@@ -76,7 +76,7 @@ protected:
 	/* execute. assert(is_success()) */
 	virtual void do_execute() = 0;
 
-	/* runs before cheching before execution */
+	/* runs before checking before execution */
 	virtual void do_init_for_execution() = 0;
 
 	/* are we going to execute the action now ? */
