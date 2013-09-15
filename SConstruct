@@ -15,15 +15,20 @@ from subprocess import Popen, PIPE, call
 from os import access, F_OK
 
 # Warn user of current set of build options.
-AddOption('--option-cache', dest='option_cache', nargs=1, type = 'string', action = 'store', metavar = 'FILE', help='file with cached construction variables', default = '.scons-option-cache')
+AddOption('--option-cache',
+          dest='option_cache',
+          nargs=1,
+          type='string',
+          action='store',
+          metavar='FILE',
+          help='file with cached construction variables',
+          default='.scons-option-cache')
 if os.path.exists(GetOption("option_cache")):
     optfile = file(GetOption("option_cache"))
     print "Saved options:", optfile.read().replace("\n", ", ")[:-2]
     optfile.close()
 
-#
 # Get the Wesnoth version number
-#
 
 config_h_re = re.compile(r"^.*#define\s*(\S*)\s*\"(\S*)\".*$", re.MULTILINE)
 build_config = dict( config_h_re.findall(File("src/wesconfig.h").get_contents()) )
@@ -34,9 +39,7 @@ except KeyError:
     print "Couldn't determin the Wesnoth version number, bailing out!"
     sys.exit(1)
 
-#
 # Build-control options
-#
 
 opts = Variables(GetOption("option_cache"))
 
@@ -61,11 +64,14 @@ opts.AddVariables(
     ('extra_flags_base',
         'Extra compiler and linker flags to use for release builds', ""),
     ('extra_flags_release',
-        'Extra compiler and linker flags to use for release builds', "-O2 -march=native"),
+        'Extra compiler and linker flags to use for release builds', ""),
+#         "-Og -march=native -ftree-parallelize-loops=4 -fdevirtualize-speculatively -fipa-pta -floop-nest-optimize -floop-strip-mine -floop-block -ftree-loop-distribution -ftree-vectorize -freorder-blocks-and-partition -freorder-functions -flto -fuse-linker-plugin -fprofile-use -fprofile-correction -fno-omit-frame-pointer"),
     ('extra_flags_debug',
-        'Extra compiler and linker flags to use for debug builds', "-ggdb3"),
+        'Extra compiler and linker flags to use for debug builds',
+        "-Og -ggdb3"),
     ('extra_flags_profile',
-        'Extra compiler and linker flags to use for profile builds', ""),
+        'Extra compiler and linker flags to use for profile builds',
+        "-march=native -Og -ggdb3 -static-libgcc -fuse-linker-plugin -fprofile-arcs -fprofile-generate -lgcov"),
     PathVariable('bindir',
                  'Where to install binaries', "bin", PathVariable.PathAccept),
     ('cachedir',
@@ -130,7 +136,7 @@ opts.AddVariables(
                  'Set to use raw recv sockets in the mp network layer, not the SDL_net facilities',
                  False),
     BoolVariable('forum_user_handler',
-                 'Enable forum user handler in wesnothd', True),
+                 'Enable forum user handler in wesnothd', False),
     ('server_gid', 'group id of the user who runs wesnothd', ""),
     ('server_uid', 'user id of the user who runs wesnothd', ""),
     BoolVariable('strict', 'Set to strict compilation', False),
@@ -154,7 +160,7 @@ opts.AddVariables(
     BoolVariable('ccache', "Use ccache", True),
     ('cxxtool', 'Set c++ compiler command if not using standard compiler.'),
     BoolVariable('cxx0x', 'Use C++0x features.', True),
-    BoolVariable('openmp', 'Enable openmp use.', True),
+    BoolVariable('openmp', 'Enable openmp use.', False),
     BoolVariable("fast",
                  "Make scons faster at cost of less precise dependency tracking.", False),
     BoolVariable("lockfile",
@@ -472,8 +478,8 @@ for env in [test_env, client_env, env]:
         if env['strict']:
             env.AppendUnique(CCFLAGS = Split("-Werror $(-Wno-unused-local-typedefs$)"))
 
-        env["OPT_FLAGS"] = "-O2"
-        env["DEBUG_FLAGS"] = Split("-O0 -DDEBUG -ggdb3")
+        env["OPT_FLAGS"] = "-Og"
+        env["DEBUG_FLAGS"] = Split("-Og -DDEBUG -ggdb3")
 
     if "suncc" in env["TOOLS"]:
         env["OPT_FLAGS"] = "-g0"
