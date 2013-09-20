@@ -1,14 +1,14 @@
 /*
-   Copyright (C) 2007 - 2013 by David White <dave.net>
-   Part of the Silver Tree Project
+ Copyright (C) 2007 - 2013 by David White <dave.net>
+ Part of the Silver Tree Project
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by or later.
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by or later.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY.
 
-   See the COPYING file for more details.
-*/
+ See the COPYING file for more details.
+ */
 
 #ifndef MAP_UTILS_HPP_INCLUDED
 #define MAP_UTILS_HPP_INCLUDED
@@ -16,14 +16,16 @@
 #include <map>
 #include <stdexcept>
 
-template<typename K, typename V>
-const V& map_get_value_default(const std::map<K,V>& m, const K& key, const V& val) {
-	typename std::map<K,V>::const_iterator i = m.find(key);
-	if(i != m.end()) {
-		return i->second;
-	} else {
-		return val;
-	}
+template <typename K, typename V>
+const V& map_get_value_default(const std::map<K, V>& m,
+                               const K& key,
+                               const V& val) {
+    typename std::map<K, V>::const_iterator i = m.find(key);
+    if (i != m.end()) {
+        return i->second;
+    } else {
+        return val;
+    }
 }
 
 /**
@@ -48,17 +50,15 @@ const V& map_get_value_default(const std::map<K,V>& m, const K& key, const V& va
  *                                a reference, but it's not possible to create
  *                                a reference from an iterator.
  */
-template<class M>
-inline typename M::mapped_type at(
-		  const M& map
-		, const typename M::key_type& key)
-{
-	typename M::const_iterator itor = map.find(key);
-	if(itor == map.end()) {
-		throw std::out_of_range("Key »" + key + "« doesn't exist.");
-	}
+template <class M>
+inline typename M::mapped_type at(const M& map,
+                                  const typename M::key_type& key) {
+    typename M::const_iterator itor = map.find(key);
+    if (itor == map.end()) {
+        throw std::out_of_range("Key »" + key + "« doesn't exist.");
+    }
 
-	return itor->second;
+    return itor->second;
 }
 
 #endif

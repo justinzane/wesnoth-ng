@@ -3057,13 +3057,23 @@ temporary_unit_mover::~temporary_unit_mover()
 	}
 }
 
+/**
+ * @note: According to gprof, this function is the single most time-comsuming call within the
+ * wesnoth codebase. A few simple scenarios of HttT caused 5091493 calls, consuming 131ns/call
+ * for a total of 1.25% of the total time used.
+ * @todo
+ * TODO: Determine if this is the optimal way to handle this. justinzane suggests refactoring
+ * to avoid strings entirely except during WML [de]serialization or for presentation within a
+ * UI; however, he is not sure of the complications of this approach.
+ */
 std::string unit::TC_image_mods() const{
 	std::stringstream modifier;
 	if(!flag_rgb_.empty()){
-		modifier << "~RC("<< flag_rgb_ << ">" << team::get_side_color_index(side()) << ")";
+		modifier << "~RC(" << flag_rgb_ << ">" << team::get_side_color_index(side()) << ")";
 	}
 	return modifier.str();
 }
+
 std::string unit::image_mods() const{
 	std::stringstream modifier;
 	if(!image_mods_.empty()){

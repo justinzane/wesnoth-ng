@@ -241,7 +241,10 @@ public:
 	 * (using the default base if new terrain is an overlay terrain)
 	 * Will return the resulting terrain or NONE_TERRAIN if merging failed
 	 */
-    t_translation::t_terrain merge_terrains(const t_translation::t_terrain & old_t, const t_translation::t_terrain & new_t, const tmerge_mode mode, bool replace_if_failed = false);
+    t_translation::t_terrain merge_terrains(const t_translation::t_terrain & old_t,
+                                            const t_translation::t_terrain & new_t,
+                                            const tmerge_mode mode,
+                                            bool replace_if_failed = false);
 
 protected:
 	t_translation::t_map tiles_;
