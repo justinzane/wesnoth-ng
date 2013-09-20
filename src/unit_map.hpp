@@ -142,14 +142,14 @@ public:
 
 		~iterator_base()	{ dec(); }
 
-		iterator_base(): i_(), tank_(NULL) { }
+		iterator_base(): unit_map_iter_(), tank_(NULL) { }
 
-		iterator_base(iterator_type i, container_type *m) : i_(i), tank_(m) {
+		iterator_base(iterator_type i, container_type *m) : unit_map_iter_(i), tank_(m) {
 			inc();
 			valid_exit();
 		}
 
-		iterator_base(const iterator_base &that) : i_(that.i_), tank_(that.tank_) {
+		iterator_base(const iterator_base &that) : unit_map_iter_(that.unit_map_iter_), tank_(that.tank_) {
 			inc();
 			valid_exit();
 		}
@@ -158,7 +158,7 @@ public:
 			if(*this != that){
 				dec();
 				tank_ = that.tank_;
-				i_ = that.i_;
+				unit_map_iter_ = that.unit_map_iter_;
 				inc();
 				valid_exit();
 			}
@@ -166,18 +166,18 @@ public:
 		}
 
 		operator iterator_base<const_iter_types> () const {
-			return iterator_base<const_iter_types>(i_, tank_);
+			return iterator_base<const_iter_types>(unit_map_iter_, tank_);
 		}
 
 	private:
 		///Construct an iterator from the uid map
-		iterator_base(t_umap::iterator ui, container_type *m) : i_(ui->second), tank_(m) {
+		iterator_base(t_umap::iterator ui, container_type *m) : unit_map_iter_(ui->second), tank_(m) {
 			inc();
 			valid_exit();
 		}
 
 		///Construct an iterator from the location map
-		iterator_base(t_lmap::iterator ui, container_type *m) : i_(ui->second), tank_(m) {
+		iterator_base(t_lmap::iterator ui, container_type *m) : unit_map_iter_(ui->second), tank_(m) {
 			inc();
 			valid_exit();
 		}
@@ -186,29 +186,29 @@ public:
 		pointer operator->() const   {
 			assert(valid());
 			tank_->self_check();
-			return  i_->unit; }
+			return  unit_map_iter_->unit; }
 		reference operator*() const {
 			tank_->self_check();
 #if 0
 			// debug!
 			if(!valid()){
 				if(!tank_){std::cerr<<"tank is NULL"<<"\n";}
-				if(i_==the_end()){std::cerr<<"i_ is the end"<<"\n";}
-				if(i_->unit==NULL){std::cerr<<"i_ unit is NULL with uid="<<i_->deleted_uid<<"\n";}
+				if(unit_map_iter_==the_end()){std::cerr<<"i_ is the end"<<"\n";}
+				if(unit_map_iter_->unit==NULL){std::cerr<<"i_ unit is NULL with uid="<<unit_map_iter_->deleted_uid<<"\n";}
 			}
 #endif
 			assert(valid());
-			return *i_->unit; }
+			return *unit_map_iter_->unit; }
 
 		iterator_base& operator++() {
 			assert( valid_entry() );
 			tank_->self_check();
-			iterator_type new_i(i_);
+			iterator_type new_i(unit_map_iter_);
 			do{
 				++new_i;
 			}while ((new_i->unit == NULL) && (new_i != the_end() )) ;
 			dec();
-			i_ = new_i;
+			unit_map_iter_ = new_i;
 			inc();
 			valid_exit();
 			return *this;
@@ -221,13 +221,13 @@ public:
 		}
 
 		iterator_base& operator--() {
-			assert(  tank_ && i_ != the_list().begin() );
+			assert(  tank_ && unit_map_iter_ != the_list().begin() );
 			tank_->self_check();
 			iterator_type begin(the_list().begin());
 			dec();
 			do {
-				--i_ ;
-			}while(i_ != begin && (i_->unit ==  NULL));
+				--unit_map_iter_ ;
+			}while(unit_map_iter_ != begin && (unit_map_iter_->unit ==  NULL));
 			inc();
 
 			valid_exit();
@@ -242,13 +242,13 @@ public:
 
 		bool valid() const {
 			if(valid_for_dereference()) {
-				if(i_->unit == NULL){
+				if(unit_map_iter_->unit == NULL){
 					recover_unit_iterator(); }
-				return  i_->unit != NULL;
+				return  unit_map_iter_->unit != NULL;
 			}
 			return false; }
 
-		bool operator==(const iterator_base &rhs) const { return (tank_ == rhs.tank_) && ( i_ == rhs.i_ ); }
+		bool operator==(const iterator_base &rhs) const { return (tank_ == rhs.tank_) && ( unit_map_iter_ == rhs.unit_map_iter_ ); }
 		bool operator!=(const iterator_base &rhs) const { return !operator==(rhs); }
 
 		//		container_type* get_map() const { return tank_; }
@@ -256,33 +256,33 @@ public:
 		template<typename Y> friend struct iterator_base;
 
 	private:
-		bool valid_for_dereference() const { return (tank_ != NULL) && (i_ != the_end()); }
-		bool valid_entry() const { return  ((tank_ != NULL) && (i_ != the_end())) ; }
+		bool valid_for_dereference() const { return (tank_ != NULL) && (unit_map_iter_ != the_end()); }
+		bool valid_entry() const { return  ((tank_ != NULL) && (unit_map_iter_ != the_end())) ; }
 		void valid_exit() const {
 			if(tank_ != NULL) {
 				assert(!the_list().empty());
-				assert(i_ != the_list().end());
-				if(i_ != the_end()){
-					assert(i_->ref_count > 0);
+				assert(unit_map_iter_ != the_list().end());
+				if(unit_map_iter_ != the_end()){
+					assert(unit_map_iter_->ref_count > 0);
 				} else {
-					assert(i_->ref_count == 1);
+					assert(unit_map_iter_->ref_count == 1);
 				}
 			}}
-		bool valid_ref_count() const { return (tank_ != NULL) && (i_ != the_end()) ; }
+		bool valid_ref_count() const { return (tank_ != NULL) && (unit_map_iter_ != the_end()) ; }
 
 		///Increment the reference counter
-		void inc() { if(valid_ref_count()) { ++(i_->ref_count); } }
+		void inc() { if(valid_ref_count()) { ++(unit_map_iter_->ref_count); } }
 
 		///Decrement the reference counter
 		///Delete the list element and the dangling umap reference if the unit is gone and the reference counter is zero
 		///@note this deletion will advance i_ to the next list element.
 		void dec() {
 			if( valid_ref_count() ){
-				assert(i_->ref_count != 0);
-				if( (--(i_->ref_count) == 0)  && (i_->unit == NULL) ){
-					if(tank_->umap_.erase(i_->deleted_uid) != 1){
-						tank_->error_recovery_externally_changed_uid(i_); }
-					i_ = the_list().erase(i_);
+				assert(unit_map_iter_->ref_count != 0);
+				if( (--(unit_map_iter_->ref_count) == 0)  && (unit_map_iter_->unit == NULL) ){
+					if(tank_->umap_.erase(unit_map_iter_->deleted_uid) != 1){
+						tank_->error_recovery_externally_changed_uid(unit_map_iter_); }
+					unit_map_iter_ = the_list().erase(unit_map_iter_);
 				} } }
 
 		unit_map::t_ilist & the_list() const { return tank_->ilist_; }
@@ -296,13 +296,13 @@ public:
 	 * @pre deleted_uid != 0
 	 */
 		void recover_unit_iterator() const {
-			assert(i_->deleted_uid != 0);
-			iterator_base new_this( tank_->find( i_->deleted_uid ));
+			assert(unit_map_iter_->deleted_uid != 0);
+			iterator_base new_this( tank_->find( unit_map_iter_->deleted_uid ));
 			const_cast<iterator_base *>(this)->operator=( new_this );
 		}
 		friend class unit_map;
 
-		iterator_type i_; ///local iterator
+		iterator_type unit_map_iter_; ///local iterator
 		container_type* tank_; ///the unit_map for i_
 	};
 
