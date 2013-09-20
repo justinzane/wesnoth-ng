@@ -54,24 +54,28 @@ opts.AddVariables(
                  Split("wesnoth wesnothd campaignd cutter exploder test")),
     EnumVariable('build',
                  'Build variant: debug, release, profile, glibcxx_debug or base (no subdirectory)',
-                 "release", ["release", "debug", "glibcxx_debug", "profile", "base"]),
+                 "release", ["release", "debug", "glibcxx_debug", "profile", "base", "pgo"]),
     PathVariable('build_dir',
                  'Build all intermediate files(objects, test programs, etc) under this dir',
                  "build",
                  PathVariable.PathAccept),
     ('extra_flags_config',
-        'Extra compiler and linker flags to use for configuration and all builds', ""),
+        'Extra compiler and linker flags to use for configuration and all builds', 
+        ""),
     ('extra_flags_base',
         'Extra compiler and linker flags to use for release builds', ""),
     ('extra_flags_release',
-        'Extra compiler and linker flags to use for release builds', ""),
-#         "-Og -march=native -ftree-parallelize-loops=4 -fdevirtualize-speculatively -fipa-pta -floop-nest-optimize -floop-strip-mine -floop-block -ftree-loop-distribution -ftree-vectorize -freorder-blocks-and-partition -freorder-functions -flto -fuse-linker-plugin -fprofile-use -fprofile-correction -fno-omit-frame-pointer"),
+        'Extra compiler and linker flags to use for release builds', 
+        "-O2 -march=core-avx-i -static-libgcc -flto -fuse-linker-plugin"),
     ('extra_flags_debug',
         'Extra compiler and linker flags to use for debug builds',
-        "-Og -ggdb3"),
+        "-Og -march=core-avx-i -static-libgcc -ggdb3"),
     ('extra_flags_profile',
         'Extra compiler and linker flags to use for profile builds',
-        "-march=native -Og -ggdb3 -static-libgcc -fuse-linker-plugin -fprofile-arcs -fprofile-generate -lgcov"),
+        """-Og -ggdb3 -march=core-avx-i -static-libgcc -fprofile-generate -fuse-linker-plugin -flto -lgcov"""),
+    ('extra_flags_pgo',
+        'Extra compiler and linker flags to use for profile guided opt. builds', 
+        """-O2 -march=core-avx-i -static-libgcc -freorder-functions -fprofile-use -fprofile-correction -fbranch-probabilities -flto -fuse-linker-plugin"""),
     PathVariable('bindir',
                  'Where to install binaries', "bin", PathVariable.PathAccept),
     ('cachedir',
@@ -156,11 +160,11 @@ opts.AddVariables(
     ('jobs',
         'Set the number of parallel compilations',
         "2", lambda key, value, env: int(value), int),
-    BoolVariable('distcc', 'Use distcc', False),
+    BoolVariable('distcc', 'Use distcc', True),
     BoolVariable('ccache', "Use ccache", True),
     ('cxxtool', 'Set c++ compiler command if not using standard compiler.'),
     BoolVariable('cxx0x', 'Use C++0x features.', True),
-    BoolVariable('openmp', 'Enable openmp use.', False),
+    BoolVariable('openmp', 'Enable openmp use.', True),
     BoolVariable("fast",
                  "Make scons faster at cost of less precise dependency tracking.", False),
     BoolVariable("lockfile",
@@ -522,7 +526,8 @@ builds = {
     "debug"         : dict(CCFLAGS   = Split("$DEBUG_FLAGS")),
     "glibcxx_debug" : dict(CPPDEFINES = Split("_GLIBCXX_DEBUG _GLIBCXX_DEBUG_PEDANTIC")),
     "release"       : dict(CCFLAGS   = "$OPT_FLAGS"),
-    "profile"       : dict(CCFLAGS   = "-pg", LINKFLAGS = "-pg")
+    "profile"       : dict(CCFLAGS   = "-pg", LINKFLAGS = "-pg"),
+    "pgo"           : dict(CCFLAGS   = "-pg", LINKFLAGS = "-pg")
     }
 builds["glibcxx_debug"].update(builds["debug"])
 build = env["build"]
@@ -641,7 +646,9 @@ install = env.Alias('install', [])
 for installable in ('wesnoth',
                     'wesnothd', 'campaignd',
                     'exploder', 'cutter'):
-    if os.path.exists(installable + build_suffix) or installable in COMMAND_LINE_TARGETS or "all" in COMMAND_LINE_TARGETS:
+    if (os.path.exists(installable + build_suffix) or 
+        installable in COMMAND_LINE_TARGETS or 
+        "all" in COMMAND_LINE_TARGETS):
         env.Alias('install', env.Alias('install-'+installable))
 
 #
