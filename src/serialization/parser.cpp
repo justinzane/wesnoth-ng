@@ -109,12 +109,12 @@ void parser::operator()()
 		tok_->next_token();
 
 		switch(tok_->current_token().type) {
-		case token::LF:
+		case token_type::LF:
 			continue;
-		case '[':
+		case token_type::OPEN_BRACKET:
 			parse_element();
 			break;
-		case token::STRING:
+		case token_type::STRING:
 			parse_variable();
 			break;
 		default:
@@ -127,11 +127,11 @@ void parser::operator()()
 				error(_("Unexpected characters at line start"));
 			}
 			break;
-		case token::END:
+		case token_type::END:
 			break;
 		}
 		loadscreen::increment_progress();
-	} while (tok_->current_token().type != token::END);
+	} while (tok_->current_token().type != token_type::END);
 
 	// The main element should be there. If it is not, this is a parser error.
 	assert(!elements.empty());
@@ -152,9 +152,9 @@ void parser::parse_element()
 	std::string elname;
 	config* current_element = NULL;
 	switch(tok_->current_token().type) {
-	case token::STRING: // [element]
+	case token_type::STRING: // [element]
 		elname = tok_->current_token().value;
-		if (tok_->next_token().type != ']')
+		if (tok_->next_token().type != token_type::CLOSE_BRACKET)
 			error(_("Unterminated [element] tag"));
 		// Add the element
 		current_element = &(elements.top().cfg->add_child(elname));
@@ -165,11 +165,11 @@ void parser::parse_element()
 		}
 		break;
 
-	case '+': // [+element]
-		if (tok_->next_token().type != token::STRING)
+	case token_type::PLUS: // [+element]
+		if (tok_->next_token().type != token_type::STRING)
 			error(_("Invalid tag name"));
 		elname = tok_->current_token().value;
-		if (tok_->next_token().type != ']')
+		if (tok_->next_token().type != token_type::CLOSE_BRACKET)
 			error(_("Unterminated [+element] tag"));
 
 		// Find the last child of the current element whose name is
@@ -190,11 +190,11 @@ void parser::parse_element()
 		elements.push(element(current_element, elname, tok_->get_start_line(), tok_->get_file()));
 		break;
 
-	case '/': // [/element]
-		if(tok_->next_token().type != token::STRING)
+	case token_type::SLASH: // [/element]
+		if(tok_->next_token().type != token_type::STRING)
 			error(_("Invalid closing tag name"));
 		elname = tok_->current_token().value;
-		if(tok_->next_token().type != ']')
+		if(tok_->next_token().type != token_type::CLOSE_BRACKET)
 			error(_("Unterminated closing tag"));
 		if(elements.size() <= 1)
 			error(_("Unexpected closing tag"));
@@ -225,14 +225,14 @@ void parser::parse_variable()
 	std::vector<std::string> variables;
 	variables.push_back("");
 
-	while (tok_->current_token().type != '=') {
+	while (tok_->current_token().type != token_type::EQUALS) {
 		switch(tok_->current_token().type) {
-		case token::STRING:
+		case token_type::STRING:
 			if(!variables.back().empty())
 				variables.back() += ' ';
 			variables.back() += tok_->current_token().value;
 			break;
-		case ',':
+		case token_type::COMMA:
 			if(variables.back().empty()) {
 				error(_("Empty variable name"));
 			} else {
@@ -258,7 +258,7 @@ void parser::parse_variable()
 		assert(curvar != variables.end());
 
 		switch (tok_->current_token().type) {
-		case ',':
+		case token_type::COMMA:
 			if ((curvar+1) != variables.end()) {
 				if (buffer.translatable())
 					cfg[*curvar] = t_string(buffer);
@@ -275,48 +275,48 @@ void parser::parse_variable()
 				buffer += ",";
 			}
 			break;
-		case '_':
+		case token_type::UNDERSCORE:
 			tok_->next_token();
 			switch (tok_->current_token().type) {
-			case token::UNTERMINATED_QSTRING:
+			case token_type::UNTERMINATED_QSTRING:
 				error(_("Unterminated quoted string"));
 				break;
-			case token::QSTRING:
+			case token_type::QSTRING:
 				buffer += t_string_base(tok_->current_token().value, tok_->textdomain());
 				break;
 			default:
 				buffer += "_";
 				buffer += tok_->current_token().value;
 				break;
-			case token::END:
-			case token::LF:
+			case token_type::END:
+			case token_type::LF:
 				buffer += "_";
 				goto finish;
 			}
 			break;
-		case '+':
+		case token_type::PLUS:
 			ignore_next_newlines = true;
 			continue;
-		case token::STRING:
+		case token_type::STRING:
 			if (previous_string) buffer += " ";
 			//nobreak
 		default:
 			buffer += tok_->current_token().value;
 			break;
-		case token::QSTRING:
+		case token_type::QSTRING:
 			buffer += tok_->current_token().value;
 			break;
-		case token::UNTERMINATED_QSTRING:
+		case token_type::UNTERMINATED_QSTRING:
 			error(_("Unterminated quoted string"));
 			break;
-		case token::LF:
+		case token_type::LF:
 			if (ignore_next_newlines) continue;
 			//nobreak
-		case token::END:
+		case token_type::END:
 			goto finish;
 		}
 
-		previous_string = tok_->current_token().type == token::STRING;
+		previous_string = tok_->current_token().type == token_type::STRING;
 		ignore_next_newlines = false;
 	}
 
