@@ -67,3 +67,9 @@ uninstall.vcproj
 Project.ncb
 Project.suo
 *.vcproj.*.user
+/.pydevproject
+/scons.lock
+/gmon.out
+/gprof_2_dot.sh
+/gprof.out
+/profile.png
