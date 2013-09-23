@@ -605,6 +605,7 @@ wesmage_sources = Split("""
     wesmage/options.cpp
     tools/dummy_video.cpp
     tools/exploder_utils.cpp
+    jz_gauss_blur.c
     sdl_utils.cpp
     tracer.cpp
     loadscreen_empty.cpp
