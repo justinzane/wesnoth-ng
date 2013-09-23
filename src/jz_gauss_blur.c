@@ -4,9 +4,7 @@
  *  Created on: Sep 20, 2013
  *      Author: justin
  */
-#include "crap.h"
-#include <time.h>
-#include </usr/include/time.h>
+#include "jz_gauss_blur.h"
 
 Uint32 get_pixel32(SDL_Surface *surface, int x, int y) {
     //Convert the pixels to 32 bit
@@ -186,76 +184,4 @@ void blur_channel_i(Uint32 height, Uint32 width, Uint32 amount, Uint32* pixels) 
         } /** end row loop */
         memcpy(pixels, output, sizeof(output));
     } /** end blur loop */
-}
-
-void bench(struct timespec* start, struct timespec* end, char* msg) {
-    double startsecs = (double)start->tv_sec + (double)start->tv_nsec / 1000000000.0;
-    double endsecs = (double)end->tv_sec + (double)end->tv_nsec / 1000000000.0;
-    printf("->\tBench Time\t%s:\t%15.9f\n", (endsecs-startsecs), msg);
-}
-
-int main(int argc, char* args[]) {
-    //The images
-    SDL_Surface* src_img = NULL;
-    SDL_Surface* dst_img = NULL;
-    SDL_Surface* screen = NULL;
-
-    float red_f[4096] = { 0.0f };
-    float grn_f[4096] = { 0.0f };
-    float blu_f[4096] = { 0.0f };
-    float alp_f[4096] = { 0.0f };
-    Uint32 red_i[4096] = { 0.0f };
-    Uint32 grn_i[4096] = { 0.0f };
-    Uint32 blu_i[4096] = { 0.0f };
-    Uint32 alp_i[4096] = { 0.0f };
-
-    int counter = 0;
-    struct timespec start, end;
-
-    SDL_Init(SDL_INIT_EVERYTHING);
-    screen = SDL_SetVideoMode(480, 320, 32, SDL_SWSURFACE);
-    src_img = SDL_LoadBMP("/home/justin/src/crap/test2.bmp");
-    dst_img = SDL_CreateRGBSurface(SDL_SWSURFACE, src_img->w, src_img->h,
-                                   src_img->format->BitsPerPixel, src_img->format->Rmask,
-                                   src_img->format->Gmask, src_img->format->Bmask,
-                                   src_img->format->Amask);
-
-    SDL_BlitSurface(src_img, NULL, screen, NULL);
-    SDL_Flip(screen);
-
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
-    for (counter = 0; counter < 32768; counter++) {
-        surf2rgba_f(src_img, red_f, grn_f, blu_f, alp_f);
-        blur_channel_f(64, 64, counter % 4, red_f);
-        blur_channel_f(64, 64, counter % 4, grn_f);
-        blur_channel_f(64, 64, counter % 4, blu_f);
-        rgba2surf_f(dst_img, red_f, grn_f, blu_f, alp_f);
-    }
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
-    bench(&start, &end, "float");
-
-    SDL_BlitSurface(dst_img, NULL, screen, NULL);
-    SDL_Flip(screen);
-
-    SDL_BlitSurface(src_img, NULL, screen, NULL);
-    SDL_Flip(screen);
-
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
-    for (counter = 0; counter < 32768; counter++) {
-        surf2rgba_i(src_img, red_i, grn_i, blu_i, alp_i);
-        blur_channel_i(64, 64, counter % 4, red_i);
-        blur_channel_i(64, 64, counter % 4, grn_i);
-        blur_channel_i(64, 64, counter % 4, blu_i);
-        rgba2surf_i(dst_img, red_i, grn_i, blu_i, alp_i);
-    }
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
-    bench(&start, &end, "Uint32");
-
-    SDL_BlitSurface(dst_img, NULL, screen, NULL);
-    SDL_Flip(screen);
-
-    SDL_FreeSurface(src_img);
-    SDL_FreeSurface(dst_img);
-    SDL_Quit();
-    return 0;
 }

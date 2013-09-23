@@ -93,5 +93,3 @@ void blur_channel_i(Uint32 height,    /**< [in]        pixmap height, 0 < height
                     Uint32 amount,    /**< [in]        1 <= blur iterations <= 4 */
                     Uint32* pixels)   /**< [in]        pixmap data pointer */
     __attribute__((hot, nonnull));
-
-int main(int argc, char* args[]);

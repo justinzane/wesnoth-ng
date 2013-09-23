@@ -1236,25 +1236,6 @@ surface light_surface(const surface &surf, const surface &lightmap, bool optimiz
 }
 
 
-surface blur_surface(const surface &surf, int depth, bool optimize)
-{
-	if(surf == NULL) {
-		return NULL;
-	}
-
-	surface res = make_neutral_surface(surf);
-
-	if(res == NULL) {
-		std::cerr << "could not make neutral surface...\n";
-		return NULL;
-	}
-
-	SDL_Rect rect = create_rect(0, 0, surf->w, surf->h);
-	blur_surface(res, rect, depth);
-
-	return optimize ? create_optimized_surface(res) : res;
-}
-
 void blur_surface(surface& surf, SDL_Rect rect, unsigned depth)
 {
 	if(surf == NULL) {
@@ -1370,173 +1351,201 @@ void blur_surface(surface& surf, SDL_Rect rect, unsigned depth)
 	}
 }
 
-/** Limit blur sizes to computationally light values. */
-enum class blur_kernel_sizes {
-        ONE = 1,
-        TWO = 2,
-        THREE = 3,
-        FOUR = 4
-};
+//surface blur_surface(const surface &surf, int depth, bool optimize)
+//{
+//    if(surf == NULL) {
+//        return NULL;
+//    }
+//
+//    surface res = make_neutral_surface(surf);
+//
+//    if(res == NULL) {
+//        std::cerr << "could not make neutral surface...\n";
+//        return NULL;
+//    }
+//
+//    SDL_Rect rect = create_rect(0, 0, surf->w, surf->h);
+//    blur_surface(res, rect, depth);
+//
+//    return optimize ? create_optimized_surface(res) : res;
+//}
 
-Uint32* blur_kernels_(size_t kern_size=blur_kernel_sizes::ONE) {
+/** Wrapper for experimental jz_gauss_blur.[ch]. */
+surface blur_surface(const surface &src_surf,
+                     int depth,
+                     bool optimize) {
+    if (src_surf == NULL) { return NULL; }
+    surface dst_surf = make_neutral_surface(src_surf);
+    if (dst_surf == NULL) { return NULL; }
 
+    Uint32 red_i[4096] = { 0.0f };
+    Uint32 grn_i[4096] = { 0.0f };
+    Uint32 blu_i[4096] = { 0.0f };
+    Uint32 alp_i[4096] = { 0.0f };
+    surf2rgba_i(src_surf, red_i, grn_i, blu_i, alp_i);
+    blur_channel_i(64, 64, depth, red_i);
+    blur_channel_i(64, 64, depth, grn_i);
+    blur_channel_i(64, 64, depth, blu_i);
+    rgba2surf_i(dst_surf, red_i, grn_i, blu_i, alp_i);
+
+    return dst_surf;
 }
 
-surface jz_blur_alpha_surface(const surface &surf,
-                              int depth,
-                              bool optimize) {
-    // Input validation =======================================================================
-    if(surf == NULL) { return NULL; }
-
-    if(depth > MAX_BLUR) { depth = MAX_BLUR; }
-
-    if (depth <=0) { return NULL; }
-
-    surface res = make_neutral_surface(surf);
-
-    if(res == NULL) {
-        std::cerr << "could not make neutral surface...\n";
-        return NULL;
-    }
-
-    //
-    return res;
-}
-
-
-surface blur_alpha_surface(const surface &surf,
+/** Wrapper for experimental jz_gauss_blur.[ch]. */
+surface blur_alpha_surface(const surface &src_surf,
                            int depth,
-                           bool optimize)
-{
-    // Input validation =======================================================================
-    if(surf == NULL) { return NULL; }
+                           bool optimize) {
+    if (src_surf == NULL) { return NULL; }
+    surface dst_surf = make_neutral_surface(src_surf);
+    if (dst_surf == NULL) { return NULL; }
 
-    if(depth > MAX_BLUR) { depth = MAX_BLUR; }
+    Uint32 red_i[4096] = { 0.0f };
+    Uint32 grn_i[4096] = { 0.0f };
+    Uint32 blu_i[4096] = { 0.0f };
+    Uint32 alp_i[4096] = { 0.0f };
+    surf2rgba_i(src_surf, red_i, grn_i, blu_i, alp_i);
+    blur_channel_i(64, 64, depth, red_i);
+    blur_channel_i(64, 64, depth, grn_i);
+    blur_channel_i(64, 64, depth, blu_i);
+    blur_channel_i(64, 64, depth, alp_i);
+    rgba2surf_i(dst_surf, red_i, grn_i, blu_i, alp_i);
 
-    if (depth <=0) { return NULL; }
-
-    surface res = make_neutral_surface(surf);
-
-    if(res == NULL) {
-        std::cerr << "could not make neutral surface...\n";
-        return NULL;
-    }
-
-	Uint32 queue[MAX_BLUR];
-	const Uint32* end_queue = queue + MAX_BLUR;
-
-	const Uint32 ff = 0xff;
-
-	surface_lock lock(res);
-
-	int x, y;
-
-	///TODO: Explain what this loop does.
-	for(y = 0; y < res->h; ++y) {
-		const Uint32* front = &queue[0];
-		Uint32* back = &queue[0];
-		Uint32 alpha=0, red = 0, green = 0, blue = 0, avg = 0;
-		Uint32* p = lock.pixels() + y*res->w;
-		for(x = 0; x <= depth && x < res->w; ++x, ++p) {
-			alpha += ((*p) >> 24)&0xFF;
-			red += ((*p) >> 16)&0xFF;
-			green += ((*p) >> 8)&0xFF;
-			blue += (*p)&0xFF;
-			++avg;
-			*back++ = *p;
-			if(back == end_queue) {
-				back = &queue[0];
-			} else {
-			    *back = *p + 1;
-			}
-		} //end for(x = 0; x <= depth && x < res->w; ++x, ++p)
-
-		p = lock.pixels() + y*res->w;
-		for(x = 0; x < res->w; ++x, ++p) {
-			*p = ((std::min(alpha/avg,ff) << 24) |
-			      (std::min(red/avg,ff) << 16) |
-			      (std::min(green/avg,ff) << 8) |
-			      std::min(blue/avg,ff));
-			if(x >= depth) {
-				alpha -= ((*front) >> 24)&0xFF;
-				red -= ((*front) >> 16)&0xFF;
-				green -= ((*front) >> 8)&0xFF;
-				blue -= *front&0xFF;
-				--avg;
-				++front;
-				if(front == end_queue) {
-					front = &queue[0];
-				}
-			} //end if(x >= depth)
-
-			if(x + depth+1 < res->w) {
-				Uint32* q = p + depth+1;
-				alpha += ((*q) >> 24)&0xFF;
-				red += ((*q) >> 16)&0xFF;
-				green += ((*q) >> 8)&0xFF;
-				blue += (*q)&0xFF;
-				++avg;
-				*back++ = *q;
-				if(back == end_queue) {
-					back = &queue[0];
-				}
-			} //endif(x + depth+1 < res->w)
-		} //end for(x = 0; x < res->w; ++x, ++p)
-	} //end for(y = 0; y < res->h; ++y)
-
-    ///TODO: Explain what this outer loop does.
-	for(x = 0; x < res->w; ++x) {
-		const Uint32* front = &queue[0];
-		Uint32* back = &queue[0];
-		Uint32 alpha=0, red = 0, green = 0, blue = 0, avg = 0;
-		Uint32* p = lock.pixels() + x;
-
-	    ///TODO: Explain what this loop does.
-		for(y = 0; y <= depth && y < res->h; ++y, p += res->w) {
-			alpha += ((*p) >> 24)&0xFF;
-			red += ((*p) >> 16)&0xFF;
-			green += ((*p) >> 8)&0xFF;
-			blue += *p&0xFF;
-			++avg;
-			*back++ = *p;
-			if(back == end_queue) {
-				back = &queue[0];
-			}
-		}
-
-		p = lock.pixels() + x;
-	    ///TODO: Explain what this loop does.
-		for(y = 0; y < res->h; ++y, p += res->w) {
-			*p = (std::min(alpha/avg,ff) << 24) | (std::min(red/avg,ff) << 16) | (std::min(green/avg,ff) << 8) | std::min(blue/avg,ff);
-			if(y >= depth) {
-				alpha -= ((*front) >> 24)&0xFF;
-				red -= ((*front) >> 16)&0xFF;
-				green -= ((*front) >> 8)&0xFF;
-				blue -= *front&0xFF;
-				--avg;
-				++front;
-				if(front == end_queue) {
-					front = &queue[0];
-				}
-			}
-
-			if(y + depth+1 < res->h) {
-				Uint32* q = p + (depth+1)*res->w;
-				alpha += ((*q) >> 24)&0xFF;
-				red += ((*q) >> 16)&0xFF;
-				green += ((*q) >> 8)&0xFF;
-				blue += (*q)&0xFF;
-				++avg;
-				*back++ = *q;
-				if(back == end_queue) {
-					back = &queue[0];
-				}
-			}
-		}
-	} //end for(x = 0; x < res->w; ++x)
-
-	return optimize ? create_optimized_surface(res) : res;
+    return dst_surf;
 }
+
+//surface blur_alpha_surface(const surface &surf,
+//                           int depth,
+//                           bool optimize)
+//{
+//    // Input validation =======================================================================
+//    if(surf == NULL) { return NULL; }
+//
+//    if(depth > MAX_BLUR) { depth = MAX_BLUR; }
+//
+//    if (depth <=0) { return NULL; }
+//
+//    surface res = make_neutral_surface(surf);
+//
+//    if(res == NULL) {
+//        std::cerr << "could not make neutral surface...\n";
+//        return NULL;
+//    }
+//
+//	Uint32 queue[MAX_BLUR];
+//	const Uint32* end_queue = queue + MAX_BLUR;
+//
+//	const Uint32 ff = 0xff;
+//
+//	surface_lock lock(res);
+//
+//	int x, y;
+//
+//	///TODO: Explain what this loop does.
+//	for(y = 0; y < res->h; ++y) {
+//		const Uint32* front = &queue[0];
+//		Uint32* back = &queue[0];
+//		Uint32 alpha=0, red = 0, green = 0, blue = 0, avg = 0;
+//		Uint32* p = lock.pixels() + y*res->w;
+//		for(x = 0; x <= depth && x < res->w; ++x, ++p) {
+//			alpha += ((*p) >> 24)&0xFF;
+//			red += ((*p) >> 16)&0xFF;
+//			green += ((*p) >> 8)&0xFF;
+//			blue += (*p)&0xFF;
+//			++avg;
+//			*back++ = *p;
+//			if(back == end_queue) {
+//				back = &queue[0];
+//			} else {
+//			    *back = *p + 1;
+//			}
+//		} //end for(x = 0; x <= depth && x < res->w; ++x, ++p)
+//
+//		p = lock.pixels() + y*res->w;
+//		for(x = 0; x < res->w; ++x, ++p) {
+//			*p = ((std::min(alpha/avg,ff) << 24) |
+//			      (std::min(red/avg,ff) << 16) |
+//			      (std::min(green/avg,ff) << 8) |
+//			      std::min(blue/avg,ff));
+//			if(x >= depth) {
+//				alpha -= ((*front) >> 24)&0xFF;
+//				red -= ((*front) >> 16)&0xFF;
+//				green -= ((*front) >> 8)&0xFF;
+//				blue -= *front&0xFF;
+//				--avg;
+//				++front;
+//				if(front == end_queue) {
+//					front = &queue[0];
+//				}
+//			} //end if(x >= depth)
+//
+//			if(x + depth+1 < res->w) {
+//				Uint32* q = p + depth+1;
+//				alpha += ((*q) >> 24)&0xFF;
+//				red += ((*q) >> 16)&0xFF;
+//				green += ((*q) >> 8)&0xFF;
+//				blue += (*q)&0xFF;
+//				++avg;
+//				*back++ = *q;
+//				if(back == end_queue) {
+//					back = &queue[0];
+//				}
+//			} //endif(x + depth+1 < res->w)
+//		} //end for(x = 0; x < res->w; ++x, ++p)
+//	} //end for(y = 0; y < res->h; ++y)
+//
+//    ///TODO: Explain what this outer loop does.
+//	for(x = 0; x < res->w; ++x) {
+//		const Uint32* front = &queue[0];
+//		Uint32* back = &queue[0];
+//		Uint32 alpha=0, red = 0, green = 0, blue = 0, avg = 0;
+//		Uint32* p = lock.pixels() + x;
+//
+//	    ///TODO: Explain what this loop does.
+//		for(y = 0; y <= depth && y < res->h; ++y, p += res->w) {
+//			alpha += ((*p) >> 24)&0xFF;
+//			red += ((*p) >> 16)&0xFF;
+//			green += ((*p) >> 8)&0xFF;
+//			blue += *p&0xFF;
+//			++avg;
+//			*back++ = *p;
+//			if(back == end_queue) {
+//				back = &queue[0];
+//			}
+//		}
+//
+//		p = lock.pixels() + x;
+//	    ///TODO: Explain what this loop does.
+//		for(y = 0; y < res->h; ++y, p += res->w) {
+//			*p = (std::min(alpha/avg,ff) << 24) | (std::min(red/avg,ff) << 16) | (std::min(green/avg,ff) << 8) | std::min(blue/avg,ff);
+//			if(y >= depth) {
+//				alpha -= ((*front) >> 24)&0xFF;
+//				red -= ((*front) >> 16)&0xFF;
+//				green -= ((*front) >> 8)&0xFF;
+//				blue -= *front&0xFF;
+//				--avg;
+//				++front;
+//				if(front == end_queue) {
+//					front = &queue[0];
+//				}
+//			}
+//
+//			if(y + depth+1 < res->h) {
+//				Uint32* q = p + (depth+1)*res->w;
+//				alpha += ((*q) >> 24)&0xFF;
+//				red += ((*q) >> 16)&0xFF;
+//				green += ((*q) >> 8)&0xFF;
+//				blue += (*q)&0xFF;
+//				++avg;
+//				*back++ = *q;
+//				if(back == end_queue) {
+//					back = &queue[0];
+//				}
+//			}
+//		}
+//	} //end for(x = 0; x < res->w; ++x)
+//
+//	return optimize ? create_optimized_surface(res) : res;
+//}
 
 surface cut_surface(const surface &surf, SDL_Rect const &r)
 {

@@ -19,9 +19,9 @@
 
 #include "scoped_resource.hpp"
 #include "util.hpp"
+#include "jz_gauss_blur.h"
 
-#include "SDL.h"
-
+#include <SDL.h>
 #include <cstdlib>
 #include <iosfwd>
 #include <map>
@@ -347,25 +347,15 @@ void blur_surface(surface& surf,
  * per pixel.
  * @param depth [in] int, 0 < depth < 255, depth of blur effect
  * @param optimize [in] true to optimize the surface before returning it.
+ * @note [HEAD] According to gprof after a few scenarios of LotI-I, this is the single
+ * most time consuming function in wesnoth.
+ * @note [e4494c1] gprof: 19, 1043, 182.166us, 0.1431801%
+ *
  * @return the blurred surface
  */
 surface blur_alpha_surface(const surface &surf,
                            int depth = 1,
                            bool optimize = true);
-
-/**
- * Cross-fades a surface with alpha channel.
- * @todo FIXME: This is just an adapted copy-paste of the normal blur but with blur alpha
- * channel too
- * @param surf [in] reference to the original surface. must be not optimized and have 32 bits
- * per pixel.
- * @param depth [in] int, 0 < depth < 255, depth of blur effect
- * @param optimize [in] true to optimize the surface before returning it.
- * @return the blurred surface
- */
-surface jz_blur_alpha_surface(const surface &surf,
-                              int depth = 1,
-                              bool optimize = true);
 
 /** Cuts a rectangle from a surface. */
 surface cut_surface(const surface &surf, SDL_Rect const &r);
