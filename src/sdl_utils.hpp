@@ -350,7 +350,8 @@ void blur_surface(surface& surf,
  * @param optimize [in] true to optimize the surface before returning it.
  * @note [HEAD] According to gprof after a few scenarios of LotI-I, this is the single
  * most time consuming function in wesnoth.
- * @note [e4494c1] gprof: 19, 1043, 182.166us, 0.1431801%
+ * @note [official/refs/HEAD] gprof: 19, 1043, 182.166us, 0.1431801%
+ * @note [local/refs/6b3edaf] gprof: 0, 1470, 0ns, 0.0%
  *
  * @return the blurred surface
  */
