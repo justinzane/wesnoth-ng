@@ -144,6 +144,7 @@ libcampaignd_sources = Split("""
 libcampaignd = env.Library("campaignd", libcampaignd_sources, OBJPREFIX = "campaignd_")
 
 libwesnoth_sdl_sources = Split("""
+    jz_gauss_blur.c
     sdl_utils.cpp
     tracer.cpp
     """)
@@ -648,6 +649,7 @@ create_images_sources = Split("""
     tests/create_images.cpp
     tools/dummy_video.cpp
     tools/exploder_utils.cpp
+    jz_gauss_blur.c
     sdl_utils.cpp
     tracer.cpp
     loadscreen_empty.cpp

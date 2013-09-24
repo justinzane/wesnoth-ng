@@ -1378,15 +1378,22 @@ surface blur_surface(const surface &src_surf,
     surface dst_surf = make_neutral_surface(src_surf);
     if (dst_surf == NULL) { return NULL; }
 
-    Uint32 red_i[4096] = { 0.0f };
-    Uint32 grn_i[4096] = { 0.0f };
-    Uint32 blu_i[4096] = { 0.0f };
-    Uint32 alp_i[4096] = { 0.0f };
+    Uint32 size = src_surf->h * src_surf->w;
+    Uint32* red_i = (Uint32*)malloc(size * sizeof(Uint32));
+    Uint32* grn_i = (Uint32*)malloc(size * sizeof(Uint32));
+    Uint32* blu_i = (Uint32*)malloc(size * sizeof(Uint32));
+    Uint32* alp_i = (Uint32*)malloc(size * sizeof(Uint32));
+
     surf2rgba_i(src_surf, red_i, grn_i, blu_i, alp_i);
-    blur_channel_i(64, 64, depth, red_i);
-    blur_channel_i(64, 64, depth, grn_i);
-    blur_channel_i(64, 64, depth, blu_i);
+    blur_channel_i(src_surf->h, src_surf->w, depth, red_i);
+    blur_channel_i(src_surf->h, src_surf->w, depth, grn_i);
+    blur_channel_i(src_surf->h, src_surf->w, depth, blu_i);
     rgba2surf_i(dst_surf, red_i, grn_i, blu_i, alp_i);
+
+    free(red_i);
+    free(grn_i);
+    free(blu_i);
+    free(alp_i);
 
     return dst_surf;
 }
@@ -1399,16 +1406,25 @@ surface blur_alpha_surface(const surface &src_surf,
     surface dst_surf = make_neutral_surface(src_surf);
     if (dst_surf == NULL) { return NULL; }
 
-    Uint32 red_i[4096] = { 0.0f };
-    Uint32 grn_i[4096] = { 0.0f };
-    Uint32 blu_i[4096] = { 0.0f };
-    Uint32 alp_i[4096] = { 0.0f };
+    Uint32 size = src_surf->h * src_surf->w;
+    Uint32* red_i = (Uint32*)malloc(size * sizeof(Uint32));
+    Uint32* grn_i = (Uint32*)malloc(size * sizeof(Uint32));
+    Uint32* blu_i = (Uint32*)malloc(size * sizeof(Uint32));
+    Uint32* alp_i = (Uint32*)malloc(size * sizeof(Uint32));
+
     surf2rgba_i(src_surf, red_i, grn_i, blu_i, alp_i);
-    blur_channel_i(64, 64, depth, red_i);
-    blur_channel_i(64, 64, depth, grn_i);
-    blur_channel_i(64, 64, depth, blu_i);
-    blur_channel_i(64, 64, depth, alp_i);
+
+    blur_channel_i(src_surf->h, src_surf->w, depth, red_i);
+    blur_channel_i(src_surf->h, src_surf->w, depth, grn_i);
+    blur_channel_i(src_surf->h, src_surf->w, depth, blu_i);
+    blur_channel_i(src_surf->h, src_surf->w, depth, alp_i);
+
     rgba2surf_i(dst_surf, red_i, grn_i, blu_i, alp_i);
+
+    free(red_i);
+    free(grn_i);
+    free(blu_i);
+    free(alp_i);
 
     return dst_surf;
 }

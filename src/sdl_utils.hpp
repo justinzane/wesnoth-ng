@@ -19,8 +19,9 @@
 
 #include "scoped_resource.hpp"
 #include "util.hpp"
-#include "jz_gauss_blur.h"
-
+extern "C" {
+    #include "jz_gauss_blur.h"
+}
 #include <SDL.h>
 #include <cstdlib>
 #include <iosfwd>
