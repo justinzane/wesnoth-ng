@@ -164,14 +164,14 @@ void recruit::redraw()
 }
 
 
-std::auto_ptr<unit> recruit::create_corresponding_unit()
+std::unique_ptr<unit> recruit::create_corresponding_unit()
 {
 	unit_type const* type = unit_types.find(unit_name_);
 	assert(type);
 	int side_num = team_index() + 1;
 	//real_unit = false needed to avoid generating random traits and causing OOS
 	bool real_unit = false;
-	std::auto_ptr<unit> result(new unit(*type, side_num, real_unit));
+	std::unique_ptr<unit> result(new unit(*type, side_num, real_unit));
 	result->set_movement(0, true);
 	result->set_attacks(0);
 	return result; //ownership gets transferred to returned auto_ptr copy
