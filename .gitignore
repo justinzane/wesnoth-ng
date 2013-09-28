@@ -67,3 +67,10 @@ uninstall.vcproj
 Project.ncb
 Project.suo
 *.vcproj.*.user
+/.pydevproject
+/gmon.6b4ac77076c27ee962d5ec53ea7fee4b3152c30a.csv
+/gmon.out
+/gmon.sum
+/gprof.out
+/gprof_2_dot.sh
+/profile.png
