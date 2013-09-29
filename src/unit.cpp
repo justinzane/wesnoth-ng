@@ -206,7 +206,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 	name_(cfg["name"].t_str()),
 	underlying_id_(0),
 	undead_variation_(),
-	variation_(cfg["variation"]),
+	variation_(cfg["variation"].empty() ? type_->default_variation() : cfg["variation"]),
 	hit_points_(1),
 	max_hit_points_(0),
 	experience_(0),
@@ -527,7 +527,7 @@ unit::unit(const unit_type &u_type, int side, bool real_unit,
 	name_(),
 	underlying_id_(real_unit? 0: n_unit::id_manager::instance().next_fake_id()),
 	undead_variation_(),
-	variation_(),
+	variation_(type_->default_variation()),
 	hit_points_(0),
 	max_hit_points_(0),
 	experience_(0),
@@ -1336,7 +1336,7 @@ bool unit::internal_matches_filter(const vconfig& cfg, const map_location& loc, 
 	config::attribute_value cfg_type = cfg["type"];
 	if (!cfg_type.blank())
 	{
-		std::string type_ids = cfg_type.str();
+		const std::string type_ids = cfg_type.str();
 		const std::string& this_type = type_id();
 
 		// We only do the full CSV search if we find a comma in there,
@@ -1353,6 +1353,56 @@ bool unit::internal_matches_filter(const vconfig& cfg, const map_location& loc, 
 			}
 		} else {
 			return false;
+		}
+	}
+
+	// The variation_type could be a comma separated list of types
+	config::attribute_value cfg_variation_type = cfg["variation"];
+	if (!cfg_variation_type.blank())
+	{
+		const std::string type_ids = cfg_variation_type.str();
+		const std::string& this_type = variation_;
+
+		// We only do the full CSV search if we find a comma in there,
+		// and if the subsequence is found within the main sequence.
+		// This is because doing the full CSV split is expensive.
+		if ( type_ids == this_type ) {
+			// pass
+		} else if ( type_ids.find(',') != std::string::npos  &&
+    				type_ids.find(this_type) != std::string::npos ) {
+			const std::vector<std::string>& vals = utils::split(type_ids);
+
+			if(std::find(vals.begin(),vals.end(),this_type) == vals.end()) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	// The has_variation_type could be a comma separated list of types
+	config::attribute_value cfg_has_variation_type = cfg["has_variation"];
+	if (!cfg_has_variation_type.blank())
+	{
+		const std::string& var_ids  = cfg_has_variation_type.str();
+		const std::string& this_var = variation_;
+
+		if ( var_ids == this_var ) {
+			// pass
+		} else {
+
+			bool match = false;
+			const std::vector<std::string>& variation_types = utils::split(var_ids);
+			// If this unit is a variation itself then search in the base unit's variations.
+			const unit_type* const type = this_var.empty() ? type_ : unit_types.find(type_->base_id());
+
+			BOOST_FOREACH(const std::string& variation_id, variation_types) {
+				if (type->has_variation(variation_id)) {
+					match = true;
+					break;
+				}
+			}
+			if (!match) return false;
 		}
 	}
 

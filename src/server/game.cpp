@@ -154,14 +154,12 @@ std::string game::list_users(user_vector users, const std::string& func) const
 }
 
 void game::start_game(const player_map::const_iterator starter) {
-	// If the game was already started we're actually advancing.
-	const bool advance = started_;
 	started_ = true;
 	// Prevent inserting empty keys when reading.
 	const simple_wml::node& s = level_.root();
 	const bool save = s["savegame"].to_bool();
 	LOG_GAME << network::ip_address(starter->first) << "\t"
-		<< starter->second.name() << "\t" << (advance ? "advanced" : "started")
+		<< starter->second.name() << "\t" << "started"
 		<< (save ? " reloaded" : "") << " game:\t\"" << name_ << "\" (" << id_
 		<< ") with: " << list_users(players_, __func__) << ". Settings: map: " << s["id"]
 		<< "\tera: "       << (s.child("era") ? (*s.child("era"))["id"] : "")
@@ -213,12 +211,6 @@ void game::start_game(const player_map::const_iterator starter) {
 	end_turn_ = (turn - 1) * nsides_ + side - 1;
 	end_turn();
 	clear_history();
-	if (advance) {
-		// When the host advances tell everyone that the next scenario data is
-		// available.
-		static simple_wml::document notify_next_scenario("[notify_next_scenario]\n[/notify_next_scenario]\n", simple_wml::INIT_COMPRESSED);
-		send_data(notify_next_scenario, starter->first);
-	}
 	// Send [observer] tags for all observers that are already in the game.
 	send_observerjoins();
 }
@@ -516,8 +508,8 @@ bool game::describe_slots() {
 	for(simple_wml::node::child_list::const_iterator it = side_list.begin(); it != side_list.end(); ++it, ++i) {
 		if (((**it)["allow_player"].to_bool(true) == false) || (**it)["controller"] == "null") {
 			num_sides--;
-		} else {
-			if (sides_[i] == 0) ++available_slots;
+		} else if (sides_[i] == 0 && side_controllers_[i] != "reserved") {
+			++available_slots;
 		}
 	}
 	char buf[50];

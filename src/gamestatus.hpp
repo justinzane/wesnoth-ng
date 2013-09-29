@@ -19,6 +19,7 @@
 
 #include "config.hpp"
 #include "game_end_exceptions.hpp"
+#include "iterator.hpp"
 #include "map_location.hpp"
 #include "mp_game_settings.hpp"
 #include "random.hpp"
@@ -99,7 +100,30 @@ private:
 	config command_;
 };
 
+/// A container of wml_menu_item.
 class wmi_container{
+	/// The underlying storage type.
+	typedef std::map<std::string, wml_menu_item*> map_t;
+	/// The key for interaction with our iterators.
+	struct key {
+		/// Instructions for converting a map_t iterator to a wml_menu_item.
+		static const wml_menu_item & eval(const map_t::const_iterator & iter)
+		{ return *iter->second; }
+	};
+
+public:
+	// Typedefs required of a container:
+	typedef wml_menu_item          value_type;
+	typedef wml_menu_item *        pointer;
+	typedef wml_menu_item &        reference;
+	typedef const wml_menu_item &  const_reference;
+	typedef map_t::difference_type difference_type;
+	typedef map_t::size_type       size_type;
+
+	typedef util::iterator_extend      <value_type, map_t, key, key> iterator;
+	typedef util::const_iterator_extend<value_type, map_t, key, key> const_iterator;
+
+
 public:
 	wmi_container();
 	wmi_container(const wmi_container& container);
@@ -109,18 +133,33 @@ public:
 	wmi_container & operator=(const wmi_container & that)
 	{ copy(that.wml_menu_items_); return *this; }
 
-	std::map<std::string, wml_menu_item*>& get_menu_items() { return wml_menu_items_; };
 	void clear_wmi();
+	/// Returns true if *this contains no data.
+	bool empty() const { return wml_menu_items_.empty(); }
+	/// Erases the item pointed to by @a pos.
+	void erase(const iterator & pos);
+	/// Erases the item with id @a key.
+	size_type erase(const std::string & key);
 	void to_config(config& cfg);
 	void set_menu_items(const config& cfg);
 
-	wml_menu_item*& get_item(const std::string& id) { return wml_menu_items_[id]; };
+	iterator find(const std::string & id)             { return iterator(wml_menu_items_.find(id)); }
+	const_iterator find(const std::string & id) const { return const_iterator(wml_menu_items_.find(id)); }
+	/// Returns an item with the given id.
+	wml_menu_item & get_item(const std::string& id);
+
+	// Iteration support:
+	iterator begin()  { return iterator(wml_menu_items_.begin()); }
+	iterator end()    { return iterator(wml_menu_items_.end()); }
+	const_iterator begin() const { return const_iterator(wml_menu_items_.begin()); }
+	const_iterator end()   const { return const_iterator(wml_menu_items_.end()); }
+
 private:
 	/// Performs a deep copy, replacing our current contents.
-	void copy(const std::map<std::string, wml_menu_item *> & source);
+	void copy(const map_t & source);
 
 private: // data
-	std::map<std::string, wml_menu_item*> wml_menu_items_;
+	map_t wml_menu_items_;
 };
 
 class carryover{

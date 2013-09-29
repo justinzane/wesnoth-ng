@@ -159,11 +159,15 @@ void wml_menu_item::update(const vconfig & vcfg)
 	if ( vcfg.has_attribute("needs_select") )
 		needs_select_ = vcfg["needs_select"].to_bool();
 
-	if ( const vconfig child = vcfg.child("show_if") )
+	if ( const vconfig & child = vcfg.child("show_if") ) {
 		show_if_ = child;
+		show_if_.make_safe();
+	}
 
-	if ( const vconfig child = vcfg.child("filter_location") )
+	if ( const vconfig & child = vcfg.child("filter_location") ) {
 		filter_location_ = child;
+		filter_location_.make_safe();
+	}
 
 	if ( const vconfig & cmd = vcfg.child("command") ) {
 		const bool delayed = cmd["delayed_variable_substitution"].to_bool(true);
@@ -187,39 +191,86 @@ wmi_container::wmi_container(const wmi_container& container)
  * Performs a deep copy, replacing our current contents.
  * Used by assignment and the copy constructor.
  */
-void wmi_container::copy(const std::map<std::string, wml_menu_item *> & source)
+void wmi_container::copy(const map_t & source)
 {
 	// Safety measure.
 	if ( &source == &wml_menu_items_ )
 		return;
 
-	// Free up the old memeory.
+	// Free up the old memory.
 	clear_wmi();
 
-	std::map<std::string, wml_menu_item*>::const_iterator itor;
-	for ( itor = source.begin(); itor != source.end(); ++itor )
+	const map_t::const_iterator source_end = source.end();
+	for ( map_t::const_iterator itor = source.begin(); itor != source_end; ++itor )
 		// Deep copy.
 		wml_menu_items_[itor->first] = new wml_menu_item(*(itor->second));
 }
 
 void wmi_container::clear_wmi()
 {
-	for (std::map<std::string, wml_menu_item *>::iterator i = wml_menu_items_.begin(),
-	     i_end = wml_menu_items_.end(); i != i_end; ++i)
-	{
+	const map_t::iterator i_end = wml_menu_items_.end();
+	for ( map_t::iterator i = wml_menu_items_.begin(); i != i_end; ++i ) {
+		// Release the wml_menu_item.
 		delete i->second;
 	}
+
 	wml_menu_items_.clear();
 }
 
-void wmi_container::to_config(config& cfg){
-	for(std::map<std::string, wml_menu_item *>::const_iterator j=wml_menu_items_.begin();
-		j!=wml_menu_items_.end(); ++j) {
-		j->second->to_config(cfg.add_child("menu_item"));
-	}
+/** Erases the item pointed to by @a pos. */
+void wmi_container::erase(const iterator & pos)
+{
+	const map_t::iterator & iter = pos.get(key());
+
+	// Release the wml_menu_item.
+	delete iter->second;
+	// Remove the now-defunct pointer from the map.
+	wml_menu_items_.erase(iter);
 }
 
-void wmi_container::set_menu_items(const config& cfg){
+/** Erases the item with id @a key. */
+wmi_container::size_type wmi_container::erase(const std::string & key)
+{
+	// Locate the item to erase.
+	iterator pos = find(key);
+
+	if ( pos == end() )
+		// No such item.
+		return 0;
+
+	// Pass the buck.
+	erase(pos);
+	return 1; // Erased one item.
+}
+
+/**
+ * Returns an item with the given id.
+ * If one does not already exist, one will be created.
+ */
+wml_menu_item & wmi_container::get_item(const std::string& id)
+{
+	// Try to insert a dummy value. This combines looking for an existing
+	// entry with insertion.
+	map_t::iterator add_it = wml_menu_items_.insert(map_t::value_type(id, NULL)).first;
+
+	// If we ended up with a dummy value, create an entry for it.
+	if ( add_it->second == NULL )
+		add_it->second = new wml_menu_item(id);
+
+	// Return the item.
+	return *add_it->second;
+}
+
+void wmi_container::to_config(config& cfg)
+{
+	// Loop through our items.
+	for ( const_iterator j = begin(), wmi_end = end(); j != wmi_end; ++j )
+		// Add this item as a child of cfg.
+		j->to_config(cfg.add_child("menu_item"));
+}
+
+void wmi_container::set_menu_items(const config& cfg)
+{
 	clear_wmi();
 	BOOST_FOREACH(const config &item, cfg.child_range("menu_item"))
 	{

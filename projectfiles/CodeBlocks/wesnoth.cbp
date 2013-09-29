@@ -166,6 +166,8 @@
 		<Unit filename="..\..\src\ai\lua\unit_advancements_aspect.hpp" />
 		<Unit filename="..\..\src\ai\manager.cpp" />
 		<Unit filename="..\..\src\ai\manager.hpp" />
+		<Unit filename="..\..\src\ai\recruitment\recruitment.cpp" />
+		<Unit filename="..\..\src\ai\recruitment\recruitment.hpp" />
 		<Unit filename="..\..\src\ai\registry.cpp" />
 		<Unit filename="..\..\src\ai\registry.hpp" />
 		<Unit filename="..\..\src\ai\testing.cpp" />
@@ -214,6 +216,8 @@
 		<Unit filename="..\..\src\controller_base.hpp" />
 		<Unit filename="..\..\src\cursor.cpp" />
 		<Unit filename="..\..\src\cursor.hpp" />
+		<Unit filename="..\..\src\desktop_util.cpp" />
+		<Unit filename="..\..\src\desktop_util.hpp" />
 		<Unit filename="..\..\src\dialogs.cpp" />
 		<Unit filename="..\..\src\dialogs.hpp" />
 		<Unit filename="..\..\src\display.cpp" />
@@ -549,6 +553,8 @@
 		<Unit filename="..\..\src\gui\dialogs\game_delete.hpp" />
 		<Unit filename="..\..\src\gui\dialogs\game_load.cpp" />
 		<Unit filename="..\..\src\gui\dialogs\game_load.hpp" />
+		<Unit filename="..\..\src\gui\dialogs\game_paths.cpp" />
+		<Unit filename="..\..\src\gui\dialogs\game_paths.hpp" />
 		<Unit filename="..\..\src\gui\dialogs\game_save.cpp" />
 		<Unit filename="..\..\src\gui\dialogs\game_save.hpp" />
 		<Unit filename="..\..\src\gui\dialogs\gamestate_inspector.cpp" />
@@ -709,6 +715,7 @@
 		<Unit filename="..\..\src\image_modifications.hpp" />
 		<Unit filename="..\..\src\intro.cpp" />
 		<Unit filename="..\..\src\intro.hpp" />
+		<Unit filename="..\..\src\iterator.hpp" />
 		<Unit filename="..\..\src\joystick.cpp" />
 		<Unit filename="..\..\src\joystick.hpp" />
 		<Unit filename="..\..\src\key.cpp" />
@@ -900,7 +907,6 @@
 		<Unit filename="..\..\src\storyscreen\part.hpp" />
 		<Unit filename="..\..\src\storyscreen\render.cpp" />
 		<Unit filename="..\..\src\storyscreen\render.hpp" />
-		<Unit filename="..\..\src\stub.hpp" />
 		<Unit filename="..\..\src\team.cpp" />
 		<Unit filename="..\..\src\team.hpp" />
 		<Unit filename="..\..\src\terrain.cpp" />

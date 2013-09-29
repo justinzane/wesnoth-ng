@@ -270,8 +270,7 @@ void create::process_event()
 	if (era_changed) {
 		engine_.set_current_era_index(era_selection_);
 
-		description_.set_text(engine_.current_extra(
-			create_engine::ERA).description);
+		set_description(engine_.current_extra(create_engine::ERA).description);
 		synchronize_selections();
 	}
 
@@ -314,7 +313,7 @@ void create::process_event()
 
 		draw_level_image();
 
-		description_.set_text(engine_.current_level().description());
+		set_description(engine_.current_level().description());
 
 		tooltips::clear_tooltips(image_rect_);
 		if (!engine_.current_level().description().empty()) {
@@ -365,8 +364,7 @@ void create::process_event()
 	if (mod_selection_changed) {
 		engine_.set_current_mod_index(mod_selection_);
 
-		description_.set_text(engine_.current_extra(
-			create_engine::MOD).description);
+		set_description(engine_.current_extra(create_engine::MOD).description);
 	}
 }
 
@@ -378,9 +376,12 @@ void create::init_level_type_changed(size_t index)
 	}
 
 	engine_.set_current_level_type(available_level_types_[selected]);
-	engine_.set_current_level(index);
+	const std::vector<std::string>& menu_item_names =
+		engine_.levels_menu_item_names();
 
-	levels_menu_.set_items(engine_.levels_menu_item_names());
+	engine_.set_current_level((index < menu_item_names.size()) ? index : 0);
+
+	levels_menu_.set_items(menu_item_names);
 	levels_menu_.move_selection(index);
 
 	level_selection_ = -1;
@@ -431,6 +432,12 @@ void create::draw_level_image()
 		update_rect(image_rect_);
 
 	}
+}
+
+void create::set_description(const std::string& description)
+{
+	description_.set_text(description.empty() ? "No description available." :
+		description);
 }
 
 std::string create::select_campaign_difficulty()

@@ -163,7 +163,7 @@ public:
 
 	const unit_type& get_gender_unit_type(std::string gender) const;
 	const unit_type& get_gender_unit_type(unit_race::GENDER gender) const;
-	const unit_type& get_variation(const std::string& name) const;
+	const unit_type& get_variation(const std::string& id) const;
 	/** Info on the type of unit that the unit reanimates as. */
 	const std::string& undead_variation() const { return undead_variation_; }
 
@@ -190,6 +190,8 @@ public:
 	int jamming() const {return jamming_; }
 	int max_attacks() const { return max_attacks_; }
 	int cost() const { return cost_; }
+	const std::string& default_variation() const { return default_variation_; }
+	const std::string& variation_name() const { return variation_name_; }
 	const std::string& usage() const { return usage_; }
 	const std::string& image() const { return image_; }
 	const std::string& icon() const { return icon_; }
@@ -245,6 +247,12 @@ public:
 	/// to the HELP_INDEX status.
 	const std::vector<unit_race::GENDER>& genders() const { return genders_; }
 	std::vector<std::string> variations() const;
+	
+	/**
+	 * @param variation_id		The id of the variation we search for.
+	 * @return					Iff one of the type's variations' (or the sibling's if the unit_type is a variation itself) id matches @variation_id.
+	 */
+	bool has_variation(const std::string& variation_id) const;
 
 	/// Returns the ID of this type's race without the need to build the type.
 	std::string race_id() const { return cfg_["race"]; } //race_->id(); }
@@ -259,9 +267,17 @@ public:
 	/// Returns a trimmed config suitable for use with units.
 	const config & get_cfg_for_units() const
 	{ return built_unit_cfg_ ? unit_cfg_ : build_unit_cfg(); }
+
+	/// Gets resistance while considering custom WML abilities.
+	/// Attention: Filters in resistance-abilities will be ignored.
+	int resistance_against(const std::string& damage_name, bool attacker) const;
+
 private:
 	/// Generates (and returns) a trimmed config suitable for use with units.
 	const config & build_unit_cfg() const;
+
+	/// Identical to unit::resistance_filter_matches.
+	bool resistance_filter_matches(const config& cfg,bool attacker,const std::string& damage_name, int res) const;
 
 private:
 	void operator=(const unit_type& o);
@@ -297,6 +313,8 @@ private:
 
 	typedef std::map<std::string,unit_type*> variations_map;
 	variations_map variations_;
+	std::string default_variation_;
+	std::string variation_name_;
 
 	const unit_race* race_;	/// Never NULL, but may point to the null race.
 

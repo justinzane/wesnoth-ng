@@ -26,6 +26,8 @@
 #include "loadscreen.hpp"
 #include "log.hpp"
 #include "portrait.hpp"
+#include "unit.hpp"
+#include "unit_abilities.hpp"
 #include "unit_animation.hpp"
 
 #include <boost/foreach.hpp>
@@ -364,6 +366,7 @@ unit_type::unit_type(const unit_type& o) :
 	flag_rgb_(o.flag_rgb_),
 	num_traits_(o.num_traits_),
 	variations_(o.variations_),
+	default_variation_(o.default_variation_),
 	race_(o.race_),
 	alpha_(o.alpha_),
 	abilities_(o.abilities_),
@@ -418,6 +421,8 @@ unit_type::unit_type(const config &cfg, const std::string & parent_id) :
 	num_traits_(0),
 	gender_types_(),
 	variations_(),
+	default_variation_(cfg_["variation"]),
+	variation_name_(cfg_["variation_name"].t_str()),
 	race_(&unit_race::null_race),
 	alpha_(ftofxp(1.0)),
 	abilities_(),
@@ -633,13 +638,14 @@ void unit_type::build_help_index(const movement_type_map &mv_types,
 	}
 	BOOST_FOREACH(const config &var_cfg, cfg_.child_range("variation"))
 	{
-		const std::string var_name = var_cfg["variation_name"];
+		const std::string& var_id = var_cfg["variation_id"].empty() ?
+				var_cfg["variation_name"] : var_cfg["variation_id"];
 
 		unit_type *ut = new unit_type(var_cfg, id_);
-		ut->debug_id_ = debug_id_ + " [" + var_name + "]";
+		ut->debug_id_ = debug_id_ + " [" + var_id + "]";
 		ut->base_id_ = base_id_;  // In case this is not id_.
 		ut->build_help_index(mv_types, races, traits);
-		variations_.insert(std::make_pair(var_name, ut));
+		variations_.insert(std::make_pair(var_id, ut));
 	}
 
 	hide_help_= cfg_["hide_help"].to_bool();
@@ -746,9 +752,9 @@ const unit_type& unit_type::get_gender_unit_type(unit_race::GENDER gender) const
 	return *this;
 }
 
-const unit_type& unit_type::get_variation(const std::string& name) const
+const unit_type& unit_type::get_variation(const std::string& id) const
 {
-	const variations_map::const_iterator i = variations_.find(name);
+	const variations_map::const_iterator i = variations_.find(id);
 	if(i != variations_.end()) {
 		return *i->second;
 	} else {
@@ -1031,6 +1037,10 @@ std::vector<std::string> unit_type::variations() const
 	return retval;
 }
 
+bool unit_type::has_variation(const std::string& variation_id) const
+{
+	return variations_.find(variation_id) != variations_.end();
+}
 
 /**
  * Generates (and returns) a trimmed config suitable for use with units.
@@ -1045,7 +1055,7 @@ const config & unit_type::build_unit_cfg() const
 	static char const *unit_type_attrs[] = { "attacks", "die_sound",
 		"experience", "flies", "hide_help", "hitpoints", "id",
 		"ignore_race_traits", "inherit", "movement", "movement_type",
-		"name", "num_traits", "variation_name" };
+		"name", "num_traits", "variation_id", "variation_name" };
 	BOOST_FOREACH(const char *attr, unit_type_attrs) {
 		unit_cfg_.remove_attribute(attr);
 	}
@@ -1065,7 +1075,51 @@ const config & unit_type::build_unit_cfg() const
 	return unit_cfg_;
 }
 
+int unit_type::resistance_against(const std::string& damage_name, bool attacker) const
+{
+	int resistance = movement_type_.resistance_against(damage_name);
+	unit_ability_list resistance_abilities;
+	if (const config &abilities = cfg_.child("abilities")) {
+		BOOST_FOREACH(const config& cfg, abilities.child_range("resistance")) {
+			if (!cfg["affect_self"].to_bool(true)) {
+				continue;
+			}
+			if (!resistance_filter_matches(cfg, attacker, damage_name, 100 - resistance)) {
+				continue;
+			}
+			resistance_abilities.push_back(unit_ability(&cfg, map_location::null_location));
+		}
+	}
+	if (!resistance_abilities.empty()) {
+		unit_abilities::effect resist_effect(resistance_abilities, 100 - resistance, false);
+		resistance = 100 - std::min<int>(resist_effect.get_composite_value(),
+				resistance_abilities.highest("max_value").first);
+	}
+	return resistance;
+}
 
+bool unit_type::resistance_filter_matches(const config& cfg, bool attacker, const std::string& damage_name, int res) const
+{
+	if(!(cfg["active_on"]=="" || (attacker && cfg["active_on"]=="offense") || (!attacker && cfg["active_on"]=="defense"))) {
+		return false;
+	}
+	const std::string& apply_to = cfg["apply_to"];
+	if(!apply_to.empty()) {
+		if(damage_name != apply_to) {
+			if ( apply_to.find(',') != std::string::npos  &&
+			     apply_to.find(damage_name) != std::string::npos ) {
+				const std::vector<std::string>& vals = utils::split(apply_to);
+				if(std::find(vals.begin(),vals.end(),damage_name) == vals.end()) {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+	}
+	if (!unit_abilities::filter_base_matches(cfg, res)) return false;
+	return true;
+}
 /* ** unit_type_data ** */
 
 
@@ -1128,6 +1182,8 @@ namespace { // Helpers for set_config()
 		std::vector<std::string> base_ids;
 		BOOST_FOREACH (config & base, ut_cfg.child_range("base_unit") )
 			base_ids.push_back(base["id"]);
+
+		ut_cfg["base_ids"] = utils::join(base_ids);
 
 		// Clear the base units (otherwise they could interfere with the merge).
 		// This has the side-effect of breaking cycles, hence base_tree is

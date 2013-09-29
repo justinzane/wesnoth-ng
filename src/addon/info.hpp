@@ -48,11 +48,19 @@ struct addon_info
 	std::vector<std::string> depends;
 	// std::vector<addon_dependency> conflicts, recommends, replaces;
 
+	time_t updated;
+
+	// Artificial upload order index used to preserve add-ons upload order
+	// until we have actual first-upload timestamps implemented. This index
+	// is not serialized anywhere.
+	unsigned order;
+
 	addon_info()
 		: id(), title(), description(), icon()
 		, version(), author(), size(), downloads()
 		, uploads(), type(), locales()
 		, depends()
+		, updated(), order()
 	{}
 
 	explicit addon_info(const config& cfg)
@@ -60,6 +68,7 @@ struct addon_info
 		, version(), author(), size(), downloads()
 		, uploads(), type(), locales()
 		, depends()
+		, updated(), order()
 	{
 		this->read(cfg);
 	}
@@ -78,6 +87,8 @@ struct addon_info
 			this->type = o.type;
 			this->locales = o.locales;
 			this->depends = o.depends;
+			this->updated = o.updated;
+			this->order = o.order;
 		}
 		return *this;
 	}
@@ -90,7 +101,7 @@ struct addon_info
 	 * Write only minimal WML used for state tracking (_info.cfg) files.
 	 *
 	 * This currently only includes the add-on type, upload count,
-	 * and version number.
+	 * title, and version number.
 	 *
 	 * @param cfg Target WML config object.
 	 */

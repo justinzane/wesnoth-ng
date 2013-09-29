@@ -633,6 +633,7 @@ set(wesnoth-main_SRC
 	ai/lua/lua_object.cpp
 	ai/lua/unit_advancements_aspect.cpp
 	ai/manager.cpp
+	ai/recruitment/recruitment.cpp
 	ai/registry.cpp
 	ai/testing.cpp
 	ai/testing/aspect_attacks.cpp
@@ -649,6 +650,7 @@ set(wesnoth-main_SRC
 	commandline_options.cpp
 	config_cache.cpp
 	controller_base.cpp
+	desktop_util.cpp
 	dialogs.cpp
 	editor/action/action.cpp
 	editor/action/action_item.cpp
@@ -727,6 +729,7 @@ set(wesnoth-main_SRC
 	gui/dialogs/formula_debugger.cpp
 	gui/dialogs/game_delete.cpp
 	gui/dialogs/game_load.cpp
+	gui/dialogs/game_paths.cpp
 	gui/dialogs/game_save.cpp
 	gui/dialogs/gamestate_inspector.cpp
 	gui/dialogs/language_selection.cpp

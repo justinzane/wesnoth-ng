@@ -16,6 +16,7 @@
 
 #include <SDL_syswm.h>
 
+#include "gettext.hpp"
 #include "serialization/string_utils.hpp"
 
 NOTIFYICONDATA* windows_tray_notification::nid = NULL;
@@ -98,10 +99,12 @@ bool windows_tray_notification::create_tray_icon()
 		return false;
 	}
 
-	const HWND window = get_window_hanlde();
+	const HWND window = get_window_handle();
 	if (window == NULL) {
 		return false;
 	}
+
+	const std::wstring& wtip = string_to_wstring(_("The Battle for Wesnoth"));
 
 	// filling notification structure
 	nid = new NOTIFYICONDATA;
@@ -117,7 +120,7 @@ bool windows_tray_notification::create_tray_icon()
 #if _WIN32_WINNT >= 0x600
 	nid->hBalloonIcon = icon;
 #endif
-	lstrcpy(nid->szTip, L"The Battle For Wesnoth");
+	lstrcpy(nid->szTip, wtip.c_str());
 
 	// creating icon notification
 	return Shell_NotifyIcon(NIM_ADD, nid) != FALSE;
@@ -129,8 +132,8 @@ bool windows_tray_notification::set_tray_message(const std::string& title, const
 	message_reset = (nid->uFlags & NIF_INFO) != 0;
 
 	nid->uFlags |= NIF_INFO;
-	lstrcpy(nid->szInfoTitle, string_to_wstring(title).data());
-	lstrcpy(nid->szInfo, string_to_wstring(message).data());
+	lstrcpy(nid->szInfoTitle, string_to_wstring(title).c_str());
+	lstrcpy(nid->szInfo, string_to_wstring(message).c_str());
 
 	// setting notification
 	return Shell_NotifyIcon(NIM_MODIFY, nid) != FALSE;
@@ -149,7 +152,7 @@ void windows_tray_notification::adjust_length(std::string& title, std::string& m
 	}
 }
 
-HWND windows_tray_notification::get_window_hanlde()
+HWND windows_tray_notification::get_window_handle()
 {
 	SDL_SysWMinfo wmInfo;
 	SDL_VERSION(&wmInfo.version);
@@ -162,7 +165,7 @@ HWND windows_tray_notification::get_window_hanlde()
 
 void windows_tray_notification::switch_to_wesnoth_window()
 {
-	const HWND window = get_window_hanlde();
+	const HWND window = get_window_handle();
 	if (window == NULL) {
 		return;
 	}

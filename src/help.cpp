@@ -529,6 +529,7 @@ static std::vector<std::string> make_unit_links_list(
 
 static void generate_races_sections(const config *help_cfg, section &sec, int level);
 static std::vector<topic> generate_unit_topics(const bool, const std::string& race);
+static void generate_unit_sections(const config *help_cfg, section &sec, int level, const bool, const std::string& race);
 enum UNIT_DESCRIPTION_TYPE {FULL_DESCRIPTION, NO_DESCRIPTION, NON_REVEALING_DESCRIPTION};
 /// Return the type of description that should be shown for a unit of
 /// the given kind. This method is intended to filter out information
@@ -1042,6 +1043,11 @@ void generate_sections(const config *help_cfg, const std::string &generator, sec
 {
 	if (generator == "races") {
 		generate_races_sections(help_cfg, sec, level);
+	} else {
+		std::vector<std::string> parts = utils::split(generator, ':', utils::STRIP_SPACES);
+		if (parts[0] == "units" && parts.size()>1) {
+			generate_unit_sections(help_cfg, sec, level, true, parts[1]);
+		}
 	}
 }
 
@@ -1373,42 +1379,56 @@ public:
 					}
 					ss << "<ref>dst='" << escape(ref_id) << "' text='" << escape(lang_unit) << "'</ref>";
 				}
-				ss << "\n"; //added even if empty, to avoid shifting
+				if (!first) ss << "\n";
 
 				reverse = !reverse; //switch direction
 			} while(reverse != first_reverse_value); // don't restart
 		}
 
+		const unit_type* parent = variation_.empty() ? &type_ :
+				unit_types.find(type_.id(), unit_type::HELP_INDEX);
 		if (!variation_.empty()) {
-			const unit_type *parent = unit_types.find(type_.id(), unit_type::HELP_INDEX);
-			ss << _("Base unit: ") << "<ref>dst='" << unit_prefix + type_.id() << "' text='" << escape(parent->type_name()) << "'</ref>\n";
-		}
-
-		if (variation_.empty()) {
+			ss << _("Base unit: ") << "<ref>dst='" << ".." << unit_prefix + type_.id()
+					<< "' text='" << escape(parent->type_name()) << "'</ref>\n";
+		} else {
 			bool first = true;
-			BOOST_FOREACH(const std::string &var, type_.variations()) {
-				const unit_type &type = type_.get_variation(var);
-				if (type.hide_help()) continue;
-
+			BOOST_FOREACH(const std::string& base_id, utils::split(type_.get_cfg()["base_ids"])) {
 				if (first) {
-					ss << _("Variations: ");
+					ss << _("Base units: ");
 					first = false;
-				} else
-					ss << ", ";
-
-				std::string ref_id;
-				std::string var_name = var;
-				if (description_type(type) == FULL_DESCRIPTION) {
-					ref_id = variation_prefix + type.id() + "_" + var;
-				} else {
-					ref_id = unknown_unit_topic;
-					var_name += " (?)";
 				}
-
-				ss << "<ref>dst='" << escape(ref_id) << "' text='" << escape(var_name) << "'</ref>";
+				const unit_type* base_type = unit_types.find(base_id, unit_type::HELP_INDEX);
+				const std::string section_prefix = base_type->variations().empty() ? "" : "..";
+				ss << "<ref>dst='" << section_prefix << unit_prefix + base_id
+						<< "' text='" << escape(base_type->type_name()) << "'</ref>\n";
 			}
-			ss << "\n"; //added even if empty, to avoid shifting
 		}
+
+		bool first = true;
+		BOOST_FOREACH(const std::string &var_id, parent->variations()) {
+			const unit_type &type = parent->get_variation(var_id);
+
+			if (type.hide_help() || variation_ == var_id) continue;
+
+			if (first) {
+				ss << _("Variations: ");
+				first = false;
+			} else
+				ss << ", ";
+
+			std::string ref_id;
+
+			std::string var_name = type.variation_name();
+			if (description_type(type) == FULL_DESCRIPTION) {
+				ref_id = variation_prefix + type.id() + "_" + var_id;
+			} else {
+				ref_id = unknown_unit_topic;
+				var_name += " (?)";
+			}
+
+			ss << "<ref>dst='" << escape(ref_id) << "' text='" << escape(var_name) << "'</ref>";
+		}
+		ss << "\n"; //added even if empty, to avoid shifting
 
 		// Print the race of the unit, cross-reference it to the
 		// respective topic.
@@ -1791,6 +1811,7 @@ void generate_races_sections(const config *help_cfg, section &sec, int level)
 		}
 		section_cfg["title"] = title;
 
+		section_cfg["sections_generator"] = "units:" + *it;
 		section_cfg["generator"] = "units:" + *it;
 
 		parse_config_internal(help_cfg, &section_cfg, race_section, level+1);
@@ -1798,6 +1819,39 @@ void generate_races_sections(const config *help_cfg, section &sec, int level)
 	}
 }
 
+void generate_unit_sections(const config* /*help_cfg*/, section& sec, int level, const bool /*sort_generated*/, const std::string& race)
+{
+	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types()) {
+		const unit_type &type = i.second;
+
+		if (type.race_id() != race)
+			continue;
+
+		if (type.variations().empty())
+			continue;
+
+		section base_unit;
+		BOOST_FOREACH(const std::string &variation_id, type.variations()) {
+			// TODO: Do we apply encountered stuff to variations?
+			const unit_type &var_type = type.get_variation(variation_id);
+			const std::string topic_name = var_type.type_name() + "\n" + var_type.variation_name();
+			const std::string var_ref = hidden_symbol(var_type.hide_help()) + variation_prefix + var_type.id() + "_" + variation_id;
+
+			topic var_topic(topic_name, var_ref, "");
+			var_topic.text = new unit_topic_generator(var_type, variation_id);
+			base_unit.topics.push_back(var_topic);
+		}
+
+		const std::string type_name = type.type_name();
+		const std::string ref_id = hidden_symbol(type.hide_help()) + unit_prefix +  type.id();
+
+		base_unit.id = ref_id;
+		base_unit.title = type_name;
+		base_unit.level = level +1;
+
+		sec.add_section(base_unit);
+	}
+}
 
 std::vector<topic> generate_unit_topics(const bool sort_generated, const std::string& race)
 {
@@ -1812,23 +1866,13 @@ std::vector<topic> generate_unit_topics(const bool sort_generated, const std::st
 		if (type.race_id() != race)
 			continue;
 
-		BOOST_FOREACH(const std::string &variation_name, type.variations()) {
-			// TODO: Do we apply encountered stuff to variations?
-			const unit_type &var_type = type.get_variation(variation_name);
-			const std::string topic_name = var_type.type_name() + "\n" + variation_name;
-			const std::string var_ref = hidden_symbol(var_type.hide_help()) + variation_prefix + var_type.id() + "_" + variation_name;
-
-			topic var_topic(topic_name, var_ref, "");
-			var_topic.text = new unit_topic_generator(var_type, variation_name);
-			topics.push_back(var_topic);
-		}
-
 		UNIT_DESCRIPTION_TYPE desc_type = description_type(type);
 		if (desc_type != FULL_DESCRIPTION)
 			continue;
 
 		const std::string type_name = type.type_name();
-		const std::string ref_id = hidden_symbol(type.hide_help()) + unit_prefix +  type.id();
+		const std::string real_prefix = type.variations().empty() ? "" : "..";
+		const std::string ref_id = hidden_symbol(type.hide_help()) + real_prefix + unit_prefix +  type.id();
 		topic unit_topic(type_name, ref_id, "");
 		unit_topic.text = new unit_topic_generator(type);
 		topics.push_back(unit_topic);

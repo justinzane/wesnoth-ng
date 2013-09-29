@@ -677,8 +677,9 @@ WML_HANDLER_FUNCTION(clear_menu_item, /*event_info*/, cfg)
 			continue;
 		}
 
-		std::map<std::string, wml_menu_item*>& menu_items = resources::gamedata->get_wml_menu_items().get_menu_items();
-		if(menu_items.find(id) == menu_items.end()) {
+		wmi_container & menu_items = resources::gamedata->get_wml_menu_items();
+		wmi_container::iterator find_it = menu_items.find(id);
+		if ( find_it == menu_items.end() ) {
 			WRN_NG << "trying to remove non-existent menu item '" << id << "', ignoring\n";
 			continue;
 		}
@@ -686,10 +687,7 @@ WML_HANDLER_FUNCTION(clear_menu_item, /*event_info*/, cfg)
 		remove_wmi_change(id);
 		remove_event_handler(id);
 
-		wml_menu_item*& mi = menu_items[id];
-		delete mi;
-		mi = NULL;
-		menu_items.erase(id);
+		menu_items.erase(find_it);
 	}
 }
 
@@ -810,7 +808,7 @@ WML_HANDLER_FUNCTION(heal_unit, event_info, cfg)
 {
 	unit_map* units = resources::units;
 
-	const vconfig healers_filter = cfg.child("filter_second");
+	const vconfig & healers_filter = cfg.child("filter_second");
 	std::vector<unit*> healers;
 	if (!healers_filter.null()) {
 		BOOST_FOREACH(unit& u, *units) {
@@ -826,7 +824,7 @@ WML_HANDLER_FUNCTION(heal_unit, event_info, cfg)
 	const bool restore_statuses = cfg["restore_statuses"].to_bool(true);
 	const bool animate = cfg["animate"].to_bool(false);
 
-	const vconfig healed_filter = cfg.child("filter");
+	const vconfig & healed_filter = cfg.child("filter");
 	bool only_unit_at_loc1 = healed_filter.null();
 	bool heal_amount_to_set = true;
 	for(unit_map::unit_iterator u  = units->begin(); u != units->end(); ++u) {
@@ -1420,7 +1418,7 @@ WML_HANDLER_FUNCTION(move_units_fake, /*event_info*/, cfg)
 
 WML_HANDLER_FUNCTION(object, event_info, cfg)
 {
-	const vconfig filter = cfg.child("filter");
+	const vconfig & filter = cfg.child("filter");
 
 	std::string id = cfg["id"];
 
@@ -1547,7 +1545,7 @@ WML_HANDLER_FUNCTION(recall, /*event_info*/, cfg)
 	temp_config["x"] = "recall";
 	temp_config["y"] = "recall";
 	vconfig unit_filter(temp_config);
-	const vconfig leader_filter = cfg.child("secondary_unit");
+	const vconfig & leader_filter = cfg.child("secondary_unit");
 
 	for(int index = 0; index < int(resources::teams->size()); ++index) {
 		LOG_NG << "for side " << index + 1 << "...\n";
@@ -1855,11 +1853,8 @@ WML_HANDLER_FUNCTION(set_menu_item, /*event_info*/, cfg)
 	   [/set_menu_item]
 	   */
 	std::string id = cfg["id"];
-	wml_menu_item*& mref = resources::gamedata->get_wml_menu_items().get_item(id);
-	if(mref == NULL) {
-		mref = new wml_menu_item(id);
-	}
-	mref->update(cfg);
+	wml_menu_item & item = resources::gamedata->get_wml_menu_items().get_item(id);
+	item.update(cfg);
 }
 
 WML_HANDLER_FUNCTION(set_variable, /*event_info*/, cfg)
@@ -2070,7 +2065,7 @@ WML_HANDLER_FUNCTION(set_variable, /*event_info*/, cfg)
 	const vconfig::child_list join_elements = cfg.get_children("join");
 	if(!join_elements.empty())
 	{
-		const vconfig join_element=join_elements.front();
+		const vconfig & join_element = join_elements.front();
 
 		std::string array_name=join_element["variable"];
 		std::string separator=join_element["separator"];
@@ -2159,7 +2154,7 @@ WML_HANDLER_FUNCTION(set_variables, /*event_info*/, cfg)
 			data.add_child(dest.key, i->get_config());
 		}
 	} else if(!split_elements.empty()) {
-		const vconfig split_element=split_elements.front();
+		const vconfig & split_element = split_elements.front();
 
 		std::string split_string=split_element["list"];
 		std::string separator_string=split_element["separator"];
@@ -2254,7 +2249,7 @@ WML_HANDLER_FUNCTION(teleport, event_info, cfg)
 	unit_map::iterator u = resources::units->find(event_info.loc1);
 
 	// Search for a valid unit filter, and if we have one, look for the matching unit
-	const vconfig filter = cfg.child("filter");
+	const vconfig & filter = cfg.child("filter");
 	if(!filter.null()) {
 		for (u = resources::units->begin(); u != resources::units->end(); ++u){
 			if ( u->matches_filter(filter) )

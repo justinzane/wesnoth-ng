@@ -53,6 +53,7 @@ const std::string attributes_to_trim[] = {
 	"extra_recruit",
 	"previous_recruits",
 	"controller",
+	"current_player",
 	"team_name",
 	"user_team_name",
 	"color",
@@ -800,8 +801,7 @@ side_engine::side_engine(const config& cfg, connect_engine& parent_engine,
 	controller_(CNTR_NETWORK),
 	current_controller_index_(0),
 	controller_options_(),
-	allow_player_(cfg["controller"] == "ai" && cfg["allow_player"].empty() ?
-		false : cfg["allow_player"].to_bool(true)),
+	allow_player_(cfg["allow_player"].to_bool(true)),
 	allow_changes_(cfg["allow_changes"].to_bool(true)),
 	index_(index),
 	team_(0),
@@ -830,7 +830,9 @@ side_engine::side_engine(const config& cfg, connect_engine& parent_engine,
 	}
 	if (cfg_["controller"] == "null") {
 		set_controller(CNTR_EMPTY);
-	} else if (!current_player_.empty() && cfg_["controller"] != "ai") {
+	} else if (cfg_["controller"] == "ai") {
+		set_controller(CNTR_COMPUTER);
+	} else if (!current_player_.empty()) {
 		// Reserve a side for "current_player", unless the side
 		// is played by an AI.
 		set_controller(CNTR_RESERVED);
@@ -874,6 +876,10 @@ config side_engine::new_config() const
 {
 	config res = cfg_;
 
+	// Save default "recruit" so that correct faction lists would be
+	// initialized by flg_manager when the new side config is sent over network.
+	res["default_recruit"] = cfg_["recruit"];
+
 	// If the user is allowed to change type, faction, leader etc,
 	// then import their new values in the config.
 	if (!parent_.params_.saved_game) {
@@ -887,7 +893,10 @@ config side_engine::new_config() const
 	if (!cfg_.has_attribute("side") || cfg_["side"].to_int() != index_ + 1) {
 		res["side"] = index_ + 1;
 	}
-	res["current_player"] = player_id_.empty() ? current_player_ : player_id_;
+	// Side's current player is the player which is currently taken that side
+	// or the one which is reserved to it.
+	res["current_player"] = !player_id_.empty() ? player_id_ :
+		(controller_ == CNTR_RESERVED ? current_player_ : "");
 	res["controller"] = (res["current_player"] == preferences::login()) ?
 		"human" : controller_names[controller_];
 
@@ -1049,11 +1058,6 @@ bool side_engine::ready_for_start() const
 
 bool side_engine::available_for_user(const std::string& name) const
 {
-	if (!allow_player_) {
-		// Computer sides are never available for players.
-		return false;
-	}
-
 	if (controller_ == CNTR_NETWORK && player_id_.empty()) {
 		// Side is free and waiting for user.
 		return true;

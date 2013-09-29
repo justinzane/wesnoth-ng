@@ -191,8 +191,7 @@ surface rotate_modification::operator()(const surface& src) const
 		case 360: return src;
 	}
 
-	// Other values are not supported. Ignore them.
-	return src;
+	return rotate_any_surface(src, normalized, zoom_, offset_);
 }
 
 surface gs_modification::operator()(const surface& src) const
@@ -640,7 +639,30 @@ REGISTER_MOD_PARSER(FL, args)
 // Rotations
 REGISTER_MOD_PARSER(ROTATE, args)
 {
-	return new rotate_modification(lexical_cast_default<int>(args, 90));
+	std::vector<std::string> const& slice_params = utils::split(args, ',', utils::STRIP_SPACES);
+	const size_t s = slice_params.size();
+
+	switch (s) {
+		case 0:
+			return new rotate_modification();
+			break;
+		case 1:
+			return new rotate_modification(
+					lexical_cast_default<int>(slice_params[0]));
+			break;
+		case 2:
+			return new rotate_modification(
+					lexical_cast_default<int>(slice_params[0]),
+					lexical_cast_default<int>(slice_params[1]));
+			break;
+		case 3:
+			return new rotate_modification(
+					lexical_cast_default<int>(slice_params[0]),
+					lexical_cast_default<int>(slice_params[1]),
+					lexical_cast_default<int>(slice_params[2]));
+			break;
+	}
+	return NULL;
 }
 
 // Grayscale

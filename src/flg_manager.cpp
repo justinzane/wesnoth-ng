@@ -44,7 +44,8 @@ flg_manager::flg_manager(const std::vector<const config*>& era_factions,
 	side_(side),
 	map_settings_(map_settings),
 	saved_game_(saved_game),
-	has_no_recruits_(side_["recruit"].empty() &&
+	has_no_recruits_((side_.has_attribute("default_recruit") ?
+		side_["default_recruit"].empty() : side_["recruit"].empty()) &&
 		side_["previous_recruits"].empty() && side_["extra_recruit"].empty()),
 	color_(color),
 	available_factions_(),
@@ -78,7 +79,7 @@ flg_manager::flg_manager(const std::vector<const config*>& era_factions,
 			}
 		}
 	}
-	if (!default_leader_type_.empty()) {
+	if (!default_leader_type_.empty() && default_leader_type_ != "random") {
 		const unit_type* unit = unit_types.find(default_leader_type_);
 		if (unit == NULL) {
 			default_leader_type_.clear();
@@ -192,7 +193,6 @@ void flg_manager::reset_gender_combo(gui::combo& combo_gender) const
 }
 
 void flg_manager::resolve_random() {
-	bool solved_random_faction = false;
 	if ((*current_faction_)["random_faction"].to_bool()) {
 		std::vector<std::string> faction_choices, faction_excepts;
 
@@ -240,12 +240,10 @@ void flg_manager::resolve_random() {
 		current_faction_ = available_factions_[faction_index];
 
 		update_available_leaders();
-
-		solved_random_faction = true;
+		set_current_leader(0);
 	}
 
-	bool solved_random_leader = false;
-	if (current_leader_ == "random" || solved_random_faction) {
+	if (current_leader_ == "random") {
 		std::vector<std::string> nonrandom_leaders;
 		BOOST_FOREACH(const std::string& leader, available_leaders_) {
 			if (leader != "random") {
@@ -264,13 +262,12 @@ void flg_manager::resolve_random() {
 			current_leader_ = nonrandom_leaders[lchoice];
 
 			update_available_genders();
+			set_current_gender(0);
 		}
-
-		solved_random_leader = true;
 	}
 
 	// Resolve random genders "very much" like standard unit code.
-	if (current_gender_ == "random" || solved_random_leader) {
+	if (current_gender_ == "random") {
 		const unit_type *ut = unit_types.find(current_leader_);
 		if (ut) {
 			std::vector<std::string> nonrandom_genders;
@@ -298,9 +295,9 @@ void flg_manager::update_available_factions()
 		if ((*faction)["id"] == "Custom" && side_["faction"] != "Custom" &&
 			has_no_recruits_) {
 
-			// "Custom" faction should not be available if both "recruit"
-			// and "previous_recruits" lists are empty. However, it should
-			// be available if it was explicitly stated so.
+			// "Custom" faction should not be available if both
+			// "default_recruit" and "previous_recruits" lists are empty.
+			// However, it should be available if it was explicitly stated so.
 			continue;
 		}
 
@@ -476,8 +473,8 @@ int flg_manager::find_suitable_faction(const std::string& faction_id) const
 		search_field = "id";
 	} else if (side_["faction_from_recruit"].to_bool()) {
 		// Choose based on recruit.
-		find = utils::split(side_["recruit"]);
-		search_field = "recruit";
+		find = utils::split(side_["default_recruit"]);
+		search_field = "default_recruit";
 	} else if (const config::attribute_value *l = side_.get("leader")) {
 		// Choose based on leader.
 		find.push_back(*l);

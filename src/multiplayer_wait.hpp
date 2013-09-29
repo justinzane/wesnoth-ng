@@ -28,6 +28,7 @@ class wait : public ui
 public:
 	wait(game_display& disp, const config& cfg, game_state& state, chat& c,
 		config& gamelist, const bool first_scenario = true);
+	~wait();
 	virtual void process_event();
 
 	void join_game(bool observe);
@@ -62,11 +63,11 @@ private:
 
 		gui::combo combo_leader_;
 		gui::combo combo_gender_;
-
-		size_t selection_;
 	};
 
 	void generate_menu();
+	bool has_level_data() const;
+	bool download_level_data();
 
 	gui::button cancel_button_;
 	gui::label start_label_;

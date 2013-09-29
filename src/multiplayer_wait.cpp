@@ -16,6 +16,7 @@
 
 #include "dialogs.hpp"
 #include "gettext.hpp"
+#include "game_config_manager.hpp"
 #include "game_preferences.hpp"
 #include "gui/dialogs/transient_message.hpp"
 #include "game_display.hpp"
@@ -49,8 +50,7 @@ wait::leader_preview_pane::leader_preview_pane(game_display& disp,
 	flg_(flg),
 	color_(color),
 	combo_leader_(disp, std::vector<std::string>()),
-	combo_gender_(disp, std::vector<std::string>()),
-	selection_(0)
+	combo_gender_(disp, std::vector<std::string>())
 {
 	flg_.reset_leader_combo(combo_leader_);
 	flg_.reset_gender_combo(combo_gender_);
@@ -60,7 +60,7 @@ wait::leader_preview_pane::leader_preview_pane(game_display& disp,
 
 void wait::leader_preview_pane::process_event()
 {
-	if (combo_leader_.changed()) {
+	if (combo_leader_.changed() && combo_leader_.selected() >= 0) {
 		flg_.set_current_leader(combo_leader_.selected());
 
 		flg_.reset_gender_combo(combo_gender_);
@@ -68,7 +68,7 @@ void wait::leader_preview_pane::process_event()
 		set_dirty();
 	}
 
-	if (combo_gender_.changed()) {
+	if (combo_gender_.changed() && combo_gender_.selected() >= 0) {
 		flg_.set_current_gender(combo_gender_.selected());
 
 		set_dirty();
@@ -160,14 +160,14 @@ bool wait::leader_preview_pane::left_side() const
 
 void wait::leader_preview_pane::set_selection(int selection)
 {
-	selection_ = selection;
+	if (selection >= 0) {
+		flg_.set_current_faction(selection);
 
-	flg_.set_current_faction(selection);
+		flg_.reset_leader_combo(combo_leader_);
+		flg_.reset_gender_combo(combo_gender_);
 
-	flg_.reset_leader_combo(combo_leader_);
-	flg_.reset_gender_combo(combo_gender_);
-
-	set_dirty();
+		set_dirty();
+	}
 }
 
 handler_vector wait::leader_preview_pane::handler_members() {
@@ -189,10 +189,19 @@ wait::wait(game_display& disp, const config& cfg, game_state& state,
 	first_scenario_(first_scenario),
 	stop_updates_(false)
 {
-	state_ = game_state();
-
 	game_menu_.set_numeric_keypress_selection(false);
 	gamelist_updated();
+}
+
+wait::~wait()
+{
+	if (get_result() == QUIT) {
+		state_ = game_state();
+		state_.classification().campaign_type = "multiplayer";
+
+		resources::config_manager->
+			load_game_config_for_game(state_.classification());
+	}
 }
 
 void wait::process_event()
@@ -203,17 +212,34 @@ void wait::process_event()
 
 void wait::join_game(bool observe)
 {
-	//if we have got valid side data
-	//the first condition is to make sure that we don't have another
-	//WML message with a side-tag in it
-	const bool download_res = download_level_data(disp(), level_,
-		first_scenario_);
+	const bool download_res = download_level_data();
 	if (!download_res) {
 		set_result(QUIT);
 		return;
 	} else if (!level_["allow_new_game"].to_bool(true)) {
 		set_result(PLAY);
 		return;
+	}
+
+	if (first_scenario_) {
+		state_ = game_state();
+		state_.classification().campaign_type = "multiplayer";
+
+		const config* campaign = &resources::config_manager->
+			game_config().find_child("campaign", "id",
+				level_.child("multiplayer")["mp_campaign"]);
+		if (*campaign) {
+			state_.classification().difficulty =
+				level_.child("multiplayer")["difficulty_define"].str();
+			state_.classification().campaign_define =
+				(*campaign)["define"].str();
+			state_.classification().campaign_xtra_defines =
+				utils::split((*campaign)["extra_defines"]);
+		}
+
+		// Make sure that we have the same config as host, if possible.
+		resources::config_manager->
+			load_game_config_for_game(state_.classification());
 	}
 
 	// Add the map name to the title.
@@ -546,6 +572,43 @@ void wait::generate_menu()
 	if (!gamelist().child("user")) {
 		set_user_list(playerlist, true);
 	}
+}
+
+bool wait::has_level_data() const
+{
+	if (first_scenario_) {
+		return level_.has_attribute("version") && level_.has_child("side");
+	} else {
+		return level_.has_child("next_scenario");
+	}
+}
+
+bool wait::download_level_data()
+{
+	if (!first_scenario_) {
+		// Ask for the next scenario data.
+		network::send_data(config("load_next_scenario"), 0);
+	}
+
+	while (!has_level_data()) {
+		network::connection data_res = dialogs::network_receive_dialog(
+			disp(), _("Getting game data..."), level_);
+
+		if (!data_res) {
+			return false;
+		}
+		check_response(data_res, level_);
+		if (level_.child("leave_game")) {
+			return false;
+		}
+	}
+
+	if (!first_scenario_) {
+		config cfg = level_.child("next_scenario");
+		level_ = cfg;
+	}
+
+	return true;
 }
 
 } // namespace mp
