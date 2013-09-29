@@ -1,0 +1,196 @@
+/*
+ * crap.c
+ *
+ *  Created on: Sep 20, 2013
+ *      Author: justin
+ */
+#include "jz_image_ops.hpp"
+#include <magick/api.h>
+#include <magick/magick.h>
+#include <wand/magick_wand.h>
+#include <Magick++.h>
+
+int __mw_ready__ = 0;
+MagickWand* __mw__;
+MagickPassFail __mw_status__;
+ExceptionInfo* __mw_ex__;
+
+void __mw_init__(void) {
+    if (__mw_ready__ == 0) {
+        InitializeMagick(NULL);
+        __mw__ = NewMagickWand();
+        __mw_status__ = MagickPass;
+        __mw_ready__ = 1;
+    }
+}
+
+void rgba2surf_i(SDL_Surface* surf, Uint32* red, Uint32* green, Uint32* blue, Uint32* alpha) {
+    Uint32 p = 0, x = 0, y = 0;
+    Uint32* sdl_pix = (Uint32*) surf->pixels;
+
+    for (y = 0; y < surf->h; y++) {
+        for (x = 0; x < surf->w; x++) {
+            p = y * surf->w + x;
+            sdl_pix[p] = SDL_MapRGBA(surf->format, (Uint8)red[p], (Uint8)green[p],
+                                     (Uint8)blue[p], (Uint8)alpha[p]);
+        }
+    }
+}
+
+void surf2rgba_i(SDL_Surface* surf, Uint32* red, Uint32* green, Uint32* blue, Uint32* alpha) {
+    if (surf == NULL) { return; }
+    if (red == NULL) { return; }
+    if (green == NULL) { return; }
+    if (blue == NULL) { return; }
+    if (alpha == NULL) { return; }
+
+    Uint32 x = 0, y = 0, p = 0;
+    Uint32* sdl_pix = (Uint32*) surf->pixels;
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+
+    for (y = 0; y < surf->h; y++) {
+        for (x = 0; x < surf->w; x++) {
+            p = surf->w * y + x;
+            SDL_GetRGBA(sdl_pix[p], surf->format, &r, &g, &b, &a);
+            red[p] =   (Uint32)r;
+            green[p] = (Uint32)g;
+            blue[p] =  (Uint32)b;
+            alpha[p] = (Uint32)a;
+        }
+    }
+}
+
+void blur_channel_i(Uint32 height, Uint32 width, Uint32 amount, Uint32* pixels) {
+    /** Input validation */
+    if (pixels == NULL) { return; }
+    if (height < 1 || height >= 2160) { return; }
+    if (width < 1 || width >= 4320) { return; }
+    if (amount > 4) { amount = 4; }
+    if (amount == 0) { return; }
+
+    Uint8 i = 0;
+    Uint16 x = 0, sx = 0, y = 0, sy = 0;
+    Uint32 output[width * height];
+
+    for (i = 0; i < amount; i++) { /** Blur iteration loop */
+        for (y = 0; y < height; y++) { /** row loop */
+            if (y == 0) {
+                sy = 1;
+            } else if (y == (height - 1)) {
+                sy = height - 2;
+            } else {
+                sy = y;
+            }
+            for (x = 1; x < (width - 1); x++) { /** column loop */
+                if (x == 0) {
+                    sx = 1;
+                } else if (x == (width - 1)) {
+                    sx = width - 2;
+                } else {
+                    sx = x;
+                }
+                output[y * width + x] = ((pixels[(sy - 1) * width + (sx - 1)] * DIAG_I  // top left
+                                          + pixels[(sy - 1) * width + (sx + 1)] * DIAG_I  // top right
+                                          + pixels[(sy + 1) * width + (sx - 1)] * DIAG_I  // bottom left
+                                          + pixels[(sy + 1) * width + (sx - 1)] * DIAG_I  // bottom right
+                                          + pixels[(sy - 1) * width + (sx + 0)] * NEXT_I  // top
+                                          + pixels[(sy + 0) * width + (sx - 1)] * NEXT_I  // left
+                                          + pixels[(sy + 0) * width + (sx - 1)] * NEXT_I  // right
+                                          + pixels[(sy + 1) * width + (sx + 0)] * NEXT_I  // bottom
+                                          + pixels[(sy + 0) * width + (sx + 0)] * SELF_I  // center
+                                          ) / DIV_I);
+            } /** end col loop */
+        } /** end row loop */
+        memcpy(pixels, output, sizeof(output));
+    } /** end blur loop */
+}
+
+Image* surf2img(const SDL_Surface* surf) {
+    if (surf == NULL) { return NULL; }
+    Image* img = NULL;
+    char* colormap = NULL;
+
+    __mw_init__();
+
+    /* Determine which colormap string to feed the magick API
+     * based on the SDL PixelFormat masks.     */
+    switch (surf->format->BytesPerPixel) {
+        case 1:
+            if (surf->format->Rmask == 0 &&
+                surf->format->Gmask == 0 &&
+                surf->format->Bmask == 0 &&
+                surf->format->Amask == 0) {
+                /** Palette based surface, can't deal with that.
+                 * TODO: Fixme. */
+                return NULL;
+            } else {
+                colormap = "I"; // I for Intensity (Greyscale)
+            }
+            break;
+        case 2:
+            if (surf->format->Rmask == 0 &&
+                surf->format->Gmask == 0 &&
+                surf->format->Bmask == 0 &&
+                surf->format->Amask == 0) {
+                /** Palette based surface, can't deal with that.
+                 * TODO: Fixme. */
+                return NULL;
+            } else {
+                colormap = "I"; // I for Intensity (Greyscale)
+                /** TODO: Deal with 16bpp greymaps. */
+                return NULL;
+            }
+            break; //case 2
+        case 3:
+            /** TODO: Determine if there in any sense in adding the other odd combos. */
+            if (surf->format->Rmask > surf->format->Gmask &&
+                surf->format->Bmask > surf->format->Bmask &&
+                surf->format->Amask == 0) {
+                colormap = "RGB";
+            } else if (surf->format->Bmask > surf->format->Gmask &&
+                surf->format->Gmask > surf->format->Rmask &&
+                surf->format->Amask == 0) {
+                colormap = "BGR";
+            }
+            break; //case 3
+        case 4:
+            if (surf->format->Rmask > surf->format->Gmask &&
+                surf->format->Bmask > surf->format->Bmask &&
+                surf->format->Bmask > surf->format->Amask) {
+                colormap = "RGBA";
+            } else if (surf->format->Amask > surf->format->Bmask &&
+                surf->format->Bmask > surf->format->Gmask &&
+                surf->format->Gmask > surf->format->Rmask) {
+                colormap = "ABGR";
+            } else if (surf->format->Amask > surf->format->Rmask &&
+                surf->format->Rmask > surf->format->Gmask &&
+                surf->format->Gmask > surf->format->Bmask) {
+                colormap = "ARGB";
+            } else if (surf->format->Bmask > surf->format->Gmask &&
+                surf->format->Gmask > surf->format->Rmask &&
+                surf->format->Rmask > surf->format->Amask) {
+                colormap = "BGRA";
+            }
+            break; //case 4
+        default:
+            return NULL;
+    } //end switch
+
+    img = MagickConstituteImage(__mw__, (size_t)surf->w, (size_t)surf->h,
+                                colormap,
+                                IntegerPixel,
+                                surf->pixels);
+    return img;
+}
+
+void img2surf(const Image* img, const SDL_Surface* surf) {
+    if (img == NULL) { return; }
+
+    unsigned long width=0, height=0;
+
+    __mw_init__();
+
+    __mw_status__ = DispatchImage(img, 0, 0, width, height, "RGBA", IntegerPixel, surf->pixels,
+                                  __mw_ex__);
+
+}

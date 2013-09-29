@@ -1,0 +1,73 @@
+/*
+ * crap.h
+ *
+ *  Created on: Sep 20, 2013
+ *      Author: justin
+ */
+#ifndef JZ_IMAGE_OPS
+#define JZ_IMAGE_OPS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+
+#define dbgscsu(w1, w2, h1, h2) if ((w1==w2) && (h1==h2)) printf("%s[%d] scale_surface %d -> %d, %d -> %d\n", __FILE__, __LINE__, w1, w2, h1, h2)
+
+const Uint32 DIAG_I = 5;
+const Uint32 NEXT_I = 7;
+const Uint32 SELF_I = 20;
+const Uint32 DIV_I  = 68;
+
+/**
+ * Converts red, green, blue and alpha **UJint32** valued pixmaps to an SDL surface.
+ * @note No validation is done to make sure that the pixmaps are the same size and
+ * depth as the surface.
+ */
+void rgba2surf_i(SDL_Surface* surf,    /**< [out]   The surface to be written to. */
+                 Uint32* red,          /**< [in]    Red pixels. */
+                 Uint32* green,        /**< [in]    Green pixels. */
+                 Uint32* blue,         /**< [in]    Blue pixels. */
+                 Uint32* alpha)        /**< [in]    Alpha pixels. */
+    __attribute__((hot, nonnull));
+
+/**
+ * Converts an SDL Surface into separate **Uint32** valued pixmaps for
+ * each channel. Expects an 8 bpp RGBA surface.
+ */
+void surf2rgba_i(SDL_Surface* surf,   /**< [out]   The surface to be written to. */
+                 Uint32* red,          /**< [in]    Red pixels. */
+                 Uint32* green,        /**< [in]    Red pixels. */
+                 Uint32* blue,         /**< [in]    Red pixels. */
+                 Uint32* alpha)        /**< [in]    Red pixels. */
+    __attribute__((hot, nonnull));
+
+/**
+ * Performs an iterative box blur approximation to a gaussian blur. This is
+ * the **Uint32** version.
+ * @note    The height, width and amount are intentionally limited to small
+ * values, based on the UHD 2160p standard, since this is intended only for
+ * use with SDL surfaces.
+ */
+void blur_channel_i(Uint32 height,    /**< [in]        pixmap height, 0 < height <= 2160 */
+                    Uint32 width,     /**< [in]        pixmap width, 0 < width <= 3840 */
+                    Uint32 amount,    /**< [in]        1 <= blur iterations <= 4 */
+                    Uint32* pixels)   /**< [in]        pixmap data pointer */
+    __attribute__((hot, nonnull));
+
+/**
+ * Converts an SDL_Surface into a Magick Image
+ * @param surf [in]
+ * @return pointer to an Image
+ */
+Image* surf2img(const SDL_Surface* surf) __attribute__((hot, nonnull));
+
+/**
+ * Converts a Magick Image into an SDL_Surface' pixels.
+ * @param img  [in]  pointer to Image
+ * @param surf [out] pointer to SDL_Surface
+ */
+void img2surf(const Image* img, const SDL_Surface* surf) __attribute__((hot, nonnull));
+
+#endif
