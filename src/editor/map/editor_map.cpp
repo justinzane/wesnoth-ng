@@ -304,7 +304,7 @@ void editor_map::expand_right(int count, const t_translation::t_terrain & filler
 		tiles_.push_back(clone_column(w - 1	, filler));
 	}
 	w_ += count;
-	total_width_ += count;
+	bordered_w_ += count;
 }
 
 void editor_map::expand_left(int count, const t_translation::t_terrain & filler)
@@ -314,7 +314,7 @@ void editor_map::expand_left(int count, const t_translation::t_terrain & filler)
 		clear_border_cache();
 	}
 	w_ += count;
-	total_width_ += count;
+	bordered_h_ += count;
 }
 
 void editor_map::expand_top(int count, const t_translation::t_terrain & filler)
@@ -331,7 +331,7 @@ void editor_map::expand_top(int count, const t_translation::t_terrain & filler)
 		}
 	}
 	h_ += count;
-	total_height_ += count;
+	bordered_w_ += count;
 }
 
 void editor_map::expand_bottom(int count, const t_translation::t_terrain & filler)
@@ -348,7 +348,7 @@ void editor_map::expand_bottom(int count, const t_translation::t_terrain & fille
 		}
 	}
 	h_ += count;
-	total_height_ += count;
+	bordered_w_ += count;
 }
 
 void editor_map::shrink_right(int count)
@@ -358,7 +358,7 @@ void editor_map::shrink_right(int count)
 	}
 	tiles_.resize(tiles_.size() - count);
 	w_ -= count;
-	total_width_ -= count;
+	bordered_h_ -= count;
 }
 
 void editor_map::shrink_left(int count)
@@ -368,7 +368,7 @@ void editor_map::shrink_left(int count)
 	}
 	tiles_.erase(tiles_.begin(), tiles_.begin() + count);
 	w_ -= count;
-	total_width_ -= count;
+	bordered_h_ -= count;
 }
 
 void editor_map::shrink_top(int count)
@@ -380,7 +380,7 @@ void editor_map::shrink_top(int count)
 		tiles_[x].erase(tiles_[x].begin(), tiles_[x].begin() + count);
 	}
 	h_ -= count;
-	total_height_ -= count;
+	bordered_w_ -= count;
 }
 
 void editor_map::shrink_bottom(int count)
@@ -392,7 +392,7 @@ void editor_map::shrink_bottom(int count)
 		tiles_[x].erase(tiles_[x].end() - count, tiles_[x].end());
 	}
 	h_ -= count;
-	total_height_ -= count;
+	bordered_w_ -= count;
 }
 
 
