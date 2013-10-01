@@ -484,7 +484,6 @@ wesnoth_sources = Split("""
     unit_display.cpp
     unit_frame.cpp
     unit_helper.cpp
-    unit_id.cpp
     unit_map.cpp
     unit_types.cpp
     variable.cpp
