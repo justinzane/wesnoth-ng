@@ -1091,7 +1091,7 @@ int unit_type::resistance_against(const std::string& damage_name, bool attacker)
 		}
 	}
 	if (!resistance_abilities.empty()) {
-		unit_abilities::effect resist_effect(resistance_abilities, 100 - resistance, false);
+		ability_effect resist_effect(resistance_abilities, 100 - resistance, false);
 		resistance = 100 - std::min<int>(resist_effect.get_composite_value(),
 				resistance_abilities.highest("max_value").first);
 	}
@@ -1117,7 +1117,7 @@ bool unit_type::resistance_filter_matches(const config& cfg, bool attacker, cons
 			}
 		}
 	}
-	if (!unit_abilities::filter_base_matches(cfg, res)) return false;
+	if (!filter_base_matches(cfg, res)) return false;
 	return true;
 }
 /* ** unit_type_data ** */

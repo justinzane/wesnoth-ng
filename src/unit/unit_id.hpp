@@ -20,29 +20,25 @@
 
 #include <boost/noncopyable.hpp>
 
-namespace n_unit {
+class unit_id_manager : private boost::noncopyable {
+    private:
+        size_t next_id_;
+        size_t fake_id_;
+        static unit_id_manager manager_;
+        unit_id_manager();
+    public:
+        static unit_id_manager& instance();
+        /** returns id for unit that is created */
+        size_t next_id();
 
-	class id_manager : private boost::noncopyable {
-		private:
-			size_t next_id_;
-			size_t fake_id_;
-			static id_manager manager_;
-			id_manager();
-		public:
-			static id_manager& instance();
-			/** returns id for unit that is created */
-			size_t next_id();
+        size_t next_fake_id();
 
-			size_t next_fake_id();
-
-			/** Used for saving id to savegame */
-			size_t get_save_id();
-			void set_save_id(size_t);
-			/** Clears id counter after game */
-			void clear();
-			void reset_fake();
-	};
-
-}
+        /** Used for saving id to savegame */
+        size_t get_save_id();
+        void set_save_id(size_t);
+        /** Clears id counter after game */
+        void clear();
+        void reset_fake();
+};
 
 #endif

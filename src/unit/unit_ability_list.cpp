@@ -20,9 +20,9 @@
  * @brief		TODO WRITEME
  * @details		TODO WRITEME
  */
-
-#include <map_location.hpp>
-#include <unit/unit_ability_list.hpp>
+#include "unit_ability_list.hpp"
+#include "../map_location.hpp"
+#include <boost/foreach.hpp>
 
 #include <string>
 #include <utility>

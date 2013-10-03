@@ -167,7 +167,7 @@ class asio_server : public  ana::server,
         boost::asio::io_service       io_service_;
         boost::asio::io_service::work work_;
         std::list<boost::thread*>     io_threads_;
-        std::auto_ptr<tcp::acceptor>  acceptor_;
+        std::unique_ptr<tcp::acceptor>  acceptor_;
         std::list<client_proxy*>      client_proxies_;
         bool                          listening_;
         ana::listener_handler*        listener_;

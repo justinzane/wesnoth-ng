@@ -156,13 +156,13 @@ void battle_prediction_pane::get_unit_strings(const battle_context_unit_stats& s
 
 		// Get damage modifiers.
 		unit_ability_list dmg_specials = weapon->get_specials("damage");
-		unit_abilities::effect dmg_effect(dmg_specials, weapon->damage(), stats.backstab_pos);
+		ability_effect dmg_effect(dmg_specials, weapon->damage(), stats.backstab_pos);
 
 		// Get the SET damage modifier, if any.
-		const unit_abilities::individual_effect *set_dmg_effect = NULL;
-		unit_abilities::effect::const_iterator i;
+		const individual_effect *set_dmg_effect = NULL;
+		ability_effect::const_iterator i;
 		for(i = dmg_effect.begin(); i != dmg_effect.end(); ++i) {
-			if(i->type == unit_abilities::SET) {
+			if(i->type == SET) {
 				set_dmg_effect = &*i;
 				break;
 			}
@@ -185,7 +185,7 @@ void battle_prediction_pane::get_unit_strings(const battle_context_unit_stats& s
 
 		// Process the ADD damage modifiers.
 		for(i = dmg_effect.begin(); i != dmg_effect.end(); ++i) {
-			if(i->type == unit_abilities::ADD) {
+			if(i->type == ADD) {
 				left_strings.push_back((*i->ability)["name"]);
 				str.str("");
 				if(i->value >= 0) str << "+" << i->value;
@@ -196,7 +196,7 @@ void battle_prediction_pane::get_unit_strings(const battle_context_unit_stats& s
 
 		// Process the MUL damage modifiers.
 		for(i = dmg_effect.begin(); i != dmg_effect.end(); ++i) {
-			if(i->type == unit_abilities::MUL) {
+			if(i->type == MUL) {
 				left_strings.push_back((*i->ability)["name"]);
 				str.str("");
 				str << "* " << (i->value / 100);

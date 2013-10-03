@@ -81,7 +81,7 @@ private:
 	virtual void do_hide();
 	virtual void do_show();
 
-	std::auto_ptr<unit> temp_unit_;
+	std::unique_ptr<unit> temp_unit_;
 	map_location recall_hex_;
 	fake_unit_ptr fake_unit_;
 };

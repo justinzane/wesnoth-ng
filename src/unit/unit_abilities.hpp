@@ -63,12 +63,9 @@
 #ifndef UNIT_ABILITIES_HPP_INCLUDED
 #define UNIT_ABILITIES_HPP_INCLUDED
 
-#include "map_location.hpp"
+#include "../map_location.hpp"
+#include "unit_ability_list.hpp"
 
-class unit_ability_list;
-
-namespace unit_abilities
-{
 bool filter_base_matches(const config& cfg, int def);
 
 enum value_modifier {NOT_USED,SET,ADD,MUL,DIV};
@@ -84,10 +81,10 @@ struct individual_effect
 	map_location loc;
 };
 
-class effect
+class ability_effect
 {
 	public:
-		effect(const unit_ability_list& list, int def, bool backstab);
+		ability_effect(const unit_ability_list& list, int def, bool backstab);
 
 		// Provide read-only access to the effect list:
 		typedef std::vector<individual_effect>::const_iterator iterator;
@@ -103,10 +100,6 @@ class effect
 		std::vector<individual_effect> effect_list_;
 		int composite_value_;
 };
-
-
-}
-
 
 #endif
 

@@ -776,7 +776,7 @@ void play_controller::finish_side_turn(){
 	}
 
 	mouse_handler_.deselect_hex();
-	n_unit::id_manager::instance().reset_fake();
+	unit_id_manager::instance().reset_fake();
 	game_events::pump();
 }
 

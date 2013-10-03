@@ -23,6 +23,13 @@
 #ifndef UNIT_ABILITY_LIST_HPP_
 #define UNIT_ABILITY_LIST_HPP_
 
+#include "../config.hpp"
+#include "../map_location.hpp"
+
+#include <string>
+#include <utility>
+#include <vector>
+
 /** The things contained within a unit_ability_list. */
 typedef std::pair<const config *, map_location> unit_ability;
 

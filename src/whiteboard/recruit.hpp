@@ -82,7 +82,7 @@ protected:
 	std::string unit_name_;
 	map_location recruit_hex_;
 	//Temp unit to insert in the future unit map when needed
-	std::auto_ptr<unit> temp_unit_;
+	std::unique_ptr<unit> temp_unit_;
 	fake_unit_ptr fake_unit_;
 	int cost_;
 
@@ -92,7 +92,7 @@ private:
 	virtual void do_hide();
 	virtual void do_show();
 
-	std::auto_ptr<unit> create_corresponding_unit();
+	std::unique_ptr<unit> create_corresponding_unit();
 };
 
 std::ostream& operator<<(std::ostream& s, recruit_ptr recruit);

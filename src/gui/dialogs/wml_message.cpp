@@ -172,7 +172,7 @@ int show_wml_message(const bool left_side
 		, const std::vector<std::string>& option_list
 		, int* chosen_option)
 {
-	std::auto_ptr<twml_message_> dlg;
+	std::unique_ptr<twml_message_> dlg;
 	if(left_side) {
 		dlg.reset(new twml_message_left(title, message, portrait, mirror));
 	} else {

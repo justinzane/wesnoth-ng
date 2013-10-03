@@ -27,51 +27,49 @@ static lg::log_domain log_unit("unit");
 // Setting the initial value to 2^32-1 is a safe and easy way to fix this.
 static const size_t INITIAL_FAKE_ID = 4294967295u;
 
-namespace n_unit {
-	id_manager id_manager::manager_;
+unit_id_manager unit_id_manager::manager_;
 
-	id_manager::id_manager() : next_id_(0), fake_id_(INITIAL_FAKE_ID)
-	{}
+unit_id_manager::unit_id_manager() : next_id_(0), fake_id_(INITIAL_FAKE_ID)
+{}
 
-	id_manager& id_manager::instance()
-	{
-		return manager_;
-	}
+unit_id_manager& unit_id_manager::instance()
+{
+    return manager_;
+}
 
-	size_t id_manager::next_id()
-	{
-		assert(next_id_ != fake_id_);
-		DBG_UT << "id: " << next_id_ << "\n";
-		return ++next_id_;
-	}
+size_t unit_id_manager::next_id()
+{
+    assert(next_id_ != fake_id_);
+    DBG_UT << "id: " << next_id_ << "\n";
+    return ++next_id_;
+}
 
-	size_t id_manager::next_fake_id()
-	{
-		assert(next_id_ != fake_id_);
-		DBG_UT << "fake id: " << fake_id_ << "\n";
-		return --fake_id_;
-	}
+size_t unit_id_manager::next_fake_id()
+{
+    assert(next_id_ != fake_id_);
+    DBG_UT << "fake id: " << fake_id_ << "\n";
+    return --fake_id_;
+}
 
-	size_t id_manager::get_save_id()
-	{
-		return next_id_;
-	}
+size_t unit_id_manager::get_save_id()
+{
+    return next_id_;
+}
 
-	void id_manager::set_save_id(size_t id)
-	{
-		clear();
-		DBG_UT << "set save id: " << id << "\n";
-		next_id_ = id;
-	}
+void unit_id_manager::set_save_id(size_t id)
+{
+    clear();
+    DBG_UT << "set save id: " << id << "\n";
+    next_id_ = id;
+}
 
-	void id_manager::reset_fake()
-	{
-		fake_id_ = INITIAL_FAKE_ID;
-	}
+void unit_id_manager::reset_fake()
+{
+    fake_id_ = INITIAL_FAKE_ID;
+}
 
-	void id_manager::clear()
-	{
-		next_id_ = 0;
-		reset_fake();
-	}
+void unit_id_manager::clear()
+{
+    next_id_ = 0;
+    reset_fake();
 }

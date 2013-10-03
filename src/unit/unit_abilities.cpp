@@ -11,28 +11,26 @@
 
  See the COPYING file for more details.
  */
+#include "unit.hpp"
+#include "unit_abilities.hpp"
+#include "unit_ability_list.hpp"
+#include "unit_map.hpp"
+#include "unit_types.hpp"
 
-#include <boost/foreach.hpp>
-#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
-#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
-#include <boost/mpl/bool_fwd.hpp>
-#include <boost/tuple/detail/tuple_basic.hpp>
-#include <config.hpp>
-#include <log.hpp>
-#include <race.hpp>
-#include <resources.hpp>
-#include <stddef.h>
-#include <team.hpp>
-#include <terrain_filter.hpp>
-#include <tstring.hpp>
-#include <unit/unit.hpp>
-#include <unit/unit_abilities.hpp>
-#include <unit/unit_ability_list.hpp>
-#include <unit/unit_map.hpp>
-#include <unit/unit_types.hpp>
-#include <variable.hpp>
+
+#include "../config.hpp"
+#include "../log.hpp"
+#include "../race.hpp"
+#include "../resources.hpp"
+#include "../team.hpp"
+#include "../terrain_filter.hpp"
+#include "../tstring.hpp"
+#include "../variable.hpp"
 //#include "gamestatus.hpp"
 
+#include <boost/foreach.hpp>
+
+#include <stddef.h>
 #include <cassert>
 #include <iostream>
 #include <iterator>
@@ -536,7 +534,7 @@ void attack_type::modified_attacks(bool is_backstab,
                                    unsigned & min_attacks,
                                    unsigned & max_attacks) const {
     // Apply [attacks].
-    unit_abilities::effect attacks_effect(get_specials("attacks"), num_attacks(), is_backstab);
+    ability_effect attacks_effect(get_specials("attacks"), num_attacks(), is_backstab);
     int attacks_value = attacks_effect.get_composite_value();
     if (attacks_value < 0) {
         attacks_value = num_attacks();
@@ -558,7 +556,7 @@ void attack_type::modified_attacks(bool is_backstab,
  * Returns the damage per attack of this weapon, considering specials.
  */
 int attack_type::modified_damage(bool is_backstab) const {
-    unit_abilities::effect dmg_effect(get_specials("damage"), damage(), is_backstab);
+    ability_effect dmg_effect(get_specials("damage"), damage(), is_backstab);
     return dmg_effect.get_composite_value();
 }
 
@@ -721,8 +719,6 @@ bool attack_type::special_active(const config& special,
     return true;
 }
 
-namespace unit_abilities {
-
 void individual_effect::set(value_modifier t,
                             int val,
                             const config *abil,
@@ -751,7 +747,7 @@ bool filter_base_matches(const config& cfg, int def) {
     return true;
 }
 
-effect::effect(const unit_ability_list& list, int def, bool backstab) :
+ability_effect::ability_effect(const unit_ability_list& list, int def, bool backstab) :
     effect_list_(), composite_value_(0) {
 
     int value_set = def;
@@ -854,6 +850,3 @@ effect::effect(const unit_ability_list& list, int def, bool backstab) :
 
     composite_value_ = int( (value_set + addition) * multiplier / divisor);
 }
-
-}  // end namespace unit_abilities
-

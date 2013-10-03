@@ -171,7 +171,7 @@ namespace {
 
 			// Regeneration?
 			unit_ability_list regen_list = patient.get_abilities("regenerate");
-			unit_abilities::effect regen_effect(regen_list, 0, false);
+			ability_effect regen_effect(regen_list, 0, false);
 			healing = std::max(healing, regen_effect.get_composite_value());
 		}
 
@@ -190,13 +190,13 @@ namespace {
 		}
 
 		// Now we can get the aggregate healing amount.
-		unit_abilities::effect heal_effect(heal_list, 0, false);
+		ability_effect heal_effect(heal_list, 0, false);
 		int unit_heal = heal_effect.get_composite_value();
 		if ( unit_heal > healing )
 		{
 			healing = unit_heal;
 			// Collect the healers involved.
-			BOOST_FOREACH (const unit_abilities::individual_effect & heal, heal_effect)
+			BOOST_FOREACH (const individual_effect & heal, heal_effect)
 				healers.push_back(&*units.find(heal.loc));
 
 			if ( !healers.empty() ) {

@@ -17,84 +17,30 @@
  *  Routines to manage units.
  */
 
-#include <boost/bind/arg.hpp>
-#include <boost/bind/bind.hpp>
-#include <boost/bind/placeholders.hpp>
-//#include <boost/bind.hpp>
+#include "unit.hpp"
+
+#include "unit_id.hpp"
+#include "unit_abilities.hpp"
+
+#include "../actions/move.hpp"
+#include "../callable_objects.hpp"
+#include "../formula.hpp"
+#include "../game_display.hpp"
+#include "../game_events/handlers.hpp"
+#include "../game_preferences.hpp"
+#include "../gamestatus.hpp"
+#include "../gettext.hpp"
+#include "../halo.hpp"
+#include "../log.hpp"
+#include "../resources.hpp"
+#include "../terrain_filter.hpp"
+#include "../formula_string_utils.hpp"
+#include "../scripting/lua.hpp"
+#include "../side_filter.hpp"
+#include "../play_controller.hpp"
+
+#include <boost/bind.hpp>
 #include <boost/foreach.hpp>
-#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
-#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
-#include <boost/mpl/bool_fwd.hpp>
-#include <boost/smart_ptr/intrusive_ptr.hpp>
-#include <boost/smart_ptr/scoped_ptr.hpp>
-#include <boost/type_traits/is_const.hpp>
-#include <callable_objects.hpp>
-#include <config.hpp>
-#include <display.hpp>
-#include <formula.hpp>
-#include <game_config.hpp>
-#include <game_errors.hpp>
-#include <gamestatus.hpp>
-#include <gettext.hpp>
-#include <halo.hpp>
-#include <image.hpp>
-#include <log.hpp>
-#include <map.hpp>
-#include <map_location.hpp>
-#include <movetype.hpp>
-#include <play_controller.hpp>
-#include <race.hpp>
-#include <scripting/lua.hpp>
-#include <sdl_utils.hpp>
-#include <serialization/string_utils.hpp>
-#include <side_filter.hpp>
-#include <simple_rng.hpp>
-#include <stddef.h>
-#include <SDL_stdinc.h>
-#include <SDL_video.h>
-#include <team.hpp>
-#include <terrain.hpp>
-#include <terrain_filter.hpp>
-#include <terrain_translation.hpp>
-#include <tstring.hpp>
-#include <unit/unit.hpp>
-#include <unit/unit_abilities.hpp>
-#include <unit/unit_frame.hpp>
-#include <unit/unit_id.hpp>
-#include <util.hpp>
-#include <variable.hpp>
-#include <variant.hpp>
-//#include "actions/move.hpp"
-//#include "formula_string_utils.hpp"
-//#include "game_display.hpp"
-//#include "game_events/handlers.hpp"
-//#include "game_preferences.hpp"
-//#include "resources.hpp"
-
-#include <cassert>
-#include <climits>
-#include <iostream>
-#include <iterator>
-#include <map>
-#include <set>
-#include <string>
-#include <utility>
-#include <vector>
-
-int rand(void);
-int snprintf(char *__s, size_t __maxlen, const char *__format);
-string vgettext(const char *msgid, const string_map &symbols);
-namespace actions {
-bool unit_can_move(const unit &u);
-} /* namespace actions */
-namespace game_events {
-void add_events(const const_child_itors &cfgs, const string &type);
-} /* namespace game_events */
-namespace preferences {
-set<string, less<string>, allocator<string>> & encountered_units();
-bool show_side_colors();
-bool show_standing_animations();
-} /* namespace preferences */
 
 static lg::log_domain log_unit("unit");
 #define DBG_UT LOG_STREAM(debug, log_unit)
@@ -368,7 +314,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 	}
 
 	// Apply the unit type's data to this unit.
-	advance_to_(cfg, *type_, use_traits);
+	advance_to(cfg, *type_, use_traits);
 
 	if (const config::attribute_value *v = cfg.get("race")) {
 		if (const unit_race *r = unit_types.find_race(*v)) {
@@ -580,7 +526,7 @@ unit::unit(const unit_type &u_type, int side, bool real_unit,
 	race_(&unit_race::null_race),
 	id_(),
 	name_(),
-	underlying_id_(real_unit? 0: n_unit::id_manager::instance().next_fake_id()),
+	underlying_id_(real_unit? 0:unit_id_manager::instance().next_fake_id()),
 	undead_variation_(),
 	variation_(type_->default_variation()),
 	hit_points_(0),
@@ -795,7 +741,7 @@ std::vector<std::string> unit::get_traits_list() const
  * Current hit point total is left unchanged unless it would violate max HP.
  * Assumes gender_ and variation_ are set to their correct values.
  */
-void unit::advance_to_(const config &old_cfg, const unit_type &u_type,
+void unit::advance_to(const config &old_cfg, const unit_type &u_type,
 	bool use_traits)
 {
 	// For reference, the type before this advancement.
@@ -1888,7 +1834,7 @@ void unit::set_selecting()
 }
 
 void unit::start_animation(int start_time, const unit_animation *animation,
-	bool with_bars,  const std::string &text, Uint32 text_color, anim_state_t state)
+	bool with_bars,  const std::string &text, Uint32 text_color, STATE state)
 {
 	const display * disp =  display::get_singleton();
 	if (!animation) {
@@ -2233,7 +2179,7 @@ int unit::defense_modifier(const t_translation::t_terrain & terrain) const
 	// Left as a comment in case someone ever wonders why it isn't a good idea.
 	unit_ability_list defense_abilities = get_abilities("defense");
 	if (!defense_abilities.empty()) {
-		unit_abilities::effect defense_effect(defense_abilities, def, false);
+		ability_effect defense_effect(defense_abilities, def, false);
 		def = defense_effect.get_composite_value();
 	}
 #endif
@@ -2259,7 +2205,7 @@ bool unit::resistance_filter_matches(const config& cfg, bool attacker, const std
 			}
 		}
 	}
-	if (!unit_abilities::filter_base_matches(cfg, res)) return false;
+	if (!filter_base_matches(cfg, res)) return false;
 	return true;
 }
 
@@ -2277,7 +2223,7 @@ int unit::resistance_against(const std::string& damage_name,bool attacker,const 
 		}
 	}
 	if(!resistance_abilities.empty()) {
-		unit_abilities::effect resist_effect(resistance_abilities, 100-res, false);
+		ability_effect resist_effect(resistance_abilities, 100-res, false);
 
 		res = 100 - std::min<int>(resist_effect.get_composite_value(),
 		                          resistance_abilities.highest("max_value").first);
@@ -2914,7 +2860,7 @@ bool unit::is_visible_to_team(team const& team, bool const see_all, gamemap cons
 
 void unit::set_underlying_id() {
 	if(underlying_id_ == 0){
-		underlying_id_ = n_unit::id_manager::instance().next_id();
+		underlying_id_ =unit_id_manager::instance().next_id();
 	}
 	if (id_.empty()) {
 		std::stringstream ss;
@@ -2926,9 +2872,9 @@ void unit::set_underlying_id() {
 unit& unit::clone(bool is_temporary)
 {
 	if(is_temporary) {
-		underlying_id_ = n_unit::id_manager::instance().next_fake_id();
+		underlying_id_ =unit_id_manager::instance().next_fake_id();
 	} else {
-		underlying_id_ = n_unit::id_manager::instance().next_id();
+		underlying_id_ =unit_id_manager::instance().next_id();
 		std::string::size_type pos = id_.find_last_of('-');
 		if(pos != std::string::npos && pos+1 < id_.size()
 		&& id_.find_first_not_of("0123456789", pos+1) == std::string::npos) {

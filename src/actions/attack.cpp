@@ -141,7 +141,7 @@ battle_context_unit_stats::battle_context_unit_stats(const unit &u,
 		}
 
 		unit_ability_list cth_specials = weapon->get_specials("chance_to_hit");
-		unit_abilities::effect cth_effects(cth_specials, chance_to_hit, backstab_pos);
+		ability_effect cth_effects(cth_specials, chance_to_hit, backstab_pos);
 		chance_to_hit = cth_effects.get_composite_value();
 
 		// Compute base damage done with the weapon.
@@ -169,13 +169,13 @@ battle_context_unit_stats::battle_context_unit_stats(const unit &u,
 			unit_ability_list drain_specials = weapon->get_specials("drains");
 
 			// Compute the drain percent (with 50% as the base for backward compatibility)
-			unit_abilities::effect drain_percent_effects(drain_specials, 50, backstab_pos);
+			ability_effect drain_percent_effects(drain_specials, 50, backstab_pos);
 			drain_percent = drain_percent_effects.get_composite_value();
 		}
 
 		// Add heal_on_hit (the drain constant)
 		unit_ability_list heal_on_hit_specials = weapon->get_specials("heal_on_hit");
-		unit_abilities::effect heal_on_hit_effects(heal_on_hit_specials, 0, backstab_pos);
+		ability_effect heal_on_hit_effects(heal_on_hit_specials, 0, backstab_pos);
 		drain_constant += heal_on_hit_effects.get_composite_value();
 
 		drains = drain_constant || drain_percent;
@@ -267,7 +267,7 @@ battle_context_unit_stats::battle_context_unit_stats(const unit_type* u_type,
 		chance_to_hit = cth;
 
 		unit_ability_list cth_specials = weapon->get_specials("chance_to_hit");
-		unit_abilities::effect cth_effects(cth_specials, chance_to_hit, backstab_pos);
+		ability_effect cth_effects(cth_specials, chance_to_hit, backstab_pos);
 		chance_to_hit = cth_effects.get_composite_value();
 
 		int base_damage = weapon->modified_damage(backstab_pos);
@@ -283,13 +283,13 @@ battle_context_unit_stats::battle_context_unit_stats(const unit_type* u_type,
 			unit_ability_list drain_specials = weapon->get_specials("drains");
 
 			// Compute the drain percent (with 50% as the base for backward compatibility)
-			unit_abilities::effect drain_percent_effects(drain_specials, 50, backstab_pos);
+			ability_effect drain_percent_effects(drain_specials, 50, backstab_pos);
 			drain_percent = drain_percent_effects.get_composite_value();
 		}
 
 		// Add heal_on_hit (the drain constant)
 		unit_ability_list heal_on_hit_specials = weapon->get_specials("heal_on_hit");
-		unit_abilities::effect heal_on_hit_effects(heal_on_hit_specials, 0, backstab_pos);
+		ability_effect heal_on_hit_effects(heal_on_hit_specials, 0, backstab_pos);
 		drain_constant += heal_on_hit_effects.get_composite_value();
 
 		drains = drain_constant || drain_percent;
