@@ -484,6 +484,7 @@ wesnoth_sources = Split("""
     tod_manager.cpp
     unit/unit.cpp
     unit/unit_abilities.cpp
+    unit/unit_ability_list.cpp
     unit/unit_animation.cpp
     unit/unit_display.cpp
     unit/unit_frame.cpp

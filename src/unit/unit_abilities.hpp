@@ -12,7 +12,53 @@
    See the COPYING file for more details.
 */
 
-/** @file */
+/**
+ * @file unit_abilties.hpp
+ * @details Following is a WML snippet demonstrating a unit's abilities:
+ * [abilities]
+ *     ...
+ * [heals]
+ *     value=4
+ *     max_value=8
+ *     cumulative=no
+ *     affect_allies=yes
+ *     name= _ "heals"
+ *     female_name= _ "female^heals"
+ *     name_inactive=null
+ *     female_name_inactive=null
+ *     description=  _ "Heals: Allows the unit to heal adjacent friendly ..."
+ *     description_inactive=null
+ *     affect_self=yes
+ *  [filter] // SUF
+ *      ...
+ *  [/filter]
+ *  [filter_self] // SUF
+ *      ...
+ *  [/filter_self]
+ *  [filter_adjacent] // SUF
+ *      adjacent=n,ne,nw
+ *      ...
+ *  [/filter_adjacent]
+ *  [filter_adjacent_location]
+ *      adjacent=n,ne,nw
+ *      ...
+ *  [/filter_adjacent]
+ *  [affect_adjacent]
+ *      adjacent=n,ne,nw
+ *      [filter] // SUF
+ *          ...
+ *      [/filter]
+ *  [/affect_adjacent]
+ *  [affect_adjacent]
+ *      adjacent=s,se,sw
+ *      [filter] // SUF
+ *          ...
+ *      [/filter]
+ *  [/affect_adjacent]
+ * [/heals]
+ * ...
+ * [/abilities]
+ */
 
 #ifndef UNIT_ABILITIES_HPP_INCLUDED
 #define UNIT_ABILITIES_HPP_INCLUDED

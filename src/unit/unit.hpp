@@ -17,146 +17,177 @@
 #ifndef UNIT_H_INCLUDED
 #define UNIT_H_INCLUDED
 
-#include <boost/tuple/tuple.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <boost/noncopyable.hpp>
+//#include <boost/scoped_ptr.hpp>
+#include <boost/smart_ptr/scoped_ptr.hpp>
+#include <boost/tuple/detail/tuple_basic.hpp>
+//#include <boost/tuple/tuple.hpp>
+#include <config.hpp>
+#include <formula_callable.hpp>
+#include <map.hpp>
+#include <map_location.hpp>
+#include <movetype.hpp>
+#include <portrait.hpp>
+#include <race.hpp>
+#include <resources.hpp>
+#include <serialization/string_utils.hpp>
+#include <stddef.h>
+#include <SDL_stdinc.h>
+#include <terrain_translation.hpp>
+#include <tstring.hpp>
+#include <unit/unit_ability_list.hpp>
+#include <unit/unit_animation.hpp>
+#include <unit/unit_map.hpp>
+#include <unit/unit_types.hpp>
+#include <util.hpp>
+#include <variable.hpp>
 
-#include "../formula_callable.hpp"
-#include "../portrait.hpp"
-#include "../resources.hpp"
-#include "unit/unit_animation.hpp"
-#include "unit/unit_types.hpp"
-#include "unit/unit_map.hpp"
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 class display;
 class game_state;
 class vconfig;
 class team;
 
-/// The things contained within a unit_ability_list.
-typedef std::pair<const config *, map_location> unit_ability;
-
-class unit_ability_list {
-    public:
-        unit_ability_list() :
-            cfgs_() {
-        }
-
-        // Implemented in unit_abilities.cpp:
-        std::pair<int, map_location> highest(const std::string& key, int def = 0) const;
-        std::pair<int, map_location> lowest(const std::string& key, int def = 0) const;
-
-        // The following make this class usable with BOOST_FOREACH:
-        typedef std::vector<unit_ability>::iterator iterator;
-        typedef std::vector<unit_ability>::const_iterator const_iterator;
-        iterator begin() {
-            return cfgs_.begin();
-        }
-        const_iterator begin() const {
-            return cfgs_.begin();
-        }
-        iterator end() {
-            return cfgs_.end();
-        }
-        const_iterator end() const {
-            return cfgs_.end();
-        }
-
-        // Vector access:
-        bool empty() const {
-            return cfgs_.empty();
-        }
-        unit_ability & front() {
-            return cfgs_.front();
-        }
-        const unit_ability & front() const {
-            return cfgs_.front();
-        }
-        unit_ability & back() {
-            return cfgs_.back();
-        }
-        const unit_ability & back() const {
-            return cfgs_.back();
-        }
-
-        iterator erase(const iterator & erase_it) {
-            return cfgs_.erase(erase_it);
-        }
-        void push_back(const unit_ability & ability) {
-            cfgs_.push_back(ability);
-        }
-
-    private:
-        // Data:
-        std::vector<unit_ability> cfgs_;
-};
-
 class unit {
+// Enums ------------------------------------------------------------------------------
     public:
-        /**
-         * Clear the unit status cache for all units. Currently only the hidden
-         * status of units is cached this way.
-         */
-        static void clear_status_caches();
 
-        // Copy constructor
+        /** States for animation. */
+        enum anim_state_t {
+            STATE_STANDING, /**< anim must fit in a hex */
+            STATE_FORGET,   /**< anim will be auto replaced by a standing anim when finished */
+            STATE_ANIM      /**< TODO WRITEME */
+        }; /** normal anims */
+
+        enum state_t {
+            STATE_SLOWED = 0,
+            STATE_POISONED,
+            STATE_PETRIFIED,
+            STATE_UNCOVERED,
+            STATE_NOT_MOVED,
+            STATE_UNHEALABLE,
+            STATE_GUARDIAN,
+            STATE_UNKNOWN = -1
+        };
+
+// Constructors/Destructors -----------------------------------------------------------
+    public:
+
+        /** @brief Copy constructor */
         unit(const unit& u);
-        /** Initializes a unit from a config */
+
+        /** @brief constructor that initializes a unit from a config */
         unit(const config& cfg,
              bool use_traits = false,
              game_state *state = NULL,
              const vconfig* vcfg = NULL);
-        /**
-         * Initializes a unit from a unit type
-         * only real_unit may have random traits, name and gender
-         * (to prevent OOS caused by RNG calls)
-         */
-        unit(const unit_type& t, int side, bool real_unit, unit_race::GENDER gender =
-            unit_race::NUM_GENDERS);
+
+        /** @brief constructor that initializes a unit from a unit type.
+         * @details only real_unit may have random traits, name and gender (to prevent
+         * OOS caused by RNG calls) */
+        unit(const unit_type& t,
+             int side,
+             bool real_unit,
+             unit_race::GENDER gender = unit_race::NUM_GENDERS);
+
         virtual ~unit();
+
+// Operators --------------------------------------------------------------------------
+    public:
         virtual unit& operator=(const unit&);
 
-        /** Advances this unit to another type */
-        void advance_to(const unit_type &t, bool use_traits = false) {
-            advance_to(cfg_, t, use_traits);
+// Static Methods ---------------------------------------------------------------------
+    public:
+        /** @brief Clear the unit status cache for all units.
+         * @details Currently only the hidden status of units is cached this way. */
+        static void clear_status_caches();
+
+        /** @brief TODO WRITEME */
+        static state_t get_known_boolean_state_id(const std::string &state);
+
+        /** @brief TODO WRITEME */
+        static std::map<std::string, state_t> get_known_boolean_state_names();
+
+// Instance Members/Methods -------------------------------------------------------------------
+    // Advancement ----------------------------------------------------------------------------
+    public:
+        /** @brief Advances this unit to another type
+         * @param t TODO Clarify if this is the type to advance to or from.
+         * @param use_traits default=false, TODO explain.
+         * @todo refactor to handle failures -- throw except or return value.*/
+        void advance_to(const unit_type& t, bool use_traits = false) {
+            advance_to_(cfg_, t, use_traits);
         }
-        const std::vector<std::string>& advances_to() const {
-            return advances_to_;
-        }
+
+        /** @brief returns the vector of strings of types that this unit may advance to. */
+        const std::vector<std::string>& advances_to() const { return advances_to_; }
+
+        /** @brief returns the vector of strings of types that this unit may advance to in
+         * translated strings */
         const std::vector<std::string> advances_to_translated() const;
+
+        /** @brief sets the vector of strings of types this unit mat advance to. */
         void set_advances_to(const std::vector<std::string>& advances_to);
 
-        /**
-         * The id of the type of the unit.
+    private:
+        /** TODO refactor types to a class then call class methods. */
+        std::vector<std::string> advances_to_;
+        /** @brief implementation of advancement
+         * @param old_cfg
+         * @param t
+         * @param use_traits
+         */
+        void advance_to_(const config &old_cfg, const unit_type &t, bool use_traits);
+
+    // Type -----------------------------------------------------------------------------------
+    public:
+        /** The type of the unit (accounting for gender and variation). */
+        const unit_type& type() const { return *type_; }
+
+        /** @brief The id of the type of the unit.
          * If you are dealing with creating units (e.g. recruitment), this is not what
          * you want, as a variation can change this; use type().base_id() instead.
          */
-        const std::string& type_id() const {
-            return type_->id();
-        }
-        /** The type of the unit (accounting for gender and variation). */
-        const unit_type& type() const {
-            return *type_;
-        }
+        const std::string& type_id() const { return type_->id(); }
 
+        /** The unit type name */
+        const t_string& type_name() const { return type_name_; }
+
+    // ID -------------------------------------------------------------------------------------
+    public:
         /** id assigned by wml */
         void set_id(const std::string& id) {
             id_ = id;
         }
+
         const std::string& id() const {
             if (id_.empty())
                 return type_name();
             else
                 return id_;
         }
+
         /** The unique internal ID of the unit */
         size_t underlying_id() const {
             return underlying_id_;
         }
+    private:
+        std::string id_;
+        size_t underlying_id_;
 
-        /** The unit type name */
-        const t_string& type_name() const {
-            return type_name_;
-        }
+    // WML and IO -----------------------------------------------------------------------------
+    public:
+
+    private:
+        config cfg_;
+
+    // ??? ------------------------------------------------------------------------------------
+    public:
         const std::string& undead_variation() const {
             return undead_variation_;
         }
@@ -326,20 +357,8 @@ class unit {
         const std::map<std::string, std::string> get_states() const;
         bool get_state(const std::string& state) const;
         void set_state(const std::string &state, bool value);
-        enum state_t {
-                STATE_SLOWED = 0,
-                STATE_POISONED,
-                STATE_PETRIFIED,
-                STATE_UNCOVERED,
-                STATE_NOT_MOVED,
-                STATE_UNHEALABLE,
-                STATE_GUARDIAN,
-                STATE_UNKNOWN = -1
-        };
         void set_state(state_t state, bool value);
         bool get_state(state_t state) const;
-        static state_t get_known_boolean_state_id(const std::string &state);
-        static std::map<std::string, state_t> get_known_boolean_state_names();
 
         bool has_moved() const {
             return movement_left() != total_movement();
@@ -516,18 +535,12 @@ class unit {
             interrupted_move_ = interrupted_move;
         }
 
-        /** States for animation. */
-        enum STATE {
-            STATE_STANDING, /** anim must fit in a hex */
-            STATE_FORGET, /** animation will be automatically replaced by a standing anim when finished */
-            STATE_ANIM
-        }; /** normal anims */
         void start_animation(int start_time,
                              const unit_animation *animation,
                              bool with_bars,
                              const std::string &text = "",
                              Uint32 text_color = 0,
-                             STATE state = STATE_ANIM);
+                             anim_state_t state = STATE_ANIM);
 
         /** The name of the file to game_display (used in menus). */
         std::string absolute_image() const;
@@ -648,8 +661,6 @@ class unit {
         const tportrait* portrait(const unsigned size, const tportrait::tside side) const;
 
     private:
-        void advance_to(const config &old_cfg, const unit_type &t, bool use_traits);
-
         bool internal_matches_filter(const vconfig& cfg,
                                      const map_location& loc,
                                      bool use_flat_tod) const;
@@ -679,16 +690,12 @@ class unit {
 
         void set_underlying_id();
 
-        config cfg_;
         map_location loc_;
 
-        std::vector<std::string> advances_to_;
         const unit_type * type_;  /// Never NULL. Adjusted for gender and variation.
         t_string type_name_;    /// The displayed name of the unit type.
         const unit_race* race_;  /// Never NULL, but may point to the null race.
-        std::string id_;
         t_string name_;
-        size_t underlying_id_;
         std::string undead_variation_;
         std::string variation_;
 
@@ -732,7 +739,7 @@ class unit {
         config events_;
         config filter_recall_;
         bool emit_zoc_;
-        STATE state_;
+        anim_state_t state_;
 
         std::vector<std::string> overlays_;
 

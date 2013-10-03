@@ -17,29 +17,84 @@
  *  Routines to manage units.
  */
 
-#include "unit/unit.hpp"
-
-#include "actions/move.hpp"
-#include "callable_objects.hpp"
-#include "formula.hpp"
-#include "game_display.hpp"
-#include "game_events/handlers.hpp"
-#include "game_preferences.hpp"
-#include "gamestatus.hpp"
-#include "gettext.hpp"
-#include "halo.hpp"
-#include "log.hpp"
-#include "resources.hpp"
-#include "unit/unit_id.hpp"
-#include "unit/unit_abilities.hpp"
-#include "terrain_filter.hpp"
-#include "formula_string_utils.hpp"
-#include "scripting/lua.hpp"
-#include "side_filter.hpp"
-#include "play_controller.hpp"
-
-#include <boost/bind.hpp>
+#include <boost/bind/arg.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/bind/placeholders.hpp>
+//#include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/mpl/bool_fwd.hpp>
+#include <boost/smart_ptr/intrusive_ptr.hpp>
+#include <boost/smart_ptr/scoped_ptr.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <callable_objects.hpp>
+#include <config.hpp>
+#include <display.hpp>
+#include <formula.hpp>
+#include <game_config.hpp>
+#include <game_errors.hpp>
+#include <gamestatus.hpp>
+#include <gettext.hpp>
+#include <halo.hpp>
+#include <image.hpp>
+#include <log.hpp>
+#include <map.hpp>
+#include <map_location.hpp>
+#include <movetype.hpp>
+#include <play_controller.hpp>
+#include <race.hpp>
+#include <scripting/lua.hpp>
+#include <sdl_utils.hpp>
+#include <serialization/string_utils.hpp>
+#include <side_filter.hpp>
+#include <simple_rng.hpp>
+#include <stddef.h>
+#include <SDL_stdinc.h>
+#include <SDL_video.h>
+#include <team.hpp>
+#include <terrain.hpp>
+#include <terrain_filter.hpp>
+#include <terrain_translation.hpp>
+#include <tstring.hpp>
+#include <unit/unit.hpp>
+#include <unit/unit_abilities.hpp>
+#include <unit/unit_frame.hpp>
+#include <unit/unit_id.hpp>
+#include <util.hpp>
+#include <variable.hpp>
+#include <variant.hpp>
+//#include "actions/move.hpp"
+//#include "formula_string_utils.hpp"
+//#include "game_display.hpp"
+//#include "game_events/handlers.hpp"
+//#include "game_preferences.hpp"
+//#include "resources.hpp"
+
+#include <cassert>
+#include <climits>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
+
+int rand(void);
+int snprintf(char *__s, size_t __maxlen, const char *__format);
+string vgettext(const char *msgid, const string_map &symbols);
+namespace actions {
+bool unit_can_move(const unit &u);
+} /* namespace actions */
+namespace game_events {
+void add_events(const const_child_itors &cfgs, const string &type);
+} /* namespace game_events */
+namespace preferences {
+set<string, less<string>, allocator<string>> & encountered_units();
+bool show_side_colors();
+bool show_standing_animations();
+} /* namespace preferences */
 
 static lg::log_domain log_unit("unit");
 #define DBG_UT LOG_STREAM(debug, log_unit)
@@ -313,7 +368,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 	}
 
 	// Apply the unit type's data to this unit.
-	advance_to(cfg, *type_, use_traits);
+	advance_to_(cfg, *type_, use_traits);
 
 	if (const config::attribute_value *v = cfg.get("race")) {
 		if (const unit_race *r = unit_types.find_race(*v)) {
@@ -740,7 +795,7 @@ std::vector<std::string> unit::get_traits_list() const
  * Current hit point total is left unchanged unless it would violate max HP.
  * Assumes gender_ and variation_ are set to their correct values.
  */
-void unit::advance_to(const config &old_cfg, const unit_type &u_type,
+void unit::advance_to_(const config &old_cfg, const unit_type &u_type,
 	bool use_traits)
 {
 	// For reference, the type before this advancement.
@@ -1833,7 +1888,7 @@ void unit::set_selecting()
 }
 
 void unit::start_animation(int start_time, const unit_animation *animation,
-	bool with_bars,  const std::string &text, Uint32 text_color, STATE state)
+	bool with_bars,  const std::string &text, Uint32 text_color, anim_state_t state)
 {
 	const display * disp =  display::get_singleton();
 	if (!animation) {
