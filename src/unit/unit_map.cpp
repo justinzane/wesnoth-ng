@@ -15,12 +15,12 @@
 
 /** @file */
 
-#include "unit_id.hpp"
+#include "unit/unit_id.hpp"
 #include "log.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
 
 #include <functional>
-#include "unit_map.hpp"
+#include "unit/unit_map.hpp"
 
 #include <boost/foreach.hpp>
 

@@ -22,7 +22,7 @@
 
 #include "game_display.hpp"
 #include "map_location.hpp"
-#include "unit_animation.hpp"
+#include "unit/unit_animation.hpp"
 
 class attack_type;
 class unit;

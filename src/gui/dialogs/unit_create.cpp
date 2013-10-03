@@ -27,7 +27,7 @@
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/toggle_button.hpp"
 #include "gui/widgets/window.hpp"
-#include "unit_types.hpp"
+#include "unit/unit_types.hpp"
 #include "utils/foreach.tpp"
 
 namespace {

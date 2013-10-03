@@ -24,7 +24,7 @@
 #include "replay.hpp"
 #include "savegame.hpp"
 #include "tod_manager.hpp"
-#include "unit_id.hpp"
+#include "unit/unit_id.hpp"
 
 #include <boost/foreach.hpp>
 

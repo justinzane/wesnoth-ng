@@ -31,7 +31,7 @@
 #include "../../mouse_handler_base.hpp"
 #include "../../resources.hpp"
 #include "../../terrain_filter.hpp"
-#include "../../unit_display.hpp"
+#include "../../unit/unit_display.hpp"
 #include "../../wml_exception.hpp"
 
 #include "../../pathfind/pathfind.hpp"

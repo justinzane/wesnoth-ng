@@ -25,7 +25,7 @@
 
 #include "resources.hpp"
 #include "team.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
 
 namespace wb {
 

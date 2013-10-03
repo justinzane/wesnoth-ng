@@ -21,8 +21,8 @@
 #include "game_display.hpp"
 #include "gamestatus.hpp"
 #include "playcampaign.hpp"
-#include "unit.hpp"
-#include "unit_map.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_map.hpp"
 
 namespace test_utils {
 	play_scenario::play_scenario(const std::string& id) :

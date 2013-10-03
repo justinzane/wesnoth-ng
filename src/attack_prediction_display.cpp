@@ -22,7 +22,7 @@
 #include "language.hpp"
 #include "marked-up_text.hpp"
 #include "resources.hpp"
-#include "unit_abilities.hpp"
+#include "unit/unit_abilities.hpp"
 
 // Conversion routine for both unscathed and damage change percentage.
 static void format_prob(char str_buf[10], double prob)

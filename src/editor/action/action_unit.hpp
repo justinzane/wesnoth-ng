@@ -28,8 +28,8 @@
 
 #include "editor/action/action.hpp"
 
-#include "../../unit_types.hpp"
-#include "../../unit.hpp"
+#include "../../unit/unit_types.hpp"
+#include "../../unit/unit.hpp"
 
 
 namespace editor {

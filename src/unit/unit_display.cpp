@@ -15,14 +15,14 @@
 /** @file */
 
 #include "global.hpp"
-#include "unit_display.hpp"
+#include "unit/unit_display.hpp"
 
 #include "game_preferences.hpp"
 #include "log.hpp"
 #include "mouse_events.hpp"
 #include "resources.hpp"
 #include "terrain_filter.hpp"
-#include "unit_map.hpp"
+#include "unit/unit_map.hpp"
 
 #include <boost/foreach.hpp>
 

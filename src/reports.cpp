@@ -32,8 +32,8 @@
 #include "team.hpp"
 #include "text.hpp"
 #include "tod_manager.hpp"
-#include "unit.hpp"
-#include "unit_helper.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_helper.hpp"
 #include "whiteboard/manager.hpp"
 
 #include <boost/foreach.hpp>

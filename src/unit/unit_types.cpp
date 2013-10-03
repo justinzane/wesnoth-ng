@@ -19,16 +19,16 @@
 
 #include "global.hpp"
 
-#include "unit_types.hpp"
+#include "unit/unit_types.hpp"
 
 #include "game_config.hpp"
 #include "gettext.hpp"
 #include "loadscreen.hpp"
 #include "log.hpp"
 #include "portrait.hpp"
-#include "unit.hpp"
-#include "unit_abilities.hpp"
-#include "unit_animation.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_abilities.hpp"
+#include "unit/unit_animation.hpp"
 
 #include <boost/foreach.hpp>
 

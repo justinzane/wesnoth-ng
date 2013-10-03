@@ -58,7 +58,7 @@
 #include "terrain_translation.hpp"
 #include "side_filter.hpp"
 #include "sound.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
 #include "ai/lua/core.hpp"
 #include "version.hpp"
 #include "gui/widgets/clickable.hpp"

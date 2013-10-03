@@ -19,7 +19,7 @@
 #include "global.hpp"
 #include "chat_events.hpp"
 #include "floating_textbox.hpp"
-#include "unit_map.hpp"
+#include "unit/unit_map.hpp"
 
 class game_state;
 class gamemap;

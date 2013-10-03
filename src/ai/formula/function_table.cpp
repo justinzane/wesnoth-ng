@@ -32,9 +32,9 @@
 #include "../../replay.hpp"
 #include "../../resources.hpp"
 #include "../../terrain_filter.hpp"
-#include "../../unit.hpp"
+#include "../../unit/unit.hpp"
 #include "../../pathfind/pathfind.hpp"
-#include "../../unit_types.hpp"
+#include "../../unit/unit_types.hpp"
 
 #include <boost/foreach.hpp>
 

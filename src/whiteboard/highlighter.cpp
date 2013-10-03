@@ -36,7 +36,7 @@
 #include "arrow.hpp"
 #include "play_controller.hpp"
 #include "resources.hpp"
-#include "unit_map.hpp"
+#include "unit/unit_map.hpp"
 
 #include <boost/foreach.hpp>
 

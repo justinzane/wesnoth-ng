@@ -37,7 +37,7 @@
 #include "../resources.hpp"
 #include "../statistics.hpp"
 #include "../team.hpp"
-#include "../unit_display.hpp"
+#include "../unit/unit_display.hpp"
 #include "../variable.hpp"
 #include "../whiteboard/manager.hpp"
 

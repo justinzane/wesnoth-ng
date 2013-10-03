@@ -13,7 +13,7 @@
 */
 
 #include "log.hpp"
-#include "unit_id.hpp"
+#include "unit/unit_id.hpp"
 
 #include <cassert>
 

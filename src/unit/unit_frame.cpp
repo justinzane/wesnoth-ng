@@ -19,7 +19,7 @@
 #include "game_display.hpp"
 #include "halo.hpp"
 #include "sound.hpp"
-#include "unit_frame.hpp"
+#include "unit/unit_frame.hpp"
 
 
 progressive_string::progressive_string(const std::string & data,int duration) :

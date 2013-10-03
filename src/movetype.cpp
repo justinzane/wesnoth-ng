@@ -23,7 +23,7 @@
 #include "map.hpp"
 #include "resources.hpp"
 #include "terrain_translation.hpp"
-#include "unit_types.hpp" // for attack_type
+#include "unit/unit_types.hpp" // for attack_type
 
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>

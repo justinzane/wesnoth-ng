@@ -17,7 +17,7 @@
  *  Routines to manage units.
  */
 
-#include "unit.hpp"
+#include "unit/unit.hpp"
 
 #include "actions/move.hpp"
 #include "callable_objects.hpp"
@@ -30,8 +30,8 @@
 #include "halo.hpp"
 #include "log.hpp"
 #include "resources.hpp"
-#include "unit_id.hpp"
-#include "unit_abilities.hpp"
+#include "unit/unit_id.hpp"
+#include "unit/unit_abilities.hpp"
 #include "terrain_filter.hpp"
 #include "formula_string_utils.hpp"
 #include "scripting/lua.hpp"

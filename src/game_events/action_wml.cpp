@@ -51,8 +51,8 @@
 #include "../sound.hpp"
 #include "../soundsource.hpp"
 #include "../terrain_filter.hpp"
-#include "../unit_display.hpp"
-#include "../unit_helper.hpp"
+#include "../unit/unit_display.hpp"
+#include "../unit/unit_helper.hpp"
 #include "../wml_exception.hpp"
 
 #include "../utils/foreach.tpp"

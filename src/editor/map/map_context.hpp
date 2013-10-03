@@ -20,7 +20,7 @@
 #include "map_label.hpp"
 #include "sound_music_track.hpp"
 #include "tod_manager.hpp"
-#include "unit_map.hpp"
+#include "unit/unit_map.hpp"
 #include "overlay.hpp"
 
 #include <boost/utility.hpp>

@@ -16,7 +16,7 @@
 
 #include "animated.hpp"
 #include "config.hpp"
-#include "unit_frame.hpp"
+#include "unit/unit_frame.hpp"
 
 class attack_type;
 class display;

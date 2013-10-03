@@ -20,7 +20,7 @@
 #include "global.hpp"
 #include "entity_location.hpp"
 
-#include "../unit.hpp"
+#include "../unit/unit.hpp"
 #include "../variable.hpp"
 
 

@@ -16,7 +16,7 @@
 #include "serialization/string_utils.hpp"
 #include "team.hpp"
 #include "terrain_filter.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
 #include "log.hpp"
 #include "resources.hpp"
 

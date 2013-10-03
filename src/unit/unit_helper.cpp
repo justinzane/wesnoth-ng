@@ -18,8 +18,8 @@
  */
 
 #include "resources.hpp"
-#include "unit.hpp"
-#include "unit_helper.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_helper.hpp"
 
 namespace unit_helper {
 

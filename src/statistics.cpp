@@ -21,7 +21,7 @@
 #include "statistics.hpp"
 #include "log.hpp"
 #include "serialization/binary_or_text.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
 #include "util.hpp"
 
 #include <boost/foreach.hpp>

@@ -21,9 +21,9 @@
 #include "log.hpp"
 #include "resources.hpp"
 #include "terrain_filter.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
 #include "team.hpp"
-#include "unit_abilities.hpp"
+#include "unit/unit_abilities.hpp"
 
 #include <boost/foreach.hpp>
 

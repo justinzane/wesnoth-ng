@@ -61,7 +61,7 @@
 #include "savegame.hpp"
 #include "sound.hpp"
 #include "statistics_dialog.hpp"
-#include "unit_display.hpp"
+#include "unit/unit_display.hpp"
 #include "wml_separators.hpp"
 #include "formula_string_utils.hpp"
 #include "scripting/lua.hpp"

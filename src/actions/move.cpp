@@ -33,10 +33,10 @@
 #include "../pathfind/pathfind.hpp"
 #include "../replay.hpp"
 #include "../resources.hpp"
-#include "../unit_display.hpp"
+#include "../unit/unit_display.hpp"
 #include "../formula_string_utils.hpp"
 #include "../team.hpp"
-#include "../unit.hpp"
+#include "../unit/unit.hpp"
 #include "../whiteboard/manager.hpp"
 
 #include <boost/foreach.hpp>

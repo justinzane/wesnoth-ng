@@ -12,20 +12,18 @@
    See the COPYING file for more details.
 */
 
-#include "unit_advancements_aspect.hpp"
-#include "../../log.hpp"
-#include "lua/lualib.h"
-#include "lua/lauxlib.h"
 #include <string>
 #include <vector>
 
 #include "scripting/lua.hpp"
 #include "scripting/lua_api.hpp"
-
 #include "global.hpp"
-
-#include "../../unit.hpp"
+#include "../../log.hpp"
 #include "../../map.hpp"
+#include "../../unit/unit.hpp"
+#include "lua/lualib.h"
+#include "lua/lauxlib.h"
+#include "unit_advancements_aspect.hpp"
 
 
 static lg::log_domain log_ai_engine_lua("ai/engine/lua");

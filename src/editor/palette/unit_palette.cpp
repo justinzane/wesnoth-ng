@@ -22,7 +22,7 @@
 
 #include "../../gettext.hpp"
 
-#include "../../unit_types.hpp"
+#include "../../unit/unit_types.hpp"
 
 #include <boost/foreach.hpp>
 

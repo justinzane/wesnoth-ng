@@ -39,8 +39,8 @@
 #include "serialization/binary_or_text.hpp"
 #include "serialization/parser.hpp"
 #include "statistics.hpp"
-//#include "unit.hpp"
-#include "unit_id.hpp"
+//#include "unit/unit.hpp"
+#include "unit/unit_id.hpp"
 #include "version.hpp"
 
 #include <boost/foreach.hpp>

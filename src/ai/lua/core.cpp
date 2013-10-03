@@ -41,7 +41,7 @@
 #include "../../resources.hpp"
 #include "../../terrain_translation.hpp"
 #include "../../terrain_filter.hpp"
-#include "../../unit.hpp"
+#include "../../unit/unit.hpp"
 #include "../actions.hpp"
 #include "../composite/engine_lua.hpp"
 #include "../composite/contexts.hpp"

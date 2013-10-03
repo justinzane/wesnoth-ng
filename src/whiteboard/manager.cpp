@@ -43,7 +43,7 @@
 #include "resources.hpp"
 #include "rng.hpp"
 #include "team.hpp"
-#include "unit_display.hpp"
+#include "unit/unit_display.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/bind.hpp>

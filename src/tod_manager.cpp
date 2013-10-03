@@ -21,8 +21,8 @@
 #include "map.hpp"
 #include "play_controller.hpp"
 #include "resources.hpp"
-#include "unit.hpp"
-#include "unit_abilities.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_abilities.hpp"
 
 #include <boost/foreach.hpp>
 

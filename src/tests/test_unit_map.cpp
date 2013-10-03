@@ -16,10 +16,10 @@
 
 #include "log.hpp"
 #include "config.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
 #include "tests/utils/game_config_manager.hpp"
-#include "unit_map.hpp"
-#include "unit_id.hpp"
+#include "unit/unit_map.hpp"
+#include "unit/unit_id.hpp"
 
 #include <boost/bind.hpp>
 

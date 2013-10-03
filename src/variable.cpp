@@ -27,8 +27,8 @@
 #include "gamestatus.hpp"
 #include "log.hpp"
 #include "resources.hpp"
-#include "unit.hpp"
-#include "unit_map.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_map.hpp"
 #include "team.hpp"
 
 #include <boost/foreach.hpp>

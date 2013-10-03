@@ -26,10 +26,10 @@
 #include "../replay.hpp"
 #include "../resources.hpp"
 #include "../team.hpp"
-#include "../unit.hpp"
-#include "../unit_abilities.hpp"
-#include "../unit_display.hpp"
-#include "../unit_map.hpp"
+#include "../unit/unit.hpp"
+#include "../unit/unit_abilities.hpp"
+#include "../unit/unit_display.hpp"
+#include "../unit/unit_map.hpp"
 
 #include <boost/foreach.hpp>
 #include <list>

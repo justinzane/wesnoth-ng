@@ -39,7 +39,7 @@
 #include "playmp_controller.hpp"
 #include "settings.hpp"
 #include "sound.hpp"
-#include "unit_id.hpp"
+#include "unit/unit_id.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>

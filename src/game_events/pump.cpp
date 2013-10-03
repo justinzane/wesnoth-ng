@@ -32,8 +32,8 @@
 #include "../resources.hpp"
 #include "../scripting/lua.hpp"
 #include "../side_filter.hpp"
-#include "../unit.hpp"
-#include "../unit_map.hpp"
+#include "../unit/unit.hpp"
+#include "../unit/unit_map.hpp"
 #include "../whiteboard/manager.hpp"
 #include "../variable.hpp"
 

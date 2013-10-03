@@ -17,7 +17,7 @@
 #ifndef UNIT_HELPER_HPP_INCLUDED
 #define UNIT_HELPER_HPP_INCLUDED
 
-#include "unit_map.hpp"
+#include "unit/unit_map.hpp"
 
 namespace unit_helper {
 

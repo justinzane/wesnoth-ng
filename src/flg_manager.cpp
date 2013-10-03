@@ -16,7 +16,7 @@
 #include "config.hpp"
 #include "formula_string_utils.hpp"
 #include "gettext.hpp"
-#include "unit_types.hpp"
+#include "unit/unit_types.hpp"
 #include "wml_separators.hpp"
 
 #include <boost/foreach.hpp>

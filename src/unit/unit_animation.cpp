@@ -14,12 +14,12 @@
 
 #include "global.hpp"
 
-#include "unit_animation.hpp"
+#include "unit/unit_animation.hpp"
 
 #include "game_display.hpp"
 #include "halo.hpp"
 #include "map.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
 #include "variable.hpp"
 #include "resources.hpp"
 #include "play_controller.hpp"

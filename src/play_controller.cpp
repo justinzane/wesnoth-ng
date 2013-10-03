@@ -34,7 +34,7 @@
 #include "resources.hpp"
 #include "savegame.hpp"
 #include "sound.hpp"
-#include "unit_id.hpp"
+#include "unit/unit_id.hpp"
 #include "save_blocker.hpp"
 #include "preferences_display.hpp"
 #include "replay.hpp"

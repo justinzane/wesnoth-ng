@@ -34,8 +34,8 @@
 #include "map.hpp"
 #include "marked-up_text.hpp"
 #include "sound.hpp"
-#include "unit.hpp"
-#include "unit_helper.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_helper.hpp"
 #include "wml_separators.hpp"
 #include "serialization/parser.hpp"
 
