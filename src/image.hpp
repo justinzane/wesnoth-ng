@@ -27,7 +27,9 @@
 ///the surface corresponding to that image.
 //
 namespace image {
-	const int tile_size = game_config::tile_size;
+    /* Changed from:
+    const int tile_size = game_config::tile_size; */
+    const int tile_size = 72;
 
 	template<typename T>
 	class cache_type;

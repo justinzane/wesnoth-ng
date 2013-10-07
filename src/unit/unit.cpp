@@ -274,7 +274,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 
 	validate_side(side_);
 
-	underlying_id_ = cfg["underlying_id"];
+	underlying_id_ = (std::string)cfg["underlying_id"];
 	set_underlying_id();
 
 	overlays_ = utils::parenthetical_split(cfg["overlays"], ',');
@@ -526,7 +526,7 @@ unit::unit(const unit_type &u_type, int side, bool real_unit,
 	race_(&unit_race::null_race),
 	id_(),
 	name_(),
-	underlying_id_(real_unit? 0:unit_id_manager::instance().next_fake_id()),
+	underlying_id_(unit_id_manager::instance().get_id()),
 	undead_variation_(),
 	variation_(type_->default_variation()),
 	hit_points_(0),
@@ -2860,7 +2860,7 @@ bool unit::is_visible_to_team(team const& team, bool const see_all, gamemap cons
 
 void unit::set_underlying_id() {
 	if(underlying_id_ == 0){
-		underlying_id_ =unit_id_manager::instance().next_id();
+		underlying_id_ =unit_id_manager::instance().get_id();
 	}
 	if (id_.empty()) {
 		std::stringstream ss;
@@ -2872,9 +2872,9 @@ void unit::set_underlying_id() {
 unit& unit::clone(bool is_temporary)
 {
 	if(is_temporary) {
-		underlying_id_ =unit_id_manager::instance().next_fake_id();
+		underlying_id_ = unit_id_manager::instance().get_id();
 	} else {
-		underlying_id_ =unit_id_manager::instance().next_id();
+		underlying_id_ = unit_id_manager::instance().get_id();
 		std::string::size_type pos = id_.find_last_of('-');
 		if(pos != std::string::npos && pos+1 < id_.size()
 		&& id_.find_first_not_of("0123456789", pos+1) == std::string::npos) {

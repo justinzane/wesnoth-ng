@@ -49,7 +49,7 @@
 // Set some default values so this file can stand alone.
 namespace game_config {
 	int kill_experience = 8;
-	int tile_size = 72; // Not really needed, but it's used in image.hpp.
+	int tile_size = 72;
 }
 #endif
 

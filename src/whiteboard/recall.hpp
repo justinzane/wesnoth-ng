@@ -5,7 +5,7 @@
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
+ (at your option) any later version.
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY.
 
@@ -20,70 +20,96 @@
 #define WB_RECALL_HPP_
 
 #include "action.hpp"
+#include <config.hpp>
+#include <map_location.hpp>
+#include <unit/unit.hpp>
+#include <unit/unit_map.hpp>
+#include <whiteboard/typedefs.hpp>
+#include <whiteboard/visitor.hpp>
 
-namespace wb
-{
+#include <boost/smart_ptr/enable_shared_from_this.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <stddef.h>
+#include <iostream>
+#include <bits/unique_ptr.h>
 
-class recall: public action
-{
-public:
-	recall(size_t team_index, bool hidden, const unit& unit, const map_location& recall_hex);
-	recall(config const&, bool hidden); // For deserialization
-	virtual ~recall();
+namespace wb {
 
-	virtual std::ostream& print(std::ostream& s) const;
+class recall:
+        public action {
 
-	virtual void accept(visitor& v);
+    public:
 
-	virtual void execute(bool& success, bool& complete);
+        recall(size_t team_index,
+               bool hidden,
+               const unit& unit,
+               const map_location& recall_hex);
 
-	/**
-	 * Check the validity of the action.
-	 *
-	 * @return the error preventing the action from being executed.
-	 * @retval OK if there isn't any error (the action can be executed.)
-	 */
-	virtual error check_validity() const;
+        recall(config const&, bool hidden);  // For deserialization
 
-	/** Applies temporarily the result of this action to the specified unit map. */
-	virtual void apply_temp_modifier(unit_map& unit_map);
-	/** Removes the result of this action from the specified unit map. */
-	virtual void remove_temp_modifier(unit_map& unit_map);
+        virtual ~recall();
 
-	/** Gets called by display when drawing a hex, to allow actions to draw to the screen. */
-	virtual void draw_hex(const map_location& hex);
-	/** Redrawing function, called each time the action situation might have changed. */
-	virtual void redraw();
+        virtual std::ostream& print(std::ostream& s) const;
 
-	/**
-	 * Indicates whether this hex is the preferred hex to draw the numbering for this action.
-	 */
-	virtual map_location get_numbering_hex() const { return recall_hex_; }
+        virtual void accept(visitor& v);
 
-	/** @return pointer to a copy of the recall unit. */
-	virtual unit* get_unit() const { return temp_unit_.get(); }
-	/** @return pointer to the fake unit used only for visuals */
-	virtual fake_unit_ptr get_fake_unit() { return fake_unit_; }
+        virtual void execute(bool& success, bool& complete);
 
-	map_location const get_recall_hex() const { return recall_hex_; }
+        /**
+         * Check the validity of the action.
+         *
+         * @return the error preventing the action from being executed.
+         * @retval OK if there isn't any error (the action can be executed.)
+         */
+        virtual error check_validity() const;
 
-	virtual config to_config() const;
+        /** Applies temporarily the result of this action to the specified unit map. */
+        virtual void apply_temp_modifier(unit_map& unit_map);
+        /** Removes the result of this action from the specified unit map. */
+        virtual void remove_temp_modifier(unit_map& unit_map);
 
-protected:
+        /** Gets called by display when drawing a hex, to allow actions to draw to the screen. */
+        virtual void draw_hex(const map_location& hex);
+        /** Redrawing function, called each time the action situation might have changed. */
+        virtual void redraw();
 
-	boost::shared_ptr<recall> shared_from_this() {
-		return boost::static_pointer_cast<recall>(action::shared_from_this());
-	}
+        /**
+         * Indicates whether this hex is the preferred hex to draw the numbering for this action.
+         */
+        virtual map_location get_numbering_hex() const {
+            return recall_hex_;
+        }
 
-private:
-	void init();
+        /** @return pointer to a copy of the recall unit. */
+        virtual unit* get_unit() const {
+            return temp_unit_.get();
+        }
+        /** @return pointer to the fake unit used only for visuals */
+        virtual fake_unit_ptr get_fake_unit() {
+            return fake_unit_;
+        }
 
-	virtual void do_hide();
-	virtual void do_show();
+        map_location const get_recall_hex() const {
+            return recall_hex_;
+        }
 
-	std::unique_ptr<unit> temp_unit_;
-	map_location recall_hex_;
-	fake_unit_ptr fake_unit_;
+        virtual config to_config() const;
+
+    protected:
+
+        boost::shared_ptr<recall> shared_from_this() {
+            return boost::static_pointer_cast<recall>(action::shared_from_this());
+        }
+
+    private:
+        void init();
+
+        virtual void do_hide();
+        virtual void do_show();
+
+        std::unique_ptr<unit> temp_unit_;
+        map_location recall_hex_;
+        fake_unit_ptr fake_unit_;
 };
 
 std::ostream& operator<<(std::ostream& s, recall_ptr recall);

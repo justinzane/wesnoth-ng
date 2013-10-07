@@ -119,6 +119,7 @@ public:
 	 * Called from the display after drawing.
 	 */
 	void post_draw();
+
 	/**
 	 * Called from the display when drawing hexes, to allow the whiteboard to
 	 * add visual elements. Some visual elements such as arrows and fake units
@@ -128,42 +129,60 @@ public:
 
 	/** Creates a temporary visual arrow, that follows the cursor, for move creation purposes */
 	void create_temp_move();
+
 	/** Informs whether an arrow is being displayed for move creation purposes */
-	bool has_temp_move() const { return route_ && !fake_units_.empty() && !move_arrows_.empty(); }
+	bool has_temp_move() const {
+	    return route_ && !fake_units_.empty() && !move_arrows_.empty();
+	}
+
 	/** Erase the temporary arrow */
 	void erase_temp_move();
+
 	/** Creates a move action for the current side, and erases the temp move.
 	 *  The move action is inserted at the end of the queue, to be executed last. */
 	void save_temp_move();
+
 	/** @return an iterator to the unit that owns the temp move, resources::units->end() if there's none. */
 	unit_map::iterator get_temp_move_unit() const;
 
 	/** Creates an attack or attack-move action for the current side */
-	void save_temp_attack(const map_location& attacker_loc, const map_location& defender_loc, int weapon_choice);
+	void save_temp_attack(const map_location& attacker_loc,
+	                      const map_location& defender_loc,
+	                      int weapon_choice);
 
 	/** Creates a recruit action for the current side
 	 *  @return true if manager has saved a planned recruit */
-	bool save_recruit(const std::string& name, int side_num, const map_location& recruit_hex);
+	bool save_recruit(const std::string& name,
+	                  int side_num,
+	                  const map_location& recruit_hex);
 
 	/** Creates a recall action for the current side
 	 *  @return true if manager has saved a planned recall */
-	bool save_recall(const unit& unit, int side_num, const map_location& recall_hex);
+	bool save_recall(const unit& unit,
+	                 int side_num,
+	                 const map_location& recall_hex);
 
 	/** Creates a suppose-dead action for the current side */
-	void save_suppose_dead(unit& curr_unit, map_location const& loc);
+	void save_suppose_dead(unit& curr_unit,
+	                       map_location const& loc);
 
 	/** Executes first action in the queue for current side */
 	void contextual_execute();
+
 	/** Executes all actions for the current turn in sequence
 	 *  @return true if the there are no more actions left for this turn when the method returns */
 	bool execute_all_actions();
+
 	/** Called by the game controller to let the whiteboard continue executing all actions
 	 *  if it stopped to wait for an attack to complete on reception of its random seed from server */
 	void continue_execute_all();
+
 	/** Deletes last action in the queue for current side */
 	void contextual_delete();
+
 	/** Moves the action determined by the UI toward the beginning of the queue  */
 	void contextual_bump_up_action();
+
 	/** Moves the action determined by the UI toward the beginning of the queue  */
 	void contextual_bump_down_action();
 
@@ -172,6 +191,7 @@ public:
 
 	/** Checks whether the whiteboard has any planned action on any team */
 	bool has_actions() const;
+
 	/** Checks whether the specified unit has at least one planned action */
 	bool unit_has_actions(unit const* unit) const;
 
@@ -190,12 +210,16 @@ private:
 	/** Transforms the unit map so that it now reflects the future state of things,
 	 *  i.e. when all planned actions will have been executed */
 	void set_planned_unit_map();
+
 	/** Restore the regular unit map */
 	void set_real_unit_map();
 
 	void validate_actions_if_needed();
-	/** Called by all of the save_***() methods after they have added their action to the queue */
+
+	/** Called by all of the save_***() methods after they have added
+	 * their action to the queue */
 	void update_plan_hiding(size_t viewing_team);
+
 	void update_plan_hiding(); //same as above, but uses wb::viewer_team() as default argument
 
 	/** Tracks whether the whiteboard is active. */
@@ -207,12 +231,17 @@ private:
 #endif
 	bool wait_for_side_init_;
 	bool planned_unit_map_active_;
+
 	/** Track whenever we're modifying actions, to avoid dual execution etc. */
 	bool executing_actions_;
+
 	/** Track whether we're in the process of executing all actions */
 	bool executing_all_actions_;
-	/** true if we're in the process of executing all action and should end turn once finished. */
+
+	/** true if we're in the process of executing all action and should end
+	 * turn once finished. */
 	bool preparing_to_end_turn_;
+
 	/** Track whether the gamestate changed and we need to validate actions. */
 	bool gamestate_mutated_;
 
@@ -221,15 +250,17 @@ private:
 	/** Reference counted "lock" to prevent the building of the unit map at certain times */
 	whiteboard_lock unit_map_lock_;
 
-
 	boost::scoped_ptr<mapbuilder> mapbuilder_;
+
 	boost::shared_ptr<highlighter> highlighter_;
 
 	boost::scoped_ptr<pathfind::marked_route> route_;
 
 	std::vector<arrow_ptr> move_arrows_;
+
 	std::vector<fake_unit_ptr> fake_units_;
-	size_t temp_move_unit_underlying_id_;
+
+	std::string temp_move_unit_underlying_id_;
 
 	boost::scoped_ptr<CKey> key_poller_;
 
@@ -242,32 +273,32 @@ private:
 	std::vector<bool> team_plans_hidden_;
 
 	///used to keep track of units owning planned moves for visual ghosting/unghosting
-	std::set<size_t> units_owning_moves_;
+	std::set<std::string> units_owning_moves_;
 };
 
 /** Applies the planned unit map for the duration of the struct's life.
- *  Reverts to real unit map on destruction, unless planned unit map was already applied when the struct was created. */
-struct future_map
-{
+ *  Reverts to real unit map on destruction, unless planned unit map was
+ *  already applied when the struct was created. */
+struct future_map {
 	future_map();
 	~future_map();
 	bool initial_planned_unit_map_;
 };
 
-/** ONLY IF whiteboard is currently active, applies the planned unit map for the duration of the struct's life.
- *  Reverts to real unit map on destruction, unless planned unit map was already applied when the struct was created. */
-struct future_map_if_active
-{
+/** ONLY IF whiteboard is currently active, applies the planned unit map
+ * for the duration of the struct's life. Reverts to real unit map on destruction,
+ * unless planned unit map was already applied when the struct was created. */
+struct future_map_if_active {
 	future_map_if_active();
 	~future_map_if_active();
 	bool initial_planned_unit_map_;
 	bool whiteboard_active_;
 };
 
-/** Ensures that the real unit map is active for the duration of the struct's life.
- *  On destruction reverts to planned unit map if it was active when the struct was created. */
-struct real_map
-{
+/** Ensures that the real unit map is active for the duration of the
+ * struct's life. On destruction reverts to planned unit map if it was active
+ * when the struct was created. */
+struct real_map {
 	real_map();
 	~real_map();
 	bool initial_planned_unit_map_;

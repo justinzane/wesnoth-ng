@@ -18,49 +18,91 @@
  * excluding conditional action WML.
  */
 
-#include "global.hpp"
 #include "action_wml.hpp"
+//
 #include "conditional_wml.hpp"
+#include "entity_location.hpp"
 #include "handlers.hpp"
 #include "pump.hpp"
-
+//
 #include "../actions/create.hpp"
 #include "../actions/move.hpp"
 #include "../actions/vision.hpp"
 #include "../ai/manager.hpp"
+#include "../config.hpp"
+#include "../construct_dialog.hpp"
 #include "../dialogs.hpp"
+#include "../font.hpp"
+#include "../game_config.hpp"
+#include "../game_end_exceptions.hpp"
+#include "../game_errors.hpp"
+#include "../gamestatus.hpp"
 #include "../game_display.hpp"
 #include "../game_preferences.hpp"
-#include "../gettext.hpp"
+//#include "../gettext.hpp"
+#include "../global.hpp"
 #include "../gui/dialogs/gamestate_inspector.hpp"
 #include "../gui/dialogs/transient_message.hpp"
 #include "../gui/dialogs/wml_message.hpp"
 #include "../gui/widgets/window.hpp"
 #include "../help.hpp"
 #include "../log.hpp"
-#include "../map.hpp"
+//#include "../map.hpp"
 #include "../map_exception.hpp"
 #include "../map_label.hpp"
+#include "../map_location.hpp"
+#include "../mouse_handler_base.hpp"
+#include "../network.hpp"
 #include "../pathfind/teleport.hpp"
 #include "../pathfind/pathfind.hpp"
 #include "../persist_var.hpp"
 #include "../play_controller.hpp"
+#include "../preferences.hpp"
 #include "../replay.hpp"
 #include "../resources.hpp"
+#include "../race.hpp"
+#include "../sdl_utils.hpp"
+#include "../serialization/string_utils.hpp"
 #include "../side_filter.hpp"
+#include "../simple_rng.hpp"
 #include "../sound.hpp"
 #include "../soundsource.hpp"
+#include "../team.hpp"
 #include "../terrain_filter.hpp"
+#include "../terrain_translation.hpp"
+#include "../time_of_day.hpp"
+#include "../tod_manager.hpp"
+#include "../tstring.hpp"
+#include "../unit/unit.hpp"
 #include "../unit/unit_display.hpp"
 #include "../unit/unit_helper.hpp"
-#include "../wml_exception.hpp"
-
+#include "../unit/unit_map.hpp"
+#include "../unit/unit_types.hpp"
+#include "../util.hpp"
 #include "../utils/foreach.tpp"
-
+#include "../variable.hpp"
+#include "../wml_exception.hpp"
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/smart_ptr/scoped_array.hpp>
+#include <boost/smart_ptr/scoped_ptr.hpp>
+//
+#include <stddef.h>
+#include <SDL_timer.h>
+#include <SDL_video.h>
+//
+#include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <map>
+#include <set>
+#include <sstream>
+#include <streambuf>
+#include <string>
+#include <utility>
+#include <vector>
 
 
 static lg::log_domain log_engine("engine");
@@ -757,10 +799,9 @@ WML_HANDLER_FUNCTION(endlevel, /*event_info*/, cfg)
 
 
 	std::string result = cfg["result"];
-	VALIDATE_WITH_DEV_MESSAGE(
-			  result.empty() || result == "victory" || result == "defeat"
-			, _("Invalid value in the result key for [end_level]")
-			, "result = '"  + result + "'.");
+	VALIDATE_WITH_DEV_MESSAGE(result.empty() || result == "victory" || result == "defeat",
+	                          "Invalid value in the result key for [end_level]",
+	                          "result = '"  + result + "'.");
 	data.transient.custom_endlevel_music = cfg["music"].str();
 	data.transient.carryover_report = cfg["carryover_report"].to_bool(true);
 	data.prescenario_save = cfg["save"].to_bool(true);
@@ -2500,16 +2541,15 @@ WML_HANDLER_FUNCTION(unstore_unit, /*event_info*/, cfg)
 				// bugs. Duplicates here might cause the wrong unit being
 				// replaced by the wrong unit.
 				if(t.recall_list().size() > 1) {
-					std::vector<size_t> desciptions;
+					std::vector<std::string> desciptions;
 					for(std::vector<unit>::const_iterator citor =
 							t.recall_list().begin();
 							citor != t.recall_list().end(); ++citor) {
 
-						const size_t desciption =
-							citor->underlying_id();
-						if(std::find(desciptions.begin(), desciptions.end(),
-									desciption) != desciptions.end()) {
-
+						const std::string desciption = citor->underlying_id();
+						if(std::find(desciptions.begin(),
+						             desciptions.end(),
+									 desciption) != desciptions.end()) {
 							lg::wml_error << "Recall list has duplicate unit "
 								"underlying_ids '" << desciption
 								<< "' unstore_unit may not work as expected.\n";
@@ -2524,13 +2564,11 @@ WML_HANDLER_FUNCTION(unstore_unit, /*event_info*/, cfg)
 				 * @todo it would be better to change recall_list() from
 				 * a vector to a map and use the underlying_id as key.
 				 */
-				const size_t key = u.underlying_id();
-				for(std::vector<unit>::iterator itor =
-						t.recall_list().begin();
-						itor != t.recall_list().end(); ++itor) {
-
-					LOG_NG << "Replaced unit '"
-						<< key << "' on the recall list\n";
+				const std::string key = u.underlying_id();
+				for(std::vector<unit>::iterator itor = t.recall_list().begin();
+                    itor != t.recall_list().end();
+                    ++itor) {
+					LOG_NG << "Replaced unit '" << key << "' on the recall list\n";
 					if(itor->underlying_id() == key) {
 						t.recall_list().erase(itor);
 						break;

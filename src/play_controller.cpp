@@ -776,7 +776,6 @@ void play_controller::finish_side_turn(){
 	}
 
 	mouse_handler_.deselect_hex();
-	unit_id_manager::instance().reset_fake();
 	game_events::pump();
 }
 
@@ -811,7 +810,8 @@ void play_controller::fire_wml_menu_item_event(const wml_menu_item &menu_item)
 	map_location const& menu_hex = mouse_handler_.get_last_hex();
 	std::string const & event_name = menu_item.event_name();
 	recorder.add_event(event_name, menu_hex);
-	if(game_events::fire(event_name, menu_hex)) 
+	if(game_events::fire((std::string)event_name,
+	                     (game_events::entity_location)menu_hex))
 	{
 		// The event has mutated the gamestate
 		undo_stack_->clear();

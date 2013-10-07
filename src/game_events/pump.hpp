@@ -111,10 +111,9 @@ namespace game_events
 	                          const queued_event &event_info, const vconfig &cfg);
 
 
-	/**
-	 * Function to fire an event.
-	 *
-	 * Events may have up to two arguments, both of which must be locations.
+	/** @brief Function to fire an event.
+	 * @details Events may have up to two arguments, both of which must be locations.
+	 * TODO Explain whether both may be null or just one.
 	 */
 	bool fire(const std::string& event,
 	          const entity_location& loc1=entity_location::null_entity,

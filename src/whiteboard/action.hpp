@@ -68,11 +68,9 @@ public:
 	/** Return the unit targeted by this action. Null if unit doesn't exist. */
 	virtual unit* get_unit() const = 0;
 
-	/**
-	 * Returns the id of the unit targeted by this action.
-	 * @retval 0 no unit is targeted.
-	 */
-	size_t get_unit_id() const;
+	/** Returns the id of the unit targeted by this action.
+	 * @retval "" no unit is targeted. */
+	std::string get_unit_id() const;
 
 	/** @return pointer to the fake unit used only for visuals */
 	virtual fake_unit_ptr get_fake_unit() = 0;

@@ -93,14 +93,14 @@ class unit_map {
 		unit_pod()
 			: unit(NULL)
 			, ref_count()
-			, deleted_uid(0)
+			, deleted_uid("deleted")
 		{
 		}
 
 		class unit * unit;
 		mutable n_ref_counter::t_ref_counter<signed int> ref_count;
 
-		unsigned deleted_uid;  ///UID of the deleted, moved, added, or otherwise invalidated iterator to facilitate a new lookup.
+		std::string deleted_uid;  ///UID of the deleted, moved, added, or otherwise invalidated iterator to facilitate a new lookup.
 	};
 
 	/// A list pointing to unit and their reference counters.  Dead units have a unit pointer equal to NULL.
@@ -110,7 +110,7 @@ class unit_map {
 
 	///Maps of id and location to list iterator.
 	///@note list iterators never invalidate due to resizing or deletion.
-	typedef boost::unordered_map<size_t, t_ilist::iterator> t_umap;
+	typedef boost::unordered_map<std::string, t_ilist::iterator> t_umap;
 	typedef boost::unordered_map<map_location, t_ilist::iterator> t_lmap;
 
 public:
@@ -256,8 +256,12 @@ public:
 		template<typename Y> friend struct iterator_base;
 
 	private:
-		bool valid_for_dereference() const { return (tank_ != NULL) && (i_ != the_end()); }
-		bool valid_entry() const { return  ((tank_ != NULL) && (i_ != the_end())) ; }
+		bool valid_for_dereference() const {
+		    return (tank_ != NULL) && (i_ != the_end());
+		}
+		bool valid_entry() const {
+		    return ((tank_ != NULL) && (i_ != the_end()));
+		}
 		void valid_exit() const {
 			if(tank_ != NULL) {
 				assert(!the_list().empty());
@@ -296,7 +300,7 @@ public:
 	 * @pre deleted_uid != 0
 	 */
 		void recover_unit_iterator() const {
-			assert(i_->deleted_uid != 0);
+			assert(i_->deleted_uid != "deleted");
 			iterator_base new_this( tank_->find( i_->deleted_uid ));
 			const_cast<iterator_base *>(this)->operator=( new_this );
 		}
@@ -324,28 +328,46 @@ public:
 	typedef unit_iterator iterator;
 	typedef const_unit_iterator const_iterator;
 
-	unit_iterator find(size_t id);
+	unit_iterator find(std::string id);
 	unit_iterator find(const map_location &loc);
 
-	const_unit_iterator find(const map_location &loc) const { return const_cast<unit_map *>(this)->find(loc); }
-	const_unit_iterator find(size_t id) const { return const_cast<unit_map *>(this)->find(id); }
+	const_unit_iterator find(const map_location &loc) const {
+	    return const_cast<unit_map *>(this)->find(loc);
+	}
+	const_unit_iterator find(std::string id) const {
+	    return const_cast<unit_map *>(this)->find(id);
+	}
 
 	unit_iterator find_leader(int side);
-	const_unit_iterator find_leader(int side) const { return const_cast<unit_map *>(this)->find_leader(side); }
+	const_unit_iterator find_leader(int side) const {
+	    return const_cast<unit_map *>(this)->find_leader(side);
+	}
 	unit_iterator find_first_leader(int side);
 
 	std::vector<unit_iterator> find_leaders(int side);
 	std::vector<const_unit_iterator> find_leaders(int side) const;
 
-	size_t count(const map_location& loc) const { return lmap_.count(loc); }
+	size_t count(const map_location& loc) const {
+	    return lmap_.count(loc);
+	}
 
-	unit_iterator begin() { return make_unit_iterator( begin_core() ); }
-	const_unit_iterator begin() const { return make_const_unit_iterator( begin_core() ); }
+	unit_iterator begin() {
+	    return make_unit_iterator( begin_core() );
+	}
+	const_unit_iterator begin() const {
+	    return make_const_unit_iterator( begin_core() );
+	}
 
-	unit_iterator end() { return make_unit_iterator(the_end_); }
-	const_unit_iterator end() const { return make_const_unit_iterator(the_end_); }
+	unit_iterator end() {
+	    return make_unit_iterator(the_end_);
+	}
+	const_unit_iterator end() const {
+	    return make_const_unit_iterator(the_end_);
+	}
 
-	size_t size() const { return lmap_.size(); }
+	size_t size() const {
+	    return lmap_.size();
+	}
 	size_t num_iters() const ;
 
 	void clear(bool force = false);
@@ -434,7 +456,7 @@ private:
 		assert(ilist_.empty());
 		unit_pod upod;
 		upod.unit = NULL;
-		upod.deleted_uid = 0;
+		upod.deleted_uid = "";
 		++upod.ref_count; //dummy count
 		ilist_.push_front(upod);
 		the_end_ = ilist_.begin();

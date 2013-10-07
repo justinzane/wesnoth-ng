@@ -137,7 +137,7 @@ std::pair<unit_map::unit_iterator, bool> unit_map::insert(unit *p) {
 	self_check();
 	assert(p);
 
-	size_t unit_id = p->underlying_id();
+	std::string unit_id = p->underlying_id();
 	const map_location &loc = p->get_location();
 
 	if (!loc.valid()) {
@@ -166,14 +166,15 @@ std::pair<unit_map::unit_iterator, bool> unit_map::insert(unit *p) {
 			assert(lit->ref_count != 0);
 		} else {
 			unit *q = uinsert.first->second->unit;
-			ERR_NG << "Trying to add " << p->name()
-				   << " - " << p->id() << " - " << p->underlying_id()
-				   << " ("  << loc << ") over " << q->name()
-				   << " - " << q->id() << " - " << q->underlying_id()
-				   << " ("  << q->get_location()
-				   << "). The new unit will be assigned underlying_id="
-				   << (1 +unit_id_manager::instance().get_save_id())
-				   << " to prevent duplicate id conflicts.\n";
+			// Removed during uuid converson, justinzane.
+//			ERR_NG << "Trying to add " << p->name()
+//				   << " - " << p->id() << " - " << p->underlying_id()
+//				   << " ("  << loc << ") over " << q->name()
+//				   << " - " << q->id() << " - " << q->underlying_id()
+//				   << " ("  << q->get_location()
+//				   << "). The new unit will be assigned underlying_id="
+//				   << (1 +unit_id_manager::instance().get_id())
+//				   << " to prevent duplicate id conflicts.\n";
 
 			p->clone(false);
 			uinsert = umap_.insert(std::make_pair(p->underlying_id(), lit ));
@@ -265,7 +266,7 @@ unit *unit_map::extract(const map_location &loc) {
 	t_ilist::iterator lit(i->second);
 
 	unit *u = lit->unit;
-	size_t uid( u->underlying_id() );
+	std::string uid( u->underlying_id() );
 
 	DBG_NG << "Extract unit " << uid << " - " << u->id()
 			<< " from location: (" << loc << ")\n";
@@ -294,7 +295,7 @@ unit *unit_map::extract(const map_location &loc) {
  */
 void unit_map::error_recovery_externally_changed_uid(t_ilist::iterator const & lit) const {
 	std::string name, id ;
-	size_t uid;
+	std::string uid;
 	if(lit->unit != NULL){
 		unit const * u(lit->unit);
 		name = u->name();
@@ -311,7 +312,7 @@ void unit_map::error_recovery_externally_changed_uid(t_ilist::iterator const & l
 	}
 	std::stringstream oldidss;
 	if (uit != umap_.end()) {
-		size_t olduid =  uit->first ;
+		std::string olduid =  uit->first ;
 		umap_.erase(uit);
 		oldidss << olduid;
 	} else {
@@ -332,7 +333,7 @@ size_t unit_map::erase(const map_location &loc) {
 	return 1;
 }
 
-unit_map::unit_iterator unit_map::find(size_t id) {
+unit_map::unit_iterator unit_map::find(std::string id) {
 	self_check();
 	t_umap::iterator i(umap_.find(id));
 	if((i != umap_.end()) && i->second->unit==NULL){ i = umap_.end() ;}

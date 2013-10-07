@@ -11,7 +11,23 @@
    See the COPYING file for more details.
 */
 
-#include "callable_objects.hpp"
+#include <boost/smart_ptr/intrusive_ptr.hpp>
+#include <callable_objects.hpp>
+#include <formula_callable.hpp>
+#include <map_location.hpp>
+#include <stddef.h>
+#include <terrain.hpp>
+#include <tstring.hpp>
+#include <unit/unit.hpp>
+#include <unit/unit_types.hpp>
+#include <variant.hpp>
+
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
 
 template <typename T, typename K>
 variant convert_map( const std::map<T, K>& input_map ) {
@@ -265,12 +281,19 @@ void unit_callable::get_inputs(std::vector<game_logic::formula_input>* inputs) c
 
 int unit_callable::do_compare(const formula_callable* callable) const
 {
+    char* end;
 	const unit_callable* u_callable = dynamic_cast<const unit_callable*>(callable);
 	if(u_callable == NULL) {
 		return formula_callable::do_compare(callable);
 	}
 
-	return u_.underlying_id() - u_callable->u_.underlying_id();
+	if (u_.underlying_id() < u_callable->u_.underlying_id()) {
+	    return -1;
+	} else if (u_.underlying_id() > u_callable->u_.underlying_id()) {
+	    return 1;
+	} else {
+	    return 0;
+	}
 }
 
 variant unit_type_callable::get_value(const std::string& key) const

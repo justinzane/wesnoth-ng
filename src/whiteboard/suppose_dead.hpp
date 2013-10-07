@@ -75,7 +75,7 @@ protected:
 		return boost::static_pointer_cast<suppose_dead>(action::shared_from_this());
 	}
 
-	size_t unit_underlying_id_;
+	std::string unit_underlying_id_;
 	std::string unit_id_;
 	map_location loc_;
 

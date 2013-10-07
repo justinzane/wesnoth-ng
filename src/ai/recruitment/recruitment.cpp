@@ -1579,7 +1579,8 @@ void recruitment::do_similarity_penalty(std::vector<data>* leader_data) const {
  * Called at the beginning and whenever the recruitment list changes.
  */
 int recruitment::get_cheapest_unit_cost_for_leader(const unit_map::const_iterator& leader) {
-	std::map<size_t, int>::const_iterator it = cheapest_unit_costs_.find(leader->underlying_id());
+	std::map<std::string, int>::const_iterator it =
+	    cheapest_unit_costs_.find(leader->underlying_id());
 	if (it != cheapest_unit_costs_.end()) {
 		return it->second;
 	}

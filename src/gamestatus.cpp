@@ -1192,7 +1192,7 @@ game_state::game_state(const config& cfg, bool show_replay) :
 		classification_(cfg),
 		mp_settings_(cfg)
 {
-	unit_id_manager::instance().set_save_id(cfg["next_underlying_unit_id"]);
+	unit_id_manager::instance().store_id(cfg["next_underlying_unit_id"]);
 	log_scope("read_game");
 
 	if(cfg.has_child("carryover_sides")){
@@ -1361,7 +1361,7 @@ void game_state::write_snapshot(config& cfg, game_display* gui) const
 
 	cfg["campaign_define"] = classification_.campaign_define;
 	cfg["campaign_extra_defines"] = utils::join(classification_.campaign_xtra_defines);
-	cfg["next_underlying_unit_id"] = str_cast(unit_id_manager::instance().get_save_id());
+	cfg["next_underlying_unit_id"] = unit_id_manager::instance().get_id();
 
 	cfg["end_credits"] = classification_.end_credits;
 	cfg["end_text"] = classification_.end_text;

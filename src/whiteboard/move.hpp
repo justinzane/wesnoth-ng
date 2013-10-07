@@ -98,7 +98,7 @@ protected:
 
 	void calculate_move_cost();
 
-	size_t unit_underlying_id_;
+	std::string unit_underlying_id_;
 	std::string unit_id_;
 	boost::scoped_ptr<pathfind::marked_route> route_;
 	int movement_cost_;

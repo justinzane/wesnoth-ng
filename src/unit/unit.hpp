@@ -81,7 +81,7 @@ public:
 	void set_id(const std::string& id) { id_ = id; }
 	const std::string& id() const { if (id_.empty()) return type_name(); else return id_; }
 	/** The unique internal ID of the unit */
-	size_t underlying_id() const { return underlying_id_; }
+	std::string underlying_id() const { return underlying_id_; }
 
 	/** The unit type name */
 	const t_string& type_name() const {return type_name_;}
@@ -398,7 +398,7 @@ private:
 	const unit_race* race_;	/// Never NULL, but may point to the null race.
 	std::string id_;
 	t_string name_;
-	size_t underlying_id_;
+	std::string underlying_id_;
 	std::string undead_variation_;
 	std::string variation_;
 

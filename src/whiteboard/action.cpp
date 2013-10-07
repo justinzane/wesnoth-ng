@@ -113,10 +113,9 @@ action::~action()
 {
 }
 
-size_t action::get_unit_id() const
-{
+std::string action::get_unit_id() const {
 	unit *ret = get_unit();
-	return ret ? ret->underlying_id() : 0;
+	return ret ? ret->underlying_id() : "";
 }
 
 } // end namespace wb

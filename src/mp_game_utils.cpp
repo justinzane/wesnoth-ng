@@ -74,7 +74,6 @@ config initial_level_config(game_display& disp, const mp_game_settings& params,
 			"multiplayer", "id", params.mp_scenario)), 0);
 
 		level["next_underlying_unit_id"] = 0;
-		unit_id_manager::instance().clear();
 
 		if (params.random_start_time)
 		{
@@ -170,7 +169,7 @@ void level_to_gamestate(config& level, game_state& state)
 
 	carryover_info sides = carryover_info(state.carryover_sides_start);
 
-	unit_id_manager::instance().set_save_id(level["next_underlying_unit_id"]);
+	unit_id_manager::instance().store_id(level["next_underlying_unit_id"]);
 
 	// Set random.
 	const config::attribute_value& seed = level["random_seed"];
