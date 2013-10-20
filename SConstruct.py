@@ -1,11 +1,25 @@
 # vi: syntax=python:et:ts=4
+#==============================================================================
+# @brief SCons build description for the Wesnoth project
+# @details Prerequisites are:
+#     1. autorevision for getting the repository revision level.
+#     2. msgfmt(1) for making builds with i18n support.
+#     3. graph-includes for making the project dependency graph.
+# @copyright Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
+# @copyright Copyright (C) 2013 - 2013 by justin zane chudgar <justin@justinzane.com>
+# @section <license> GPLv2
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 #
-# SCons build description for the Wesnoth project
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY.
 #
-# Prerequisites are:
-# 1. autorevision for getting the repository revision level.
-# 2. msgfmt(1) for making builds with i18n support.
-# 3. graph-includes for making the project dependency graph.
+# See the COPYING file for more details.
+# @note updated 2013 by justinzane <justin@justinzane.com> to better handle
+# compiler wrappers like ccache and distcc as well as the LLVM clang++ compiler.
+#==============================================================================
 
 import os, sys, shutil, re, commands
 from glob import glob
@@ -56,480 +70,18 @@ opts.AddVariables(
     EnumVariable('build',
                  'Build variant: debug, release profile or base (no subdirectory)',
                  "release",
-                 ["release", "debug", "glibcxx_debug", "profile", "base"]),
+                 ["release", "debug", "profile", "base"]),
     BoolVariable('prereqs',
                  'abort if prerequisites cannot be detected',
                  True),
     ('jobs',
      'Set the number of parallel compilations',
-<<<<<<< HEAD
-     "11",
-     lambda key, value, env: int(value),
-     int),
-    BoolVariable('distcc',
-                 'Use distcc',
-                 True),
-    BoolVariable('ccache',
-                 "Use ccache",
-                 True),
-    BoolVariable('openmp',
-                 'Enable openmp use.',
-                 False),
-    BoolVariable('verbose',
-                 'Emit progress messages during data installation.',
-                 True),
-
-    # Advanced Build Options ------------------------------------------------------------------
-    ('host',
-     'Cross-compile host.',
-     ''),
-    ('cxxtool',
-     'Set c++ compiler command if not using standard compiler.',
-     None),
-    EnumVariable('cxxstd',
-                 'The C++ standard to use. i.e. -std=c++98, -std=c++11, etc.',
-                 'c++11',
-                 ['c++98', 'c++11', 'gnu++98', 'gnu++11', 'c++1y', 'gnu++1y']),
-    EnumVariable('cstd',
-                 'The C standard to use. i.e. -std=c99, -std=c11, etc.',
-                 'c11',
-                 ['c98', 'c11', 'gnu99', 'gnu11', 'c90', 'gnu90']),
-    BoolVariable("fast",
-                 "Make scons faster at cost of less precise dependency tracking.",
-                 False),
-    BoolVariable("lockfile",
-                 "Use lockfile to prevent multiple instances of scons running at the same time.",
-                 True),
-    BoolVariable('strict',
-                 'Set to strict compilation',
-                 False),
-    BoolVariable('static_test',
-                 'Staticaly build against boost test (Not supported yet)',
-                 False),
-
-    # Compiler/Linker Flags -------------------------------------------------------------------
-    ('extra_flags_config',
-     'Extra compiler and linker flags to use for configuration and all builds',
-     "-march=core-avx-i"),
-    ('extra_flags_base',
-     'Extra compiler and linker flags to use for release builds',
-     ""),
-    ('extra_flags_release',
-     'Extra compiler and linker flags to use for release builds',
-     "-O2"),
-    ('extra_flags_debug',
-     'Extra compiler and linker flags to use for debug builds',
-     "-O0 -ggdb3 -static-libgcc"),
-    ('extra_flags_profile',
-     'Extra compiler and linker flags to use for profile builds',
-     "-Og -pg -ggdb3 -static-libgcc"),
-
-    # Optional Components ---------------------------------------------------------------------
-    BoolVariable('fribidi',
-                 'Clear to disable bidirectional-language support',
-                 False),
-    BoolVariable('desktop_entry',
-                 'Clear to disable desktop-entry',
-                 False),
-    # TODO: Document what functions are disabled by this flag.
-    BoolVariable('lowmem',
-                 'Set to reduce memory usage by removing extra functionality',
-                 False),
-    BoolVariable('notifications',
-                 'Enable support for desktop notifications',
-                 False),
-    BoolVariable('nls',
-                 'enable compile/install of gettext message catalogs',
-                 False),
-    BoolVariable('raw_sockets',
-                 'Set True to use raw sockets in the mp network layer instead of SDL_net',
-                 False),
-    BoolVariable('forum_user_handler',
-                 'Enable forum user handler in wesnothd [Warning, links to mysql!]',
-                 False),
-
-    # Names -----------------------------------------------------------------------------------
-    ('program_suffix',
-     'suffix to append to names of installed programs',
-     "$version_suffix"),
-    ('version_suffix',
-     'suffix that will be added to default values of prefsdir, program_suffix and datadirname',
-     ""),
-    ('server_gid',
-     'group id of the user who runs wesnothd',
-     ""),
-    ('server_uid',
-     'user id of the user who runs wesnothd',
-     ""),
-
-    # Paths and Directory Locations -----------------------------------------------------------
-    PathVariable('build_dir',
-                 'Build all intermediate files(objects, test programs, etc) under this dir',
-                 "build",
-                 PathVariable.PathAccept),
-    PathVariable('bindir',
-                 'Where to install binaries',
-                 "bin",
-                 PathVariable.PathAccept),
-    ('cachedir',
-     'Directory that contains a cache of derived files.',
-     ''),
-    PathVariable('datadir',
-                 'read-only architecture-independent game data',
-                 "$datarootdir/$datadirname",
-                 PathVariable.PathAccept),
-    PathVariable('fifodir',
-                 'directory for the wesnothd fifo socket file',
-                 "/var/run/wesnothd",
-                 PathVariable.PathAccept),
-    BoolVariable('systemd',
-                 'Install systemd unit file for wesnothd',
-                 bool(WhereIs("systemd"))),
-    PathVariable('datarootdir',
-                 'sets the root of data directories to a non-default location',
-                 "share",
-                 PathVariable.PathAccept),
-    PathVariable('datadirname',
-                 'sets the name of data directory',
-                 "wesnoth$version_suffix",
-                 PathVariable.PathAccept),
-    PathVariable('desktopdir',
-                 'sets the desktop entry directory to a non-default location',
-                 "$datarootdir/applications",
-                 PathVariable.PathAccept),
-    PathVariable('icondir',
-                 'sets the icons directory to a non-default location',
-                 "$datarootdir/icons",
-                 PathVariable.PathAccept),
-    BoolVariable('internal_data',
-                 'Set to put data in Mac OS X application fork',
-                 False),
-    PathVariable('localedirname',
-                 'sets the locale data directory to a non-default location',
-                 "translations",
-                 PathVariable.PathAccept),
-    PathVariable('mandir',
-                 'sets the man pages directory to a non-default location',
-                 "$datarootdir/man",
-                 PathVariable.PathAccept),
-    PathVariable('docdir',
-                 'sets the doc directory to a non-default location',
-                 "$datarootdir/doc/wesnoth",
-                 PathVariable.PathAccept),
-    PathVariable('python_site_packages_dir',
-                 'sets the directory where python modules are installed',
-                 "lib/python/site-packages/wesnoth",
-                 PathVariable.PathAccept),
-    PathVariable('prefix',
-                 'autotools-style installation prefix',
-                 "/usr/local",
-                 PathVariable.PathAccept),
-    PathVariable('prefsdir',
-                 'user preferences directory',
-                 "",
-                 PathVariable.PathAccept),
-    PathVariable('default_prefs_file',
-                 'default preferences file name',
-                 "",
-                 PathVariable.PathAccept),
-    PathVariable('destdir',
-                 'prefix to add to all installation paths.',
-                 "/",
-                 PathVariable.PathAccept),
-    PathVariable('sdldir',
-                 'Directory of SDL installation.',
-                 "",
-                 OptionalPath),
-    PathVariable('boostdir',
-                 'Directory of boost installation.',
-                 "",
-                 OptionalPath),
-    PathVariable('boostlibdir',
-                 'Directory where boost libraries are installed.',
-                 "",
-                 OptionalPath),
-    ('boost_suffix',
-     'Suffix of boost libraries.'),
-    PathVariable('gettextdir',
-                 'Root directory of Gettext\'s installation.',
-                 "",
-                 OptionalPath),
-    PathVariable('gtkdir',
-                 'Directory where GTK SDK is installed.',
-                 "",
-                 OptionalPath),
-    PathVariable('luadir',
-                 'Directory where Lua binary package is unpacked.',
-                 "",
-                 OptionalPath),
-)
-
-#
-# Setup
-#
-
-sys.path.insert(0, "./scons")
-env = Environment(tools=["tar", "gettext", "install", "python_devel", "scanreplace"], options = opts, toolpath = ["scons"])
-
-if env["lockfile"]:
-    print "Creating lockfile"
-    lockfile = os.path.abspath("scons.lock")
-    open(lockfile, "wx").write(str(os.getpid()))
-    import atexit
-    atexit.register(os.remove, lockfile)
-
-opts.Save(GetOption("option_cache"), env)
-env.SConsignFile("$build_dir/sconsign.dblite")
-
-# Make sure the user's environment is always available
-env['ENV']['PATH'] = os.environ["PATH"]
-env['ENV']['TERM'] = os.environ["TERM"]
-if env["PLATFORM"] == "win32":
-    env.Tool("mingw")
-elif env["PLATFORM"] == "sunos":
-    env.Tool("sunc++")
-    env.Tool("suncc")
-    env.Tool("sunar")
-    env.Tool("sunlink")
-    env.Append(CXXFLAGS = Split("-library=stlport4 -staticlib=stlport4 -norunpath -features=tmplife -features=tmplrefstatic -features=extensions"))
-    env.Append(LINKFLAGS = Split("-library=stlport4 -staticlib=stlport4 -lsocket -lnsl -lboost_iostreams -L. -R."))
-    env['CC'] = env['CXX']
-else:
-    from cross_compile import *
-    setup_cross_compile(env)
-
-if env.get('cxxtool',""):
-    env['CXX'] = env['cxxtool']
-    if 'HOME' in os.environ:
-        env['ENV']['HOME'] = os.environ['HOME']
-
-if env['jobs'] > 1:
-    SetOption("num_jobs", env['jobs'])
-
-if env['distcc'] or env['ccache']:
-    env.Tool('ccwrappers')
-
-#if env['ccache']:
-#    env.Tool('ccache')
-
-
-Help("""Arguments may be a mixture of switches and targets in any order.
-Switches apply to the entire build regardless of where they are in the order.
-Important switches include:
-
-    prefix=/usr     probably what you want for production tools
-    build=base      build directly in the distribution root;
-                    you'll need this if you're trying to use Emacs compile mode.
-    build=release   build the release build variant with appropriate flags
-                        in build/release and copy resulting binaries
-                        into distribution/working copy root.
-    build=debug     same for debug build variant, binaries will be copied with -debug suffix
-
-With no arguments, the recipe builds wesnoth and wesnothd.  Available
-build targets include the individual binaries:
-
-    wesnoth wesnothd campaignd exploder cutter test
-
-You can make the following special build targets:
-
-    all = wesnoth exploder cutter wesnothd campaignd (*).
-    TAGS = build tags for Emacs (*).
-    wesnoth-deps.png = project dependency graph
-    install = install all executables that currently exist, and any data needed
-    install-wesnothd = install the Wesnoth multiplayer server.
-    install-campaignd = install the Wesnoth campaign server.
-    install-cutter = install the castle cutter
-    install-exploder = install the castle exploder
-    install-pytools = install all Python tools and modules
-    uninstall = uninstall all executables, tools, modules, and servers.
-    pot-update = generate gettext message catalog templates and merge them with localized message catalogs
-    update-po = merge message catalog templates with localized message catalogs for particular lingua
-    update-po4a = update translations of manual and manpages
-    af bg ca ... = linguas for update-po
-    dist = make distribution tarball as wesnoth.tar.bz2 (*).
-    data-dist = make data tarball as wesnoth-data.tar.bz2 (*).
-    binary-dist = make data tarball as wesnoth-binaries.tar.bz2 (*).
-    wesnoth-bundle = make Mac OS application bundle from game (*)
-    sanity-check = run a pre-release sanity check on the distribution.
-    manual = regenerate English-language manual and, possibly, localized manuals if appropriate xmls exist.
-
-Files made by targets marked with '(*)' are cleaned by 'scons -c all'
-
-Options are cached in a file named .scons-option-cache and persist to later
-invocations.  The file is editable.  Delete it to start fresh. You can also use a different file by
-specifying --option-cache=FILE command line argument. Current option values can be listed with 'scons -h'.
-
-If you set CXXFLAGS and/or LDFLAGS in the environment, the values will
-be appended to the appropriate variables within scons.
-""" + opts.GenerateHelpText(env, sort=cmp))
-
-if GetOption("help"):
-    Return()
-
-if env["cachedir"] and not env['ccache']:
-    CacheDir(env["cachedir"])
-
-if env["fast"]:
-    env.Decider('MD5-timestamp')
-    SetOption('max_drift', 1)
-    SetOption('implicit_cache', 1)
-
-if not os.path.isabs(env["prefix"]):
-    print "Warning: prefix is set to relative dir. destdir setting will be ignored."
-    env["destdir"] = ""
-
-#
-# work around long command line problem on windows
-# see http://www.scons.org/wiki/LongCmdLinesOnWin32
-#
-if sys.platform == 'win32':
-    try:
-        import win32file
-        import win32event
-        import win32process
-        import win32security
-        import string
-
-        def my_spawn(sh, escape, cmd, args, spawnenv):
-            for var in spawnenv:
-                spawnenv[var] = spawnenv[var].encode('ascii', 'replace')
-
-            sAttrs = win32security.SECURITY_ATTRIBUTES()
-            StartupInfo = win32process.STARTUPINFO()
-            newargs = string.join(map(escape, args[1:]), ' ')
-            cmdline = cmd + " " + newargs
-
-            # check for any special operating system commands
-            if cmd == 'del':
-                for arg in args[1:]:
-                    win32file.DeleteFile(arg)
-                exit_code = 0
-            else:
-                # otherwise execute the command.
-                hProcess, hThread, dwPid, dwTid = win32process.CreateProcess(None,
-                                                                             cmdline,
-                                                                             None,
-                                                                             None,
-                                                                             1,
-                                                                             0,
-                                                                             spawnenv,
-                                                                             None,
-                                                                             StartupInfo)
-                win32event.WaitForSingleObject(hProcess, win32event.INFINITE)
-                exit_code = win32process.GetExitCodeProcess(hProcess)
-                win32file.CloseHandle(hProcess);
-                win32file.CloseHandle(hThread);
-            return exit_code
-
-        env['SPAWN'] = my_spawn
-    except ImportError:
-        def subprocess_spawn(sh, escape, cmd, args, env):
-            return call(' '.join(args))
-        env['SPAWN'] = subprocess_spawn
-
-#
-# Check some preconditions
-#
-
-def Warning(message):
-    print message
-    return False
-
-from metasconf import init_metasconf
-configure_args = dict(custom_tests = init_metasconf(env, ["cplusplus",
-                                                          "python_devel",
-                                                          "sdl",
-                                                          "boost",
-                                                          "pango",
-                                                          "pkgconfig",
-                                                          "gettext",
-                                                          "lua"]), config_h = "config.h",
-    log_file="$build_dir/config.log", conf_dir="$build_dir/sconf_temp")
-
-env.MergeFlags(env["extra_flags_config"])
-if env["prereqs"]:
-    conf = env.Configure(**configure_args)
-
-    if env["PLATFORM"] == "posix":
-        conf.CheckCHeader("poll.h", "<>")
-        conf.CheckCHeader("sys/poll.h", "<>")
-        conf.CheckCHeader("sys/select.h", "<>")
-        if conf.CheckCHeader("sys/sendfile.h", "<>"):
-            conf.CheckFunc("sendfile")
-    conf.CheckLib("m")
-    conf.CheckFunc("round")
-
-    def CheckAsio(conf):
-        if env["PLATFORM"] == 'win32':
-            conf.env.Append(LIBS = ["libws2_32"])
-            have_libpthread = True
-        else:
-            have_libpthread = conf.CheckLib("pthread")
-        return have_libpthread and \
-            conf.CheckBoost("system") and \
-            conf.CheckBoost("asio", header_only = True)
-
-    if env['host'] in ['x86_64-nacl', 'i686-nacl']:
-        # libppapi_cpp has a reverse dependency on the following function
-        env.Append(LINKFLAGS = ['-Wl,--undefined=_ZN2pp12CreateModuleEv'])
-        conf.CheckLib("ppapi")
-        conf.CheckLib("ppapi_cpp")
-        conf.CheckLib("nacl-mounts")
-        # We are linking static libraries without libtool.
-        # Enumerating all transitive dependencies.
-        conf.CheckLib("pthread")
-        conf.CheckLib("dl")
-        conf.CheckLib("SDL")
-        conf.CheckLib("jpeg")
-        conf.CheckLib("png")
-        conf.CheckLib("tiff")
-        conf.CheckLib("ogg")
-        conf.CheckLib("expat")
-        conf.CheckLib("pixman-1")
-        conf.CheckLib("vorbisfile")
-        conf.CheckLib("vorbis")
-        conf.CheckLib("mikmod")
-
-    have_server_prereqs = \
-        conf.CheckCPlusPlus(gcc_version = "3.3") and \
-        conf.CheckGettextLibintl() and \
-        conf.CheckBoost("iostreams", require_version = "1.34.1") and \
-        conf.CheckBoostIostreamsGZip() and \
-        conf.CheckBoostIostreamsBZip2() and \
-        conf.CheckBoost("smart_ptr", header_only = True) and \
-        conf.CheckSDL(require_version = '1.2.7') and \
-        conf.CheckSDL('SDL_net') or Warning("Base prerequisites are not met.")
-
-    env = conf.Finish()
-    client_env = env.Clone()
-    conf = client_env.Configure(**configure_args)
-    have_client_prereqs = have_server_prereqs and \
-        CheckAsio(conf) and \
-        conf.CheckPango("cairo", require_version = "1.21.3") and \
-        conf.CheckPKG("fontconfig") and \
-        conf.CheckBoost("program_options", require_version="1.35.0") and \
-        conf.CheckBoost("regex", require_version = "1.35.0") and \
-        conf.CheckSDL("SDL_ttf", require_version = "2.0.8") and \
-        conf.CheckSDL("SDL_mixer", require_version = '1.2.0') and \
-        conf.CheckLib("vorbisfile") and \
-        conf.CheckSDL("SDL_image", require_version = '1.2.0') and \
-        conf.CheckOgg() or Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
-
-    have_X = False
-    if have_client_prereqs:
-        if env["PLATFORM"] != "win32":
-            have_X = conf.CheckLib('X11')
-
-        env["notifications"] = env["notifications"] and conf.CheckPKG("dbus-1")
-        if env["notifications"]:
-            client_env.Append(CPPDEFINES = ["HAVE_LIBDBUS"])
-
-        if client_env['fribidi']:
-            client_env['fribidi'] = conf.CheckPKG('fribidi >= 0.10.9') or Warning("Can't find libfribidi, disabling freebidi support.")
-=======
      "3",
      lambda key, value, env: int(value),
      int),
+    ('cxxtool',
+     'Set c++ compiler command if not using standard compiler.',
+     'g++'),
     BoolVariable('distcc',
                  'Use distcc',
                  True),
@@ -547,9 +99,6 @@ if env["prereqs"]:
     ('host',
      'Cross-compile host.',
      ''),
-    ('cxxtool',
-     'Set c++ compiler command if not using standard compiler.',
-     'clang++'),
     EnumVariable('cxxstd',
                  'The C++ standard to use. i.e. -std=c++98, -std=c++11, etc.',
                  'c++11',
@@ -578,12 +127,17 @@ if env["prereqs"]:
     ('extra_flags_base',
      'Extra compiler and linker flags to use for base builds',
      ""),
+    # @note if using the clang++ compiler, it is currently impossible to use the
+    # '-O4' optimization level, the '-emit-llvm' flag or any other options that cause
+    # clang to emit LLVM IR into object files for link time optimization.
+    # @todo This requires careful integration of
+    # '-Xlinker -plugin -Xlinker /usr/lib/LLVMgold.so' which.
     ('extra_flags_release',
      'Extra compiler and linker flags to use for release builds',
-     "-O4"),
+     "-O2"),
     ('extra_flags_debug',
      'Extra compiler and linker flags to use for debug builds',
-     "-O0 -g"),
+     "-Og -ggdb3"),
     ('extra_flags_profile',
      'Extra compiler and linker flags to use for profile builds',
      "-O0 -pg"),
@@ -599,6 +153,7 @@ if env["prereqs"]:
     BoolVariable('lowmem',
                  'Set to reduce memory usage by removing extra functionality',
                  False),
+    # TODO: Document what platforms are supported by notifications.
     BoolVariable('notifications',
                  'Enable support for desktop notifications',
                  False),
@@ -737,7 +292,9 @@ env = Environment(tools=["tar",
                          "gettext",
                          "install",
                          "python_devel",
-                         "scanreplace"], options = opts, toolpath = ["scons"])
+                         "scanreplace"],
+                  options = opts,
+                  toolpath = ["scons"])
 
 if env["lockfile"]:
     print "Creating lockfile"
@@ -769,8 +326,7 @@ else:
 if env['cxxtool'] in ("clang++", "clang", "llvm"):
     env['CC'] = 'clang'
     env['CXX'] = "clang++"
-    env.Append(LINKFLAGS = Split("-plugin /usr/lib/LLVMgold.so"))
-    env.Tool('llvm')
+#    env.Tool('llvm')
 elif env['cxxtool'] in (None, "", "g++"):
     env['CC'] = "gcc"
     env['CXX'] = "g++"
@@ -935,8 +491,6 @@ if env["prereqs"]:
         if env["PLATFORM"] == 'win32':
             conf.env.Append(LIBS = ["libws2_32"])
             have_libpthread = True
-        elif "clang++" in env['CXX']:
-            have_libpthread = True # Check always fails with clang++
         else:
             have_libpthread = conf.CheckLib("pthread")
         return have_libpthread and \
@@ -978,10 +532,6 @@ if env["prereqs"]:
     client_env = env.Clone()
     conf = client_env.Configure(**configure_args)
 
-    #TODO Reinstate this check ina way that works with clang++
-    #    conf.CheckLib("vorbisfile") and conf.CheckOgg()
-
-
     have_client_prereqs = have_server_prereqs and \
         CheckAsio(conf) and \
         conf.CheckPango("cairo", require_version = "1.21.3") and \
@@ -990,7 +540,8 @@ if env["prereqs"]:
         conf.CheckBoost("regex", require_version = "1.35.0") and \
         conf.CheckSDL("SDL_ttf", require_version = "2.0.8") and \
         conf.CheckSDL("SDL_mixer", require_version = '1.2.0') and \
-        conf.CheckSDL("SDL_image", require_version = '1.2.0') or \
+        conf.CheckSDL("SDL_image", require_version = '1.2.0') and \
+        conf.CheckLib("vorbisfile") and conf.CheckOgg() or \
         Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
 
     have_X = False
@@ -1005,7 +556,6 @@ if env["prereqs"]:
         if client_env['fribidi']:
             client_env['fribidi'] = (conf.CheckPKG('fribidi >= 0.10.9') or
                                      Warning("Can't find libfribidi, disabling freebidi support."))
->>>>>>> refs/heads/jz_clang
 
     if env["forum_user_handler"]:
         env.ParseConfig("pkg_config --libs --cflags mysql")

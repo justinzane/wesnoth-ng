@@ -225,9 +225,12 @@ void play_replay(display& disp, game_state& gamestate, const config& game_config
 }
 
 static LEVEL_RESULT playsingle_scenario(const config& game_config,
-		const config* level, display& disp, game_state& state_of_game,
-		const config::const_child_itors &story,
-		bool skip_replay, end_level_data &end_level)
+                                        const config* level,
+                                        display& disp,
+                                        game_state& state_of_game,
+                                        const config::const_child_itors &story,
+                                        bool skip_replay,
+                                        end_level_data &end_level)
 {
 	const int ticks = SDL_GetTicks();
 	int num_turns = (*level)["turns"].to_int(-1);
@@ -236,7 +239,13 @@ static LEVEL_RESULT playsingle_scenario(const config& game_config,
 	team_init(init_level, state_of_game);
 
 	LOG_NG << "creating objects... " << (SDL_GetTicks() - ticks) << "\n";
-	playsingle_controller playcontroller(init_level, state_of_game, ticks, num_turns, game_config, disp.video(), skip_replay);
+	playsingle_controller playcontroller(init_level,
+	                                     state_of_game,
+	                                     ticks,
+	                                     num_turns,
+	                                     game_config,
+	                                     disp.video(),
+	                                     skip_replay);
 	LOG_NG << "created objects... " << (SDL_GetTicks() - playcontroller.get_ticks()) << "\n";
 
 	LEVEL_RESULT res = playcontroller.play_scenario(story, skip_replay);
@@ -453,12 +462,19 @@ LEVEL_RESULT play_game(game_display& disp, game_state& gamestate,
 			const config &wmlvars = gamestate.replay_start().child("variables");
 			if (!wmlvars || wmlvars.empty()){
 				gamestate.replay_start().clear_children("variables");
-				gamestate.replay_start().add_child("variables", gamestate.carryover_sides_start.child_or_empty("variables"));
+				gamestate.replay_start().add_child("variables",
+				    gamestate.carryover_sides_start.child_or_empty("variables"));
 			}
 
 			switch (io_type){
 			case IO_NONE:
-				res = playsingle_scenario(game_config, scenario, disp, gamestate, story, skip_replay, end_level);
+				res = playsingle_scenario(game_config,
+				                          scenario,
+				                          disp,
+				                          gamestate,
+				                          story,
+				                          skip_replay,
+				                          end_level);
 				break;
 			case IO_SERVER:
 			case IO_CLIENT:

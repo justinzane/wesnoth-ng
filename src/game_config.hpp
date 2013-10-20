@@ -43,8 +43,8 @@ extern const size_t max_loop;           /**< @brief The maximum number of hexes 
                                              @warning This should not be set to less than the
                                              max map area */
 extern int poison_amount;               /**< TODO WRITEME */
-extern int rest_heal_amount;            /**< TODO WRITEME */
 extern int recall_cost;                 /**< TODO WRITEME */
+extern int rest_heal_amount;            /**< TODO WRITEME */
 extern int tile_size;                   /**< TODO WRITEME */
 extern int village_income;              /**< TODO WRITEME */
 extern int village_support;             /**< TODO WRITEME */
@@ -106,9 +106,6 @@ extern std::vector<Uint32> red_green_scale;
 extern std::vector<Uint32> red_green_scale_text;
 
 /** TODO WRITEME */
-const std::vector<Uint32>& tc_info(const std::string& name);
-
-/** TODO WRITEME */
 extern std::map<std::string, std::vector<Uint32> > team_rgb_colors;
 
 /** TODO WRITEME */
@@ -140,6 +137,9 @@ void load_config(const config &cfg);
 /** @brief TODO WRITEME */
 void add_color_info(const config& v);
 
+/** @brief TODO WRITEME */
+const std::vector<Uint32>& tc_info(const std::string& name);
+
 /** @details Return a color corresponding to the value val red for val=0 to green for val=100,
  * passing by yellow. Colors are defined by [game_config] keys red_green_scale and
  * red_green_scale_text */
@@ -149,9 +149,7 @@ Uint32 red_to_green(int val, bool for_text = true);
  * Colors are defined by [game_config] keys blue_white_scale and blue_white_scale_text. */
 Uint32 blue_to_white(int val, bool for_text = true);
 
-} //end namespace game_config
 
-namespace game_config {
 /** @namespace game_config::images
  * @brief TODO WRITEME */
 namespace images {
@@ -190,9 +188,7 @@ extern std::string level;                       /**< TODO WRITEME */
 extern std::string ellipsis;                    /**< TODO WRITEME */
 extern std::string missing;
 }  //end namespace game_config::images
-} //end namespace game_config
 
-namespace game_config {
 /** @namespace game_config::sounds
  * @brief TODO WRITEME */
 namespace sounds {

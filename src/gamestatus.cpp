@@ -1183,7 +1183,7 @@ game_state::game_state()  :
 		mp_settings_()
 		{}
 
-game_state::game_state(const config& cfg, bool show_replay) :
+game_state::game_state(config& cfg, bool show_replay) :
 		replay_data(),
 		snapshot(),
 		carryover_sides(),
@@ -1192,7 +1192,13 @@ game_state::game_state(const config& cfg, bool show_replay) :
 		classification_(cfg),
 		mp_settings_(cfg)
 {
-	unit_id_manager::instance().store_id(cfg["next_underlying_unit_id"]);
+    // This handles old "int" IDs by replacing them.
+    if (unit_id_manager::instance().is_valid_id(cfg["next_underlying_unit_id"])) {
+        unit_id_manager::instance().store_id(cfg["next_underlying_unit_id"]);
+    } else {
+        cfg["next_underlying_unit_id"] = unit_id_manager::instance().get_id();
+    }
+
 	log_scope("read_game");
 
 	if(cfg.has_child("carryover_sides")){

@@ -125,9 +125,9 @@ struct queued_event_context {
 };
 
 game_events::queued_event const *queued_event_context::current_qe = NULL;
-game_events::queued_event queued_event_context::default_qe((std::string)"_from_lua",
-                                                           (game_events::entity_location)map_location(),
-                                                           (game_events::entity_location)map_location(),
+game_events::queued_event queued_event_context::default_qe("_from_lua",
+                                                           map_location(),
+                                                           map_location(),
                                                            config());
 }  //unnamed namespace for queued_event_context
 
@@ -1131,10 +1131,10 @@ static int impl_unit_variables_set(lua_State *L) {
 static int intf_get_unit(lua_State *L) {
     unit_map &units = *resources::units;
     unit_map::const_iterator ui;
-    size_t* id_len_;
-    std::string id_ = (std::string)luaL_checklstring(L, 1, id_len_);
+    size_t id_len_ = 0;
+    std::string id_ = (std::string)luaL_checklstring(L, 1, &id_len_);
 
-    if ((*id_len_) < 36) { //not a valid id
+    if (id_len_ < 36) { //not a valid id
         int x = luaL_checkinteger(L, 1) - 1;
         int y = luaL_optint(L, 2, 0) - 1;
         ui = units.find(map_location(x, y));

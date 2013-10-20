@@ -36,9 +36,13 @@ class vconfig;
 
 namespace game_events
 {
+    /** @struct queued_event
+     * @brief TODO WRITEME */
 	struct queued_event {
-		queued_event(const std::string& name, const entity_location& loc1,
-		             const entity_location& loc2, const config& data)
+		queued_event(const std::string& name,       /**< TODO WRITEME */
+		             const entity_location& loc1,   /**< TODO WRITEME */
+		             const entity_location& loc2,   /**< TODO WRITEME */
+		             const config& data)            /**< TODO WRITEME */
 			: name(name), loc1(loc1), loc2(loc2), data(data)
 		{}
 

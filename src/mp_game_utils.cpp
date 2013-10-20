@@ -169,7 +169,12 @@ void level_to_gamestate(config& level, game_state& state)
 
 	carryover_info sides = carryover_info(state.carryover_sides_start);
 
-	unit_id_manager::instance().store_id(level["next_underlying_unit_id"]);
+    // This handles old "int" IDs by replacing them.
+    if (unit_id_manager::instance().is_valid_id(level["next_underlying_unit_id"])) {
+        unit_id_manager::instance().store_id(level["next_underlying_unit_id"]);
+    } else {
+        level["next_underlying_unit_id"] = unit_id_manager::instance().get_id();
+    }
 
 	// Set random.
 	const config::attribute_value& seed = level["random_seed"];

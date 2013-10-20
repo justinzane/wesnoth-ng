@@ -12,7 +12,6 @@
 
    See the COPYING file for more details.
 */
-
 #include "sound_music_track.hpp"
 
 #include "config.hpp"
@@ -21,7 +20,7 @@
 #include "serialization/string_utils.hpp"
 #include "util.hpp"
 #if !defined(_WIN32) && !defined(__APPLE__)
-#include "vorbis/vorbisfile.h"
+#include <vorbis/vorbisfile.h>
 #endif
 
 static lg::log_domain log_audio("audio");

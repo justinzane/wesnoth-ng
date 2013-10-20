@@ -951,8 +951,9 @@ void game_controller::launch_game(RELOAD_GAME_DATA reload)
 	}
 
 	try {
-		const LEVEL_RESULT result = play_game(disp(),state_,
-		    resources::config_manager->game_config());
+		const LEVEL_RESULT result = play_game(disp(),
+		                                      state_,
+		                                      resources::config_manager->game_config());
 		// don't show The End for multiplayer scenario
 		// change this if MP campaigns are implemented
 		if(result == VICTORY && (state_.classification().campaign_type.empty() || state_.classification().campaign_type != "multiplayer")) {

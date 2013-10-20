@@ -382,7 +382,7 @@ class game_state
 public:
 	game_state();
 	game_state(const game_state& state);
-	explicit game_state(const config& cfg, bool show_replay = false);
+	explicit game_state(config& cfg, bool show_replay = false);
 
 	~game_state(){};
 	game_state& operator=(const game_state& state);

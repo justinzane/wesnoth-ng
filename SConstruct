@@ -1,11 +1,25 @@
 # vi: syntax=python:et:ts=4
+#==============================================================================
+# @brief SCons build description for the Wesnoth project
+# @details Prerequisites are:
+#     1. autorevision for getting the repository revision level.
+#     2. msgfmt(1) for making builds with i18n support.
+#     3. graph-includes for making the project dependency graph.
+# @copyright Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
+# @copyright Copyright (C) 2013 - 2013 by justin zane chudgar <justin@justinzane.com>
+# @section <license> GPLv2
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 #
-# SCons build description for the Wesnoth project
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY.
 #
-# Prerequisites are:
-# 1. autorevision for getting the repository revision level.
-# 2. msgfmt(1) for making builds with i18n support.
-# 3. graph-includes for making the project dependency graph.
+# See the COPYING file for more details.
+# @note updated 2013 by justinzane <justin@justinzane.com> to better handle
+# compiler wrappers like ccache and distcc as well as the LLVM clang++ compiler.
+#==============================================================================
 
 import os, sys, shutil, re, commands
 from glob import glob
@@ -56,21 +70,24 @@ opts.AddVariables(
     EnumVariable('build',
                  'Build variant: debug, release profile or base (no subdirectory)',
                  "release",
-                 ["release", "debug", "glibcxx_debug", "profile", "base"]),
+                 ["release", "debug", "profile", "base"]),
     BoolVariable('prereqs',
                  'abort if prerequisites cannot be detected',
                  True),
     ('jobs',
      'Set the number of parallel compilations',
-     "11",
+     "3",
      lambda key, value, env: int(value),
      int),
+    ('cxxtool',
+     'Set c++ compiler command if not using standard compiler.',
+     'g++'),
     BoolVariable('distcc',
                  'Use distcc',
                  True),
     BoolVariable('ccache',
                  "Use ccache",
-                 True),
+                 False),
     BoolVariable('openmp',
                  'Enable openmp use.',
                  False),
@@ -82,9 +99,6 @@ opts.AddVariables(
     ('host',
      'Cross-compile host.',
      ''),
-    ('cxxtool',
-     'Set c++ compiler command if not using standard compiler.',
-     None),
     EnumVariable('cxxstd',
                  'The C++ standard to use. i.e. -std=c++98, -std=c++11, etc.',
                  'c++11',
@@ -111,17 +125,22 @@ opts.AddVariables(
      'Extra compiler and linker flags to use for configuration and all builds',
      "-march=core-avx-i"),
     ('extra_flags_base',
-     'Extra compiler and linker flags to use for release builds',
+     'Extra compiler and linker flags to use for base builds',
      ""),
+    # @note if using the clang++ compiler, it is currently impossible to use the
+    # '-O4' optimization level, the '-emit-llvm' flag or any other options that cause
+    # clang to emit LLVM IR into object files for link time optimization.
+    # @todo This requires careful integration of
+    # '-Xlinker -plugin -Xlinker /usr/lib/LLVMgold.so' which.
     ('extra_flags_release',
      'Extra compiler and linker flags to use for release builds',
      "-O2"),
     ('extra_flags_debug',
      'Extra compiler and linker flags to use for debug builds',
-     "-O0 -ggdb3 -static-libgcc"),
+     "-Og -ggdb3"),
     ('extra_flags_profile',
      'Extra compiler and linker flags to use for profile builds',
-     "-Og -pg -ggdb3 -static-libgcc"),
+     "-O0 -pg"),
 
     # Optional Components ---------------------------------------------------------------------
     BoolVariable('fribidi',
@@ -134,6 +153,7 @@ opts.AddVariables(
     BoolVariable('lowmem',
                  'Set to reduce memory usage by removing extra functionality',
                  False),
+    # TODO: Document what platforms are supported by notifications.
     BoolVariable('notifications',
                  'Enable support for desktop notifications',
                  False),
@@ -268,7 +288,13 @@ opts.AddVariables(
 #
 
 sys.path.insert(0, "./scons")
-env = Environment(tools=["tar", "gettext", "install", "python_devel", "scanreplace"], options = opts, toolpath = ["scons"])
+env = Environment(tools=["tar",
+                         "gettext",
+                         "install",
+                         "python_devel",
+                         "scanreplace"],
+                  options = opts,
+                  toolpath = ["scons"])
 
 if env["lockfile"]:
     print "Creating lockfile"
@@ -297,20 +323,22 @@ else:
     from cross_compile import *
     setup_cross_compile(env)
 
-if env.get('cxxtool',""):
-    env['CXX'] = env['cxxtool']
-    if 'HOME' in os.environ:
-        env['ENV']['HOME'] = os.environ['HOME']
+if env['cxxtool'] in ("clang++", "clang", "llvm"):
+    env['CC'] = 'clang'
+    env['CXX'] = "clang++"
+#    env.Tool('llvm')
+elif env['cxxtool'] in (None, "", "g++"):
+    env['CC'] = "gcc"
+    env['CXX'] = "g++"
+
+if 'HOME' in os.environ:
+    env['ENV']['HOME'] = os.environ['HOME']
 
 if env['jobs'] > 1:
     SetOption("num_jobs", env['jobs'])
 
 if env['distcc'] or env['ccache']:
     env.Tool('ccwrappers')
-
-#if env['ccache']:
-#    env.Tool('ccache')
-
 
 Help("""Arguments may be a mixture of switches and targets in any order.
 Switches apply to the entire build regardless of where they are in the order.
@@ -436,6 +464,7 @@ def Warning(message):
 
 from metasconf import init_metasconf
 configure_args = dict(custom_tests = init_metasconf(env, ["cplusplus",
+                                                          "llvm",
                                                           "python_devel",
                                                           "sdl",
                                                           "boost",
@@ -489,19 +518,20 @@ if env["prereqs"]:
         conf.CheckLib("vorbis")
         conf.CheckLib("mikmod")
 
-    have_server_prereqs = \
-        conf.CheckCPlusPlus(gcc_version = "3.3") and \
-        conf.CheckGettextLibintl() and \
-        conf.CheckBoost("iostreams", require_version = "1.34.1") and \
-        conf.CheckBoostIostreamsGZip() and \
-        conf.CheckBoostIostreamsBZip2() and \
-        conf.CheckBoost("smart_ptr", header_only = True) and \
-        conf.CheckSDL(require_version = '1.2.7') and \
-        conf.CheckSDL('SDL_net') or Warning("Base prerequisites are not met.")
+    have_server_prereqs = (((("clang++" in env['CXX']) and conf.CheckLLVM()) or
+          (("g++" in env['CXX']) and conf.CheckCPlusPlus(gcc_version = "3.3"))) and
+         conf.CheckGettextLibintl() and
+         conf.CheckBoost("iostreams", require_version = "1.34.1") and
+         conf.CheckBoostIostreamsGZip() and
+         conf.CheckBoostIostreamsBZip2() and
+         conf.CheckBoost("smart_ptr", header_only = True) and
+         conf.CheckSDL(require_version = '1.2.7') and
+         conf.CheckSDL('SDL_net') or Warning("Base prerequisites are not met."))
 
     env = conf.Finish()
     client_env = env.Clone()
     conf = client_env.Configure(**configure_args)
+
     have_client_prereqs = have_server_prereqs and \
         CheckAsio(conf) and \
         conf.CheckPango("cairo", require_version = "1.21.3") and \
@@ -510,9 +540,9 @@ if env["prereqs"]:
         conf.CheckBoost("regex", require_version = "1.35.0") and \
         conf.CheckSDL("SDL_ttf", require_version = "2.0.8") and \
         conf.CheckSDL("SDL_mixer", require_version = '1.2.0') and \
-        conf.CheckLib("vorbisfile") and \
         conf.CheckSDL("SDL_image", require_version = '1.2.0') and \
-        conf.CheckOgg() or Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
+        conf.CheckLib("vorbisfile") and conf.CheckOgg() or \
+        Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
 
     have_X = False
     if have_client_prereqs:
@@ -524,7 +554,8 @@ if env["prereqs"]:
             client_env.Append(CPPDEFINES = ["HAVE_LIBDBUS"])
 
         if client_env['fribidi']:
-            client_env['fribidi'] = conf.CheckPKG('fribidi >= 0.10.9') or Warning("Can't find libfribidi, disabling freebidi support.")
+            client_env['fribidi'] = (conf.CheckPKG('fribidi >= 0.10.9') or
+                                     Warning("Can't find libfribidi, disabling freebidi support."))
 
     if env["forum_user_handler"]:
         env.ParseConfig("pkg_config --libs --cflags mysql")

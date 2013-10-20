@@ -32,7 +32,7 @@ namespace game_events
 	struct entity_location : public map_location {
         /** TODO WRITEME*/
 		entity_location(const map_location &loc,
-		                std::string id = 0);
+		                std::string id = "");
 
 		/** TODO WRITEME*/
         entity_location(const map_location &loc,

@@ -17,6 +17,7 @@
 
 #include <ctime>
 #include <cstdint>
+#include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <boost/uuid/uuid.hpp>
@@ -53,7 +54,15 @@ class unit_id_manager: private boost::noncopyable {
 
         /** @brief converts a string to a uuid */
         boost::uuids::uuid str2uuid(const std::string& s) {
-            boost::uuids::uuid u = strgen_.operator ()(s);
+            boost::uuids::uuid u;
+            try {
+                std::cout << "JZ Converted " << s << " to a uuid.\n";
+                u = strgen_.operator ()(s);
+            } catch (boost::exception&) {
+                std::cout << "JZ Could not convert " << s << " to a uuid.\n";
+                u = rndgen_.operator ()();
+            }
+            std::cout << "JZ Inserting " << u << "\n";
             known_ids_.insert(u);
             return u;
         }
@@ -63,6 +72,7 @@ class unit_id_manager: private boost::noncopyable {
         std::string get_id(void) {
             boost::uuids::uuid u = rndgen_.operator ()();
             known_ids_.insert(u);
+
             return uuid2str(u);
         }
 
@@ -70,8 +80,10 @@ class unit_id_manager: private boost::noncopyable {
         bool has_id(const std::string id) {
             boost::uuids::uuid u_ = str2uuid(id);
             if (known_ids_.find(u_) == known_ids_.end()) {
+                std::cout << "JZ Checking ID: " << id << " --  " << "False\n";
                 return false;
             } else {
+                std::cout << "JZ Checking ID: " << id << " --  " << "True\n";
                 return true;
             }
         }
@@ -84,7 +96,19 @@ class unit_id_manager: private boost::noncopyable {
 
         /** @brief notifies the id manager of an ID. */
         void store_id(std::string id) {
+            std::cout << "JZ Storing ID: " << id << "\n";
             known_ids_.insert(str2uuid(id));
+        }
+
+        /** @brief checks if a string is a uuid */
+        bool is_valid_id(const std::string& s) {
+            boost::uuids::uuid u;
+            try {
+                u = strgen_.operator ()(s);
+                return true;
+            } catch (boost::exception&) {
+                return false;
+            }
         }
 
         /** @brief Accessor for the singleton instance. */
