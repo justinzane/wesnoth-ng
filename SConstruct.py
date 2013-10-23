@@ -121,7 +121,7 @@ opts.AddVariables(
      "-O0 -g"),
     ('extra_flags_profile',
      'Extra compiler and linker flags to use for profile builds',
-     "-O0 -pg"),
+     "-O0 -g -lprofiler -ltcmalloc"),
 
     # Optional Components ---------------------------------------------------------------------
     BoolVariable('fribidi',
@@ -304,8 +304,8 @@ else:
 if env['cxxtool'] in ("clang++", "clang", "llvm"):
     env['CC'] = 'clang'
     env['CXX'] = "clang++"
-    env.Append(LINKFLAGS = Split("-plugin /usr/lib/LLVMgold.so"))
     env.Tool('llvm')
+    env.Append(LINKFLAGS = "-Wl,-plugin,/usr/lib/LLVMgold.so")
 elif env['cxxtool'] in (None, "", "g++"):
     env['CC'] = "gcc"
     env['CXX'] = "g++"
@@ -513,10 +513,6 @@ if env["prereqs"]:
     client_env = env.Clone()
     conf = client_env.Configure(**configure_args)
 
-    #TODO Reinstate this check ina way that works with clang++
-    #    conf.CheckLib("vorbisfile") and conf.CheckOgg()
-
-
     have_client_prereqs = have_server_prereqs and \
         CheckAsio(conf) and \
         conf.CheckPango("cairo", require_version = "1.21.3") and \
@@ -525,7 +521,9 @@ if env["prereqs"]:
         conf.CheckBoost("regex", require_version = "1.35.0") and \
         conf.CheckSDL("SDL_ttf", require_version = "2.0.8") and \
         conf.CheckSDL("SDL_mixer", require_version = '1.2.0') and \
-        conf.CheckSDL("SDL_image", require_version = '1.2.0') or \
+        conf.CheckSDL("SDL_image", require_version = '1.2.0') and \
+        conf.CheckLib("vorbisfile") and \
+        conf.CheckOgg() or \
         Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
 
     have_X = False
