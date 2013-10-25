@@ -109,7 +109,7 @@ opts.AddVariables(
     # Compiler/Linker Flags -------------------------------------------------------------------
     ('extra_flags_config',
      'Extra compiler and linker flags to use for configuration and all builds',
-     "-march=core-avx-i"),
+     "-march=core-avx-i -lprofiler -ltcmalloc"),
     ('extra_flags_base',
      'Extra compiler and linker flags to use for base builds',
      ""),
