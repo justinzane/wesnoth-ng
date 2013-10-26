@@ -34,6 +34,55 @@ simple `#include` instead of several. For example `unit.hpp`:
             #include "unit/unit-bar.hpp"
             #endif
             '''
+### Naming Clarifications
+
+Though this is certainly not a priority for performance or functionality, I would prefer to see
+object names that are potentially ambiguous like "map" refactored to reduce confusion. In this 
+particular example, a map is both a c++ standard container `std::map<key_t, value_t>` and 
+a game concept -- the playing space. By renaming `map.hpp`, `map_utils.hpp`, etc. to `board.hpp`, 
+`board_utils.hpp`, etc. it becomes clear that that class is not a key-value container type, but 
+a core game type.
+
+## Parallelization
+
+As just about every device capable of playing Wesnoth now has, at minimum, multiple CPU cores 
+and many have multiple compute devices, like OpenCL capable GPUs, maintaining the code to be 
+thread and coprocessor friendly seems like an ideal practice. Of course, countless PhDs have 
+written their theses on this subject; and, it is not at all clear and simple. Not, am I in any 
+way expert in these matters.
+
+My initial suggestions in this area are twofold. First, those who **do** have expertise in the 
+various levels of parallelism are requested to provide guidelines about writing or refactoring 
+to enable clean and easy parallelization in the future.
+
+One thing that I believe is important in this respect, as well as in others, is to keep Wesnoth's 
+codebase as "library-like" as possible. That is to say, to make sure that users of a class do 
+not leverage their knowledge of the internals of the class, but just use its clearly defined 
+public API. Another is that all the functionality relating to a Wesnoth conceptual topic, for example units 
+or time_of_days, be organized together and separated from other conceptual topics as much as 
+possible.    
+
+### First Places to Parallelize
+
+There seem to be two functional areas that are very time-consuming and look to be ideal 
+candidates for parallelization. The first is serialization, which I will discuss later. The 
+second is situational analysis -- the part of an AI's mechanism for determining the optimal 
+actions for all its units of responsibility. Since many AI strategies examine this from the 
+perspective of each individual unit, the ability to create *tasks* that can be allocated to 
+processing pools (thread pools, opencl kernels, __future_tool__, etc.) and run in parallel 
+would have great benefits. 
+
+Either simpler AI algorithms could run at improved speed on low-power devices or complex 
+algorithms could run within the limits of player annoyance on higher performance systems. 
+
+## Separation of Logic from Presentation
+
+In the publishing world, there is a clear separation of design creation from content writing. 
+In Wesnoth, I believe that it would be good to clearly separate the visual/audio presentation 
+code from the game logic code. While display obviously is wholely dependent on logic, the 
+logic is almost entirely independent on the display. 
+
+*TODO* define what this means in detail.
 
 ## Serialization
 
@@ -261,7 +310,12 @@ exactly the same contents. (The script code is below.) The results are mind-bogg
 |                   variables |       21 |     622658 |      474 |       7003 |   2357.1%|
 |                     village |       74 |       1389 |       13 |        247 |    117.6%|
 |                       while |      136 |     334464 |      229 |     492431 |    268.4%|
+|                        MINS |        1 |          3 |        0 |          0 |    100.0%|
+|                        MAXS |     2427 |    3719228 |     6346 |    1559248 |  47700.0%|
+|                        SUMS |          |   22026602 |          |   18412225 |          |
 
+*Note that the minimum possible waste is 100%, not 0%, since it should be called percentage of 
+minimum possible data size.* :)
 
 ### A Basic Fix
 
@@ -280,9 +334,9 @@ reliance on strings and large objects that require large reads and writes during
 
 ### The JSON Fix
 
-My perferred way to handle in-game serialization is to have the game state serialized to JSON 
+My preferred way to handle in-game serialization is to have the game state serialized to JSON 
 and persisted either as files, in an in-memory store or in a NoSQL store like MongoDB. One of 
-the things that I see as a major advantage of using json and MongoDB as a serialization and 
+the things that I see as a major advantage of using JSON and MongoDB as a serialization and 
 persistence methodology is that it makes it possible for quick and easy network updates of 
 campaigns, sharing of private -- not wesnoth.org -- campaigns and scenarios, persisting from 
 storage constrained devices to network stores, etc.
