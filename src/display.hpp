@@ -43,7 +43,7 @@ class arrow;
 #include "key.hpp"
 #include "team.hpp"
 #include "time_of_day.hpp"
-#include "theme.hpp"
+#include "display/theme.hpp"
 #include "video.hpp"
 #include "widgets/button.hpp"
 #include "widgets/slider.hpp"

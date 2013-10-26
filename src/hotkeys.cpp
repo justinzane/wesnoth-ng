@@ -28,7 +28,7 @@
 #include "hotkeys.hpp"
 #include "log.hpp"
 #include "preferences_display.hpp"
-#include "theme.hpp"
+#include "display/theme.hpp"
 #include "wesconfig.h"
 #include "wml_separators.hpp"
 

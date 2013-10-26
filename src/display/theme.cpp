@@ -21,7 +21,7 @@
 #include "hotkeys.hpp"
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
-#include "theme.hpp"
+#include "display/theme.hpp"
 #include "wml_exception.hpp"
 
 #include <boost/foreach.hpp>

@@ -440,7 +440,7 @@ int divide(int a,int b) {
 /**	-file sdl_utils.hpp */
 /**	@file team.hpp */
 /**	@file terrain.hpp */
-/**	-file theme.hpp */
+/**	-file display/theme.hpp */
 /**	-file unit.hpp */
 /**	@file unit_types.hpp */
 /**	-file util.hpp */

@@ -68,7 +68,7 @@ libwesnoth_core_sources.extend([
 libwesnoth_core = [env.Library("wesnoth_core", libwesnoth_core_sources)]
 
 libwesnoth_sources = Split("""
-    arrow.cpp
+    whiteboard/arrow.cpp
     pathfind/astarsearch.cpp
     builder.cpp
     clipboard.cpp
@@ -112,7 +112,7 @@ libwesnoth_sources = Split("""
     time_of_day.cpp
     tooltips.cpp
     video.cpp
-    theme.cpp
+    display/theme.cpp
     widgets/button.cpp
     widgets/file_menu.cpp
     widgets/label.cpp
