@@ -19,9 +19,9 @@
 
 #include "arrow.hpp"
 
-#include "game_display.hpp"
-#include "log.hpp"
-#include "resources.hpp"
+#include "../game_display.hpp"
+#include "../log.hpp"
+#include "../resources.hpp"
 
 #include <boost/foreach.hpp>
 

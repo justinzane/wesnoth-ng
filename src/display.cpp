@@ -34,7 +34,7 @@
 #include "text.hpp"
 #include "time_of_day.hpp"
 #include "tooltips.hpp"
-#include "arrow.hpp"
+#include "whiteboard/arrow.hpp"
 #include "tod_manager.hpp"
 #include "resources.hpp"
 #include "whiteboard/manager.hpp"
