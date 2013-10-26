@@ -1,3 +1,7 @@
+Title: justinzane/wesnoth-old GOALS
+Category: foss
+Tags: Wesnoth, c++, development, planning
+
 # GOALS
 
 Goals, plans, thought, analysis and general silliness regarding the justinzane fork of 
