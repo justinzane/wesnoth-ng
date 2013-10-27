@@ -72,3 +72,5 @@ Project.suo
 /cpu_prof
 /cpu_prof.callgrind
 /cpu_prof.raw
+/cpu-prof-wesnoth
+/cpu-prof-wesnothd
