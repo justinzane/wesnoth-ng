@@ -25,7 +25,7 @@
 #include "../controller_base.hpp"
 #include "../help.hpp"
 #include "../mouse_handler_base.hpp"
-#include "../tooltips.hpp"
+#include "../display/tooltips.hpp"
 
 #include "sound_music_track.hpp"
 

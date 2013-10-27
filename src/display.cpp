@@ -33,7 +33,7 @@
 #include "reports.hpp"
 #include "text.hpp"
 #include "time_of_day.hpp"
-#include "tooltips.hpp"
+#include "display/tooltips.hpp"
 #include "whiteboard/arrow.hpp"
 #include "tod_manager.hpp"
 #include "resources.hpp"

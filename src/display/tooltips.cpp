@@ -13,7 +13,7 @@
 */
 #include "global.hpp"
 
-#include "tooltips.hpp"
+#include "display/tooltips.hpp"
 
 #include "font.hpp"
 #include "game_display.hpp"

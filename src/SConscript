@@ -110,7 +110,7 @@ libwesnoth_sources = Split("""
     terrain_translation.cpp
     text.cpp
     time_of_day.cpp
-    tooltips.cpp
+    display/tooltips.cpp
     video.cpp
     display/theme.cpp
     widgets/button.cpp

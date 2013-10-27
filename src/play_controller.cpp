@@ -39,7 +39,7 @@
 #include "preferences_display.hpp"
 #include "replay.hpp"
 #include "soundsource.hpp"
-#include "tooltips.hpp"
+#include "display/tooltips.hpp"
 #include "game_preferences.hpp"
 #include "wml_exception.hpp"
 #include "formula_string_utils.hpp"

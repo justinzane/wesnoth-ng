@@ -21,7 +21,7 @@ class display;
 
 #include "cursor.hpp"
 #include "font.hpp"
-#include "tooltips.hpp"
+#include "display/tooltips.hpp"
 
 #include "widgets/menu.hpp"
 

@@ -19,7 +19,7 @@
 
 #include "../../editor_display.hpp"
 //#include "gui/dialogs/item_create.hpp"
-#include "tooltips.hpp"
+#include "display/tooltips.hpp"
 #include "gettext.hpp"
 
 #include "map_location.hpp"

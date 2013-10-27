@@ -24,7 +24,7 @@
 #include "log.hpp"
 #include "marked-up_text.hpp"
 #include "text.hpp"
-#include "tooltips.hpp"
+#include "display/tooltips.hpp"
 #include "video.hpp"
 #include "serialization/parser.hpp"
 #include "serialization/preprocessor.hpp"
