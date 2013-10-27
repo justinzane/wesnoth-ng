@@ -109,19 +109,19 @@ opts.AddVariables(
     # Compiler/Linker Flags -------------------------------------------------------------------
     ('extra_flags_config',
      'Extra compiler and linker flags to use for configuration and all builds',
-     "-march=core-avx-i"),
+     "-march=core-avx-i -lprofiler -ltcmalloc"),
     ('extra_flags_base',
      'Extra compiler and linker flags to use for base builds',
      ""),
     ('extra_flags_release',
      'Extra compiler and linker flags to use for release builds',
-     "-O4"),
+     "-O4 -fslp-vectorize -fslp-vectorize-aggressive"),
     ('extra_flags_debug',
      'Extra compiler and linker flags to use for debug builds',
      "-O0 -g"),
     ('extra_flags_profile',
      'Extra compiler and linker flags to use for profile builds',
-     "-O0 -g -lprofiler -ltcmalloc"),
+     "-O0 -g"),
 
     # Optional Components ---------------------------------------------------------------------
     BoolVariable('fribidi',
