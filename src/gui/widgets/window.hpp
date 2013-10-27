@@ -21,7 +21,7 @@
 #ifndef GUI_WIDGETS_WINDOW_HPP_INCLUDED
 #define GUI_WIDGETS_WINDOW_HPP_INCLUDED
 
-#include "cursor.hpp"
+#include "display/cursor.hpp"
 #include "gui/auxiliary/formula.hpp"
 #include "gui/widgets/helper.hpp"
 #include "gui/widgets/panel.hpp"

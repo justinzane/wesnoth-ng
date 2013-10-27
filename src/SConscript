@@ -73,7 +73,7 @@ libwesnoth_sources = Split("""
     builder.cpp
     display/clipboard.cpp
     display/construct_dialog.cpp
-    cursor.cpp
+    display/cursor.cpp
     display/display.cpp
     events.cpp
     generic_event.cpp

@@ -18,7 +18,7 @@
  */
 
 #include "builder.hpp"
-#include "cursor.hpp"
+#include "display/cursor.hpp"
 #include "display/display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"

@@ -17,7 +17,7 @@
 #include "addon/manager.hpp"
 #include "ai/configuration.hpp"
 #include "builder.hpp"
-#include "cursor.hpp"
+#include "display/cursor.hpp"
 #include "game_config.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/message.hpp"

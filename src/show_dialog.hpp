@@ -19,7 +19,7 @@ class config;
 class CVideo;
 class display;
 
-#include "cursor.hpp"
+#include "display/cursor.hpp"
 #include "display/font.hpp"
 #include "display/tooltips.hpp"
 

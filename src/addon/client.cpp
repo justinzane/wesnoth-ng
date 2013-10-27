@@ -16,7 +16,7 @@
 #include "addon/info.hpp"
 #include "addon/manager.hpp"
 #include "addon/validation.hpp"
-#include "cursor.hpp"
+#include "display/cursor.hpp"
 #include "display/display.hpp"
 #include "formula_string_utils.hpp"
 #include "gettext.hpp"

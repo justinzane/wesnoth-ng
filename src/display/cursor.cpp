@@ -17,7 +17,7 @@
  * Support for different cursors-shapes.
  */
 
-#include "cursor.hpp"
+#include "display/cursor.hpp"
 
 #include "game_preferences.hpp"
 #include "image.hpp"

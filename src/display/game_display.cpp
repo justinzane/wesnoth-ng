@@ -33,7 +33,7 @@
 Growl_Delegate growl_obj;
 #endif
 
-#include "cursor.hpp"
+#include "display/cursor.hpp"
 #include "game_preferences.hpp"
 #include "halo.hpp"
 #include "log.hpp"
