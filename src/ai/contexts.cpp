@@ -32,7 +32,7 @@
 #include "../formula.hpp"
 #include "../formula_function.hpp"
 #include "../formula_fwd.hpp"
-#include "../game_display.hpp"
+#include "../display/game_display.hpp"
 #include "../log.hpp"
 #include "../map.hpp"
 #include "../mouse_handler_base.hpp"

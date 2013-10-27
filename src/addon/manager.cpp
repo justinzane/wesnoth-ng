@@ -20,7 +20,7 @@
 #include "display/dialogs.hpp"
 #include "filesystem.hpp"
 #include "formatter.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/addon_connect.hpp"

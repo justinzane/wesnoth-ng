@@ -22,7 +22,7 @@
 #include "move.hpp"
 
 #include "../config.hpp"
-#include "../game_display.hpp"
+#include "../display/game_display.hpp"
 #include "../game_events/pump.hpp"
 #include "../log.hpp"
 #include "../map.hpp"

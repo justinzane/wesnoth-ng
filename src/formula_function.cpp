@@ -18,7 +18,7 @@
 #include "callable_objects.hpp"
 #include "formula_debugger.hpp"
 #include "formula_function.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "log.hpp"
 
 #include <boost/foreach.hpp>

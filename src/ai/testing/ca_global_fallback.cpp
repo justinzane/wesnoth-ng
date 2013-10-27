@@ -21,7 +21,7 @@
 
 #include "../composite/ai.hpp"
 
-#include "../../game_display.hpp"
+#include "../../display/game_display.hpp"
 #include "../../log.hpp"
 #include "../../map.hpp"
 #include "../../map_label.hpp"

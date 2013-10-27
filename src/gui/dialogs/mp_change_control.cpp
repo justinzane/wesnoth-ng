@@ -28,7 +28,7 @@
 #include "gui/widgets/window.hpp"
 
 #include "formula_string_utils.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"

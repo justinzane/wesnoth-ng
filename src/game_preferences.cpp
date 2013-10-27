@@ -16,7 +16,7 @@
 
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gamestatus.hpp"
 #include "gettext.hpp"

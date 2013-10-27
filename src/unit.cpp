@@ -22,7 +22,7 @@
 #include "actions/move.hpp"
 #include "callable_objects.hpp"
 #include "formula.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_events/handlers.hpp"
 #include "game_preferences.hpp"
 #include "gamestatus.hpp"

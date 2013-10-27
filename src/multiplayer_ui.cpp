@@ -16,7 +16,7 @@
 
 #include "construct_dialog.hpp"
 #include "gamestatus.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/mp_cmd_wrapper.hpp"

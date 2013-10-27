@@ -16,7 +16,7 @@
 #include "global.hpp"
 
 #include "display/floating_textbox.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
 #include "log.hpp"
 #include "resources.hpp"

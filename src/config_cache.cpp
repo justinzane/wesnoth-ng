@@ -18,7 +18,7 @@
 #include "filesystem.hpp"
 #include "gettext.hpp"
 #include "game_config.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
 #include "show_dialog.hpp"

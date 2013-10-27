@@ -19,7 +19,7 @@
 #include "game_config_manager.hpp"
 #include "game_preferences.hpp"
 #include "gui/dialogs/transient_message.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
 #include "mp_game_utils.hpp"

@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 #include "config.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "gettext.hpp"
 
 namespace mp

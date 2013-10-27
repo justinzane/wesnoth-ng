@@ -19,7 +19,7 @@
 
 #include "arrow.hpp"
 
-#include "../game_display.hpp"
+#include "../display/game_display.hpp"
 #include "../log.hpp"
 #include "../resources.hpp"
 

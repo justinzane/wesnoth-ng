@@ -19,7 +19,7 @@
 
 #include "global.hpp"
 
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "gettext.hpp"
 #include "wesconfig.h"
 

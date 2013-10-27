@@ -29,7 +29,7 @@
 #include "../actions/vision.hpp"
 #include "../ai/manager.hpp"
 #include "../display/dialogs.hpp"
-#include "../game_display.hpp"
+#include "../display/game_display.hpp"
 #include "../game_preferences.hpp"
 #include "../gettext.hpp"
 #include "../gui/dialogs/gamestate_inspector.hpp"
