@@ -25,7 +25,7 @@
 #include "gettext.hpp"
 #include "loadscreen.hpp"
 #include "log.hpp"
-#include "portrait.hpp"
+#include "display/portrait.hpp"
 #include "unit.hpp"
 #include "unit_abilities.hpp"
 #include "unit_animation.hpp"

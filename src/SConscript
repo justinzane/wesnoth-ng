@@ -75,6 +75,11 @@ libwesnoth_sources = Split("""
     display/construct_dialog.cpp
     display/cursor.cpp
     display/display.cpp
+    display/show_dialog.cpp
+    display/sound_music_track.cpp
+    display/tooltips.cpp
+    display/video.cpp
+    display/theme.cpp
     events.cpp
     generic_event.cpp
     hotkeys.cpp
@@ -102,17 +107,12 @@ libwesnoth_sources = Split("""
     race.cpp
     random.cpp
     reports.cpp
-    show_dialog.cpp
     sound.cpp
     soundsource.cpp
-    display/sound_music_track.cpp
     terrain.cpp
     terrain_translation.cpp
     text.cpp
     time_of_day.cpp
-    display/tooltips.cpp
-    display/video.cpp
-    display/theme.cpp
     widgets/button.cpp
     widgets/file_menu.cpp
     widgets/label.cpp
@@ -158,19 +158,20 @@ libcutter = client_env.Library("cutter", libcutter_sources)
 
 # Used by both 'wesnoth' and 'test' targets
 wesnoth_sources = Split("""
-    about.cpp
     actions/attack.cpp
     actions/create.cpp
     actions/heal.cpp
     actions/move.cpp
     actions/undo.cpp
-    actions/vision.cpp
+    actions/vision.cpp""" + 
+    """
     addon/client.cpp
     addon/info.cpp
     addon/manager.cpp
     addon/manager_ui.cpp
     addon/state.cpp
-    addon/validation.cpp
+    addon/validation.cpp""" + 
+    """
     ai/actions.cpp
     ai/akihara/recruitment.cpp
     ai/composite/ai.cpp
@@ -211,12 +212,16 @@ wesnoth_sources = Split("""
     ai/testing/ca_testing_move_to_targets.cpp
     ai/testing/ca_testing_recruitment.cpp
     ai/testing/stage_fallback.cpp
-    ai/testing/stage_rca.cpp
+    ai/testing/stage_rca.cpp""" +
+    """
     display/animated_game.cpp
     display/desktop_util.cpp
     display/dialogs.cpp
     display/floating_textbox.cpp
     display/game_display.cpp
+    display/portrait.cpp
+    """ + 
+    """
     editor/action/action.cpp
     editor/action/action_unit.cpp
     editor/action/action_label.cpp
@@ -244,33 +249,14 @@ wesnoth_sources = Split("""
     editor/editor_main.cpp
     editor/editor_preferences.cpp
     editor/toolkit/brush.cpp
-    editor/toolkit/editor_toolkit.cpp
+    editor/toolkit/editor_toolkit.cpp""" + 
+    """
     game_events/action_wml.cpp
     game_events/conditional_wml.cpp
     game_events/entity_location.cpp
     game_events/handlers.cpp
-    game_events/pump.cpp
-    attack_prediction.cpp
-    attack_prediction_display.cpp
-    callable_objects.cpp
-    commandline_options.cpp
-    config_cache.cpp
-    controller_base.cpp
-    filechooser.cpp
-    flg_manager.cpp
-    formula.cpp
-    formula_debugger.cpp
-    formula_debugger_fwd.cpp
-    formula_function.cpp
-    formula_string_utils.cpp
-    formula_tokenizer.cpp
-    game_config_manager.cpp
-    game_controller.cpp
-    display/game_display.cpp
-    game_errors.cpp
-    game_instance.cpp
-    game_preferences.cpp
-    gamestatus.cpp
+    game_events/pump.cpp""" + 
+    """
     gui/auxiliary/canvas.cpp
     gui/auxiliary/event/dispatcher.cpp
     gui/auxiliary/event/distributor.cpp
@@ -429,7 +415,46 @@ wesnoth_sources = Split("""
     gui/widgets/vertical_scrollbar.cpp
     gui/widgets/viewport.cpp
     gui/widgets/widget.cpp
-    gui/widgets/window.cpp
+    gui/widgets/window.cpp""" +
+    """
+    whiteboard/action.cpp
+    whiteboard/attack.cpp
+    whiteboard/highlighter.cpp
+    whiteboard/manager.cpp
+    whiteboard/mapbuilder.cpp
+    whiteboard/move.cpp
+    whiteboard/recall.cpp
+    whiteboard/recruit.cpp
+    whiteboard/side_actions.cpp
+    whiteboard/suppose_dead.cpp
+    whiteboard/utility.cpp""" +
+    """
+    widgets/combo.cpp
+    widgets/combo_drag.cpp
+    widgets/drop_target.cpp
+    widgets/scrollpane.cpp""" +
+    """
+    about.cpp
+    attack_prediction.cpp
+    attack_prediction_display.cpp
+    callable_objects.cpp
+    commandline_options.cpp
+    config_cache.cpp
+    controller_base.cpp
+    filechooser.cpp
+    flg_manager.cpp
+    formula.cpp
+    formula_debugger.cpp
+    formula_debugger_fwd.cpp
+    formula_function.cpp
+    formula_string_utils.cpp
+    formula_tokenizer.cpp
+    game_config_manager.cpp
+    game_controller.cpp
+    game_errors.cpp
+    game_instance.cpp
+    game_preferences.cpp
+    gamestatus.cpp
     halo.cpp
     help.cpp
     intro.cpp
@@ -463,7 +488,6 @@ wesnoth_sources = Split("""
     playmp_controller.cpp
     playsingle_controller.cpp
     playturn.cpp
-    portrait.cpp
     replay.cpp
     replay_controller.cpp
     resources.cpp
@@ -494,23 +518,8 @@ wesnoth_sources = Split("""
     unit_map.cpp
     unit_types.cpp
     variable.cpp
-    variant.cpp
-    whiteboard/action.cpp
-    whiteboard/attack.cpp
-    whiteboard/highlighter.cpp
-    whiteboard/manager.cpp
-    whiteboard/mapbuilder.cpp
-    whiteboard/move.cpp
-    whiteboard/recall.cpp
-    whiteboard/recruit.cpp
-    whiteboard/side_actions.cpp
-    whiteboard/suppose_dead.cpp
-    whiteboard/utility.cpp
-    widgets/combo.cpp
-    widgets/combo_drag.cpp
-    widgets/drop_target.cpp
-    widgets/scrollpane.cpp
-    """)
+    variant.cpp"""
+)
 
 if env["PLATFORM"] == "win32":
     wesnoth_sources.append("display/windows_tray_notification.cpp")

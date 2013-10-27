@@ -16,7 +16,7 @@
 #ifndef CONSTRUCT_DIALOG_H_INCLUDED
 #define CONSTRUCT_DIALOG_H_INCLUDED
 
-#include "show_dialog.hpp"
+#include "display/show_dialog.hpp"
 
 #include "widgets/label.hpp"
 #include "widgets/textbox.hpp"

@@ -12,7 +12,7 @@
    See the COPYING file for more details.
 */
 
-#include "portrait.hpp"
+#include "display/portrait.hpp"
 
 #include "config.hpp"
 #include "log.hpp"

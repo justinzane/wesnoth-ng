@@ -23,7 +23,7 @@
 #include "log.hpp"
 #include "map.hpp"
 #include "marked-up_text.hpp"
-#include "show_dialog.hpp"
+#include "display/show_dialog.hpp"
 
 #include "widgets/slider.hpp"
 

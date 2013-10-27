@@ -18,7 +18,7 @@
 
 #include "widgets/combo.hpp"
 #include "display/display.hpp"
-#include "show_dialog.hpp"
+#include "display/show_dialog.hpp"
 
 
 namespace gui {
