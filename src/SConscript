@@ -71,7 +71,7 @@ libwesnoth_sources = Split("""
     whiteboard/arrow.cpp
     pathfind/astarsearch.cpp
     builder.cpp
-    clipboard.cpp
+    display/clipboard.cpp
     display/construct_dialog.cpp
     cursor.cpp
     display/display.cpp

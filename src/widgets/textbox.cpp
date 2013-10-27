@@ -17,7 +17,7 @@
 #include "global.hpp"
 
 #include "widgets/textbox.hpp"
-#include "clipboard.hpp"
+#include "display/clipboard.hpp"
 #include "log.hpp"
 #include "display/video.hpp"
 

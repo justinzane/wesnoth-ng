@@ -14,7 +14,7 @@
 
 #include "global.hpp"
 
-#include "clipboard.hpp"
+#include "display/clipboard.hpp"
 #include "cursor.hpp"
 #include "events.hpp"
 #include "log.hpp"

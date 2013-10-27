@@ -16,7 +16,7 @@
 
 #include "gui/dialogs/game_paths.hpp"
 
-#include "clipboard.hpp"
+#include "display/clipboard.hpp"
 #include "display/desktop_util.hpp"
 #include "filesystem.hpp"
 #include "game_config.hpp"

@@ -38,7 +38,7 @@
 
 #include "display/dialogs.hpp"
 
-#include "../clipboard.hpp"
+#include "../display/clipboard.hpp"
 #include "../game_preferences.hpp"
 #include "../gettext.hpp"
 #include "../preferences_display.hpp"

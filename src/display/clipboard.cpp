@@ -16,7 +16,7 @@
 
 #include "global.hpp"
 
-#include "clipboard.hpp"
+#include "display/clipboard.hpp"
 #include <algorithm>
 
 #include <SDL_version.h>
