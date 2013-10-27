@@ -14,7 +14,7 @@
 
 #include "global.hpp"
 
-#include "construct_dialog.hpp"
+#include "display/construct_dialog.hpp"
 #include "gamestatus.hpp"
 #include "display/game_display.hpp"
 #include "game_preferences.hpp"

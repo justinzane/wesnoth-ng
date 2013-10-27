@@ -15,7 +15,7 @@
 #include "game_controller.hpp"
 
 #include "about.hpp"
-#include "construct_dialog.hpp"
+#include "display/construct_dialog.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/addon_connect.hpp"
 #include "gui/dialogs/campaign_difficulty.hpp"

@@ -17,7 +17,7 @@
 class config;
 class display;
 
-#include "construct_dialog.hpp"
+#include "display/construct_dialog.hpp"
 
 namespace gui
 {

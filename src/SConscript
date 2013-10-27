@@ -72,7 +72,7 @@ libwesnoth_sources = Split("""
     pathfind/astarsearch.cpp
     builder.cpp
     clipboard.cpp
-    construct_dialog.cpp
+    display/construct_dialog.cpp
     cursor.cpp
     display/display.cpp
     events.cpp
@@ -212,6 +212,7 @@ wesnoth_sources = Split("""
     ai/testing/ca_testing_recruitment.cpp
     ai/testing/stage_fallback.cpp
     ai/testing/stage_rca.cpp
+    display/animated_game.cpp
     display/desktop_util.cpp
     display/dialogs.cpp
     display/floating_textbox.cpp
@@ -249,7 +250,6 @@ wesnoth_sources = Split("""
     game_events/entity_location.cpp
     game_events/handlers.cpp
     game_events/pump.cpp
-    display/animated_game.cpp
     attack_prediction.cpp
     attack_prediction_display.cpp
     callable_objects.cpp

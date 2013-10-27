@@ -15,7 +15,7 @@
 
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
-#include "construct_dialog.hpp"
+#include "display/construct_dialog.hpp"
 
 #include "display/display.hpp"
 #include "gettext.hpp"
