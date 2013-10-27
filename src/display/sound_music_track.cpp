@@ -13,7 +13,7 @@
    See the COPYING file for more details.
 */
 
-#include "sound_music_track.hpp"
+#include "display/sound_music_track.hpp"
 
 #include "config.hpp"
 #include "filesystem.hpp"

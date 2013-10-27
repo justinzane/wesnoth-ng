@@ -27,7 +27,7 @@
 #include "../mouse_handler_base.hpp"
 #include "../display/tooltips.hpp"
 
-#include "sound_music_track.hpp"
+#include "display/sound_music_track.hpp"
 
 class map_generator;
 
