@@ -12,7 +12,7 @@
    See the COPYING file for more details.
 */
 
-#include "desktop_util.hpp"
+#include "display/desktop_util.hpp"
 
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
