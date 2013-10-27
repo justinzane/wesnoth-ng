@@ -16,7 +16,7 @@
 #define MAP_LABEL_HPP_INCLUDED
 
 #include "map_location.hpp"
-#include "font.hpp"
+#include "display/font.hpp"
 #include "tstring.hpp"
 #include "team.hpp"
 

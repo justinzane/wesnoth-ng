@@ -127,7 +127,7 @@ libwesnoth_sources = Split("""
     wml_exception.cpp
     """)
 libwesnoth_sources.extend([
-    client_env.Object("font.cpp", 
+    client_env.Object("display/font.cpp", 
                       EXTRA_DEFINE = client_env['fribidi'] and "HAVE_FRIBIDI" or None),
     ])
 
@@ -212,15 +212,9 @@ wesnoth_sources = Split("""
     ai/testing/ca_testing_recruitment.cpp
     ai/testing/stage_fallback.cpp
     ai/testing/stage_rca.cpp
-    animated_game.cpp
-    attack_prediction.cpp
-    attack_prediction_display.cpp
-    callable_objects.cpp
-    commandline_options.cpp
-    config_cache.cpp
-    controller_base.cpp
     display/desktop_util.cpp
     display/dialogs.cpp
+    display/floating_textbox.cpp
     editor/action/action.cpp
     editor/action/action_unit.cpp
     editor/action/action_label.cpp
@@ -249,9 +243,15 @@ wesnoth_sources = Split("""
     editor/editor_preferences.cpp
     editor/toolkit/brush.cpp
     editor/toolkit/editor_toolkit.cpp
+    animated_game.cpp
+    attack_prediction.cpp
+    attack_prediction_display.cpp
+    callable_objects.cpp
+    commandline_options.cpp
+    config_cache.cpp
+    controller_base.cpp
     filechooser.cpp
     flg_manager.cpp
-    floating_textbox.cpp
     formula.cpp
     formula_debugger.cpp
     formula_debugger_fwd.cpp

@@ -15,7 +15,7 @@
 
 #include "display/tooltips.hpp"
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "game_display.hpp"
 #include "help.hpp"
 #include "marked-up_text.hpp"

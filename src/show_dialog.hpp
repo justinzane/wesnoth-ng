@@ -20,7 +20,7 @@ class CVideo;
 class display;
 
 #include "cursor.hpp"
-#include "font.hpp"
+#include "display/font.hpp"
 #include "display/tooltips.hpp"
 
 #include "widgets/menu.hpp"

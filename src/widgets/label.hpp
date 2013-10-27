@@ -15,7 +15,7 @@
 #ifndef LABEL_HPP_INCLUDED
 #define LABEL_HPP_INCLUDED
 
-#include "../font.hpp"
+#include "../display/font.hpp"
 #include "widget.hpp"
 #include <string>
 

@@ -15,7 +15,7 @@
 #include "addon/state.hpp"
 
 #include "addon/manager.hpp"
-#include "font.hpp"
+#include "display/font.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
 

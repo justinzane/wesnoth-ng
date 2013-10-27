@@ -18,7 +18,7 @@
 
 #include "tristate_button.hpp"
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "game_config.hpp"
 #include "image.hpp"
 #include "log.hpp"

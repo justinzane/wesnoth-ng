@@ -39,7 +39,7 @@ struct time_of_day;
 class map_labels;
 class arrow;
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "key.hpp"
 #include "team.hpp"
 #include "time_of_day.hpp"

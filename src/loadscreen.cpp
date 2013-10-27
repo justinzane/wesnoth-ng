@@ -20,7 +20,7 @@
 #include "loadscreen.hpp"
 
 #include "log.hpp"
-#include "font.hpp"
+#include "display/font.hpp"
 #include "marked-up_text.hpp"
 #include "gettext.hpp"
 #include "filesystem.hpp"

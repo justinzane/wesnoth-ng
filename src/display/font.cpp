@@ -19,7 +19,7 @@
 
 #include "config.hpp"
 #include "filesystem.hpp"
-#include "font.hpp"
+#include "display/font.hpp"
 #include "game_config.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"

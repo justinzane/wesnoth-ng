@@ -16,7 +16,7 @@
 
 #include "global.hpp"
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "gettext.hpp"
 #include "hotkeys.hpp"
 #include "log.hpp"

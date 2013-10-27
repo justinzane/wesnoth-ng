@@ -19,7 +19,7 @@
 
 #include "global.hpp"
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "image.hpp"
 #include "log.hpp"
 #include "preferences.hpp"

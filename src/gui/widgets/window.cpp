@@ -21,7 +21,7 @@
 
 #include "gui/widgets/window_private.hpp"
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "game_display.hpp"
 #include "gettext.hpp"
 #include "log.hpp"

@@ -18,7 +18,7 @@
 
 #include "widgets/button.hpp"
 #include "game_config.hpp"
-#include "font.hpp"
+#include "display/font.hpp"
 #include "marked-up_text.hpp"
 #include "image.hpp"
 #include "log.hpp"

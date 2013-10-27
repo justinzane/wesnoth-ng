@@ -18,7 +18,7 @@
 
 #include "widgets/slider.hpp"
 #include "game_config.hpp"
-#include "font.hpp"
+#include "display/font.hpp"
 #include "image.hpp"
 #include "sound.hpp"
 #include "display/video.hpp"
