@@ -25,7 +25,7 @@
 #include "actions/create.hpp"
 #include "actions/move.hpp"
 #include "actions/undo.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "game_display.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_events/pump.hpp"

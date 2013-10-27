@@ -23,7 +23,7 @@
 #include "preferences_display.hpp"
 
 #include "construct_dialog.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "formatter.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"

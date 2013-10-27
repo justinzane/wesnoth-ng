@@ -14,7 +14,7 @@
 
 #include "global.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "gamestatus.hpp"
 #include "map_label.hpp"
 #include "resources.hpp"

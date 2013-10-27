@@ -23,7 +23,7 @@
 #include "actions/heal.hpp"
 #include "actions/undo.hpp"
 #include "actions/vision.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "game_events/handlers.hpp"
 #include "game_events/pump.hpp"
 #include "gettext.hpp"

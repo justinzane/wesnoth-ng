@@ -17,7 +17,7 @@
 
 #include "construct_dialog.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "gettext.hpp"
 #include "sound.hpp"
 #include "log.hpp"

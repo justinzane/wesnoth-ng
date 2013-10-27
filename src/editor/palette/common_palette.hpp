@@ -15,7 +15,7 @@
 #ifndef COMMON_PALETTES_H_INCLUDED
 #define COMMON_PALETTES_H_INCLUDED
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "config.hpp"
 #include "gui/widgets/widget.hpp"
 

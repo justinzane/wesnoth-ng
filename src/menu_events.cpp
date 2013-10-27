@@ -27,7 +27,7 @@
 #include "actions/vision.hpp"
 #include "builder.hpp"
 #include "ai/manager.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "formatter.hpp"
 #include "filechooser.hpp"
 #include "game_end_exceptions.hpp"

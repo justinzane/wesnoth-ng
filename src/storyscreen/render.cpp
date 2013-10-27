@@ -25,7 +25,7 @@
 #include "storyscreen/part.hpp"
 #include "storyscreen/render.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "image.hpp"
 #include "language.hpp"
 #include "sound.hpp"

@@ -21,7 +21,7 @@
 
 #include "actions/attack.hpp"
 #include "actions/undo.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "game_display.hpp"
 #include "game_preferences.hpp"
 #include "gui/dialogs/game_delete.hpp"

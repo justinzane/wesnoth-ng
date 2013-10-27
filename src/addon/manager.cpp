@@ -17,7 +17,7 @@
 
 #include "addon/manager.hpp"
 #include "addon/manager_ui.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "filesystem.hpp"
 #include "formatter.hpp"
 #include "game_display.hpp"

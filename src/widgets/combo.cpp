@@ -17,7 +17,7 @@
 #include "global.hpp"
 
 #include "widgets/combo.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "show_dialog.hpp"
 
 

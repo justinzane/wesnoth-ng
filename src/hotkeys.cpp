@@ -17,7 +17,7 @@
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
 #include "construct_dialog.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "filesystem.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_preferences.hpp"

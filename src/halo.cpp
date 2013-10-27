@@ -20,7 +20,7 @@
 
 #include "global.hpp"
 #include "animated.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "game_preferences.hpp"
 #include "halo.hpp"
 #include "serialization/string_utils.hpp"

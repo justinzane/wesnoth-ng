@@ -15,7 +15,7 @@
 #include "global.hpp"
 
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
 #include "sound.hpp"

@@ -23,7 +23,7 @@
 #include "storyscreen/interface.hpp"
 #include "storyscreen/controller.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "gettext.hpp"
 #include "intro.hpp"
 #include "language.hpp"

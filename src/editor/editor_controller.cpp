@@ -36,7 +36,7 @@
 #include "gui/widgets/window.hpp"
 #include "wml_exception.hpp"
 
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 
 #include "../clipboard.hpp"
 #include "../game_preferences.hpp"

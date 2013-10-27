@@ -15,7 +15,7 @@
 
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "filesystem.hpp"
 #include "filechooser.hpp"
 #include "game_preferences.hpp"

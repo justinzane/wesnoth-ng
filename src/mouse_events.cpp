@@ -20,7 +20,7 @@
 #include "actions/move.hpp"
 #include "actions/undo.hpp"
 #include "attack_prediction_display.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_events/pump.hpp"
 #include "gettext.hpp"

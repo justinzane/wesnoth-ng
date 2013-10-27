@@ -15,8 +15,8 @@
 #ifndef LEADER_SCROLL_DIALOG_H_INCLUDED
 #define LEADER_SCROLL_DIALOG_H_INCLUDED
 
-#include "dialogs.hpp"
-#include "display.hpp"
+#include "display/dialogs.hpp"
+#include "display/display.hpp"
 #include "gettext.hpp"
 
 namespace gui {

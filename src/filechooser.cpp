@@ -16,7 +16,7 @@
 
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/folder_create.hpp"
 #include "gui/dialogs/transient_message.hpp"

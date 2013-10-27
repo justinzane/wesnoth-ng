@@ -14,7 +14,7 @@
 #define GETTEXT_DOMAIN "wesnoth-editor"
 
 #include "context_manager.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "filesystem.hpp"
 #include "filechooser.hpp"
 #include "formula_string_utils.hpp"

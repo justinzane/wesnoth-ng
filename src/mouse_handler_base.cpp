@@ -16,7 +16,7 @@
 #include "mouse_handler_base.hpp"
 
 #include "cursor.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "log.hpp"
 #include "preferences.hpp"
 #include "display/tooltips.hpp"

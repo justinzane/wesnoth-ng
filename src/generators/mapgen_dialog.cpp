@@ -18,7 +18,7 @@
 
 #include "mapgen_dialog.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "gettext.hpp"
 #include "log.hpp"
 #include "map.hpp"

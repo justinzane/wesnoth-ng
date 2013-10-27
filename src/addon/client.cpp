@@ -17,7 +17,7 @@
 #include "addon/manager.hpp"
 #include "addon/validation.hpp"
 #include "cursor.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "formula_string_utils.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/message.hpp"

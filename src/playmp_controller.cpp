@@ -15,7 +15,7 @@
 
 #include "playmp_controller.hpp"
 
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 
 #include "actions/undo.hpp"
 #include "game_end_exceptions.hpp"

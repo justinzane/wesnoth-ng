@@ -20,7 +20,7 @@
 #ifndef ARROW_HPP_INCLUDED
 #define ARROW_HPP_INCLUDED
 
-#include "../display.hpp"
+#include "../display/display.hpp"
 
 typedef std::vector<map_location> arrow_path_t;
 

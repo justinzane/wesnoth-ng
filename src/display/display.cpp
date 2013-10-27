@@ -19,7 +19,7 @@
 
 #include "builder.hpp"
 #include "cursor.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "halo.hpp"
