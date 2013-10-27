@@ -22,7 +22,7 @@
 #include "game_preferences.hpp"
 #include "image.hpp"
 #include "preferences_display.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <iostream>
 

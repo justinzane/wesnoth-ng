@@ -111,7 +111,7 @@ libwesnoth_sources = Split("""
     text.cpp
     time_of_day.cpp
     display/tooltips.cpp
-    video.cpp
+    display/video.cpp
     display/theme.cpp
     widgets/button.cpp
     widgets/file_menu.cpp

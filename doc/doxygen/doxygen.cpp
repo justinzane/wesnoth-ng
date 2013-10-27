@@ -444,7 +444,7 @@ int divide(int a,int b) {
 /**	-file unit.hpp */
 /**	@file unit_types.hpp */
 /**	-file util.hpp */
-/**	@file video.hpp */
+/**	@file display/video.hpp */
 
 /** @} */
 

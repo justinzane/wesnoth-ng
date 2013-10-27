@@ -44,7 +44,7 @@ class arrow;
 #include "team.hpp"
 #include "time_of_day.hpp"
 #include "display/theme.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #include "widgets/button.hpp"
 #include "widgets/slider.hpp"
 

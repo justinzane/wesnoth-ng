@@ -24,7 +24,7 @@
 #include "marked-up_text.hpp"
 #include "gettext.hpp"
 #include "filesystem.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #include "image.hpp"
 
 #include <SDL_events.h>

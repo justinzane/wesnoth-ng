@@ -20,7 +20,7 @@
 
 #include "font.hpp"
 #include "marked-up_text.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 namespace gui {
 

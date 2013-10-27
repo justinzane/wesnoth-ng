@@ -21,7 +21,7 @@
 
 #include "widgets/scrollbar.hpp"
 #include "image.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <iostream>
 

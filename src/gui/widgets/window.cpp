@@ -42,7 +42,7 @@
 #include "preferences.hpp"
 #include "preferences_display.hpp"
 #include "utils/foreach.tpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <boost/bind.hpp>
 

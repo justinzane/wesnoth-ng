@@ -24,7 +24,7 @@
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
 #include "sound.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #include "wml_separators.hpp"
 
 #include "filesystem.hpp"

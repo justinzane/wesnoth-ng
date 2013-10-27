@@ -25,7 +25,7 @@
 #include "gui/widgets/window.hpp"
 #include "hotkeys.hpp"
 #include "utils/foreach.tpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <cassert>
 

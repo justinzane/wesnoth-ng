@@ -20,7 +20,7 @@
 #include "log.hpp"
 #include "preferences_display.hpp"
 #include "sound.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #if defined _WIN32
 #include "windows_tray_notification.hpp"
 #endif

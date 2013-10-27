@@ -20,7 +20,7 @@
 #include "help.hpp"
 #include "marked-up_text.hpp"
 #include "resources.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <boost/foreach.hpp>
 

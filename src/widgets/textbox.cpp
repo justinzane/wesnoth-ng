@@ -19,7 +19,7 @@
 #include "widgets/textbox.hpp"
 #include "clipboard.hpp"
 #include "log.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 static lg::log_domain log_display("display");
 #define WRN_DP LOG_STREAM(warn, log_display)

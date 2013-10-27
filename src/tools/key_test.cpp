@@ -18,7 +18,7 @@
  */
 
 #include "key.h"
-#include "video.hpp"
+#include "display/video.hpp"
 
 int main( void )
 {

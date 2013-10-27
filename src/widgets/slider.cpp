@@ -21,7 +21,7 @@
 #include "font.hpp"
 #include "image.hpp"
 #include "sound.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 
 namespace {

@@ -23,7 +23,7 @@
 
 #include "floating_point_emulation.hpp"
 #include "neon.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <algorithm>
 #include <cassert>

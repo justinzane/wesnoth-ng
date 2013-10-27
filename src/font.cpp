@@ -25,7 +25,7 @@
 #include "marked-up_text.hpp"
 #include "text.hpp"
 #include "display/tooltips.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #include "serialization/parser.hpp"
 #include "serialization/preprocessor.hpp"
 #include "serialization/string_utils.hpp"

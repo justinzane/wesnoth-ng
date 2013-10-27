@@ -62,7 +62,7 @@
 #include "gui/widgets/window.hpp"
 #include "language.hpp"
 #include "tests/utils/fake_display.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #include "wml_exception.hpp"
 
 #include <boost/bind.hpp>
