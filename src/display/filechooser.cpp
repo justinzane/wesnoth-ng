@@ -20,7 +20,7 @@
 #include "gettext.hpp"
 #include "gui/dialogs/folder_create.hpp"
 #include "gui/dialogs/transient_message.hpp"
-#include "filechooser.hpp"
+#include "display/filechooser.hpp"
 #include "widgets/file_menu.hpp"
 
 

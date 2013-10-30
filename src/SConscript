@@ -75,6 +75,7 @@ libwesnoth_sources = Split("""
     display/construct_dialog.cpp
     display/cursor.cpp
     display/display.cpp
+    display/imgops.cpp
     display/show_dialog.cpp
     display/sound_music_track.cpp
     display/tooltips.cpp
@@ -217,6 +218,7 @@ wesnoth_sources = Split("""
     display/animated_game.cpp
     display/desktop_util.cpp
     display/dialogs.cpp
+    display/filechooser.cpp
     display/floating_textbox.cpp
     display/game_display.cpp
     display/portrait.cpp
@@ -441,7 +443,6 @@ wesnoth_sources = Split("""
     commandline_options.cpp
     config_cache.cpp
     controller_base.cpp
-    filechooser.cpp
     flg_manager.cpp
     formula.cpp
     formula_debugger.cpp
@@ -620,7 +621,7 @@ wesmage_sources = Split("""
     wesmage/options.cpp
     tools/dummy_video.cpp
     tools/exploder_utils.cpp
-    sdl_utils.cpp
+    display/sdl_utils.cpp
     tracer.cpp
     loadscreen_empty.cpp
     """)
