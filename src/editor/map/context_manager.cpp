@@ -16,7 +16,7 @@
 #include "context_manager.hpp"
 #include "display/display.hpp"
 #include "filesystem.hpp"
-#include "filechooser.hpp"
+#include "display/filechooser.hpp"
 #include "formula_string_utils.hpp"
 #include "gettext.hpp"
 #include "generators/map_create.hpp"

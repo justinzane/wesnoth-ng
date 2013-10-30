@@ -17,7 +17,7 @@
 #include "exceptions.hpp"
 #include "SDL_ttf.h"
 
-#include "sdl_utils.hpp"
+#include "display/sdl_utils.hpp"
 
 class t_string;
 

@@ -17,7 +17,7 @@
 
 #include "display/display.hpp"
 #include "filesystem.hpp"
-#include "filechooser.hpp"
+#include "display/filechooser.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/game_paths.hpp"

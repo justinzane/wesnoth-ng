@@ -24,7 +24,7 @@
 #include "log.hpp"
 #include "preferences.hpp"
 #include "preferences_display.hpp"
-#include "sdl_utils.hpp"
+#include "display/sdl_utils.hpp"
 #include "display/video.hpp"
 
 #include <boost/foreach.hpp>

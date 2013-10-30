@@ -29,7 +29,7 @@
 #include "ai/manager.hpp"
 #include "display/dialogs.hpp"
 #include "formatter.hpp"
-#include "filechooser.hpp"
+#include "display/filechooser.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_events/pump.hpp"
 #include "game_preferences.hpp"

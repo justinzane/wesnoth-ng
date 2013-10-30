@@ -523,7 +523,8 @@ if env["prereqs"]:
         conf.CheckSDL("SDL_mixer", require_version = '1.2.0') and \
         conf.CheckSDL("SDL_image", require_version = '1.2.0') and \
         conf.CheckLib("vorbisfile") and \
-        conf.CheckOgg() or \
+        conf.CheckOgg() and \
+        conf.CheckCXXHeader("opencv2/opencv.hpp") or \
         Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
 
     have_X = False
@@ -538,6 +539,8 @@ if env["prereqs"]:
         if client_env['fribidi']:
             client_env['fribidi'] = (conf.CheckPKG('fribidi >= 0.10.9') or
                                      Warning("Can't find libfribidi, disabling freebidi support."))
+
+        client_env.ParseConfig('pkg-config --libs opencv')
 
     if env["forum_user_handler"]:
         env.ParseConfig("pkg_config --libs --cflags mysql")

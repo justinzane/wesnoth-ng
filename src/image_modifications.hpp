@@ -17,7 +17,7 @@
 #ifndef IMAGE_MODIFICATIONS_HPP_INCLUDED
 #define IMAGE_MODIFICATIONS_HPP_INCLUDED
 
-#include "sdl_utils.hpp"
+#include "display/sdl_utils.hpp"
 #include <queue>
 
 namespace image {
