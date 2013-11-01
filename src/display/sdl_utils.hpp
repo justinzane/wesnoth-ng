@@ -174,7 +174,19 @@ surface make_RGBA8888(const surface &surf);
  */
 surface make_RGBA8888(const surface &surf);
 
+/**
+ * @brief TODO: WRITEME
+ * @param w
+ * @param h
+ * @return
+ */
 surface create_neutral_surface(int w, int h);
+
+/**
+ * @brief TODO: WRITEME
+ * @param surf
+ * @return
+ */
 surface create_optimized_surface(const surface &surf);
 
 /**
@@ -236,13 +248,11 @@ surface adjust_surface_color(const surface &surf,
                              bool optimize = true);
 
 /**
- * @brief TODO: WRITEME
- * @param surf
- * @param optimize
- * @return
+ * @brief Downsample RGBA to K.
+ * @return Greyscale image as surface.
  */
-surface greyscale_image(const surface &surf,
-                        bool optimize = true);
+surface greyscale_image(const surface &surf,    /**< Color image to be downsampled to grey. */
+                        bool optimize = true);  /**< Return RLE optimized surface. */
 
 /**
  * @brief create an heavy shadow of the image, by blurring, increasing alpha and darkening
@@ -448,14 +458,66 @@ surface rotate_180_surface(const surface &surf, bool optimize = true)
 surface rotate_90_surface(const surface &surf, bool clockwise, bool optimize = true)
                           __attribute__((deprecated("Use rotate_surface.")));
 
+typedef enum mirror_axis_t{
+    VERT,
+    HORIZ,
+    NE_SW_DIAG,
+    SE_NW_DIAG,
+    CUSTOM,
+} const mirror_axis;
+
 /**
- * @brief TODO WRITEME
+ * @brief Mirror an image with respect to provided axis.
+ * @param surf      Image to be mirrored
+ * @param axis      Axis to be mirrored across.
+ *                  VERT / HORIZ / NE_SW_DIAG / SE_NW_DIAG / CUSTOM
+ *                  If CUSTOM is chosen, two points that define the axis line
+ *                  must be provided in following parameters.
+ * @param optimize  RLE optimize the returned surface
+ * @param axis_x1   Only used with axis=CUSTOM
+ * @param axis_x2   Only used with axis=CUSTOM
+ * @param axis_y1   Only used with axis=CUSTOM
+ * @param axis_y2   Only used with axis=CUSTOM
+ * @return  Mirrored image as surface.
+ * @note Diagonal and custom mirrors are NOT implemented yet.
+ * @todo Implement diag and custom mirrors.
+ */
+surface mirror_surface(const surface& surf,
+                       const mirror_axis_t axis,
+                       const bool optimize=true,
+                       const double axis_x1 = 0.0,
+                       const double axis_x2 = 0.0,
+                       const double axis_y1 = 0.0,
+                       const double axis_y2 = 0.0);
+
+/**
+ * @brief Mirror image about vertical axis through center of image.
+ * @details
+ *     0 1 2  -> 2 1 0
+ *     3 4 5     5 4 3
  * @param surf
  * @param optimize
+ * @return mirrored image
+ */
+surface flip_surface(const surface &surf, bool optimize = true)
+                     __attribute__((deprecated("Use mirror surface instead.")));
+
+/**
+ * @brief Mirror image about horizontal axis through center of image.
+ * @details
+ *     0 1 2  -> 3 4 5
+ *     3 4 5     0 1 2
+ * @param surf
+ * @param optimize
+ * @return mirrored image
+ */
+surface flop_surface(const surface &surf, bool optimize = true)
+                     __attribute__((deprecated("Use mirror surface instead.")));
+
+/**
+ * @brief TODO WRITEME
  * @return
  */
-surface flip_surface(const surface &surf, bool optimize = true);
-surface flop_surface(const surface &surf, bool optimize = true);
 surface create_compatible_surface(const surface &surf, int width = -1, int height = -1);
 
 /**

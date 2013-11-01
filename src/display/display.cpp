@@ -1465,9 +1465,12 @@ static void draw_background(surface screen, const SDL_Rect& area, const std::str
 }
 
 void display::draw_text_in_hex(const map_location& loc,
-		const tdrawing_layer layer, const std::string& text,
-		size_t font_size, SDL_Color color, double x_in_hex, double y_in_hex)
-{
+                               const tdrawing_layer layer,
+                               const std::string& text,
+                               size_t font_size,
+                               SDL_Color color,
+                               double x_in_hex,
+                               double y_in_hex) {
 	if (text.empty()) return;
 
 	const size_t font_sz = static_cast<size_t>(font_size * get_zoom_factor());
@@ -1506,10 +1509,10 @@ void display::render_image(int x, int y, const display::tdrawing_layer drawing_l
 	surface surf(image);
 
 	if(hreverse) {
-		surf = image::reverse_image(surf);
+		surf = mirror_surface(surf, VERT, false);
 	}
 	if(vreverse) {
-		surf = flop_surface(surf, false);
+		surf = mirror_surface(surf, HORIZ, false);
 	}
 
 	if(greyscale) {

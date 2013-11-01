@@ -142,8 +142,9 @@ bool operator<(const surface& a, const surface& b) {
 }
 
 bool is_neutral(const surface& surf) {
-    return (surf->format->BytesPerPixel == 4 && surf->format->Rmask == 0xFF0000u
-            && (surf->format->Amask | 0xFF000000u) == 0xFF000000u);
+    return (surf->format->BytesPerPixel == 4 &&
+            surf->format->Rmask == 0xFF0000u &&
+            (surf->format->Amask | 0xFF000000u) == 0xFF000000u);
 }
 
 bool is_ARGB8888(const surface& surf) {
@@ -1099,6 +1100,59 @@ surface rotate_90_surface(const surface &surf, bool clockwise, bool optimize) {
 }
 
 
+/** TODO FINISHME */
+surface mirror_surface(const surface& surf,
+                       const mirror_axis_t axis,
+                       const bool optimize,
+                       const double axis_x1,
+                       const double axis_x2,
+                       const double axis_y1,
+                       const double axis_y2) {
+    if (surf == NULL) { throw std::invalid_argument("Cannot mirror null surface."); }
+    // Make sure both surfaces are always in the "neutral" pixel format
+
+    surface dst(create_neutral_surface(surf->w, surf->h));
+    surface src(make_neutral_surface(surf));
+    if (src == NULL || dst == NULL) {
+        throw std::logic_error("Could not create neutral surfaces. This is a BUG.");
+    }
+    { //Scoping for surface lock.
+        using namespace cv;
+        Mat src_mat = Mat(src->h, src->w, CV_8UC4, src->pixels, Mat::AUTO_STEP);
+        Mat dst_mat = Mat(dst->h, dst->w, CV_8UC4, dst->pixels, Mat::AUTO_STEP);
+        Mat aff_mat;
+        Point2f src_pts[3];
+        Point2f dst_pts[3];
+        switch(axis) {
+            case VERT:
+                flip(src_mat, dst_mat, 1);
+                break;
+            case HORIZ:
+                flip(src_mat, dst_mat, 0);
+                break;
+            case NE_SW_DIAG:
+                src_pts[0] = Point2f((float)src->w,       (float)src->h);
+                dst_pts[0] = Point2f(0.0f,                0.0f);
+                src_pts[0] = Point2f((float)(src->w-0.5), (float)src->h);
+                dst_pts[0] = Point2f(0.0f,                0.5f);
+                src_pts[0] = Point2f((float)src->w,       (float)(src->h-0.5f));
+                dst_pts[0] = Point2f(0.5f,                0.0f);
+                aff_mat = getAffineTransform(src_pts, dst_pts);
+                warpAffine(src_mat, dst_mat, aff_mat, dst_mat.size());
+                break;
+            case SE_NW_DIAG:
+                /// TODO: Implement me.
+                break;
+            case CUSTOM:
+                /// TODO: Implement me.
+                break;
+            default:
+                throw std::logic_error("Should never get here.");
+        }
+    }
+    return (optimize ? create_optimized_surface(dst) : dst);
+}
+
 void put_pixel(const surface& surf, surface_lock& surf_lock, int x, int y, Uint32 pixel) {
     const int bpp = surf->format->BytesPerPixel;
     /* dst is the address to the pixel we want to set */
@@ -1153,60 +1207,19 @@ Uint32 get_pixel(const surface& surf, const const_surface_lock& surf_lock, int x
 
 
 surface flip_surface(const surface &surf, bool optimize) {
-    if (surf == NULL) { throw std::invalid_argument("Cannot flip null surface."); }
-
-    surface nsurf(make_neutral_surface(surf));
-    if (nsurf == NULL) { throw std::logic_error("Could not make neutral surface..."); }
-
-    {
-        surface_lock lock(nsurf);
-        Uint32* const pixels = lock.pixels();
-
-        for (int y = 0; y != nsurf->h; ++y) {
-            for (int x = 0; x != nsurf->w / 2; ++x) {
-                const int index1 = y * nsurf->w + x;
-                const int index2 = (y + 1) * nsurf->w - x - 1;
-                std::swap(pixels[index1], pixels[index2]);
-            }
-        }
-    }
-
-    return optimize ? create_optimized_surface(nsurf) : nsurf;
+    return mirror_surface(surf, VERT, optimize);
 }
 
+
 surface flop_surface(const surface &surf, bool optimize) {
-    if (surf == NULL) {
-        return NULL;
-    }
-
-    surface nsurf(make_neutral_surface(surf));
-
-    if (nsurf == NULL) {
-        std::cerr << "could not make neutral surface...\n";
-        return NULL;
-    }
-
-    {
-        surface_lock lock(nsurf);
-        Uint32* const pixels = lock.pixels();
-
-        for (int x = 0; x != nsurf->w; ++x) {
-            for (int y = 0; y != nsurf->h / 2; ++y) {
-                const int index1 = y * nsurf->w + x;
-                const int index2 = (nsurf->h - y - 1) * surf->w + x;
-                std::swap(pixels[index1], pixels[index2]);
-            }
-        }
-    }
-
-    return optimize ? create_optimized_surface(nsurf) : nsurf;
+    return mirror_surface(surf, HORIZ, optimize);
 }
 
 surface create_compatible_surface(const surface &surf, int width, int height) {
-    if (surf == NULL) return NULL;
-
+    if (surf == NULL) {
+        throw std::invalid_argument("Cannot create compatible surface given null.");
+    }
     if (width == -1) width = surf->w;
-
     if (height == -1) height = surf->h;
 
     surface s = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, surf->format->BitsPerPixel,
@@ -1218,6 +1231,7 @@ surface create_compatible_surface(const surface &surf, int width, int height) {
     }
     return s;
 }
+
 
 void blit_surface(const surface& src,
                   const SDL_Rect* srcrect,

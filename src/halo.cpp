@@ -158,11 +158,12 @@ bool effect::render()
 	if(surf_ == NULL) {
 		return false;
 	}
+	//not responsible for upsidedown unit bug
 	if(orientation_ == HREVERSE || orientation_ == HVREVERSE) {
-		surf_.assign(image::reverse_image(surf_));
+		surf_.assign(mirror_surface(surf_, HORIZ));
 	}
 	if(orientation_ == VREVERSE || orientation_ == HVREVERSE) {
-		surf_.assign(flop_surface(surf_));
+		surf_.assign(mirror_surface(surf_, VERT));
 	}
 
 	const map_location zero_loc(0,0);

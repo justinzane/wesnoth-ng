@@ -576,7 +576,7 @@ void playsingle_controller::play_turn(bool save)
 		try {
 			save_blocker blocker;
 			init_side(player_number_ - 1);
-		} catch (end_turn_exception) {
+		} catch (end_turn_exception&) {
 			if (current_team().is_network() == false) {
 				turn_info turn_data(player_number_, replay_sender_);
 				recorder.end_turn();

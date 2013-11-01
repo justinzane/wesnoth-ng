@@ -980,12 +980,9 @@ bool is_empty_hex(const locator& i_locator)
 	return i_locator.locate_in_cache(is_empty_hex_);
 }
 
-
-surface reverse_image(const surface& surf)
-{
-	if(surf == NULL) {
-		return surface(NULL);
-	}
+// nor responsible for upside-down unit bug
+surface reverse_image(const surface& surf) {
+	if(surf == NULL) { throw std::invalid_argument("Cannot reverse image with null surface."); }
 
 	const std::map<surface,surface>::iterator itor = reversed_images_.find(surf);
 	if(itor != reversed_images_.end()) {
@@ -993,7 +990,7 @@ surface reverse_image(const surface& surf)
 		return itor->second;
 	}
 
-	const surface rev(flip_surface(surf));
+	const surface rev(mirror_surface(surf, HORIZ));
 	if(rev == NULL) {
 		return surface(NULL);
 	}

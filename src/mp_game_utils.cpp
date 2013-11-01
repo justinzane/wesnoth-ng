@@ -58,7 +58,7 @@ config initial_level_config(game_display& disp, const mp_game_settings& params,
 			resources::config_manager->
 				load_game_config_for_game(state.classification());
 		}
-		catch (load_game_cancelled_exception){
+		catch (load_game_cancelled_exception&){
 			return config();
 		} catch(config::error&) {
 			return config();

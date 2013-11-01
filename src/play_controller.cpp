@@ -350,7 +350,9 @@ struct placing_info {
 	map_location pos;
 };
 
-static bool operator<(const placing_info& a, const placing_info& b) { return a.score > b.score; }
+static bool operator<(const placing_info& a, const placing_info& b) __attribute__((unused)) {
+    return a.score > b.score;
+}
 
 void play_controller::place_sides_in_preferred_locations()
 {
