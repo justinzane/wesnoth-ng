@@ -18,35 +18,37 @@
  *  Handle input via mouse & keyboard, events, schedule commands.
  */
 
+#include "gettext.hpp"
+#include "loadscreen.hpp"
+#include "log.hpp"
+#include "formula_string_utils.hpp"
+#include "game_preferences.hpp"
 #include "play_controller.hpp"
+#include "preferences_display.hpp"
+#include "replay.hpp"
+#include "resources.hpp"
+#include "savegame.hpp"
+#include "save_blocker.hpp"
+#include "soundsource.hpp"
+#include "unit_id.hpp"
+#include "wml_exception.hpp"
+
+
+#include "ai/manager.hpp"
+#include "ai/testing.hpp"
 #include "actions/create.hpp"
 #include "actions/heal.hpp"
 #include "actions/undo.hpp"
 #include "actions/vision.hpp"
 #include "display/dialogs.hpp"
+#include "display/halo.hpp"
+#include "display/sound.hpp"
+#include "display/tooltips.hpp"
 #include "game_events/handlers.hpp"
 #include "game_events/pump.hpp"
-#include "gettext.hpp"
-#include "halo.hpp"
-#include "loadscreen.hpp"
-#include "log.hpp"
 #include "pathfind/teleport.hpp"
-#include "resources.hpp"
-#include "savegame.hpp"
-#include "sound.hpp"
-#include "unit_id.hpp"
-#include "save_blocker.hpp"
-#include "preferences_display.hpp"
-#include "replay.hpp"
-#include "soundsource.hpp"
-#include "display/tooltips.hpp"
-#include "game_preferences.hpp"
-#include "wml_exception.hpp"
-#include "formula_string_utils.hpp"
-#include "ai/manager.hpp"
-#include "ai/testing.hpp"
-#include "whiteboard/manager.hpp"
 #include "scripting/lua.hpp"
+#include "whiteboard/manager.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -313,7 +315,7 @@ void play_controller::init_managers(){
 	resources::tunnels = pathfind_manager_.get();
 	resources::whiteboard = whiteboard_manager_.get();
 
-	halo_manager_.reset(new halo::manager(*gui_));
+	halo_manager_.reset(new halo_mgr(*gui_));
 	LOG_NG << "done initializing managers... " << (SDL_GetTicks() - ticks_) << "\n";
 }
 

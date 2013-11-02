@@ -17,8 +17,8 @@
 #include "global.hpp"
 
 #include "display/game_display.hpp"
-#include "halo.hpp"
-#include "sound.hpp"
+#include "display/halo.hpp"
+#include "display/sound.hpp"
 #include "unit_frame.hpp"
 
 
@@ -625,53 +625,53 @@ void unit_frame::redraw(const int frame_time,bool on_start_time,bool in_scope_of
 			       	current_data.blend_ratio,current_data.submerge,!facing_north);
 	}
 	
-	halo::remove(*halo_id);
-	*halo_id = halo::NO_HALO;
+	halo_remove(*halo_id);
+	*halo_id = HALO_INVALID;
 	
 	if (!in_scope_of_frame) { //check after frame as first/last frame image used in defense/attack anims
 		return;
 	}
 	
 	if(!current_data.halo.empty()) {
-		halo::ORIENTATION orientation;
+		halo_orientation_t orientation;
 		switch(direction)
 		{
 			case map_location::NORTH:
 			case map_location::NORTH_EAST:
-				orientation = halo::NORMAL;
+				orientation = NORMAL;
 				break;
 			case map_location::SOUTH_EAST:
 			case map_location::SOUTH:
 				if(!current_data.auto_vflip) {
-					orientation = halo::NORMAL;
+					orientation = NORMAL;
 				} else {
-					orientation = halo::VREVERSE;
+					orientation = VERT_REFLECT;
 				}
 				break;
 			case map_location::SOUTH_WEST:
 				if(!current_data.auto_vflip) {
-					orientation = halo::HREVERSE;
+					orientation = HORIZ_REFLECT;
 				} else {
-					orientation = halo::HVREVERSE;
+					orientation = HORIZ_REFLECT;
 				}
 				break;
 			case map_location::NORTH_WEST:
-				orientation = halo::HREVERSE;
+				orientation = HORIZ_REFLECT;
 				break;
 			case map_location::NDIRECTIONS:
 			default:
-				orientation = halo::NORMAL;
+				orientation = NORMAL;
 				break;
 		}
 		
 		if(direction != map_location::SOUTH_WEST && direction != map_location::NORTH_WEST) {
-			*halo_id = halo::add(static_cast<int>(x+current_data.halo_x* game_display::get_singleton()->get_zoom_factor()),
+			*halo_id = halo_add(static_cast<int>(x+current_data.halo_x* game_display::get_singleton()->get_zoom_factor()),
 					static_cast<int>(y+current_data.halo_y* game_display::get_singleton()->get_zoom_factor()),
 					current_data.halo + current_data.halo_mod,
 					map_location(-1, -1),
 					orientation);
 		} else {
-			*halo_id = halo::add(static_cast<int>(x-current_data.halo_x* game_display::get_singleton()->get_zoom_factor()),
+			*halo_id = halo_add(static_cast<int>(x-current_data.halo_x* game_display::get_singleton()->get_zoom_factor()),
 					static_cast<int>(y+current_data.halo_y* game_display::get_singleton()->get_zoom_factor()),
 					current_data.halo + current_data.halo_mod,
 					map_location(-1, -1),

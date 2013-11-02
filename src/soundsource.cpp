@@ -18,7 +18,7 @@
 #include "display/display.hpp"
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "soundsource.hpp"
 
 namespace soundsource {

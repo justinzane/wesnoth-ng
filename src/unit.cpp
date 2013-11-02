@@ -27,7 +27,7 @@
 #include "game_preferences.hpp"
 #include "gamestatus.hpp"
 #include "gettext.hpp"
-#include "halo.hpp"
+#include "display/halo.hpp"
 #include "log.hpp"
 #include "resources.hpp"
 #include "unit_id.hpp"
@@ -184,7 +184,7 @@ unit::unit(const unit& o):
 		   next_idling_(0),
 
            frame_begin_time_(o.frame_begin_time_),
-           unit_halo_(halo::NO_HALO),
+           unit_halo_(HALO_INVALID),
            getsHit_(o.getsHit_),
            refreshing_(o.refreshing_),
            hidden_(o.hidden_),
@@ -258,7 +258,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 	anim_(NULL),
 	next_idling_(0),
 	frame_begin_time_(0),
-	unit_halo_(halo::NO_HALO),
+	unit_halo_(HALO_INVALID),
 	getsHit_(0),
 	refreshing_(false),
 	hidden_(false),
@@ -580,7 +580,7 @@ unit::unit(const unit_type &u_type, int side, bool real_unit,
 	anim_(NULL),
 	next_idling_(0),
 	frame_begin_time_(0),
-	unit_halo_(halo::NO_HALO),
+	unit_halo_(HALO_INVALID),
 	getsHit_(0),
 	refreshing_(false),
 	hidden_(false),
@@ -1961,14 +1961,14 @@ void unit::redraw_unit()
 	const int y = static_cast<int>(adjusted_params.offset * ydst + (1.0-adjusted_params.offset) * ysrc) + d2;
 
 
-	if(unit_halo_ == halo::NO_HALO && !image_halo().empty()) {
-		unit_halo_ = halo::add(0, 0, image_halo()+TC_image_mods(), map_location(-1, -1));
+	if(unit_halo_ == HALO_INVALID && !image_halo().empty()) {
+		unit_halo_ = halo_add(0, 0, image_halo()+TC_image_mods(), map_location(-1, -1));
 	}
-	if(unit_halo_ != halo::NO_HALO && image_halo().empty()) {
-		halo::remove(unit_halo_);
-		unit_halo_ = halo::NO_HALO;
-	} else if(unit_halo_ != halo::NO_HALO) {
-		halo::set_location(unit_halo_, x, y - height_adjust);
+	if(unit_halo_ != HALO_INVALID && image_halo().empty()) {
+		halo_remove(unit_halo_);
+		unit_halo_ = HALO_INVALID;
+	} else if(unit_halo_ != HALO_INVALID) {
+		halo_set_loc(unit_halo_, x, y - height_adjust);
 	}
 
 
@@ -2112,9 +2112,9 @@ void unit::redraw_unit()
 
 void unit::clear_haloes()
 {
-	if(unit_halo_ != halo::NO_HALO) {
-		halo::remove(unit_halo_);
-		unit_halo_ = halo::NO_HALO;
+	if(unit_halo_ != HALO_INVALID) {
+		halo_remove(unit_halo_);
+		unit_halo_ = HALO_INVALID;
 	}
 	if(anim_ ) anim_->clear_haloes();
 }

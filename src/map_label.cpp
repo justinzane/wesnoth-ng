@@ -350,7 +350,7 @@ void terrain_label::read(const config &cfg)
 	if(!tmp_color.empty()) {
 		std::vector<Uint32> temp_rgb;
 		if(string2rgb(tmp_color, temp_rgb) && !temp_rgb.empty()) {
-			color = int_to_color(temp_rgb[0]);
+			color = get_sdl_color(temp_rgb[0]);
 		}
 	}
 	color_ = color;

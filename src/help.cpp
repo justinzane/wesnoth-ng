@@ -33,7 +33,7 @@
 #include "log.hpp"
 #include "map.hpp"
 #include "marked-up_text.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "unit.hpp"
 #include "unit_helper.hpp"
 #include "wml_separators.hpp"

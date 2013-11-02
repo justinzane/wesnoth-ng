@@ -238,13 +238,17 @@ public:
 
 	virtual void add_facet(const config &cfg)
 	{
-		boost::shared_ptr< composite_aspect <T> > c = boost::dynamic_pointer_cast< composite_aspect<T> >(where_);
+		boost::shared_ptr< composite_aspect <T> > c =
+		    boost::dynamic_pointer_cast< composite_aspect<T> >(where_);
 		if (c) {
 			assert (c->get_id()==this->get_name());
 			c->add_facet(-1, cfg);
 			c->invalidate();
 		} else {
-			LOG_STREAM(debug, aspect::log()) << "typesafe_known_aspect [" << this->get_name() << "] : while adding facet to aspect, got null. this might be caused by target [aspect] being not composite" << std::endl;
+			LOG_STREAM(debug, aspect::log()) << "typesafe_known_aspect [" <<
+			    this->get_name() <<
+			    "] : while adding facet to aspect, got null. " <<
+			    "this might be caused by target [aspect] being not composite" << std::endl;
 		}
 	}
 
@@ -323,7 +327,6 @@ public:
 		}
 		return cfg;
 	}
-
 
 	virtual bool add_facet(int pos, const config &cfg)
 	{

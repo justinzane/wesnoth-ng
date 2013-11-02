@@ -26,7 +26,7 @@
 #include "menu_events.hpp"
 #include "multiplayer.hpp"
 #include "multiplayer_ui.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "wml_separators.hpp"
 #include "formula_string_utils.hpp"
 

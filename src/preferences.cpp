@@ -26,7 +26,7 @@
 #include "hotkeys.hpp"
 #include "log.hpp"
 #include "preferences.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "display/video.hpp" // non_interactive()
 #include "serialization/parser.hpp"
 #include "util.hpp"

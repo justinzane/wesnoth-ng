@@ -19,7 +19,7 @@
 #include "game_preferences.hpp"
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "display/sound_music_track.hpp"
 #include "util.hpp"
 

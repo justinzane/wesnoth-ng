@@ -290,7 +290,9 @@ int mask_modification::get_y() const
 }
 
 surface light_modification::operator()(const surface& src) const {
-	if(src == NULL) { return NULL; }
+	if(src == NULL) {
+	    throw std::invalid_argument("Cannot light_modification::operator() with null surface.");
+	}
 
 	//light_surface wants a neutral surface having same dimensions
 	surface nsurf;
@@ -298,7 +300,7 @@ surface light_modification::operator()(const surface& src) const {
 		nsurf = scale_surface(surf_, src->w, src->h, false);
 	else
 		nsurf = make_neutral_surface(surf_);
-	return light_surface(src, nsurf);;
+	return light_surface(src, nsurf);
 }
 
 const surface& light_modification::get_surface() const
@@ -928,7 +930,7 @@ REGISTER_MOD_PARSER(BG, args)
 		c[i] = lexical_cast_default<int>(factors[i]);
 	}
 
-	return new background_modification(create_color(c[0], c[1], c[2], c[3]));
+	return new background_modification(get_sdl_color(c[0], c[1], c[2], c[3]));
 }
 
 } // end anon namespace

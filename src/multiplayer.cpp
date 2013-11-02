@@ -38,7 +38,7 @@
 #include "playcampaign.hpp"
 #include "playmp_controller.hpp"
 #include "settings.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "unit_id.hpp"
 
 #include <boost/bind.hpp>

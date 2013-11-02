@@ -19,7 +19,7 @@
 #include "events.hpp"
 #include "log.hpp"
 #include "preferences_display.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "display/video.hpp"
 #if defined _WIN32
 #include "windows_tray_notification.hpp"

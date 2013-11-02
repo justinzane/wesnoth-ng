@@ -45,7 +45,7 @@
 #include "network.hpp"
 #include "playmp_controller.hpp"
 #include "preferences_display.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>

@@ -23,7 +23,7 @@
 #include "language.hpp"
 #include "image.hpp"
 #include "marked-up_text.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "display/video.hpp"
 #include "wml_separators.hpp"
 

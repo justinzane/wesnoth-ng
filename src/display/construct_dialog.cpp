@@ -19,7 +19,7 @@
 
 #include "display/display.hpp"
 #include "gettext.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
 

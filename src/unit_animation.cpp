@@ -17,7 +17,7 @@
 #include "unit_animation.hpp"
 
 #include "display/game_display.hpp"
-#include "halo.hpp"
+#include "display/halo.hpp"
 #include "map.hpp"
 #include "unit.hpp"
 #include "variable.hpp"
@@ -981,9 +981,9 @@ void unit_animation::particule::redraw(const frame_parameters& value,const map_l
 }
 void unit_animation::particule::clear_halo()
 {
-	if(halo_id_ != halo::NO_HALO) {
-		halo::remove(halo_id_);
-		halo_id_ = halo::NO_HALO;
+	if(halo_id_ != HALO_INVALID) {
+		halo_remove(halo_id_);
+		halo_id_ = HALO_INVALID;
 	}
 }
 std::set<map_location> unit_animation::particule::get_overlaped_hex(const frame_parameters& value,const map_location &src, const map_location &dst)
@@ -996,14 +996,14 @@ std::set<map_location> unit_animation::particule::get_overlaped_hex(const frame_
 
 unit_animation::particule::~particule()
 {
-	halo::remove(halo_id_);
-	halo_id_ = halo::NO_HALO;
+	halo_remove(halo_id_);
+	halo_id_ = HALO_INVALID;
 }
 
 void unit_animation::particule::start_animation(int start_time)
 {
-	halo::remove(halo_id_);
-	halo_id_ = halo::NO_HALO;
+	halo_remove(halo_id_);
+	halo_id_ = HALO_INVALID;
 	parameters_.override(get_animation_duration());
 	animated<unit_frame>::start_animation(start_time,cycles_);
 	last_frame_begin_time_ = get_begin_time() -1;

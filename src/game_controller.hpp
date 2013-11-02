@@ -22,7 +22,7 @@
 #include "game_preferences.hpp"
 #include "hotkeys.hpp"
 #include "resources.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "thread.hpp"
 
 struct jump_to_campaign_info

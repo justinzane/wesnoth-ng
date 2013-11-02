@@ -831,14 +831,14 @@ const color_range team::get_side_color_range(int side){
 
 SDL_Color team::get_side_color(int side)
 {
-	return int_to_color(get_side_color_range(side).mid());
+	return get_sdl_color(get_side_color_range(side).mid());
 }
 
 SDL_Color team::get_minimap_color(int side)
 {
 	// Note: use mid() instead of rep() unless
 	// high contrast is needed over a map or minimap!
-	return int_to_color(get_side_color_range(side).rep());
+	return get_sdl_color(get_side_color_range(side).rep());
 }
 
 std::string team::get_side_color_index(int side)

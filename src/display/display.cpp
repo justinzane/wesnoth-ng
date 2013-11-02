@@ -22,7 +22,7 @@
 #include "display/display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
-#include "halo.hpp"
+#include "display/halo.hpp"
 #include "hotkeys.hpp"
 #include "language.hpp"
 #include "log.hpp"
@@ -94,7 +94,7 @@ void display::parse_team_overlays()
 
 void display::add_overlay(const map_location& loc, const std::string& img, const std::string& halo,const std::string& team_name, bool visible_under_fog)
 {
-	const int halo_handle = halo::add(get_location_x(loc) + hex_size() / 2,
+	const int halo_handle = halo_add(get_location_x(loc) + hex_size() / 2,
 			get_location_y(loc) + hex_size() / 2, halo, loc);
 
 	const overlay item(img, halo, halo_handle, team_name, visible_under_fog);
@@ -106,7 +106,7 @@ void display::remove_overlay(const map_location& loc)
 	typedef overlay_map::const_iterator Itor;
 	std::pair<Itor,Itor> itors = overlays_.equal_range(loc);
 	while(itors.first != itors.second) {
-		halo::remove(itors.first->second.halo_handle);
+		halo_remove(itors.first->second.halo_handle);
 		++itors.first;
 	}
 
@@ -124,7 +124,7 @@ void display::remove_single_overlay(const map_location& loc, const std::string& 
 		if(itors.first->second.image == toDelete || itors.first->second.halo == toDelete) {
 			iteratorCopy = itors.first;
 			++itors.first;
-			halo::remove(iteratorCopy->second.halo_handle);
+			halo_remove(iteratorCopy->second.halo_handle);
 			overlays_.erase(iteratorCopy);
 		}
 		else {

@@ -59,7 +59,7 @@
 #include "replay.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "statistics_dialog.hpp"
 #include "unit_display.hpp"
 #include "wml_separators.hpp"
@@ -1148,7 +1148,7 @@ void menu_handler::label_terrain(mouse_handler& mousehandler, bool team_only)
 		if (team_only) {
 			team_name = gui_->labels().team_name();
 		} else {
-			color = int_to_color(team::get_side_rgb(gui_->viewing_side()));
+			color = get_sdl_color(team::get_side_rgb(gui_->viewing_side()));
 		}
 		const std::string& old_team_name = old_label ? old_label->team_name() : "";
 		// remove the old label if we changed the team_name

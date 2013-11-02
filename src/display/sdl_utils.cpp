@@ -31,6 +31,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <math.h>
+#include <stdint.h>
 #include <algorithm>
 #include <cassert>
 #include <cstring>
@@ -54,25 +55,72 @@ const_surface_lock::~const_surface_lock() {
     if (locked_) SDL_UnlockSurface(surface_);
 }
 
-SDL_Color int_to_color(const Uint32 rgb) {
+SDL_Color get_sdl_color (const Uint32 argb) {
     SDL_Color result;
-    result.r = (0x00FF0000 & rgb) >> 16;
-    result.g = (0x0000FF00 & rgb) >> 8;
-    result.b = (0x000000FF & rgb);
-    result.unused = 0;
+    result.unused = (0xff000000 & argb) >> 24;
+    result.r      = (0x00ff0000 & argb) >> 16;
+    result.g      = (0x0000ff00 & argb) >>  8;
+    result.b      = (0x000000ff & argb);
     return result;
 }
 
-SDL_Color create_color(const unsigned char red,
-                       unsigned char green,
-                       unsigned char blue,
-                       unsigned char unused) {
+SDL_Color get_sdl_color(const unsigned char r,
+                        const unsigned char g,
+                        const unsigned char b,
+                        const unsigned char a) {
     SDL_Color result;
-    result.r = red;
-    result.g = green;
-    result.b = blue;
-    result.unused = unused;
+    result.r = r;
+    result.g = g;
+    result.b = b;
+    result.unused = a;
+    return result;
+}
 
+SDL_Color get_sdl_color(const int r,
+                        const int g,
+                        const int b,
+                        const int a) {
+    SDL_Color result;
+    result.r = (r < 0) ? 0 : ((r > 255) ? 255 : (Uint8)r);
+    result.g = (g < 0) ? 0 : ((g > 255) ? 255 : (Uint8)g);
+    result.b = (b < 0) ? 0 : ((b > 255) ? 255 : (Uint8)b);
+    result.unused = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
+    return result;
+}
+
+SDL_Color get_sdl_color(const size_t r,
+                        const size_t g,
+                        const size_t b,
+                        const size_t a) {
+    SDL_Color result;
+    result.r = (r > 255) ? 255 : (Uint8)r;
+    result.g = (g > 255) ? 255 : (Uint8)g;
+    result.b = (b > 255) ? 255 : (Uint8)b;
+    result.unused = (a > 255) ? 255 : (Uint8)a;
+    return result;
+}
+
+SDL_Color get_sdl_color(const float r,
+                        const float g,
+                        const float b,
+                        const float a) {
+    SDL_Color result;
+    result.r = (r < 0) ? 0 : ((r > 255) ? 255 : (Uint8)r);
+    result.g = (g < 0) ? 0 : ((g > 255) ? 255 : (Uint8)g);
+    result.b = (b < 0) ? 0 : ((b > 255) ? 255 : (Uint8)b);
+    result.unused = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
+    return result;
+}
+
+SDL_Color get_sdl_color(const double r,
+                        const double g,
+                        const double b,
+                        const double a) {
+    SDL_Color result;
+    result.r = (r < 0) ? 0 : ((r > 255) ? 255 : (Uint8)r);
+    result.g = (g < 0) ? 0 : ((g > 255) ? 255 : (Uint8)g);
+    result.b = (b < 0) ? 0 : ((b > 255) ? 255 : (Uint8)b);
+    result.unused = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
     return result;
 }
 

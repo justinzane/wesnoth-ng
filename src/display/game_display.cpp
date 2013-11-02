@@ -33,7 +33,7 @@
 Growl_Delegate growl_obj;
 #endif
 
-#include "display/cursor.hpp"
+#include "cursor.hpp"
 #include "game_preferences.hpp"
 #include "halo.hpp"
 #include "log.hpp"
@@ -43,7 +43,7 @@ Growl_Delegate growl_obj;
 #include "reports.hpp"
 #include "resources.hpp"
 #include "tod_manager.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "whiteboard/manager.hpp"
 #ifdef _WIN32
 #include "windows_tray_notification.hpp"
@@ -243,7 +243,7 @@ void game_display::post_draw() {
 
 void game_display::draw_invalidated()
 {
-	halo::unrender(invalidated_);
+	halo_unrender(invalidated_);
 	display::draw_invalidated();
 
 	BOOST_FOREACH(unit* temp_unit, fake_units_) {
@@ -258,7 +258,7 @@ void game_display::draw_invalidated()
 
 void game_display::post_commit()
 {
-	halo::render();
+	halo_render();
 }
 
 void game_display::draw_hex(const map_location& loc)
@@ -424,7 +424,7 @@ void game_display::draw_movement_info(const map_location& loc)
 			std::stringstream def_text;
 			def_text << def << "%";
 
-			SDL_Color color = int_to_color(game_config::red_to_green(def, false));
+			SDL_Color color = get_sdl_color(game_config::red_to_green(def, false));
 
 			// simple mark (no turn point) use smaller font
 			int def_font = w->second.turns > 0 ? 18 : 16;
@@ -470,7 +470,7 @@ void game_display::draw_movement_info(const map_location& loc)
 			std::stringstream def_text;
 			def_text << def << "%";
 
-			SDL_Color color = int_to_color(game_config::red_to_green(def, false));
+			SDL_Color color = get_sdl_color(game_config::red_to_green(def, false));
 
 			// use small font
 			int def_font = 16;
@@ -650,7 +650,7 @@ void game_display::float_label(const map_location& loc, const std::string& text,
 
 	font::floating_label flabel(text);
 	flabel.set_font_size(font::SIZE_XLARGE);
-	const SDL_Color color = create_color(red, green, blue);
+	const SDL_Color color = get_sdl_color(red, green, blue);
 	flabel.set_color(color);
 	flabel.set_position(get_location_x(loc)+zoom_/2, get_location_y(loc));
 	flabel.set_move(0, -2 * turbo_speed());
@@ -1111,7 +1111,7 @@ void game_display::add_chat_message(const time_t& time, const std::string& speak
 	}
 	SDL_Color speaker_color = {255,255,255,255};
 	if(side >= 1) {
-		speaker_color = int_to_color(team::get_side_color_range(side).mid());
+		speaker_color = get_sdl_color(team::get_side_color_range(side).mid());
 	}
 
 	SDL_Color message_color = chat_message_color;

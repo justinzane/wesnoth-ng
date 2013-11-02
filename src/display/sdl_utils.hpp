@@ -21,7 +21,7 @@
 #include "util.hpp"
 
 #include <SDL/SDL.h>
-
+#include <stdint.h>
 #include <cstdlib>
 #include <iosfwd>
 #include <map>
@@ -547,17 +547,74 @@ void fill_rect_alpha(SDL_Rect &rect, Uint32 color, Uint8 alpha, surface &target)
 
 SDL_Rect get_non_transparent_portion(const surface &surf);
 
+/** @brief equality operator */
 bool operator==(const SDL_Rect& a, const SDL_Rect& b);
-bool operator!=(const SDL_Rect& a, const SDL_Rect& b);
-bool operator==(const SDL_Color& a, const SDL_Color& b);
-bool operator!=(const SDL_Color& a, const SDL_Color& b);
-SDL_Color inverse(const SDL_Color& color);
-SDL_Color int_to_color(const Uint32 rgb);
 
-SDL_Color create_color(const unsigned char red,
-                       unsigned char green,
-                       unsigned char blue,
-                       unsigned char unused = 255);
+/** @brief inequality operator */
+bool operator!=(const SDL_Rect& a, const SDL_Rect& b);
+
+/** @brief equality operator */
+bool operator==(const SDL_Color& a, const SDL_Color& b);
+
+/** @brief inequality operator */
+bool operator!=(const SDL_Color& a, const SDL_Color& b);
+
+/**
+ * @brief Invert the given color.
+ * @param color SDL color
+ * @return the inverse of the given color.
+ */
+SDL_Color inverse(const SDL_Color& color);
+
+/**
+ * @brief convert a 32bit unsigned int to an SDL color, alpha -> unused.
+ * @details
+ *      SDL_Color.unused = bits 24-31
+ *      SDL_Color.r      = bits 16-23
+ *      SDL_Color.g      = bits  8-15
+ *      SDL_Color.b      = bits  0- 7
+ */
+SDL_Color get_sdl_color(const Uint32 argb);
+
+/**
+ * @brief convert 4 chars unsigned int to an SDL color, alpha -> unused.
+ */
+SDL_Color get_sdl_color(const unsigned char r,
+                        const unsigned char g,
+                        const unsigned char b,
+                        const unsigned char a = 255);
+
+/**
+ * @brief convert a 32bit unsigned in to an SDL color, alpha -> unused.
+ * @note values above and below 0-255 are replaced with the closest valid value.
+ */
+SDL_Color get_sdl_color(const int r, const int g, const int b, const int a = 255);
+
+/**
+ * @brief convert a 32bit unsigned in to an SDL color, alpha -> unused.
+ * @note values above and below 0-255 are replaced with the closest valid value.
+ */
+SDL_Color get_sdl_color(const size_t r, const size_t g, const size_t b, const size_t a = 255);
+
+/**
+ * @brief convert a 32bit unsigned in to an SDL color, alpha -> unused.
+ * @note values above and below 0-255 are replaced with the closest valid value,
+ * and values are rounded down
+ */
+SDL_Color get_sdl_color(const float r,
+                        const float g,
+                        const float b,
+                        const float a = 255.0f);
+
+/**
+ * @brief convert a 32bit unsigned in to an SDL color, alpha -> unused.
+ * @note values above and below 0-255 are replaced with the closest valid value.
+ * and values are rounded down
+ */
+SDL_Color get_sdl_color(const double r,
+                        const double g,
+                        const double b,
+                        const double a = 255.0);
 
 /**
  * Helper class for pinning SDL surfaces into memory.
@@ -565,6 +622,7 @@ SDL_Color create_color(const unsigned char red,
  *       the pointer returned by #pixels is meaningful.
  */
 struct surface_lock {
+    public:
         surface_lock(surface &surf);
         ~surface_lock();
 
@@ -576,6 +634,11 @@ struct surface_lock {
         bool locked_;
 };
 
+/**
+ * Helper class for pinning SDL surfaces into memory.
+ * @note This class should be used only with neutral surfaces, so that
+ *       the pointer returned by #pixels is meaningful.
+ */
 struct const_surface_lock {
         const_surface_lock(const surface &surf);
         ~const_surface_lock();
@@ -591,7 +654,6 @@ struct const_surface_lock {
 /**
  * Helper methods for setting/getting a single pixel in an image.
  * Lifted from http://sdl.beuc.net/sdl.wiki/Pixel_Access
- *
  * @param surf           The image to get or receive the pixel from.
  * @param surf_lock      The locked surface to make sure the pointers are valid.
  * @x                    The position in the row of the pixel.

@@ -25,7 +25,7 @@
 #include "preferences.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "formula_string_utils.hpp"
 #include "whiteboard/manager.hpp"
 

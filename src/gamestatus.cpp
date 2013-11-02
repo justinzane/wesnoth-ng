@@ -45,7 +45,7 @@
 #include "map.hpp"
 #include "pathfind/pathfind.hpp"
 #include "whiteboard/side_actions.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "soundsource.hpp"
 #include "map_label.hpp"
 
