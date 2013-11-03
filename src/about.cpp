@@ -24,6 +24,7 @@
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
 
+#include <SDL2/SDL.h>
 #include <boost/foreach.hpp>
 
 /**
@@ -265,7 +266,7 @@ void show_about(display &disp, const std::string &campaign)
 	bool last_escape;
 
 	surface text_surf = create_compatible_surface(screen, text_rect.w, text_rect.h);
-	SDL_SetAlpha(text_surf, SDL_RLEACCEL, SDL_ALPHA_OPAQUE);
+	SDL_SetSurfaceAlphaMod(text_surf, SDL_RLEACCEL, SDL_ALPHA_OPAQUE);
 
 	int image_count = 0;
 	int scroll_speed = 4;	// scroll_speed*50 = speed of scroll in pixel per second

@@ -21,7 +21,7 @@
 
 #include "global.hpp"
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
 #include "log.hpp"
 

@@ -17,7 +17,7 @@
 #define MOUSE_HANDLER_BASE_H_INCLUDED
 
 #include "map_location.hpp"
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
 class display;
 

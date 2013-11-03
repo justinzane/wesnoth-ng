@@ -15,7 +15,7 @@
 #ifndef TOOLTIPS_HPP_INCLUDED
 #define TOOLTIPS_HPP_INCLUDED
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
 #include <string>
 

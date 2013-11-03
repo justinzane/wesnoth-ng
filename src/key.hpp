@@ -15,7 +15,7 @@
 #ifndef KEY_HPP_INCLUDED
 #define KEY_HPP_INCLUDED
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
 /**
  * Class that keeps track of all the keys on the keyboard.

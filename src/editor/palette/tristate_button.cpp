@@ -250,8 +250,8 @@ void tristate_button::draw_contents() {
 	}
 
 //  TODO for later reference
-//	SDL_SetAlpha(nbase, SDL_SRCALPHA, SDL_ALPHA_OPAQUE);
-//	SDL_SetAlpha(image, 0, 0);
+//	SDL_SetSurfaceAlphaMod(nbase, SDL_SRCALPHA, SDL_ALPHA_OPAQUE);
+//	SDL_SetSurfaceAlphaMod(image, 0, 0);
 //
 //	TODO might be needed.
 	bg_restore();

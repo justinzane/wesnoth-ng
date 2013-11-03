@@ -15,7 +15,7 @@
 #ifndef WINDOWS_TRAY_NOTIFICATION_HPP_INCLUDED
 #define WINDOWS_TRAY_NOTIFICATION_HPP_INCLUDED
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <string>
 //forces to call Unicode winapi functions instead of ASCII (default)
 #define UNICODE

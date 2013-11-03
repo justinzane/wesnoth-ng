@@ -17,7 +17,7 @@
 #ifndef CURSOR_HPP_INCLUDED
 #define CURSOR_HPP_INCLUDED
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 struct surface;
 
 namespace cursor

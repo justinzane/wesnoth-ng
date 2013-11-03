@@ -27,7 +27,7 @@
 #include "gui/widgets/panel.hpp"
 
 #include "events.hpp"
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
 #include <string>
 #include <boost/function.hpp>
@@ -703,7 +703,7 @@ private:
 			, const Uint8 mouse_button_mask);
 
 	void signal_handler_sdl_key_down(
-			const event::tevent event, bool& handled, const SDLKey key);
+			const event::tevent event, bool& handled, const SDL_Keycode key);
 
 	void signal_handler_message_show_tooltip(
 			  const event::tevent event

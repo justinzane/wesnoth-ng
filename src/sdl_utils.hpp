@@ -20,7 +20,7 @@
 #include "scoped_resource.hpp"
 #include "util.hpp"
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 
 #include <cstdlib>
 #include <iosfwd>
@@ -50,7 +50,8 @@ namespace {
 const SDL_Rect empty_rect = { 0, 0, 0, 0 };
 }
 
-SDLKey sdl_keysym_from_name(std::string const &keyname);
+/** @note Removed because migration to SDL2 is unclear. */
+//SDLKey sdl_keysym_from_name(std::string const &keyname);
 
 bool point_in_rect(int x, int y, const SDL_Rect& rect);
 bool rects_overlap(const SDL_Rect& rect1, const SDL_Rect& rect2);

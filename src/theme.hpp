@@ -20,7 +20,7 @@
 #ifndef THEME_HPP_INCLUDED
 #define THEME_HPP_INCLUDED
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include "config.hpp"
 #include "generic_event.hpp"
 

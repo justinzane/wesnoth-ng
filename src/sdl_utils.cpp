@@ -80,27 +80,27 @@ SDL_Color create_color(const unsigned char red
 	return result;
 }
 
-SDLKey sdl_keysym_from_name(std::string const &keyname)
-{
-	static bool initialized = false;
-	typedef std::map<std::string const, SDLKey> keysym_map_t;
-	static keysym_map_t keysym_map;
-
-	if (!initialized) {
-		for(SDLKey i = SDLK_FIRST; i < SDLK_LAST; i = SDLKey(int(i) + 1)) {
-			std::string name = SDL_GetKeyName(i);
-			if (!name.empty())
-				keysym_map[name] = i;
-		}
-		initialized = true;
-	}
-
-	keysym_map_t::const_iterator it = keysym_map.find(keyname);
-	if (it != keysym_map.end())
-		return it->second;
-	else
-		return SDLK_UNKNOWN;
-}
+/** @note Removed because migration to SDL2 is unclear. */
+//SDLKey sdl_keysym_from_name(std::string const &keyname) {
+//	static bool initialized = false;
+//	typedef std::map<std::string const, SDL_Keycode> keysym_map_t;
+//	static keysym_map_t keysym_map;
+//
+//	if (!initialized) {
+//		for(SDL_Keycode i = SDLK_FIRST; i < SDLK_LAST; i = SDL_Keycode(int(i) + 1)) {
+//			std::string name = SDL_GetKeyName(i);
+//			if (!name.empty())
+//				keysym_map[name] = i;
+//		}
+//		initialized = true;
+//	}
+//
+//	keysym_map_t::const_iterator it = keysym_map.find(keyname);
+//	if (it != keysym_map.end())
+//		return it->second;
+//	else
+//		return SDLK_UNKNOWN;
+//}
 
 bool point_in_rect(int x, int y, const SDL_Rect& rect)
 {
@@ -184,7 +184,7 @@ surface make_neutral_surface(const surface &surf)
 
 	surface const result = SDL_ConvertSurface(surf,&get_neutral_pixel_format(),SDL_SWSURFACE);
 	if(result != NULL) {
-		SDL_SetAlpha(result,SDL_SRCALPHA,SDL_ALPHA_OPAQUE);
+		SDL_SetSurfaceAlphaMod(result,SDL_SRCALPHA,SDL_ALPHA_OPAQUE);
 	}
 
 	return result;
@@ -220,7 +220,7 @@ surface create_optimized_surface(const surface &surf)
 		return surf;
 	}
 
-	SDL_SetAlpha(result,SDL_SRCALPHA|SDL_RLEACCEL,SDL_ALPHA_OPAQUE);
+	SDL_SetSurfaceAlphaMod(result,SDL_SRCALPHA|SDL_RLEACCEL,SDL_ALPHA_OPAQUE);
 
 	return result;
 }
@@ -1276,12 +1276,12 @@ void blur_surface(surface& surf, SDL_Rect rect, unsigned depth)
 	const unsigned pixel_offset = rect.y * surf->w + rect.x;
 
 	surface_lock lock(surf);
-	for(unsigned y = 0; y < rect.h; ++y) {
+	for(int y = 0; y < rect.h; ++y) {
 		const Uint32* front = &queue[0];
 		Uint32* back = &queue[0];
 		Uint32 red = 0, green = 0, blue = 0, avg = 0;
 		Uint32* p = lock.pixels() + pixel_offset + y * surf->w;
-		for(unsigned x = 0; x <= depth && x < rect.w; ++x, ++p) {
+		for(int x = 0; x <= depth && x < rect.w; ++x, ++p) {
 			red += ((*p) >> 16)&0xFF;
 			green += ((*p) >> 8)&0xFF;
 			blue += (*p)&0xFF;
@@ -2064,7 +2064,7 @@ void fill_rect_alpha(SDL_Rect &rect, Uint32 color, Uint8 alpha, surface &target)
 
 	SDL_Rect r = {0,0,rect.w,rect.h};
 	sdl_fill_rect(tmp,&r,color);
-	SDL_SetAlpha(tmp,SDL_SRCALPHA,alpha);
+	SDL_SetSurfaceAlphaMod(tmp,SDL_SRCALPHA,alpha);
 	sdl_blit(tmp,NULL,target,&rect);
 }
 

@@ -15,7 +15,7 @@
 #ifndef EVENTS_HPP_INCLUDED
 #define EVENTS_HPP_INCLUDED
 
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include <vector>
 
 //our user-defined double-click event type

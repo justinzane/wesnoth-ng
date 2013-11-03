@@ -15,7 +15,8 @@
 #define FONT_HPP_INCLUDED
 
 #include "exceptions.hpp"
-#include "SDL_ttf.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "sdl_utils.hpp"
 
@@ -136,7 +137,7 @@ public:
 	void set_color(const SDL_Color& color) {color_ = color;}
 	void set_bg_color(const SDL_Color& bg_color) {
 		bgcolor_ = bg_color;
-		bgalpha_ = bg_color.unused;
+		bgalpha_ = bg_color.alpha;
 	}
 	void set_border_size(int border) {border_ = border;}
 	// set width for word wrapping (use -1 to disable it)

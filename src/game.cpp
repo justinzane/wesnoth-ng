@@ -361,10 +361,11 @@ static int process_command_args(const commandline_options& cmdline_opts) {
 	if(cmdline_opts.rng_seed) {
 		srand(*cmdline_opts.rng_seed);
 	}
-	if(cmdline_opts.screenshot) {
-		static char opt[] = "SDL_VIDEODRIVER=dummy";
-		SDL_putenv(opt);
-	}
+	/** @todo Reenable screenshots with SDL2. */
+//	if(cmdline_opts.screenshot) {
+//		static char opt[] = "SDL_VIDEODRIVER=dummy";
+//		SDL_putenv(opt);
+//	}
 	if(cmdline_opts.strict_validation) {
 		strict_validation_enabled = true;
 	}

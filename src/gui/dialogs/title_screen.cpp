@@ -166,10 +166,10 @@ static bool fullscreen(CVideo& video)
 	const SDL_Rect& rect = screen_area();
 
 	SDL_Event event;
-	event.type = SDL_VIDEORESIZE;
-	event.resize.type = SDL_VIDEORESIZE;
-	event.resize.w = rect.w;
-	event.resize.h = rect.h;
+	event.type = SDL_WINDOWEVENT_RESIZE;
+	event.resize.type = SDL_WINDOWEVENT_RESIZE.type;
+	event.resize.data1 = rect.w;
+	event.resize.data2 = rect.h;
 
 	SDL_PushEvent(&event);
 
