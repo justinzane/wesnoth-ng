@@ -17,7 +17,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "game_config_manager.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "multiplayer_connect.hpp"
 #include "multiplayer_ui.hpp"
 

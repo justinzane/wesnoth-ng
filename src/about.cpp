@@ -19,8 +19,8 @@
 
 #include "about.hpp"
 
-#include "construct_dialog.hpp"
-#include "display.hpp"
+#include "display/construct_dialog.hpp"
+#include "display/display.hpp"
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
 

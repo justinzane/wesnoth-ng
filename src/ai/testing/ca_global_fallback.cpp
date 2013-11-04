@@ -21,13 +21,13 @@
 
 #include "../composite/ai.hpp"
 
-#include "../../game_display.hpp"
+#include "../../display/game_display.hpp"
 #include "../../log.hpp"
 #include "../../map.hpp"
 #include "../../map_label.hpp"
 #include "../../replay.hpp"
 #include "../../resources.hpp"
-#include "../../sdl_utils.hpp"
+#include "../../display/sdl_utils.hpp"
 #include "../../team.hpp"
 #include "../../terrain_filter.hpp"
 #include "../../tod_manager.hpp"
@@ -53,7 +53,7 @@ static void display_label(int /*side*/, const map_location& location, const std:
 	display* gui = display::get_singleton();
 	std::string team_name;
 
-	SDL_Color color = int_to_color(team::get_side_rgb(surrounded ? 2 : 1 ) );//@fixme: for tests
+	SDL_Color color = get_sdl_color(team::get_side_rgb(surrounded ? 2 : 1 ) );//@fixme: for tests
 
 	const terrain_label *res;
 	res = gui->labels().set_label(location, text, team_name, color);

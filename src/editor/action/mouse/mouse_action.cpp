@@ -18,7 +18,7 @@
 #include "../../editor_display.hpp"
 #include "mouse_action.hpp"
 
-#include "construct_dialog.hpp"
+#include "display/construct_dialog.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/editor_set_starting_position.hpp"
 #include "editor/palette/terrain_palettes.hpp"

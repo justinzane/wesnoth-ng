@@ -28,7 +28,8 @@ struct tbuilder_listbox
 {
 	explicit tbuilder_listbox(const config& cfg);
 
-	twidget* build () const;
+    using tbuilder_control::build;
+    twidget* build () const;
 
 	tscrollbar_container::tscrollbar_mode vertical_scrollbar_mode;
 	tscrollbar_container::tscrollbar_mode horizontal_scrollbar_mode;

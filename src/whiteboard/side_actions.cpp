@@ -35,7 +35,7 @@
 
 #include "actions/create.hpp"
 #include "actions/undo.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_end_exceptions.hpp"
 #include "map.hpp"
 #include "resources.hpp"

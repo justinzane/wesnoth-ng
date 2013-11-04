@@ -16,7 +16,7 @@
 #include "editor/action/action.hpp"
 #include "map_context.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "filesystem.hpp"
 #include "gettext.hpp"
 #include "map_exception.hpp"

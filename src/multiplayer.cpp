@@ -13,7 +13,7 @@
 */
 #include "multiplayer.hpp"
 
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "formula_string_utils.hpp"
 #include "game_preferences.hpp"
 #include "generators/map_create.hpp"
@@ -38,7 +38,7 @@
 #include "playcampaign.hpp"
 #include "playmp_controller.hpp"
 #include "settings.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "unit_id.hpp"
 
 #include <boost/bind.hpp>

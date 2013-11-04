@@ -25,12 +25,12 @@
 #include "storyscreen/part.hpp"
 #include "storyscreen/render.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "image.hpp"
 #include "language.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "text.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <boost/foreach.hpp>
 

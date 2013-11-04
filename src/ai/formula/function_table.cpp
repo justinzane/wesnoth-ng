@@ -24,7 +24,7 @@
 
 #include "../../attack_prediction.hpp"
 #include "../../filesystem.hpp"
-#include "../../game_display.hpp"
+#include "../../display/game_display.hpp"
 #include "../../log.hpp"
 #include "../../map_label.hpp"
 #include "../../menu_events.hpp"
@@ -1362,7 +1362,7 @@ private:
                 display* gui = display::get_singleton();
 		std::string team_name;
 
-		SDL_Color color = int_to_color(team::get_side_rgb(ai_.get_side()));
+		SDL_Color color = get_sdl_color(team::get_side_rgb(ai_.get_side()));
 
 		const terrain_label *res;
 		res = gui->labels().set_label(location, text, team_name, color);

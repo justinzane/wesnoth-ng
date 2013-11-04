@@ -22,7 +22,7 @@
 
 #include "events.hpp"
 #include "interface.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <boost/shared_ptr.hpp>
 

@@ -19,7 +19,7 @@
 #include "filesystem.hpp"
 #include "gamestatus.hpp"
 #include "tod_manager.hpp"
-#include "show_dialog.hpp"
+#include "display/show_dialog.hpp"
 
 class config_writer;
 class game_display;

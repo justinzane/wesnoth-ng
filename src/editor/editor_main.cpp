@@ -15,7 +15,7 @@
 
 #include "editor_controller.hpp"
 
-#include "../construct_dialog.hpp"
+#include "../display/construct_dialog.hpp"
 #include "../gettext.hpp"
 #include "../filesystem.hpp"
 #include "editor/action/action_base.hpp"

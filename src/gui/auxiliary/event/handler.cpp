@@ -16,7 +16,7 @@
 
 #include "gui/auxiliary/event/handler.hpp"
 
-#include "clipboard.hpp"
+#include "display/clipboard.hpp"
 #include "gui/auxiliary/event/dispatcher.hpp"
 #include "gui/auxiliary/timer.hpp"
 #include "gui/auxiliary/log.hpp"
@@ -25,7 +25,7 @@
 #include "gui/widgets/window.hpp"
 #include "hotkeys.hpp"
 #include "utils/foreach.tpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <cassert>
 

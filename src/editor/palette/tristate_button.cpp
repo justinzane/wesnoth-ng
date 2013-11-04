@@ -18,14 +18,14 @@
 
 #include "tristate_button.hpp"
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "game_config.hpp"
 #include "image.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
 #include "serialization/string_utils.hpp"
-#include "sound.hpp"
-#include "video.hpp"
+#include "display/sound.hpp"
+#include "display/video.hpp"
 #include "wml_separators.hpp"
 
 static lg::log_domain log_display("display");

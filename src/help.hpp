@@ -19,7 +19,7 @@ class display;
 class gamemap;
 
 #include "hotkeys.hpp"
-#include "construct_dialog.hpp"
+#include "display/construct_dialog.hpp"
 
 namespace help {
 

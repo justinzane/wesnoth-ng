@@ -22,7 +22,7 @@
 
 #include "intro.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
 #include "storyscreen/interface.hpp"
@@ -54,7 +54,7 @@ void the_end(display &disp, std::string text, unsigned int duration)
 		if(n)
 			sdl_fill_rect(video.getSurface(),&area,0);
 
-		const SDL_Color col = create_color(n, n, n, n);
+		const SDL_Color col = get_sdl_color(n, n, n, n);
 		font::draw_text(&video,area,font_size,col,text,area.x,area.y);
 		update_rect(area);
 

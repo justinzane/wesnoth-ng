@@ -18,11 +18,11 @@
 #include "editor/editor_main.hpp"
 #include "gamestatus.hpp"
 #include "game_config_manager.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
 #include "hotkeys.hpp"
 #include "resources.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "thread.hpp"
 
 struct jump_to_campaign_info {

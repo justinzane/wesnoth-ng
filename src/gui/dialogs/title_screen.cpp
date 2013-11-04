@@ -16,7 +16,7 @@
 
 #include "gui/dialogs/title_screen.hpp"
 
-#include "display.hpp"
+#include "display/display.hpp"
 #include "game_config.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"

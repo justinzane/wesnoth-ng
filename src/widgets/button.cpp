@@ -18,13 +18,13 @@
 
 #include "widgets/button.hpp"
 #include "game_config.hpp"
-#include "font.hpp"
+#include "display/font.hpp"
 #include "marked-up_text.hpp"
 #include "image.hpp"
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
-#include "sound.hpp"
-#include "video.hpp"
+#include "display/sound.hpp"
+#include "display/video.hpp"
 #include "wml_separators.hpp"
 
 #include "filesystem.hpp"

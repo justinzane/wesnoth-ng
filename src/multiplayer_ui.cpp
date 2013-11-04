@@ -14,9 +14,9 @@
 
 #include "global.hpp"
 
-#include "construct_dialog.hpp"
+#include "display/construct_dialog.hpp"
 #include "gamestatus.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/mp_cmd_wrapper.hpp"
@@ -26,7 +26,7 @@
 #include "menu_events.hpp"
 #include "multiplayer.hpp"
 #include "multiplayer_ui.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "wml_separators.hpp"
 #include "formula_string_utils.hpp"
 

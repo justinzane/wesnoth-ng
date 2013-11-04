@@ -1181,7 +1181,7 @@ void timage::draw(surface& canvas
 	}
 
 	if(vertical_mirror_(local_variables)) {
-		surf = flip_surface(surf, false);
+		surf = mirror_surface(surf, VERT, false);
 	}
 
 	blit_surface(surf, &src_clip, canvas, &dst_clip);

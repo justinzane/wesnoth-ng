@@ -23,7 +23,7 @@
 #include "pathfind/pathfind.hpp"
 #include "pathfind/teleport.hpp"
 
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "gettext.hpp"
 #include "log.hpp"
 #include "map.hpp"

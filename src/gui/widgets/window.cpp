@@ -21,8 +21,8 @@
 
 #include "gui/widgets/window_private.hpp"
 
-#include "font.hpp"
-#include "game_display.hpp"
+#include "display/font.hpp"
+#include "display/game_display.hpp"
 #include "gettext.hpp"
 #include "log.hpp"
 #include "gui/auxiliary/event/distributor.hpp"
@@ -42,7 +42,7 @@
 #include "preferences.hpp"
 #include "preferences_display.hpp"
 #include "utils/foreach.tpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 #include <boost/bind.hpp>
 

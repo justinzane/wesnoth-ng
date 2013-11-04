@@ -25,7 +25,7 @@
 #include "../manager.hpp"
 #include "../../actions/attack.hpp"
 #include "../../attack_prediction.hpp"
-#include "../../game_display.hpp"
+#include "../../display/game_display.hpp"
 #include "../../log.hpp"
 #include "../../map.hpp"
 #include "../../map_label.hpp"

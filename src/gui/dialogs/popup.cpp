@@ -17,7 +17,7 @@
 #include "gui/dialogs/popup.hpp"
 
 #include "gui/widgets/window.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 namespace gui2 {
 

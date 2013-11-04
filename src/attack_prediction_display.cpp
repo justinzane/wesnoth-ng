@@ -18,7 +18,7 @@
 #include "actions/attack.hpp"
 #include "attack_prediction.hpp"
 #include "gettext.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "language.hpp"
 #include "marked-up_text.hpp"
 #include "resources.hpp"

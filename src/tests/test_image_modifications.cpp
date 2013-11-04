@@ -53,11 +53,11 @@ private:
 	{
 		config cfg;
 		cfg.add_child("color_range",
-			       create_color_range("red",
+			       get_sdl_color_range("red",
 						  "FF0000,FFFFFF,000000,FF0000",
 						  "Red"));
 		cfg.add_child("color_range",
-			       create_color_range("blue",
+			       get_sdl_color_range("blue",
 						  "2E419B,FFFFFF,0F0F0F,0000FF",
 						  "Blue"));
 
@@ -93,7 +93,7 @@ private:
 		paths_manager_.set_paths(cfg);
 	}
 
-	config create_color_range(const std::string& id,
+	config get_sdl_color_range(const std::string& id,
 				  const std::string& rgb,
 				  const std::string& name)
 	{

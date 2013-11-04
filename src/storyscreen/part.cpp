@@ -31,7 +31,7 @@
 #include "serialization/string_utils.hpp"
 #include "util.hpp"
 #include "variable.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 
 namespace storyscreen {
 

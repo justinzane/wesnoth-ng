@@ -34,11 +34,11 @@
 #include "mp_game_utils.hpp"
 #include "multiplayer.hpp"
 #include "multiplayer_connect_engine.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "gettext.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "wml_exception.hpp"
 #include "formula_string_utils.hpp"
 

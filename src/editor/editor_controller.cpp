@@ -36,17 +36,16 @@
 #include "gui/widgets/window.hpp"
 #include "wml_exception.hpp"
 
-#include "dialogs.hpp"
-
-#include "../clipboard.hpp"
+#include "../display/dialogs.hpp"
+#include "../display/clipboard.hpp"
+#include "../display/halo.hpp"
+#include "../display/sound.hpp"
 #include "../game_preferences.hpp"
 #include "../gettext.hpp"
 #include "../preferences_display.hpp"
 #include "../rng.hpp"
-#include "../sound.hpp"
 #include "../leader_scroll_dialog.hpp"
 
-#include "halo.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
@@ -104,7 +103,7 @@ void editor_controller::init_gui()
 	floating_label_manager_.reset(new font::floating_label_context());
 	gui().set_draw_coordinates(preferences::editor::draw_hex_coordinates());
 	gui().set_draw_terrain_codes(preferences::editor::draw_terrain_codes());
-	halo_manager_.reset(new halo::manager(*gui_));
+	halo_manager_.reset(new halo_mgr(*gui_));
 }
 
 void editor_controller::init_tods(const config& game_config)

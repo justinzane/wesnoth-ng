@@ -14,7 +14,7 @@
 #include "mp_game_utils.hpp"
 
 #include "config.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "formula_string_utils.hpp"
 #include "gamestatus.hpp"
 #include "game_config_manager.hpp"
@@ -58,7 +58,7 @@ config initial_level_config(game_display& disp, const mp_game_settings& params,
 			resources::config_manager->
 				load_game_config_for_game(state.classification());
 		}
-		catch (load_game_cancelled_exception){
+		catch (load_game_cancelled_exception&){
 			return config();
 		} catch(config::error&) {
 			return config();

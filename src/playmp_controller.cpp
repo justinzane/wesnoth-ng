@@ -15,7 +15,7 @@
 
 #include "playmp_controller.hpp"
 
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 
 #include "actions/undo.hpp"
 #include "game_end_exceptions.hpp"
@@ -25,7 +25,7 @@
 #include "preferences.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "formula_string_utils.hpp"
 #include "whiteboard/manager.hpp"
 

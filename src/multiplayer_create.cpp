@@ -21,9 +21,9 @@
 
 #include "gettext.hpp"
 #include "game_config_manager.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
-#include "construct_dialog.hpp"
+#include "display/construct_dialog.hpp"
 #include "settings.hpp"
 #include "map.hpp"
 #include "map_exception.hpp"

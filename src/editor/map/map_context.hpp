@@ -18,7 +18,7 @@
 #include "editor_map.hpp"
 #include "gamestatus.hpp"
 #include "map_label.hpp"
-#include "sound_music_track.hpp"
+#include "display/sound_music_track.hpp"
 #include "tod_manager.hpp"
 #include "unit_map.hpp"
 #include "overlay.hpp"

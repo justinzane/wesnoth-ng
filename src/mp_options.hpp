@@ -17,7 +17,7 @@
 
 #include <string>
 #include "config.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #include "gui/widgets/widget.hpp"
 #include "gui/widgets/window.hpp"
 

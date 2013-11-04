@@ -24,7 +24,7 @@
 #include "help.hpp"
 
 #include "about.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "exceptions.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
@@ -33,7 +33,7 @@
 #include "log.hpp"
 #include "map.hpp"
 #include "marked-up_text.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "unit.hpp"
 #include "unit_helper.hpp"
 #include "wml_separators.hpp"

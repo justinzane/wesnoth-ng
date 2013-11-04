@@ -14,7 +14,7 @@
 
 #include "color_range.hpp"
 #include "config.hpp"
-#include "display.hpp"
+#include "display/display.hpp"
 #include "game_config.hpp"
 #include "image.hpp"
 #include "image_modifications.hpp"
@@ -155,52 +155,31 @@ surface rc_modification::operator()(const surface& src) const
 	return recolor_image(src, rc_map_);
 }
 
-surface fl_modification::operator()(const surface& src) const
-{
+// Not causing upside-down unit images.
+surface fl_modification::operator()(const surface& src) const {
 	surface ret = src;
 
 	if ( horiz_  && vert_ ) {
-		// Slightly faster than doing both a flip and a flop.
-		ret = rotate_180_surface(ret);
-	}
-
-	else if(horiz_) {
-		ret = flip_surface(ret);
-	}
-
-	else if(vert_) {
-		ret = flop_surface(ret);
+		ret = rotate_surface(ret, 180.0, 1.0, (double)(ret->w)/2.0, (double)(ret->h)/2.0);
+	} else if(horiz_) {
+		ret = mirror_surface(ret, HORIZ);
+	} else if(vert_) {
+		ret = mirror_surface(ret, VERT);
 	}
 
 	return ret;
 }
 
-surface rotate_modification::operator()(const surface& src) const
-{
-	// Convert the number of degrees to the interval [0,360].
-	const int normalized = degrees_ >= 0 ?
-		degrees_ - 360*(degrees_/360) :
-		degrees_ + 360*(1 + (-degrees_)/360); // In case compilers disagree as to what -90/360 is.
-
-	switch ( normalized )
-	{
-		case 0:   return src;
-		case 90:  return rotate_90_surface(src, true);
-		case 180: return rotate_180_surface(src);
-		case 270: return rotate_90_surface(src, false);
-		case 360: return src;
-	}
-
-	return rotate_any_surface(src, normalized, zoom_, offset_);
+surface rotate_modification::operator()(const surface& src) const {
+	return rotate_surface(src, degrees_, (double)zoom_,
+	                      (double)(src->w)/2.0, (double)(src->h)/2.0);
 }
 
-surface gs_modification::operator()(const surface& src) const
-{
+surface gs_modification::operator()(const surface& src) const {
 	return greyscale_image(src);
 }
 
-surface crop_modification::operator()(const surface& src) const
-{
+surface crop_modification::operator()(const surface& src) const {
 	SDL_Rect area = slice_;
 	if(area.w == 0) {
 		area.w = src->w;
@@ -311,7 +290,9 @@ int mask_modification::get_y() const
 }
 
 surface light_modification::operator()(const surface& src) const {
-	if(src == NULL) { return NULL; }
+	if(src == NULL) {
+	    throw std::invalid_argument("Cannot light_modification::operator() with null surface.");
+	}
 
 	//light_surface wants a neutral surface having same dimensions
 	surface nsurf;
@@ -319,7 +300,7 @@ surface light_modification::operator()(const surface& src) const {
 		nsurf = scale_surface(surf_, src->w, src->h, false);
 	else
 		nsurf = make_neutral_surface(surf_);
-	return light_surface(src, nsurf);;
+	return light_surface(src, nsurf);
 }
 
 const surface& light_modification::get_surface() const
@@ -420,9 +401,8 @@ float blend_modification::get_a() const
 	return a_;
 }
 
-surface bl_modification::operator()(const surface& src) const
-{
-	return blur_alpha_surface(src, depth_);
+surface bl_modification::operator()(const surface& src) const {
+	return blur_surface(src, depth_);
 }
 
 int bl_modification::get_depth() const
@@ -950,7 +930,7 @@ REGISTER_MOD_PARSER(BG, args)
 		c[i] = lexical_cast_default<int>(factors[i]);
 	}
 
-	return new background_modification(create_color(c[0], c[1], c[2], c[3]));
+	return new background_modification(get_sdl_color(c[0], c[1], c[2], c[3]));
 }
 
 } // end anon namespace

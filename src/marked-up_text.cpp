@@ -22,11 +22,11 @@
 
 #include "global.hpp"
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
 #include "serialization/string_utils.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #include "wml_exception.hpp"
 
 namespace font {

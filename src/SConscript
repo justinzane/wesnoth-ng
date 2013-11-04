@@ -68,13 +68,18 @@ libwesnoth_core_sources.extend([
 libwesnoth_core = [env.Library("wesnoth_core", libwesnoth_core_sources)]
 
 libwesnoth_sources = Split("""
-    arrow.cpp
+    whiteboard/arrow.cpp
     pathfind/astarsearch.cpp
     builder.cpp
-    clipboard.cpp
-    construct_dialog.cpp
-    cursor.cpp
-    display.cpp
+    display/clipboard.cpp
+    display/construct_dialog.cpp
+    display/cursor.cpp
+    display/display.cpp
+    display/show_dialog.cpp
+    display/sound_music_track.cpp
+    display/tooltips.cpp
+    display/video.cpp
+    display/theme.cpp
     events.cpp
     generic_event.cpp
     hotkeys.cpp
@@ -102,17 +107,12 @@ libwesnoth_sources = Split("""
     race.cpp
     random.cpp
     reports.cpp
-    show_dialog.cpp
-    sound.cpp
+    display/sound.cpp
     soundsource.cpp
-    sound_music_track.cpp
     terrain.cpp
     terrain_translation.cpp
     text.cpp
     time_of_day.cpp
-    tooltips.cpp
-    video.cpp
-    theme.cpp
     widgets/button.cpp
     widgets/file_menu.cpp
     widgets/label.cpp
@@ -127,7 +127,8 @@ libwesnoth_sources = Split("""
     wml_exception.cpp
     """)
 libwesnoth_sources.extend([
-    client_env.Object("font.cpp", EXTRA_DEFINE = client_env['fribidi'] and "HAVE_FRIBIDI" or None),
+    client_env.Object("display/font.cpp", 
+                      EXTRA_DEFINE = client_env['fribidi'] and "HAVE_FRIBIDI" or None),
     ])
 
 libwesnoth = client_env.Library("wesnoth", libwesnoth_sources)
@@ -144,7 +145,7 @@ libcampaignd_sources = Split("""
 libcampaignd = env.Library("campaignd", libcampaignd_sources, OBJPREFIX = "campaignd_")
 
 libwesnoth_sdl_sources = Split("""
-    sdl_utils.cpp
+    display/sdl_utils.cpp
     tracer.cpp
     """)
 libwesnoth_sdl = client_env.Library("wesnoth_sdl", libwesnoth_sdl_sources)
@@ -157,19 +158,20 @@ libcutter = client_env.Library("cutter", libcutter_sources)
 
 # Used by both 'wesnoth' and 'test' targets
 wesnoth_sources = Split("""
-    about.cpp
     actions/attack.cpp
     actions/create.cpp
     actions/heal.cpp
     actions/move.cpp
     actions/undo.cpp
-    actions/vision.cpp
+    actions/vision.cpp""" + 
+    """
     addon/client.cpp
     addon/info.cpp
     addon/manager.cpp
     addon/manager_ui.cpp
     addon/state.cpp
-    addon/validation.cpp
+    addon/validation.cpp""" + 
+    """
     ai/actions.cpp
     ai/akihara/recruitment.cpp
     ai/composite/ai.cpp
@@ -210,16 +212,17 @@ wesnoth_sources = Split("""
     ai/testing/ca_testing_move_to_targets.cpp
     ai/testing/ca_testing_recruitment.cpp
     ai/testing/stage_fallback.cpp
-    ai/testing/stage_rca.cpp
-    animated_game.cpp
-    attack_prediction.cpp
-    attack_prediction_display.cpp
-    callable_objects.cpp
-    commandline_options.cpp
-    config_cache.cpp
-    controller_base.cpp
-    desktop_util.cpp
-    dialogs.cpp
+    ai/testing/stage_rca.cpp""" +
+    """
+    display/animated_game.cpp
+    display/desktop_util.cpp
+    display/dialogs.cpp
+    display/filechooser.cpp
+    display/floating_textbox.cpp
+    display/game_display.cpp
+    display/portrait.cpp
+    """ + 
+    """
     editor/action/action.cpp
     editor/action/action_unit.cpp
     editor/action/action_label.cpp
@@ -247,28 +250,14 @@ wesnoth_sources = Split("""
     editor/editor_main.cpp
     editor/editor_preferences.cpp
     editor/toolkit/brush.cpp
-    editor/toolkit/editor_toolkit.cpp
-    filechooser.cpp
-    flg_manager.cpp
-    floating_textbox.cpp
-    formula.cpp
-    formula_debugger.cpp
-    formula_debugger_fwd.cpp
-    formula_function.cpp
-    formula_string_utils.cpp
-    formula_tokenizer.cpp
-    game_config_manager.cpp
-    game_controller.cpp
-    game_display.cpp
-    game_errors.cpp
+    editor/toolkit/editor_toolkit.cpp""" + 
+    """
     game_events/action_wml.cpp
     game_events/conditional_wml.cpp
     game_events/entity_location.cpp
     game_events/handlers.cpp
-    game_events/pump.cpp
-    game_instance.cpp
-    game_preferences.cpp
-    gamestatus.cpp
+    game_events/pump.cpp""" + 
+    """
     gui/auxiliary/canvas.cpp
     gui/auxiliary/event/dispatcher.cpp
     gui/auxiliary/event/distributor.cpp
@@ -427,8 +416,46 @@ wesnoth_sources = Split("""
     gui/widgets/vertical_scrollbar.cpp
     gui/widgets/viewport.cpp
     gui/widgets/widget.cpp
-    gui/widgets/window.cpp
-    halo.cpp
+    gui/widgets/window.cpp""" +
+    """
+    whiteboard/action.cpp
+    whiteboard/attack.cpp
+    whiteboard/highlighter.cpp
+    whiteboard/manager.cpp
+    whiteboard/mapbuilder.cpp
+    whiteboard/move.cpp
+    whiteboard/recall.cpp
+    whiteboard/recruit.cpp
+    whiteboard/side_actions.cpp
+    whiteboard/suppose_dead.cpp
+    whiteboard/utility.cpp""" +
+    """
+    widgets/combo.cpp
+    widgets/combo_drag.cpp
+    widgets/drop_target.cpp
+    widgets/scrollpane.cpp""" +
+    """
+    about.cpp
+    attack_prediction.cpp
+    attack_prediction_display.cpp
+    callable_objects.cpp
+    commandline_options.cpp
+    config_cache.cpp
+    controller_base.cpp
+    flg_manager.cpp
+    formula.cpp
+    formula_debugger.cpp
+    formula_debugger_fwd.cpp
+    formula_function.cpp
+    formula_string_utils.cpp
+    formula_tokenizer.cpp
+    game_config_manager.cpp
+    game_controller.cpp
+    game_errors.cpp
+    game_instance.cpp
+    game_preferences.cpp
+    gamestatus.cpp
+    display/halo.cpp
     help.cpp
     intro.cpp
     leader_scroll_dialog.cpp
@@ -461,7 +488,6 @@ wesnoth_sources = Split("""
     playmp_controller.cpp
     playsingle_controller.cpp
     playturn.cpp
-    portrait.cpp
     replay.cpp
     replay_controller.cpp
     resources.cpp
@@ -492,26 +518,11 @@ wesnoth_sources = Split("""
     unit_map.cpp
     unit_types.cpp
     variable.cpp
-    variant.cpp
-    whiteboard/action.cpp
-    whiteboard/attack.cpp
-    whiteboard/highlighter.cpp
-    whiteboard/manager.cpp
-    whiteboard/mapbuilder.cpp
-    whiteboard/move.cpp
-    whiteboard/recall.cpp
-    whiteboard/recruit.cpp
-    whiteboard/side_actions.cpp
-    whiteboard/suppose_dead.cpp
-    whiteboard/utility.cpp
-    widgets/combo.cpp
-    widgets/combo_drag.cpp
-    widgets/drop_target.cpp
-    widgets/scrollpane.cpp
-    """)
+    variant.cpp"""
+)
 
 if env["PLATFORM"] == "win32":
-    wesnoth_sources.append("windows_tray_notification.cpp")
+    wesnoth_sources.append("display/windows_tray_notification.cpp")
 
 wesnoth_sources.extend(client_env.Object("game_preferences_display.cpp", EXTRA_DEFINE = env["PLATFORM"] != "win32" and "WESNOTH_PREFIX='\"$prefix\"'" or None))
 wesnoth_sources.extend(client_env.Object("hotkey_preferences_display.cpp", EXTRA_DEFINE = env["PLATFORM"] != "win32" and "WESNOTH_PREFIX='\"$prefix\"'" or None))
@@ -609,7 +620,7 @@ wesmage_sources = Split("""
     wesmage/options.cpp
     tools/dummy_video.cpp
     tools/exploder_utils.cpp
-    sdl_utils.cpp
+    display/sdl_utils.cpp
     tracer.cpp
     loadscreen_empty.cpp
     """)
@@ -651,7 +662,7 @@ create_images_sources = Split("""
     tests/create_images.cpp
     tools/dummy_video.cpp
     tools/exploder_utils.cpp
-    sdl_utils.cpp
+    display/sdl_utils.cpp
     tracer.cpp
     loadscreen_empty.cpp
 """)

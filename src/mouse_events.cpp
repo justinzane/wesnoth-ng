@@ -20,7 +20,7 @@
 #include "actions/move.hpp"
 #include "actions/undo.hpp"
 #include "attack_prediction_display.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_events/pump.hpp"
 #include "gettext.hpp"
@@ -35,7 +35,7 @@
 #include "menu_events.hpp"
 #include "pathfind/teleport.hpp"
 #include "play_controller.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "replay.hpp"
 #include "resources.hpp"
 #include "rng.hpp"
@@ -877,9 +877,9 @@ int mouse_handler::show_attack_dialog(const map_location& attacker_loc, const ma
 
 			// color CtH in red-yellow-green
 			SDL_Color att_cth_color =
-					int_to_color( game_config::red_to_green(att.chance_to_hit) );
+					get_sdl_color( game_config::red_to_green(att.chance_to_hit) );
 			SDL_Color def_cth_color =
-					int_to_color( game_config::red_to_green(def.chance_to_hit) );
+					get_sdl_color( game_config::red_to_green(def.chance_to_hit) );
 
 			atts << IMAGE_PREFIX << attw.icon() << COLUMN_SEPARATOR
 					<< font::BOLD_TEXT << attw_name  << "\n"

@@ -16,7 +16,7 @@
 
 #include "gui/widgets/text_box.hpp"
 
-#include "font.hpp"
+#include "display/font.hpp"
 #include "gui/auxiliary/log.hpp"
 #include "gui/auxiliary/widget_definition/text_box.hpp"
 #include "gui/auxiliary/window_builder/text_box.hpp"

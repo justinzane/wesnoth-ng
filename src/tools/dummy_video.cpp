@@ -14,8 +14,8 @@
 
 /** @file */
 
-#include "../video.hpp"
-#include "../sdl_utils.hpp"
+#include "../display/video.hpp"
+#include "../display/sdl_utils.hpp"
 
 static surface dummy_screen_surface(NULL);
 

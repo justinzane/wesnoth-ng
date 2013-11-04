@@ -16,7 +16,7 @@
 
 #include "gui/widgets/text.hpp"
 
-#include "clipboard.hpp"
+#include "display/clipboard.hpp"
 #include "gui/auxiliary/log.hpp"
 #include "serialization/string_utils.hpp"
 

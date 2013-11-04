@@ -28,8 +28,9 @@
 #include "../actions/move.hpp"
 #include "../actions/vision.hpp"
 #include "../ai/manager.hpp"
-#include "../dialogs.hpp"
-#include "../game_display.hpp"
+#include "../display/dialogs.hpp"
+#include "../display/game_display.hpp"
+#include "../display/sound.hpp"
 #include "../game_preferences.hpp"
 #include "../gettext.hpp"
 #include "../gui/dialogs/gamestate_inspector.hpp"
@@ -48,7 +49,6 @@
 #include "../replay.hpp"
 #include "../resources.hpp"
 #include "../side_filter.hpp"
-#include "../sound.hpp"
 #include "../soundsource.hpp"
 #include "../terrain_filter.hpp"
 #include "../unit_display.hpp"
@@ -1513,7 +1513,7 @@ WML_HANDLER_FUNCTION(print, /*event_info*/, cfg)
 
 	int size = cfg["size"].to_int(font::SIZE_SMALL);
 	int lifetime = cfg["duration"].to_int(50);
-	SDL_Color color = create_color(cfg["red"], cfg["green"], cfg["blue"]);
+	SDL_Color color = get_sdl_color(cfg["red"], cfg["green"], cfg["blue"]);
 
 	const SDL_Rect& rect = resources::screen->map_outside_area();
 

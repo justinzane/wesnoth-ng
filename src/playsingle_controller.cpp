@@ -24,7 +24,7 @@
 #include "ai/manager.hpp"
 #include "ai/game_info.hpp"
 #include "ai/testing.hpp"
-#include "dialogs.hpp"
+#include "display/dialogs.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_events/pump.hpp"
 #include "game_preferences.hpp"
@@ -36,7 +36,7 @@
 #include "playturn.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "formula_string_utils.hpp"
 #include "events.hpp"
 #include "save_blocker.hpp"
@@ -576,7 +576,7 @@ void playsingle_controller::play_turn(bool save)
 		try {
 			save_blocker blocker;
 			init_side(player_number_ - 1);
-		} catch (end_turn_exception) {
+		} catch (end_turn_exception&) {
 			if (current_team().is_network() == false) {
 				turn_info turn_data(player_number_, replay_sender_);
 				recorder.end_turn();

@@ -25,6 +25,7 @@
 #include "statistics.hpp"
 #include "tod_manager.hpp"
 #include "gamestatus.hpp"
+#include "display/halo.hpp"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -43,7 +44,7 @@ namespace game_events {
 } // namespace game_events
 
 namespace halo {
-	struct manager;
+	struct halo_mgr;
 } // namespace halo
 
 namespace preferences {
@@ -205,7 +206,7 @@ protected:
 	boost::scoped_ptr<preferences::display_manager> prefs_disp_manager_;
 	boost::scoped_ptr<tooltips::manager> tooltips_manager_;
 	boost::scoped_ptr<game_events::manager> events_manager_;
-	boost::scoped_ptr<halo::manager> halo_manager_;
+	boost::scoped_ptr<halo_mgr> halo_manager_;
 	font::floating_label_context labels_manager_;
 	help::help_manager help_manager_;
 	events::mouse_handler mouse_handler_;

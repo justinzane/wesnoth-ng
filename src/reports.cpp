@@ -18,8 +18,8 @@
 #include "attack_prediction.hpp"
 #include "editor/editor_controller.hpp"
 #include "editor/palette/terrain_palettes.hpp"
-#include "font.hpp"
-#include "game_display.hpp"
+#include "display/font.hpp"
+#include "display/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "language.hpp"
@@ -513,7 +513,7 @@ static config unit_defense(const unit* u, const map_location& displayed_unit_hex
 
 	const t_translation::t_terrain &terrain = map[displayed_unit_hex];
 	int def = 100 - u->defense_modifier(terrain);
-	SDL_Color color = int_to_color(game_config::red_to_green(def));
+	SDL_Color color = get_sdl_color(game_config::red_to_green(def));
 	str << span_color(color) << def << "%</span>";
 	tooltip << _("Terrain: ") << "<b>" << map.get_terrain_info(terrain).description() << "</b>\n";
 
@@ -529,7 +529,7 @@ static config unit_defense(const unit* u, const map_location& displayed_unit_hex
 				revert = false;
 			} else {
 				int t_def = 100 - u->defense_modifier(t);
-				SDL_Color color = int_to_color(game_config::red_to_green(t_def));
+				SDL_Color color = get_sdl_color(game_config::red_to_green(t_def));
 				tooltip << '\t' << map.get_terrain_info(t).description() << ": "
 					<< span_color(color) << t_def << "%</span> "
 					<< (revert ? _("maximum^max.") : _("minimum^min.")) << '\n';
@@ -625,7 +625,7 @@ static config unit_moves(const unit* u)
 	}
 
 	int grey = 128 + int((255 - 128) * movement_frac);
-	SDL_Color c = create_color(grey, grey, grey);
+	SDL_Color c = get_sdl_color(grey, grey, grey);
 	str << span_color(c) << u->movement_left() << '/' << u->total_movement() << naps;
 	return text_report(str.str(), tooltip.str());
 }
@@ -896,7 +896,7 @@ static config unit_weapons(const unit *attacker, const map_location &attacker_po
 				<< _("Damage: ") << "<b>" << "0" << "</b>\n";
 		}
 
-		SDL_Color chance_color = int_to_color(game_config::red_to_green(chance_to_hit));
+		SDL_Color chance_color = get_sdl_color(game_config::red_to_green(chance_to_hit));
 
 		// Total damage.
 		str << "  " << span_color(dmg_color) << total_damage << naps << span_color(font::weapon_color)
@@ -955,7 +955,7 @@ static config unit_weapons(const unit *attacker, const map_location &attacker_po
 			char hp_buf[10];
 			format_hp(hp_buf, hp);
 
-			SDL_Color prob_color = int_to_color(game_config::blue_to_white(prob * 100.0, true));
+			SDL_Color prob_color = get_sdl_color(game_config::blue_to_white(prob * 100.0, true));
 
 			str		<< span_color(font::weapon_details_color) << "  " << "  "
 					<< span_color(u->hp_color(hp)) << hp_buf << naps

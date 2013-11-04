@@ -18,8 +18,8 @@
 #include "global.hpp"
 
 #include "widgets/widget.hpp"
-#include "video.hpp"
-#include "tooltips.hpp"
+#include "display/video.hpp"
+#include "display/tooltips.hpp"
 
 #include <cassert>
 

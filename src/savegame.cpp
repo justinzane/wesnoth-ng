@@ -18,9 +18,9 @@
 
 #include "savegame.hpp"
 
-#include "dialogs.hpp" //FIXME: get rid of this as soon as the two remaining dialogs are moved to gui2
+#include "display/dialogs.hpp" //FIXME: get rid of this as soon as the two remaining dialogs are moved to gui2
 #include "formula_string_utils.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"

@@ -22,7 +22,7 @@
 #include "formula_debugger.hpp"
 #include "gettext.hpp"
 #include "game_config.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 #include "generators/map_create.hpp"
 #include "gui/auxiliary/layout_exception.hpp"
 #include "gui/dialogs/addon_connect.hpp"
@@ -62,7 +62,7 @@
 #include "gui/widgets/window.hpp"
 #include "language.hpp"
 #include "tests/utils/fake_display.hpp"
-#include "video.hpp"
+#include "display/video.hpp"
 #include "wml_exception.hpp"
 
 #include <boost/bind.hpp>

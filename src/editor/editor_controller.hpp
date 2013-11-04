@@ -25,9 +25,9 @@
 #include "../controller_base.hpp"
 #include "../help.hpp"
 #include "../mouse_handler_base.hpp"
-#include "../tooltips.hpp"
-
-#include "sound_music_track.hpp"
+#include "../display/tooltips.hpp"
+#include "../display/halo.hpp"
+#include "../display/sound_music_track.hpp"
 
 class map_generator;
 
@@ -47,10 +47,6 @@ struct set_random_generator;
 namespace preferences {
 	struct display_manager;
 } // namespace preferences
-
-namespace halo {
-	struct manager;
-} // namespace halo
 
 namespace editor {
 
@@ -234,7 +230,7 @@ class editor_controller : public controller_base,
 		tooltips::manager tooltip_manager_;
 		boost::scoped_ptr<font::floating_label_context> floating_label_manager_;
 
-		boost::scoped_ptr<halo::manager> halo_manager_;
+		boost::scoped_ptr<halo_mgr> halo_manager_;
 		boost::scoped_ptr<help::help_manager> help_manager_;
 
 		/** Quit main loop flag */

@@ -21,7 +21,7 @@ class  battle_context;
 struct battle_context_unit_stats;
 struct map_location;
 class  unit;
-#include "show_dialog.hpp"
+#include "display/show_dialog.hpp"
 
 // This preview pane is shown in the "Damage Calculations" dialog.
 class battle_prediction_pane : public gui::preview_pane

@@ -15,8 +15,8 @@
 
 #include "controller_base.hpp"
 
-#include "dialogs.hpp"
-#include "display.hpp"
+#include "display/dialogs.hpp"
+#include "display/display.hpp"
 #include "game_preferences.hpp"
 #include "log.hpp"
 #include "mouse_handler_base.hpp"

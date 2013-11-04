@@ -17,7 +17,7 @@
 #include "palette_manager.hpp"
 #include "widgets/widget.hpp"
 
-#include "tooltips.hpp"
+#include "display/tooltips.hpp"
 #include "editor/action/mouse/mouse_action.hpp"
 #include <boost/foreach.hpp>
 

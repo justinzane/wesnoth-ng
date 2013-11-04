@@ -18,7 +18,7 @@
 #include "statistics_dialog.hpp"
 #include "unit_types.hpp"
 #include "wml_separators.hpp"
-#include "game_display.hpp"
+#include "display/game_display.hpp"
 
 
 bool statistics_dialog::use_campaign_ = false;

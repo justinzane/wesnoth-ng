@@ -23,7 +23,7 @@
 #include "gui/widgets/window.hpp"
 #include "gui/widgets/detail/register.tpp"
 #include "gui/widgets/settings.hpp"
-#include "sound.hpp"
+#include "display/sound.hpp"
 #include "utils/foreach.tpp"
 
 #include <boost/bind.hpp>
