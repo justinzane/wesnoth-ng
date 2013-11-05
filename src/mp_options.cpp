@@ -94,7 +94,7 @@ void manager::init_info(const config& cfg, const std::string& key)
 	}
 }
 
-manager::manager(const config& gamecfg, CVideo& video, const config& values)
+manager::manager(const config& gamecfg, ui_window& video, const config& values)
 		: options_info_()
 		, values_(values)
 		, video_(video)

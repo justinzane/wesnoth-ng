@@ -22,7 +22,7 @@
 #include "../composite/ai.hpp"
 #include "../actions.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
+#include "../../board/map.hpp"
 #include "../../resources.hpp"
 #include "../../team.hpp"
 #include "../../terrain_filter.hpp"

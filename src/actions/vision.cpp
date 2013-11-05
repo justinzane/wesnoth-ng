@@ -21,20 +21,32 @@
 
 #include "move.hpp"
 
+#include "../board/map.hpp"
+#include "../board/map_label.hpp"
+#include "../board/map_location.hpp"
 #include "../config.hpp"
-#include "../display/game_display.hpp"
+#include "../game_events/entity_location.hpp"
 #include "../game_events/pump.hpp"
+#include "../gui/game_display.hpp"
 #include "../log.hpp"
-#include "../map.hpp"
-#include "../map_label.hpp"
-#include "../map_location.hpp"
 #include "../pathfind/pathfind.hpp"
 #include "../play_controller.hpp"
 #include "../resources.hpp"
 #include "../team.hpp"
 #include "../unit.hpp"
+#include "../unit_map.hpp"
+#include "../util.hpp"
 
 #include <boost/foreach.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <stddef.h>
+
+#include <climits>
+#include <cstdbool>
+#include <iostream>
+#include <string>
 
 static lg::log_domain log_engine("engine");
 #define DBG_NG LOG_STREAM(debug, log_engine)

@@ -27,7 +27,7 @@ public:
 	tgame_delete();
 
 	/** The execute function see @ref tdialog for more information. */
-	static bool execute(CVideo& video)
+	static bool execute(ui_window& video)
 	{
 		return tgame_delete().show(video);
 	}

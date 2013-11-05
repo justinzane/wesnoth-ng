@@ -19,9 +19,9 @@
 
 #include "widgets/menu.hpp"
 
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "image.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 namespace gui {
 

@@ -20,15 +20,15 @@
 #include "loadscreen.hpp"
 
 #include "log.hpp"
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "marked-up_text.hpp"
 #include "gettext.hpp"
 #include "filesystem.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 #include "image.hpp"
 
-#include <SDL_events.h>
-#include <SDL_image.h>
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_image.h>
 
 #include <cassert>
 
@@ -39,7 +39,7 @@ static lg::log_domain log_loadscreen("loadscreen");
 
 loadscreen::global_loadscreen_manager* loadscreen::global_loadscreen_manager::manager = NULL;
 
-loadscreen::global_loadscreen_manager::global_loadscreen_manager(CVideo& screen)
+loadscreen::global_loadscreen_manager::global_loadscreen_manager(ui_window& screen)
   : owns(global_loadscreen == NULL)
 {
 	if(owns) {
@@ -66,7 +66,7 @@ void loadscreen::global_loadscreen_manager::reset()
 	}
 }
 
-loadscreen::loadscreen(CVideo &screen, const int percent):
+loadscreen::loadscreen(ui_window &screen, const int percent):
 	screen_(screen),
 	textarea_(),
 	logo_surface_(image::get_image("misc/logo.png")),

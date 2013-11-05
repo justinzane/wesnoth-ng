@@ -18,11 +18,11 @@
 #include "editor/editor_main.hpp"
 #include "gamestatus.hpp"
 #include "game_config_manager.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_preferences.hpp"
 #include "hotkeys.hpp"
 #include "resources.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "thread.hpp"
 
 struct jump_to_campaign_info {
@@ -107,7 +107,7 @@ class game_controller {
 
         const commandline_options& cmdline_opts_;
         util::scoped_ptr<game_display> disp_;
-        CVideo video_;
+        ui_window video_;
 
         /** @note this should get destroyed *after* the video, since we want
          *  to clean up threads after the display disappears. */

@@ -24,7 +24,7 @@
 #include <vector>
 #include <boost/next_prior.hpp>
 
-#include "SDL_types.h"
+#include "SDL2/SDL_types.h"
 
 /** The type we use to represent Unicode strings. */
 typedef std::vector<wchar_t> wide_string;
@@ -332,8 +332,8 @@ private:
 	std::pair<std::string::const_iterator, std::string::const_iterator> current_substr;
 };
 
-std::string wstring_to_string(const wide_string &);
-wide_string string_to_wstring(const std::string &);
+std::string wstring_to_string(const std::wstring &);
+std::wstring string_to_wstring(const std::string &);
 std::string wchar_to_string(const wchar_t);
 
 /** Returns a lowercased version of the string. */

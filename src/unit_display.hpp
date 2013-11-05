@@ -20,8 +20,8 @@
 #ifndef UNIT_DISPLAY_HPP_INCLUDED
 #define UNIT_DISPLAY_HPP_INCLUDED
 
-#include "display/game_display.hpp"
-#include "map_location.hpp"
+#include "gui/game_display.hpp"
+#include "board/map_location.hpp"
 #include "unit_animation.hpp"
 
 class attack_type;

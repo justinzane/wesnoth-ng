@@ -95,7 +95,7 @@ void taddon_list::expand(tgrid& grid)
 			.set_visible(twidget::tvisible::visible);
 }
 
-void taddon_list::pre_show(CVideo& /*video*/, twindow& window)
+void taddon_list::pre_show(ui_window& /*video*/, twindow& window)
 {
 	if(new_widgets) {
 

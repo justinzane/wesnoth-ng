@@ -37,7 +37,7 @@ static lg::log_domain log_whiteboard("whiteboard");
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 
 class arrow;
 struct map_location; //not used in the typedefs, saves a few forward declarations

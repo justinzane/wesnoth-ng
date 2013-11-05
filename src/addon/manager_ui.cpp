@@ -18,8 +18,8 @@
 #include "addon/info.hpp"
 #include "addon/manager.hpp"
 #include "addon/state.hpp"
-#include "display/dialogs.hpp"
-#include "display/display.hpp"
+#include "gui/dialogs.hpp"
+#include "gui/display.hpp"
 #include "filesystem.hpp"
 #include "formatter.hpp"
 #include "formula_string_utils.hpp"
@@ -260,7 +260,7 @@ bool do_resolve_addon_dependencies(display& disp, addons_client& client, const a
 }
 
 /** Checks whether the given add-on has local .pbl or VCS information and asks before overwriting it. */
-bool do_check_before_overwriting_addon(CVideo& video, const addon_info& addon)
+bool do_check_before_overwriting_addon(ui_window& video, const addon_info& addon)
 {
 	const std::string& addon_id = addon.id;
 
@@ -294,7 +294,7 @@ bool do_check_before_overwriting_addon(CVideo& video, const addon_info& addon)
 }
 
 /** Performs all backend and UI actions for taking down the specified add-on. */
-void do_remote_addon_delete(CVideo& video, addons_client& client, const std::string& addon_id)
+void do_remote_addon_delete(ui_window& video, addons_client& client, const std::string& addon_id)
 {
 	utils::string_map symbols;
 	symbols["addon"] = make_addon_title(addon_id); // FIXME: need the real title!
@@ -319,7 +319,7 @@ void do_remote_addon_delete(CVideo& video, addons_client& client, const std::str
 }
 
 /** Performs all backend and UI actions for publishing the specified add-on. */
-void do_remote_addon_publish(CVideo& video, addons_client& client, const std::string& addon_id)
+void do_remote_addon_publish(ui_window& video, addons_client& client, const std::string& addon_id)
 {
 	std::string server_msg;
 
@@ -396,11 +396,11 @@ struct addons_filter_state
 /** GUI1 support class handling the filter options button. */
 class filter_options_action : public gui::dialog_button_action
 {
-	CVideo& video_;
+	ui_window& video_;
 	addons_filter_state& f_;
 
 public:
-	filter_options_action(CVideo& video, addons_filter_state& filter)
+	filter_options_action(ui_window& video, addons_filter_state& filter)
 		: video_(video)
 		, f_(filter)
 	{}

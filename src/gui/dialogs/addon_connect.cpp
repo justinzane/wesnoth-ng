@@ -65,7 +65,7 @@ void taddon_connect::help_button_callback(twindow& /*window*/)
 	}
 }
 
-void taddon_connect::pre_show(CVideo& /*video*/, twindow& window)
+void taddon_connect::pre_show(ui_window& /*video*/, twindow& window)
 {
 	find_widget<tbutton>(&window, "remove_addons", false)
 			.set_active(allow_remove_);

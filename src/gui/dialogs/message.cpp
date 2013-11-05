@@ -12,19 +12,31 @@
    See the COPYING file for more details.
 */
 
+#include "message.hpp"
+
+#include "../../gettext.hpp"
+#include "../../log.hpp"
+#include "../../utils/foreach.tpp"
+#include "../auxiliary/find_widget.tpp"
+#include "../video.hpp"
+#include "../widgets/button.hpp"
+#include "../widgets/image.hpp"
+#include "../widgets/label.hpp"
+#include "../widgets/settings.hpp"
+#include "../widgets/widget.hpp"
+#include "../widgets/window.hpp"
+
+#include <boost/foreach.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/typeof/native.hpp>
+
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <vector>
+
 #define GETTEXT_DOMAIN "wesnoth-lib"
-
-#include "gui/dialogs/message.hpp"
-
-#include "gettext.hpp"
-#include "gui/auxiliary/find_widget.tpp"
-#include "gui/widgets/button.hpp"
-#include "gui/widgets/image.hpp"
-#include "gui/widgets/label.hpp"
-#include "gui/widgets/settings.hpp"
-#include "gui/widgets/window.hpp"
-#include "log.hpp"
-#include "utils/foreach.tpp"
 
 namespace gui2 {
 
@@ -63,7 +75,7 @@ struct tmessage_implementation
 	}
 };
 
-void tmessage::pre_show(CVideo& /*video*/, twindow& window)
+void tmessage::pre_show(ui_window& /*video*/, twindow& window)
 {
 	// ***** Validate the required buttons ***** ***** ***** *****
 	tmessage_implementation::
@@ -138,7 +150,7 @@ tmessage::tbutton_status::tbutton_status()
 {
 }
 
-void show_message(CVideo& video, const std::string& title,
+void show_message(ui_window& video, const std::string& title,
 	const std::string& message, const std::string& button_caption,
 	const bool auto_close, const bool message_use_markup)
 {
@@ -147,7 +159,7 @@ void show_message(CVideo& video, const std::string& title,
 	dlg.show(video);
 }
 
-int show_message(CVideo& video, const std::string& title,
+int show_message(ui_window& video, const std::string& title,
 	const std::string& message, const tmessage::tbutton_style button_style,
 	bool message_use_markup,
 	bool /*message_title_mode*/)
@@ -183,7 +195,7 @@ int show_message(CVideo& video, const std::string& title,
 	return dlg.get_retval();
 }
 
-void show_error_message(CVideo& video, const std::string& message,
+void show_error_message(ui_window& video, const std::string& message,
 	bool message_use_markup)
 {
 	LOG_STREAM(err, lg::general) << message << '\n';

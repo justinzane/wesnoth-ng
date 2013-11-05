@@ -16,12 +16,12 @@
 
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gamestatus.hpp"
 #include "gettext.hpp"
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "network.hpp" // ping_timeout
 #include "serialization/string_utils.hpp"
 #include "settings.hpp"

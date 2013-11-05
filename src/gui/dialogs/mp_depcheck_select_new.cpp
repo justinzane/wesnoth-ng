@@ -86,7 +86,7 @@ tmp_depcheck_select_new::tmp_depcheck_select_new
 
 }
 
-void tmp_depcheck_select_new::pre_show(CVideo& /*video*/, twindow& window)
+void tmp_depcheck_select_new::pre_show(ui_window& /*video*/, twindow& window)
 {
 	tlistbox& listbox = find_widget<tlistbox>(&window, "itemlist", false);
 

@@ -41,7 +41,7 @@ public:
 	 * @param name [out] The new unit name the user entered if this method
 	 *                   returns @a true, undefined otherwise.
 	 */
-	static bool execute(const std::string& title, const std::string& label, std::string& text, CVideo& video)
+	static bool execute(const std::string& title, const std::string& label, std::string& text, ui_window& video)
 	{
 		return tedit_text(title, label, text).show(video);
 	}

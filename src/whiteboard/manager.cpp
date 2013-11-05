@@ -20,7 +20,7 @@
 
 #include "action.hpp"
 #include "highlighter.hpp"
-#include "mapbuilder.hpp"
+#include "board/mapbuilder.hpp"
 #include "move.hpp"
 #include "attack.hpp"
 #include "recall.hpp"

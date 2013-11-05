@@ -16,7 +16,7 @@
 #define GUI_DIALOGS_EDITOR_EDIT_LABEL_HPP_INCLUDED
 
 #include "gui/dialogs/dialog.hpp"
-#include "map_label.hpp"
+#include "board/map_label.hpp"
 
 namespace gui2 {
 
@@ -37,7 +37,7 @@ public:
 	teditor_edit_label(std::string& text, bool& immutable, bool& visible_fog, bool& visible_shroud);
 
 	/** The execute function see @ref tdialog for more information. */
-	static bool execute(std::string& text, bool& immutable, bool& visible_fog, bool& visible_shroud, CVideo& video)
+	static bool execute(std::string& text, bool& immutable, bool& visible_fog, bool& visible_shroud, ui_window& video)
 	{
 		return teditor_edit_label(text, immutable, visible_fog, visible_shroud).show(video);
 	}

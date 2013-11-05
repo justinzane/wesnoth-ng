@@ -91,7 +91,7 @@ public:
 		bool have_era;
 		bool have_all_mods;
 	};
-	gamebrowser(CVideo& video, const config &map_hashes);
+	gamebrowser(ui_window& video, const config &map_hashes);
 	void scroll(unsigned int pos);
 	void handle_event(const SDL_Event& event);
 	void set_inner_location(const SDL_Rect& rect);

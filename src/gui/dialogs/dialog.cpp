@@ -19,7 +19,7 @@
 #include "gui/dialogs/field.hpp"
 #include "gui/widgets/integer_selector.hpp"
 #include "utils/foreach.tpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 namespace gui2 {
 
@@ -30,7 +30,7 @@ tdialog::~tdialog()
 	}
 }
 
-bool tdialog::show(CVideo& video, const unsigned auto_close_time)
+bool tdialog::show(ui_window& video, const unsigned auto_close_time)
 {
 	if(video.faked()) {
 		return false;
@@ -186,7 +186,7 @@ tfield_label* tdialog::register_label(const std::string& id
 	return field;
 }
 
-twindow* tdialog::build_window(CVideo& video) const
+twindow* tdialog::build_window(ui_window& video) const
 {
 	return build(video, window_id());
 }

@@ -25,7 +25,7 @@
 #include "global.hpp"
 
 #include "../../unit.hpp"
-#include "../../map.hpp"
+#include "../../board/map.hpp"
 
 
 static lg::log_domain log_ai_engine_lua("ai/engine/lua");

@@ -19,8 +19,8 @@ libwesnoth_core_sources = Split("""
     gettext.cpp
     hash.cpp
     log.cpp
-    map.cpp
-    map_location.cpp
+    board/map.cpp
+    board/map_location.cpp
     md5.cpp
     network.cpp
     thread.cpp
@@ -71,15 +71,15 @@ libwesnoth_sources = Split("""
     whiteboard/arrow.cpp
     pathfind/astarsearch.cpp
     builder.cpp
-    display/clipboard.cpp
-    display/construct_dialog.cpp
-    display/cursor.cpp
-    display/display.cpp
-    display/show_dialog.cpp
-    display/sound_music_track.cpp
-    display/tooltips.cpp
-    display/video.cpp
-    display/theme.cpp
+    gui/clipboard.cpp
+    gui/construct_dialog.cpp
+    gui/cursor.cpp
+    gui/display.cpp
+    gui/show_dialog.cpp
+    gui/sound_music_track.cpp
+    gui/tooltips.cpp
+    gui/video.cpp
+    gui/theme.cpp
     events.cpp
     generic_event.cpp
     hotkeys.cpp
@@ -98,7 +98,7 @@ libwesnoth_sources = Split("""
     key.cpp
     language.cpp
     loadscreen.cpp
-    map_label.cpp
+    board/map_label.cpp
     marked-up_text.cpp
     minimap.cpp
     pathutils.cpp
@@ -107,7 +107,7 @@ libwesnoth_sources = Split("""
     race.cpp
     random.cpp
     reports.cpp
-    display/sound.cpp
+    gui/sound.cpp
     soundsource.cpp
     terrain.cpp
     terrain_translation.cpp
@@ -127,7 +127,7 @@ libwesnoth_sources = Split("""
     wml_exception.cpp
     """)
 libwesnoth_sources.extend([
-    client_env.Object("display/font.cpp", 
+    client_env.Object("gui/font.cpp", 
                       EXTRA_DEFINE = client_env['fribidi'] and "HAVE_FRIBIDI" or None),
     ])
 
@@ -145,7 +145,7 @@ libcampaignd_sources = Split("""
 libcampaignd = env.Library("campaignd", libcampaignd_sources, OBJPREFIX = "campaignd_")
 
 libwesnoth_sdl_sources = Split("""
-    display/sdl_utils.cpp
+    gui/sdl_utils.cpp
     tracer.cpp
     """)
 libwesnoth_sdl = client_env.Library("wesnoth_sdl", libwesnoth_sdl_sources)
@@ -214,13 +214,13 @@ wesnoth_sources = Split("""
     ai/testing/stage_fallback.cpp
     ai/testing/stage_rca.cpp""" +
     """
-    display/animated_game.cpp
-    display/desktop_util.cpp
-    display/dialogs.cpp
-    display/filechooser.cpp
-    display/floating_textbox.cpp
-    display/game_display.cpp
-    display/portrait.cpp
+    gui/animated_game.cpp
+    gui/desktop_util.cpp
+    gui/dialogs.cpp
+    gui/filechooser.cpp
+    gui/floating_textbox.cpp
+    gui/game_display.cpp
+    gui/portrait.cpp
     """ + 
     """
     editor/action/action.cpp
@@ -455,7 +455,7 @@ wesnoth_sources = Split("""
     game_instance.cpp
     game_preferences.cpp
     gamestatus.cpp
-    display/halo.cpp
+    gui/halo.cpp
     help.cpp
     intro.cpp
     leader_scroll_dialog.cpp
@@ -522,7 +522,7 @@ wesnoth_sources = Split("""
 )
 
 if env["PLATFORM"] == "win32":
-    wesnoth_sources.append("display/windows_tray_notification.cpp")
+    wesnoth_sources.append("gui/windows_tray_notification.cpp")
 
 wesnoth_sources.extend(client_env.Object("game_preferences_display.cpp", EXTRA_DEFINE = env["PLATFORM"] != "win32" and "WESNOTH_PREFIX='\"$prefix\"'" or None))
 wesnoth_sources.extend(client_env.Object("hotkey_preferences_display.cpp", EXTRA_DEFINE = env["PLATFORM"] != "win32" and "WESNOTH_PREFIX='\"$prefix\"'" or None))
@@ -620,7 +620,7 @@ wesmage_sources = Split("""
     wesmage/options.cpp
     tools/dummy_video.cpp
     tools/exploder_utils.cpp
-    display/sdl_utils.cpp
+    gui/sdl_utils.cpp
     tracer.cpp
     loadscreen_empty.cpp
     """)
@@ -662,7 +662,7 @@ create_images_sources = Split("""
     tests/create_images.cpp
     tools/dummy_video.cpp
     tools/exploder_utils.cpp
-    display/sdl_utils.cpp
+    gui/sdl_utils.cpp
     tracer.cpp
     loadscreen_empty.cpp
 """)

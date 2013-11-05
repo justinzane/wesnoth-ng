@@ -15,7 +15,7 @@
 #ifndef FILE_MENU_H_INCLUDED
 #define FILE_MENU_H_INCLUDED
 
-#include "../display/construct_dialog.hpp"
+#include "../gui/construct_dialog.hpp"
 
 namespace gui {
 
@@ -30,7 +30,7 @@ public:
 	/// Initialize the file menu. start_file is the file that will be
 	/// selected initially. The current directory will be
 	/// the one the file is in.
-	file_menu(CVideo &disp, std::string start_file="");
+	file_menu(ui_window &disp, std::string start_file="");
 
 	/// Return the chosen file.
 	std::string get_choice() const;

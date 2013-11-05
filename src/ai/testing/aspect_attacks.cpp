@@ -22,7 +22,7 @@
 #include "../manager.hpp"
 #include "../../actions/attack.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
+#include "../../board/map.hpp"
 #include "../../team.hpp"
 #include "../../tod_manager.hpp"
 #include "../../resources.hpp"

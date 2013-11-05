@@ -882,12 +882,12 @@ void utf8_iterator::update()
 }
 
 
-std::string wstring_to_string(const wide_string &src)
+std::string wstring_to_string(const std::wstring &src)
 {
 	std::string ret;
 
 	try {
-		for(wide_string::const_iterator i = src.begin(); i != src.end(); ++i) {
+		for(std::wstring::const_iterator i = src.begin(); i != src.end(); ++i) {
 			unsigned int count;
 			wchar_t ch = *i;
 
@@ -934,14 +934,14 @@ std::string wstring_to_string(const wide_string &src)
 
 std::string wchar_to_string(const wchar_t c)
 {
-	wide_string s;
+	std::wstring s;
 	s.push_back(c);
 	return wstring_to_string(s);
 }
 
-wide_string string_to_wstring(const std::string &src)
+std::wstring string_to_wstring(const std::string &src)
 {
-	wide_string res;
+	std::wstring res;
 
 	try {
 		utf8_iterator i1(src);
@@ -987,7 +987,7 @@ utf8_string lowercase(const utf8_string& s)
 
 void truncate_as_wstring(std::string& str, const size_t size)
 {
-	wide_string utf8_str = utils::string_to_wstring(str);
+	std::wstring utf8_str = utils::string_to_wstring(str);
 	if(utf8_str.size() > size) {
 		utf8_str.resize(size);
 		str = utils::wstring_to_string(utf8_str);

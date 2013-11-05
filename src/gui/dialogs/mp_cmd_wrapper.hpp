@@ -49,7 +49,7 @@ private:
 	std::string time_;
 
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog, implemented by REGISTER_DIALOG. */
 	virtual const std::string& window_id() const;

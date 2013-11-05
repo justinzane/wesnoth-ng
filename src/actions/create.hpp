@@ -25,7 +25,7 @@ class  config;
 class  team;
 class  vconfig;
 
-#include "../map_location.hpp"
+#include "../board/map_location.hpp"
 #include "../unit.hpp"
 
 

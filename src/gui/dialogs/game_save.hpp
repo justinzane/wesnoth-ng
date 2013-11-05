@@ -28,7 +28,7 @@ public:
 
 	static bool execute(std::string& filename
 			, const std::string& title
-			, CVideo& video)
+			, ui_window& video)
 	{
 		return tgame_save(filename, title).show(video);
 	}
@@ -51,7 +51,7 @@ public:
 			  std::string& filename
 			, const std::string& title
 			, const std::string& message
-			, CVideo& video)
+			, ui_window& video)
 	{
 		return tgame_save_message(filename, title, message).show(video);
 	}
@@ -76,7 +76,7 @@ public:
 			, std::string& filename
 			, const std::string& title
 			, const std::string& message
-			, CVideo& video)
+			, ui_window& video)
 	{
 		return tgame_save_oos(ignore_all, filename, title, message).show(video);
 	}

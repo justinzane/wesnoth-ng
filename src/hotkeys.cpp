@@ -16,8 +16,8 @@
 
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
-#include "display/construct_dialog.hpp"
-#include "display/display.hpp"
+#include "gui/construct_dialog.hpp"
+#include "gui/display.hpp"
 #include "filesystem.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_preferences.hpp"
@@ -28,7 +28,7 @@
 #include "hotkeys.hpp"
 #include "log.hpp"
 #include "preferences_display.hpp"
-#include "display/theme.hpp"
+#include "gui/theme.hpp"
 #include "wesconfig.h"
 #include "wml_separators.hpp"
 
@@ -359,7 +359,7 @@ void hotkey_item::load_from_config(const config& cfg)
 		return;
 	}
 
-	wide_string wkey = utils::string_to_wstring(key);
+	std::wstring wkey = utils::string_to_wstring(key);
 
 	// They may really want a specific key on the keyboard:
 	// we assume that any single character keyname is a character.

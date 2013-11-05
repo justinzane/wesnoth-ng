@@ -20,7 +20,7 @@
 #include "../game_config.hpp"
 #include "exploder_composer.hpp"
 
-#include "SDL_image.h"
+#include "SDL2/SDL_image.h"
 
 #include <iostream>
 

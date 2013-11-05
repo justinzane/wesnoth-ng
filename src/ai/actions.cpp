@@ -38,7 +38,7 @@
 #include "../actions/attack.hpp"
 #include "../actions/create.hpp"
 #include "../actions/move.hpp"
-#include "../display/dialogs.hpp"
+#include "../gui/dialogs.hpp"
 #include "../game_end_exceptions.hpp"
 #include "../game_preferences.hpp"
 #include "../log.hpp"

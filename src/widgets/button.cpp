@@ -18,13 +18,13 @@
 
 #include "widgets/button.hpp"
 #include "game_config.hpp"
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "marked-up_text.hpp"
 #include "image.hpp"
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
-#include "display/sound.hpp"
-#include "display/video.hpp"
+#include "gui/sound.hpp"
+#include "gui/video.hpp"
 #include "wml_separators.hpp"
 
 #include "filesystem.hpp"
@@ -39,7 +39,7 @@ const int horizontal_padding = font::SIZE_SMALL;
 const int checkbox_horizontal_padding = font::SIZE_SMALL / 2;
 const int vertical_padding = font::SIZE_SMALL / 2;
 
-button::button(CVideo& video, const std::string& label, button::TYPE type,
+button::button(ui_window& video, const std::string& label, button::TYPE type,
                std::string button_image_name, SPACE_CONSUMPTION spacing,
                const bool auto_join, std::string overlay_image)
 	: widget(video, auto_join), type_(type), label_(label),

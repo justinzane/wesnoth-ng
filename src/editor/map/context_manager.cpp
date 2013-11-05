@@ -13,31 +13,37 @@
 */
 #define GETTEXT_DOMAIN "wesnoth-editor"
 
-#include "context_manager.hpp"
-#include "display/display.hpp"
-#include "filesystem.hpp"
-#include "display/filechooser.hpp"
-#include "formula_string_utils.hpp"
-#include "gettext.hpp"
-#include "generators/map_create.hpp"
-#include "map_context.hpp"
+#include "editor_map.hpp"
 
-#include "editor/action/action.hpp"
-#include "editor/editor_controller.hpp"
-#include "editor/editor_preferences.hpp"
+#include "../../board/map_label.hpp"
+#include "../../board/map_location.hpp"
+#include "../../config.hpp"
+#include "../../game_config.hpp"
+#include "../../log.hpp"
+#include "../../resources.hpp"
+#include "../../serialization/string_utils.hpp"
+#include "../../team.hpp"
+#include "../../time_of_day.hpp"
+#include "../../tod_manager.hpp"
+#include "../../tstring.hpp"
+#include "../../util.hpp"
+#include "../action/action_base.hpp"
+#include "../editor_common.hpp"
+#include "../editor_display.hpp"
+#include "../palette/terrain_palettes.hpp"
 
-#include "gui/dialogs/editor_generate_map.hpp"
-#include "gui/dialogs/editor_new_map.hpp"
-#include "gui/dialogs/editor_resize_map.hpp"
-#include "gui/dialogs/message.hpp"
-#include "gui/dialogs/transient_message.hpp"
-#include "gui/widgets/window.hpp"
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/smart_ptr/scoped_ptr.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <stddef.h>
 
-#include <boost/foreach.hpp>
-
-#include "terrain_translation.hpp"
-
-#include "wml_separators.hpp"
+#include <cstdbool>
+#include <iostream>
+#include <iterator>
+#include <set>
+#include <string>
+#include <vector>
 
 namespace {
 static std::vector<std::string> saved_windows_;

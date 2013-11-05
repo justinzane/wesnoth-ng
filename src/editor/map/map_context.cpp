@@ -1,3 +1,39 @@
+#include "../../board/map.hpp"
+#include "../../board/map_location.hpp"
+#include "../../config.hpp"
+#include "../../log.hpp"
+#include "../../resources.hpp"
+#include "../../serialization/preprocessor.hpp"
+#include "../../serialization/string_utils.hpp"
+#include "../../terrain.hpp"
+#include "../../terrain_translation.hpp"
+#include "../../tstring.hpp"
+#include "../../unit.hpp"
+#include "../editor_common.hpp"
+
+#include "/usr/lib/gcc/x86_64-unknown-linux-gnu/4.8.2/include/stddef.h"
+
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/regex/v4/match_flags.hpp>
+#include <boost/regex/v4/regex.hpp>
+#include <boost/regex/v4/regex_fwd.hpp>
+#include <boost/regex/v4/regex_search.hpp>
+#include <boost/regex/v4/sub_match.hpp>
+#include <boost/smart_ptr/scoped_ptr.hpp>
+#include <boost/type_traits/is_const.hpp>
+
+//#include <cassert>
+#include <cassert>
+#include <deque>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
+
 /*
    Copyright (C) 2008 - 2013 by Tomasz Sniatowski <kailoran@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
@@ -13,21 +49,19 @@
 */
 #define GETTEXT_DOMAIN "wesnoth-editor"
 
-#include "editor/action/action.hpp"
 #include "map_context.hpp"
 
-#include "display/display.hpp"
-#include "filesystem.hpp"
-#include "gettext.hpp"
-#include "map_exception.hpp"
-#include "map_label.hpp"
-#include "serialization/binary_or_text.hpp"
-#include "serialization/parser.hpp"
-#include "team.hpp"
-#include "wml_exception.hpp"
-
-
-#include "formula_string_utils.hpp"
+#include "../../gui/display.hpp"
+#include "../../filesystem.hpp"
+#include "../../gettext.hpp"
+#include "../action/action.hpp"
+#include "../../board/map_exception.hpp"
+#include "../../board/map_label.hpp"
+#include "../../serialization/binary_or_text.hpp"
+#include "../../serialization/parser.hpp"
+#include "../../team.hpp"
+#include "../../wml_exception.hpp"
+#include "../../formula_string_utils.hpp"
 
 #include <boost/regex.hpp>
 #include <boost/foreach.hpp>

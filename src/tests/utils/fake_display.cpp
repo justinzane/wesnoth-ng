@@ -16,9 +16,9 @@
 
 #include "fake_display.hpp"
 
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "tod_manager.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "unit_map.hpp"
 
 namespace test_utils {
@@ -26,7 +26,7 @@ namespace test_utils {
 	class fake_display_manager {
 		static fake_display_manager* manager_;
 
-		CVideo video_;
+		ui_window video_;
 		unit_map dummy_umap_;
 		config dummy_cfg_;
 		gamemap dummy_map_;
@@ -57,7 +57,7 @@ namespace test_utils {
 	}
 
 	fake_display_manager::fake_display_manager() :
-	   	video_(CVideo::FAKE_TEST),
+	   	video_(ui_window::FAKE_TEST),
 		dummy_umap_(),
 		dummy_cfg_(),
 		dummy_map_(dummy_cfg_,""),

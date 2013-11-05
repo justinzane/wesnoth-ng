@@ -235,7 +235,7 @@ public:
 	{
 	}
 
-	void pre_show(CVideo& /*video*/, twindow& window)
+	void pre_show(ui_window& /*video*/, twindow& window)
 	{
 		LOG_CHAT_LOG << "Entering tchat_log::view::pre_show" << std::endl;
 		controller_.update_view_from_model();
@@ -296,12 +296,12 @@ boost::shared_ptr<tchat_log::view> tchat_log::get_view()
 	return view_;
 }
 
-twindow* tchat_log::build_window(CVideo& video)
+twindow* tchat_log::build_window(ui_window& video)
 {
 	return build(video, window_id());
 }
 
-void tchat_log::pre_show(CVideo& video, twindow& window)
+void tchat_log::pre_show(ui_window& video, twindow& window)
 {
 	LOG_CHAT_LOG << "Entering tchat_log::pre_show" << std::endl;
 	view_->bind(window);

@@ -21,8 +21,8 @@
 #include "gettext.hpp"
 #include "network.hpp"
 #include "log.hpp"
-#include "map.hpp"
-#include "map_exception.hpp"
+#include "board/map.hpp"
+#include "board/map_exception.hpp"
 #include "utils/foreach.tpp"
 #include "wml_exception.hpp"
 

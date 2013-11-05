@@ -17,7 +17,7 @@
 
 #include "editor/action/action_base.hpp"
 #include "editor/map/editor_map.hpp"
-#include "display/theme.hpp"
+#include "gui/theme.hpp"
 #include "editor/palette/editor_palettes.hpp"
 #include "editor/palette/terrain_palettes.hpp"
 #include "editor/palette/empty_palette.hpp"

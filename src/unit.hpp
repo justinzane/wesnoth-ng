@@ -21,7 +21,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "formula_callable.hpp"
-#include "display/portrait.hpp"
+#include "gui/portrait.hpp"
 #include "resources.hpp"
 #include "unit_animation.hpp"
 #include "unit_types.hpp"

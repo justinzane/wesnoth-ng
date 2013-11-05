@@ -18,8 +18,8 @@
 #include "global.hpp"
 
 #include "widgets/widget.hpp"
-#include "display/video.hpp"
-#include "display/tooltips.hpp"
+#include "gui/video.hpp"
+#include "gui/tooltips.hpp"
 
 #include <cassert>
 
@@ -39,7 +39,7 @@ widget::widget(const widget &o)
 {
 }
 
-widget::widget(CVideo& video, const bool auto_join)
+widget::widget(ui_window& video, const bool auto_join)
 	: handler(auto_join), focus_(true), video_(&video), rect_(EmptyRect), needs_restore_(false),
 	  state_(UNINIT), hidden_override_(false), enabled_(true), clip_(false),
 	  clip_rect_(EmptyRect), volatile_(false), help_string_(0), mouse_lock_local_(false)

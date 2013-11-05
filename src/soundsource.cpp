@@ -15,10 +15,10 @@
 #include "global.hpp"
 
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "log.hpp"
 #include "serialization/string_utils.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "soundsource.hpp"
 
 namespace soundsource {

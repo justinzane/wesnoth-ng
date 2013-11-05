@@ -18,12 +18,12 @@
 
 #include "mapgen_dialog.hpp"
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "gettext.hpp"
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "marked-up_text.hpp"
-#include "display/show_dialog.hpp"
+#include "gui/show_dialog.hpp"
 
 #include "widgets/slider.hpp"
 
@@ -100,7 +100,7 @@ void default_map_generator::user_config(display& disp)
 	const resize_lock prevent_resizing;
 	const events::event_context dialog_events_context;
 
-	CVideo& screen = disp.video();
+	ui_window& screen = disp.video();
 
 	const int width = 600;
 	const int height = 400;

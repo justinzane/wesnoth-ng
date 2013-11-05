@@ -15,9 +15,9 @@
 
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "filesystem.hpp"
-#include "display/filechooser.hpp"
+#include "gui/filechooser.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/game_paths.hpp"
@@ -881,7 +881,7 @@ void preferences_dialog::process_event()
 		}
 		if (confirm_sound_button_.pressed()) {
 			apply = true;
-			rate = sample_rate_input_.text();
+			rate = sample_rate_input_.get_text();
 		}
 
 		if (apply)
@@ -965,7 +965,7 @@ void preferences_dialog::process_event()
 
 		if (friends_add_friend_button_.pressed()) {
 			std::string notes;
-			std::string username = friends_input_.text();
+			std::string username = friends_input_.get_text();
 			size_t pos = username.find_first_of(' ');
 
 			if(pos != std::string::npos) {
@@ -974,7 +974,7 @@ void preferences_dialog::process_event()
 			}
 
 			if (preferences::add_friend(username, notes)) {
-				friends_input_.clear();
+				friends_input_.clear_text();
 				set_friends_menu();
 			} else {
 				gui2::show_transient_error_message(disp_.video(), _("Invalid username"));
@@ -982,7 +982,7 @@ void preferences_dialog::process_event()
 		}
 		if (friends_add_ignore_button_.pressed()) {
 			std::string reason;
-			std::string username = friends_input_.text();
+			std::string username = friends_input_.get_text();
 			size_t pos = username.find_first_of(' ');
 
 			if(pos != std::string::npos) {
@@ -991,21 +991,21 @@ void preferences_dialog::process_event()
 			}
 
 			if (preferences::add_ignore(username, reason)) {
-				friends_input_.clear();
+				friends_input_.clear_text();
 				set_friends_menu();
 			} else {
 				gui2::show_transient_error_message(disp_.video(), _("Invalid username"));
             }
         }
 		if (friends_remove_button_.pressed()) {
-			std::string to_remove = friends_input_.text();
+			std::string to_remove = friends_input_.get_text();
 			if(to_remove.empty() && friends_.selection() >= 0 && friends_names_[friends_.selection()] != "(empty list)") {
 				to_remove = friends_names_[friends_.selection()];
 			}
 			if(!to_remove.empty()) {
 				/** @todo Better to remove from a specific relation. */
 				preferences::remove_acquaintance(to_remove);
-				friends_input_.clear();
+				friends_input_.clear_text();
 				set_friends_menu();
             }
         }

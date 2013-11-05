@@ -17,14 +17,14 @@
 #ifndef JM_LOADSCREEN_HPP
 #define JM_LOADSCREEN_HPP
 
-class CVideo;
+class ui_window;
 
-#include "display/sdl_utils.hpp"
+#include "gui/sdl_utils.hpp"
 
 class loadscreen {
 	public:
 		// Preferred constructor
-		explicit loadscreen(CVideo &screen, const int percent = 0);
+		explicit loadscreen(ui_window &screen, const int percent = 0);
 		// Keep default copy constructor
 		// Keep default copy assignment
 		// Destructor, dumps the counter values to stderr
@@ -53,7 +53,7 @@ class loadscreen {
 		static loadscreen *global_loadscreen;
 
 		struct global_loadscreen_manager {
-			explicit global_loadscreen_manager(CVideo& screen);
+			explicit global_loadscreen_manager(ui_window& screen);
 			~global_loadscreen_manager();
 			static global_loadscreen_manager* get()
 			{ return manager; }
@@ -72,7 +72,7 @@ private:
 		loadscreen();
 
 		// Data members
-		CVideo &screen_;
+		ui_window &screen_;
 		SDL_Rect textarea_;
 		surface logo_surface_;
 		bool logo_drawn_;

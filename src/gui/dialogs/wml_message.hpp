@@ -97,7 +97,7 @@ private:
 	int *chosen_option_;
 
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog. */
 	void post_show(twindow& window);
@@ -161,7 +161,7 @@ private:
  *                                dialog closes.
  */
 int show_wml_message(const bool left_side
-		, CVideo& video
+		, ui_window& video
 		, const std::string& title
 		, const std::string& message
 		, const std::string& portrait

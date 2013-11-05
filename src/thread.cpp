@@ -12,12 +12,21 @@
    See the COPYING file for more details.
 */
 
-#include "global.hpp"
-
-#include <vector>
-
-#include "log.hpp"
 #include "thread.hpp"
+
+//#include "global.hpp"
+#include "log.hpp"
+
+#include <stddef.h>
+
+#include <boost/smart_ptr/scoped_ptr.hpp>
+#include <SDL2/SDL_error.h>
+#include <SDL2/SDL_mutex.h>
+#include <SDL2/SDL_version.h>
+
+#include <iostream>
+#include <iterator>
+#include <vector>
 
 
 #define ERR_G LOG_STREAM(err, lg::general)

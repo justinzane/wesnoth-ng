@@ -25,7 +25,7 @@
 #ifndef GAME_EVENTS_ACTION_WML_H_INCLUDED
 #define GAME_EVENTS_ACTION_WML_H_INCLUDED
 
-#include "../map.hpp"
+#include "../board/map.hpp"
 
 class  config;
 struct map_location;

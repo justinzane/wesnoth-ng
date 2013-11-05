@@ -12,14 +12,37 @@
  See the COPYING file for more details.
  */
 
+#include "../events.hpp"
+#include "../gui/sdl_utils.hpp"
+#include "../util.hpp"
+
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keyboard.h>
+#include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_timer.h>
+
+#include <stddef.h>
+
+#include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <vector>
+
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
 #include "global.hpp"
 
 #include "widgets/textbox.hpp"
-#include "display/clipboard.hpp"
+#include "gui/clipboard.hpp"
 #include "log.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 static lg::log_domain log_display("display");
 #define WRN_DP LOG_STREAM(warn, log_display)
@@ -27,13 +50,14 @@ static lg::log_domain log_display("display");
 
 namespace gui {
 
+/// @todo Remove this hardcoded font size.
 const int font_size = font::SIZE_PLUS;
 
-textbox::textbox(CVideo &video,
-                 int width,
+textbox::textbox(ui_window &video,
+                 Uint32 width,
                  const std::string& text,
                  bool editable,
-                 size_t max_size,
+                 Uint32 max_size,
                  double alpha,
                  double alpha_focus,
                  const bool auto_join) :
@@ -52,8 +76,8 @@ textbox::textbox(CVideo &video,
     wrap_(false),
     line_height_(0),
     yscroll_(0),
-    alpha_(alpha),
-    alpha_focus_(alpha_focus),
+    unfocused_alpha_(alpha),
+    focused_alpha_(alpha_focus),
     edit_target_(NULL) {
     // static const SDL_Rect area = d.screen_area();
     // const int height = font::draw_text(NULL,area,font_size,font::NORMAL_COLOR,"ABCD",0,0).h;
@@ -62,31 +86,11 @@ textbox::textbox(CVideo &video,
     update_text_cache(true);
 }
 
-textbox::~textbox() {
-}
-
 void textbox::set_inner_location(SDL_Rect const &rect) {
     bg_register(rect);
     if (text_image_.null()) return;
     text_pos_ = 0;
     update_text_cache(false);
-}
-
-const std::string textbox::text() const {
-    const std::string &ret = utils::wstring_to_string(text_);
-    return ret;
-}
-
-// set_text does not respect max_size_
-void textbox::set_text(const std::string& text, const SDL_Color& color) {
-    text_ = utils::string_to_wstring(text);
-    cursor_ = text_.size();
-    text_pos_ = 0;
-    selstart_ = -1;
-    selend_ = -1;
-    set_dirty(true);
-    update_text_cache(true, color);
-    handle_text_changed(text_);
 }
 
 void textbox::append_text(const std::string& text, bool auto_scroll, const SDL_Color& color) {
@@ -101,7 +105,7 @@ void textbox::append_text(const std::string& text, bool auto_scroll, const SDL_C
         return;
     }
     const bool is_at_bottom = get_position() == get_max_position();
-    const wide_string& wtext = utils::string_to_wstring(text);
+    const std::wstring& wtext = utils::string_to_wstring(text);
 
     const surface new_text = add_text_line(wtext, color);
     surface new_surface = create_compatible_surface(
@@ -127,19 +131,7 @@ void textbox::append_text(const std::string& text, bool auto_scroll, const SDL_C
     handle_text_changed(text_);
 }
 
-void textbox::clear() {
-    text_.clear();
-    cursor_ = 0;
-    cursor_pos_ = 0;
-    text_pos_ = 0;
-    selstart_ = -1;
-    selend_ = -1;
-    set_dirty(true);
-    update_text_cache(true);
-    handle_text_changed(text_);
-}
-
-void textbox::draw_cursor(int pos, CVideo &video) const {
+void textbox::draw_cursor(int pos, ui_window &video) const {
     if (show_cursor_ && editable_ && enabled()) {
         SDL_Rect rect = create_rect(location().x + pos, location().y, 1, location().h);
 
@@ -153,7 +145,7 @@ void textbox::draw_contents() {
 
     surface surf = video().getSurface();
     draw_solid_tinted_rectangle(loc.x, loc.y, loc.w, loc.h, 0, 0, 0,
-                                focus(NULL) ? alpha_focus_ : alpha_, surf);
+                                focus(NULL) ? focused_alpha_ : unfocused_alpha_, surf);
 
     SDL_Rect src;
 
@@ -214,26 +206,6 @@ void textbox::draw_contents() {
     update_rect(loc);
 }
 
-void textbox::set_editable(bool value) {
-    editable_ = value;
-}
-
-bool textbox::editable() const {
-    return editable_;
-}
-
-void textbox::scroll_to_bottom() {
-    set_position(get_max_position());
-}
-
-void textbox::set_wrap(bool val) {
-    if (wrap_ != val) {
-        wrap_ = val;
-        update_text_cache(true);
-        set_dirty(true);
-    }
-}
-
 void textbox::scroll(unsigned int pos) {
     yscroll_ = pos;
     set_dirty(true);
@@ -255,11 +227,11 @@ surface textbox::add_text_line(const wide_string& text, const SDL_Color& color) 
     // some more complex scripts (that is, RTL languages). This part of the work should
     // actually be done by the font-rendering system.
     std::string visible_string;
-    wide_string wrapped_text;
+    std::wstring wrapped_text;
 
-    wide_string::const_iterator backup_itor = text.end();
+    std::wstring::const_iterator backup_itor = text.end();
 
-    wide_string::const_iterator itor = text.begin();
+    std::wstring::const_iterator itor = text.begin();
     while (itor != text.end()) {
         //If this is a space, save copies of the current state so we can roll back
         if (char( *itor) == ' ') {
@@ -305,8 +277,8 @@ surface textbox::add_text_line(const wide_string& text, const SDL_Color& color) 
 
 void textbox::update_text_cache(bool changed, const SDL_Color& color) {
     if (changed) {
-        char_x_.clear();
-        char_y_.clear();
+        char_x_.clear_text();
+        char_y_.clear_text();
 
         text_image_.assign(add_text_line(text_, color));
     }
@@ -326,28 +298,17 @@ void textbox::update_text_cache(bool changed, const SDL_Color& color) {
     }
 }
 
-bool textbox::is_selection() {
-    return (selstart_ != -1) && (selend_ != -1) && (selstart_ != selend_);
-}
-
-void textbox::erase_selection() {
-    if ( !is_selection()) return;
-
-    wide_string::iterator itor = text_.begin() + std::min(selstart_, selend_);
-    text_.erase(itor, itor + abs(selend_ - selstart_));
-    cursor_ = std::min(selstart_, selend_);
-    selstart_ = selend_ = -1;
-}
-
+/**
+ * @namespace anonymous
+ * @brief Picks <ctrl> or <cmd> modifiers based on platform.
+ */
 namespace {
-const unsigned int copypaste_modifier =
 #ifdef __APPLE__
-                                        KMOD_LMETA | KMOD_RMETA
+    const unsigned int copypaste_modifier = KMOD_LMETA | KMOD_RMETA;
 #else
-                                        KMOD_CTRL
+    const unsigned int copypaste_modifier = KMOD_CTRL;
 #endif
-;
-}
+} //end anon namespace
 
 bool textbox::requires_event_focus(const SDL_Event* event) const {
     if ( !focus_ || hidden() || !enabled()) {
@@ -359,14 +320,17 @@ bool textbox::requires_event_focus(const SDL_Event* event) const {
     }
 
     if (event->type == SDL_KEYDOWN) {
-        SDLKey key = event->key.keysym.sym;
+        SDL_Keycode key = event->key.keysym.sym;
+        //in the future we may need to check for input history or multi-line support
+        //for now, just return false since these events are not handled.
         switch (key) {
             case SDLK_UP:
+                return false;
             case SDLK_DOWN:
+                return false;
             case SDLK_PAGEUP:
+                return false;
             case SDLK_PAGEDOWN:
-                //in the future we may need to check for input history or multi-line support
-                //for now, just return false since these events are not handled.
                 return false;
             default:
                 return true;
@@ -376,9 +340,7 @@ bool textbox::requires_event_focus(const SDL_Event* event) const {
     return false;
 }
 
-void textbox::handle_event(const SDL_Event& event) {
-    handle_event(event, false);
-}
+
 
 void textbox::handle_event(const SDL_Event& event, bool was_forwarded) {
     if ( !enabled()) return;
@@ -461,7 +423,7 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded) {
         return;
     }
 
-    const char key = reinterpret_cast<const SDL_TextInputEvent&>(event).char;
+    const char key = reinterpret_cast<const SDL_TextInputEvent&>(event.key;
     const SDL_Keymod modifiers = SDL_GetModState();
 
     const int c = key.sym;
@@ -496,7 +458,7 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded) {
             }
         }
 
-        if (c == SDLK_u && (modifiers & KMOD_CTRL)) {  // clear line
+        if (c == SDLK_u && (modifiers & KMOD_CTRL)) {  // clear_text line
             changed = true;
             cursor_ = 0;
             text_.resize(0);
@@ -549,7 +511,7 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded) {
                     //cut off anything after the first newline
                     str.erase(std::find_if(str.begin(),str.end(),utils::isnewline),str.end());
 
-                    wide_string s = utils::string_to_wstring(str);
+                    std::wstring s = utils::string_to_wstring(str);
 
                     if(text_.size() < max_size_) {
                         if(s.size() + text_.size() > max_size_) {
@@ -570,7 +532,7 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded) {
                         const size_t beg = std::min<size_t>(size_t(selstart_),size_t(selend_));
                         const size_t end = std::max<size_t>(size_t(selstart_),size_t(selend_));
 
-                        wide_string ws = wide_string(text_.begin() + beg, text_.begin() + end);
+                        std::wstring ws = std::wstring(text_.begin() + beg, text_.begin() + end);
                         std::string s = utils::wstring_to_string(ws);
                         copy_to_clipboard(s, false);
                     }
@@ -607,16 +569,6 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded) {
     }
 
     set_dirty(true);
-}
-
-void textbox::pass_event_to_target(const SDL_Event& event) {
-    if (edit_target_ && edit_target_->editable()) {
-        edit_target_->handle_event(event, true);
-    }
-}
-
-void textbox::set_edit_target(textbox* target) {
-    edit_target_ = target;
 }
 
 }  //end namespace gui

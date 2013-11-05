@@ -18,7 +18,7 @@
 
 #include "config.hpp"
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "resources.hpp"
 #include "side_filter.hpp"
 #include "team.hpp"

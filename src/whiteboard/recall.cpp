@@ -24,7 +24,7 @@
 #include "visitor.hpp"
 
 #include "actions/create.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "play_controller.hpp"
 #include "resources.hpp"
 #include "team.hpp"

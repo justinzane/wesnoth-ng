@@ -13,12 +13,11 @@
    See the COPYING file for more details.
 */
 
-#include "global.hpp"
-
-#include "log.hpp"
-#include "map.hpp"
-#include "pathfind/pathfind.hpp"
-#include "pathfind/teleport.hpp"
+#include "../global.hpp"
+#include "../log.hpp"
+#include "../board/map.hpp"
+#include "pathfind.hpp"
+#include "teleport.hpp"
 
 #include <queue>
 #include <map>

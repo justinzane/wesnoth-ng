@@ -21,7 +21,7 @@
 
 #include "widgets/scrollbar.hpp"
 #include "image.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 #include <iostream>
 
@@ -46,7 +46,7 @@ namespace {
 
 namespace gui {
 
-scrollbar::scrollbar(CVideo &video)
+scrollbar::scrollbar(ui_window &video)
 	: widget(video)
 	, mid_scaled_(NULL)
 	, groove_scaled_(NULL)

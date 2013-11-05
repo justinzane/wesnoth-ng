@@ -18,14 +18,14 @@
 
 #include "tristate_button.hpp"
 
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "game_config.hpp"
 #include "image.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
 #include "serialization/string_utils.hpp"
-#include "display/sound.hpp"
-#include "display/video.hpp"
+#include "gui/sound.hpp"
+#include "gui/video.hpp"
 #include "wml_separators.hpp"
 
 static lg::log_domain log_display("display");
@@ -36,7 +36,7 @@ namespace gui {
 const int font_size = font::SIZE_SMALL;
 const int checkbox_horizontal_padding = font::SIZE_SMALL / 2;
 
-tristate_button::tristate_button(CVideo& video,
+tristate_button::tristate_button(ui_window& video,
 		editor::common_palette* palette,
 		std::string button_image_name,
 		const bool auto_join) :

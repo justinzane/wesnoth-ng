@@ -32,7 +32,7 @@
 
 #include "../../attack_prediction.hpp"
 #include "../../filesystem.hpp"
-#include "../../display/game_display.hpp"
+#include "../../gui/game_display.hpp"
 #include "../../gamestatus.hpp"
 #include "../../log.hpp"
 #include "../../map.hpp"

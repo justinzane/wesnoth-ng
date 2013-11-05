@@ -22,7 +22,7 @@
 #include "create.hpp"
 #include "move.hpp"
 
-#include "../display/game_display.hpp"
+#include "../gui/game_display.hpp"
 #include "../log.hpp"
 #include "../play_controller.hpp"
 #include "../replay.hpp"

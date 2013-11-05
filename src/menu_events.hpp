@@ -18,7 +18,7 @@
 
 #include "global.hpp"
 #include "chat_events.hpp"
-#include "display/floating_textbox.hpp"
+#include "gui/floating_textbox.hpp"
 #include "unit_map.hpp"
 
 class game_state;

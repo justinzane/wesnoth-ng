@@ -15,7 +15,7 @@
 
 #include "editor_controller.hpp"
 
-#include "../display/construct_dialog.hpp"
+#include "../gui/construct_dialog.hpp"
 #include "../gettext.hpp"
 #include "../filesystem.hpp"
 #include "editor/action/action_base.hpp"
@@ -26,7 +26,7 @@ lg::log_domain log_editor("editor");
 
 namespace editor {
 
-EXIT_STATUS start(const config& game_conf, CVideo& video, const std::string& filename /* = "" */,
+EXIT_STATUS start(const config& game_conf, ui_window& video, const std::string& filename /* = "" */,
 	bool take_screenshot /* = false */, const std::string& screenshot_filename /* = "map_screenshot.bmp" */)
 {
 	EXIT_STATUS e = EXIT_ERROR;

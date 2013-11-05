@@ -79,7 +79,7 @@ tmp_create_game::tmp_create_game(const config& cfg) :
 {
 }
 
-void tmp_create_game::pre_show(CVideo& /*video*/, twindow& window)
+void tmp_create_game::pre_show(ui_window& /*video*/, twindow& window)
 {
 	find_widget<tminimap>(&window, "minimap", false).set_config(&cfg_);
 

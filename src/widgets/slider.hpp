@@ -16,7 +16,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "../display/sdl_utils.hpp"
+#include "../gui/sdl_utils.hpp"
 
 #include "widget.hpp"
 
@@ -27,7 +27,7 @@ namespace gui {
 class slider : public widget
 {
 public:
-	slider(CVideo &video, const std::string& image = "buttons/sliders/slider", bool black = false);
+	slider(ui_window &video, const std::string& image = "buttons/sliders/slider", bool black = false);
 
 	void set_min(int value);
 	void set_max(int value);
@@ -76,8 +76,8 @@ template<typename T>
 class list_slider : public slider
 {
 	public:
-		list_slider(CVideo &video);
-		list_slider(CVideo &video, const std::vector<T> &items);
+		list_slider(ui_window &video);
+		list_slider(ui_window &video, const std::vector<T> &items);
 		void set_items(const std::vector<T> &items);
 		bool select_item(const T& item); //use select_item() instead of set_value()
 		const T& item_selected() const; //use item_selected() instead of value()

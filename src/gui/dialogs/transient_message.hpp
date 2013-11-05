@@ -54,7 +54,7 @@ private:
  * @param message_use_markup  Use markup for the message?
  * @param title_use_markup    Use markup for the title?
  */
-void show_transient_message(CVideo& video
+void show_transient_message(ui_window& video
 		, const std::string& title
 		, const std::string& message
 		, const std::string& image = std::string()
@@ -73,7 +73,7 @@ void show_transient_message(CVideo& video
  * @param image               An image to show in the dialog.
  * @param message_use_markup  Use markup for the message?
  */
-void show_transient_error_message(CVideo& video
+void show_transient_error_message(ui_window& video
 		, const std::string& message
 		, const std::string& image = std::string()
 		, const bool message_use_markup = false);

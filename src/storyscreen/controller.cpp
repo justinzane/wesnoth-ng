@@ -26,7 +26,7 @@
 #include "asserts.hpp"
 #include "variable.hpp"
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "game_events/action_wml.hpp"
 #include "game_events/conditional_wml.hpp"
 #include "gamestatus.hpp"

@@ -71,7 +71,7 @@ builder_widget_lookup()
  * be tuned. This page will describe what can be tuned.
  *
  */
-twindow *build(CVideo &video, const twindow_builder::tresolution *definition)
+twindow *build(ui_window &video, const twindow_builder::tresolution *definition)
 {
 	// We set the values from the definition since we can only determine the
 	// best size (if needed) after all widgets have been placed.
@@ -125,7 +125,7 @@ twindow *build(CVideo &video, const twindow_builder::tresolution *definition)
 	return window;
 }
 
-twindow *build(CVideo &video, const std::string &type)
+twindow *build(ui_window &video, const std::string &type)
 {
 	std::vector<twindow_builder::tresolution>::const_iterator
 		definition = get_window_builder(type);

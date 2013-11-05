@@ -22,11 +22,11 @@
 
 #include "global.hpp"
 
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
 #include "serialization/string_utils.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 #include "wml_exception.hpp"
 
 namespace font {
@@ -238,7 +238,7 @@ SDL_Rect draw_text(surface dst, const SDL_Rect& area, int size,
 	return res;
 }
 
-SDL_Rect draw_text(CVideo* gui, const SDL_Rect& area, int size,
+SDL_Rect draw_text(ui_window* gui, const SDL_Rect& area, int size,
                    const SDL_Color& color, const std::string& txt,
                    int x, int y, bool use_tooltips, int style)
 {
@@ -554,7 +554,7 @@ std::string word_wrap_text(const std::string& unwrapped_text, int font_size,
 	return wrapped_text;
 }
 
-SDL_Rect draw_wrapped_text(CVideo* gui, const SDL_Rect& area, int font_size,
+SDL_Rect draw_wrapped_text(ui_window* gui, const SDL_Rect& area, int font_size,
 		     const SDL_Color& color, const std::string& text,
 		     int x, int y, int max_width)
 {

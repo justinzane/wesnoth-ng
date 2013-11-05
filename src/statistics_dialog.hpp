@@ -16,7 +16,7 @@
 #ifndef STATISTICS_DIALOG_HPP_INCLUDED
 #define STATISTICS_DIALOG_HPP_INCLUDED
 
-#include "display/construct_dialog.hpp"
+#include "gui/construct_dialog.hpp"
 #include "statistics.hpp"
 
 #include <vector>

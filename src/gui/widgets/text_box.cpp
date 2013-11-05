@@ -16,7 +16,7 @@
 
 #include "gui/widgets/text_box.hpp"
 
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "gui/auxiliary/log.hpp"
 #include "gui/auxiliary/widget_definition/text_box.hpp"
 #include "gui/auxiliary/window_builder/text_box.hpp"
@@ -206,7 +206,7 @@ void ttext_box::delete_selection()
 	}
 
 	// Update the text, we need to assume it's a wide string.
-	wide_string tmp = utils::string_to_wstring(get_value());
+	std::wstring tmp = utils::string_to_wstring(get_value());
 	tmp.erase(tmp.begin() + start, tmp.begin() + start + len);
 	const std::string& text = utils::wstring_to_string(tmp);
 	set_value(text);

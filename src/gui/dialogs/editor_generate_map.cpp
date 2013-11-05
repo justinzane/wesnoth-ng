@@ -96,7 +96,7 @@ void teditor_generate_map::update_current_generator_label(twindow& window)
 	window.invalidate_layout();
 }
 
-void teditor_generate_map::pre_show(CVideo& /*video*/, twindow& window)
+void teditor_generate_map::pre_show(ui_window& /*video*/, twindow& window)
 {
 	assert(!map_generators_.empty());
 	assert(gui_);

@@ -28,7 +28,7 @@ class replay_controller : public play_controller
 {
 public:
 	replay_controller(const config& level, game_state& state_of_game,
-		const int ticks, const int num_turns, const config& game_config, CVideo& video);
+		const int ticks, const int num_turns, const config& game_config, ui_window& video);
 	virtual ~replay_controller();
 
 	virtual bool can_execute_command(const hotkey::hotkey_command& command, int index=-1) const;
@@ -96,7 +96,7 @@ private:
 
 
 LEVEL_RESULT play_replay_level(const config& terrain_config,
-		const config* level, CVideo& video,
+		const config* level, ui_window& video,
 		game_state& state_of_game);
 
 #endif

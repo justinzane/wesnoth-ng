@@ -23,13 +23,11 @@
 class config;
 
 #include "exceptions.hpp"
-#include "SDL_net.h"
-
-#include <string>
-#include <vector>
-
+#include <SDL2/SDL_net.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/exception/error_info.hpp>
+#include <string>
+#include <vector>
 
 namespace threading
 {

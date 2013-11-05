@@ -18,9 +18,9 @@
 #define MARKED_UP_TEXT_HPP_INCLUDED
 
 
-class CVideo;
+class ui_window;
 struct surface;
-#include <SDL_video.h>
+#include <SDL2/SDL_video.h>
 #include <string>
 
 namespace font {
@@ -76,7 +76,7 @@ SDL_Rect draw_text(surface dst, const SDL_Rect& area, int size,
                    int x, int y, bool use_tooltips = false, int style = 0);
 
 /** wrapper of the previous function, gui can also be NULL */
-SDL_Rect draw_text(CVideo* gui, const SDL_Rect& area, int size,
+SDL_Rect draw_text(ui_window* gui, const SDL_Rect& area, int size,
                    const SDL_Color& color, const std::string& text,
                    int x, int y, bool use_tooltips = false, int style = 0);
 
@@ -135,7 +135,7 @@ std::string word_wrap_text(const std::string& unwrapped_text, int font_size,
  *
  * @returns                       A bounding rectangle of the text.
  */
-SDL_Rect draw_wrapped_text(CVideo* gui, const SDL_Rect& area, int font_size,
+SDL_Rect draw_wrapped_text(ui_window* gui, const SDL_Rect& area, int font_size,
 			     const SDL_Color& color, const std::string& text,
 			     int x, int y, int max_width);
 

@@ -1,4 +1,6 @@
-/*
+/**
+ * Removed for SDL2
+ *
    Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
@@ -10,7 +12,6 @@
    but WITHOUT ANY WARRANTY.
 
    See the COPYING file for more details.
-*/
 
 #include "global.hpp"
 #include "key.hpp"
@@ -28,3 +29,4 @@ bool CKey::operator[](int k) const
 	return key_list[k] > 0;
 #endif
 }
+*/

@@ -16,8 +16,8 @@
 
 #include "gui/dialogs/game_paths.hpp"
 
-#include "display/clipboard.hpp"
-#include "display/desktop_util.hpp"
+#include "gui/clipboard.hpp"
+#include "gui/desktop_util.hpp"
 #include "filesystem.hpp"
 #include "game_config.hpp"
 #include "gui/auxiliary/find_widget.tpp"
@@ -69,7 +69,7 @@ tgame_paths::tgame_paths()
 	path_map_["cache"] = get_cache_dir();
 }
 
-void tgame_paths::pre_show(CVideo& /*video*/, twindow& window)
+void tgame_paths::pre_show(ui_window& /*video*/, twindow& window)
 {
     FOREACH(const AUTO& path_ent, path_map_) {
 		const std::string& path_id = path_ent.first;

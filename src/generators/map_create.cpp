@@ -12,15 +12,24 @@
    See the COPYING file for more details.
 */
 
-#include "global.hpp"
 #include "map_create.hpp"
 
-#include "generators/cavegen.hpp"
-#include "generators/yamg/ya_mapgen.hpp"
-#include "log.hpp"
+#include "cavegen.hpp"
 #include "mapgen_dialog.hpp"
-#include "scoped_resource.hpp"
-#include "serialization/string_utils.hpp"
+
+#include "yamg/ya_mapgen.hpp"
+
+#include "../config.hpp"
+#include "../log.hpp"
+#include "../scoped_resource.hpp"
+#include "../serialization/string_utils.hpp"
+//#include "global.hpp"
+
+#include "mapgen_dialog.hpp"
+
+#include <iostream>
+#include <string>
+#include <vector>
 
 
 static lg::log_domain log_config("config");

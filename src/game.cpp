@@ -698,7 +698,7 @@ int main(int argc, char** argv)
 	} catch(boost::program_options::error& e) {
 		std::cerr << "Error in command line: " << e.what() << '\n';
 		return 1;
-	} catch(CVideo::error&) {
+	} catch(ui_window::error&) {
 		std::cerr << "Could not initialize video. Exiting.\n";
 		return 1;
 	} catch(font::manager::error&) {
@@ -710,7 +710,7 @@ int main(int argc, char** argv)
 	} catch(gui::button::error&) {
 		std::cerr << "Could not create button: Image could not be found\n";
 		return 1;
-	} catch(CVideo::quit&) {
+	} catch(ui_window::quit&) {
 		//just means the game should quit
 	} catch(end_level_exception&) {
 		std::cerr << "caught end_level_exception (quitting)\n";

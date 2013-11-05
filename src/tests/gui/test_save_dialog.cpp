@@ -19,7 +19,7 @@
 #include <boost/test/unit_test_suite.hpp>
 
 
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 #include "key.hpp"
 #include "filesystem.hpp"
 #include "savegame.hpp"

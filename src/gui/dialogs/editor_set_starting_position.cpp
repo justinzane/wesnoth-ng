@@ -28,7 +28,7 @@
 #endif
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/window.hpp"
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 
 namespace gui2 {
 
@@ -75,7 +75,7 @@ teditor_set_starting_position::teditor_set_starting_position(
 	}
 }
 
-void teditor_set_starting_position::pre_show(CVideo& /*video*/, twindow& window)
+void teditor_set_starting_position::pre_show(ui_window& /*video*/, twindow& window)
 {
 	tlistbox& list = find_widget<tlistbox>(&window, "listbox", false);
 	window.keyboard_capture(&list);

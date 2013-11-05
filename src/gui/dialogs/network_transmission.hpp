@@ -63,7 +63,7 @@ public:
 
 protected:
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog. */
 	void post_show(twindow& window);

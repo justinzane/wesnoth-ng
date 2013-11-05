@@ -58,7 +58,7 @@ void twml_message_::set_option_list(
  * ugly. There needs to be a clean interface to set whether a widget has a
  * markup and what kind of markup. These fixes will be post 1.6.
  */
-void twml_message_::pre_show(CVideo& /*video*/, twindow& window)
+void twml_message_::pre_show(ui_window& /*video*/, twindow& window)
 {
 	window.canvas(1).set_variable("portrait_image", variant(portrait_));
 	window.canvas(1).set_variable("portrait_mirror", variant(mirror_));
@@ -160,7 +160,7 @@ REGISTER_DIALOG(wml_message_left)
 REGISTER_DIALOG(wml_message_right)
 
 int show_wml_message(const bool left_side
-		, CVideo& video
+		, ui_window& video
 		, const std::string& title
 		, const std::string& message
 		, const std::string& portrait

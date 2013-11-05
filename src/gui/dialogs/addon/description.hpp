@@ -41,7 +41,7 @@ public:
 	 *
 	 * See @ref tdialog for more information.
 	 */
-	static void display(const std::string& addon_id, const addons_list& addons_list, const addons_tracking_list& addon_states, CVideo& video)
+	static void display(const std::string& addon_id, const addons_list& addons_list, const addons_tracking_list& addon_states, ui_window& video)
 	{
 		taddon_description(addon_id, addons_list, addon_states).show(video);
 	}

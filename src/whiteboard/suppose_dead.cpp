@@ -25,7 +25,7 @@
 
 #include "arrow.hpp"
 #include "config.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_end_exceptions.hpp"
 #include "mouse_events.hpp"
 #include "play_controller.hpp"

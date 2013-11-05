@@ -25,12 +25,12 @@
 #include "storyscreen/part.hpp"
 #include "storyscreen/render.hpp"
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "image.hpp"
 #include "language.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "text.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -65,7 +65,7 @@ namespace {
 	std::string const storybox_top_border_path = "dialogs/translucent54-border-top.png";
 	std::string const storybox_bottom_border_path = "dialogs/translucent54-border-bottom.png";
 
-	void blur_area(CVideo& video, int y, int h)
+	void blur_area(ui_window& video, int y, int h)
 	{
 		SDL_Rect blur_rect = create_rect(0, y, screen_area().w, h);
 		surface blur = get_surface_portion(video.getSurface(), blur_rect);
@@ -502,7 +502,7 @@ void part_ui::render_story_box()
 			// NOTE: ::blit_surface() screws up with antialiasing and hinting when
 			//       on backgroundless (e.g. black) screens; ttext::draw()
 			//       uses it nonetheless, no idea why...
-			//       Here we'll use CVideo::blit_surface() instead.
+			//       Here we'll use ui_window::blit_surface() instead.
 			video_.blit_surface(dstrect.x, dstrect.y, txtsurf, &scan);
 			update_rect(dstrect);
 			++scan.y;

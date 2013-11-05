@@ -21,14 +21,14 @@
 #include "filesystem.hpp"
 #include "game_preferences.hpp"
 #include "lobby_preferences.hpp"
-#include "map_exception.hpp"
+#include "board/map_exception.hpp"
 #include "marked-up_text.hpp"
 #include "minimap.hpp"
 #include "multiplayer_lobby.hpp"
 #include "gettext.hpp"
 #include "log.hpp"
 #include "playmp_controller.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "wml_exception.hpp"
 #include "formula_string_utils.hpp"
 
@@ -42,7 +42,7 @@ std::vector<std::string> empty_string_vector;
 }
 
 namespace mp {
-gamebrowser::gamebrowser(CVideo& video, const config &map_hashes) :
+gamebrowser::gamebrowser(ui_window& video, const config &map_hashes) :
 	menu(video, empty_string_vector, false, -1, -1, NULL, &menu::bluebg_style),
 	gold_icon_locator_("themes/gold.png"),
 	xp_icon_locator_("themes/units.png"),
@@ -1033,8 +1033,8 @@ void lobby::process_event()
 		return;
 	}
 
-	if(search_string_ != filter_text_.text()) {
-	    search_string_ = filter_text_.text();
+	if(search_string_ != filter_text_.get_text()) {
+	    search_string_ = filter_text_.get_text();
 	    preferences::set_fi_text(search_string_);
 	    gamelist_updated();
 	}

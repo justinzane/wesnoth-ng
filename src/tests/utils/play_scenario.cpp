@@ -18,7 +18,7 @@
 #include "tests/utils/game_config_manager.hpp"
 #include "tests/utils/fake_display.hpp"
 
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "gamestatus.hpp"
 #include "playcampaign.hpp"
 #include "unit.hpp"

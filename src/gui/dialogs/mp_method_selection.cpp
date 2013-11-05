@@ -53,7 +53,7 @@ namespace gui2 {
 
 REGISTER_DIALOG(mp_method_selection)
 
-void tmp_method_selection::pre_show(CVideo& /*video*/, twindow& window)
+void tmp_method_selection::pre_show(ui_window& /*video*/, twindow& window)
 {
 	user_name_ = preferences::login();
 	ttext_box* user_widget = find_widget<ttext_box>(

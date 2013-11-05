@@ -15,7 +15,7 @@
 #ifndef LABEL_HPP_INCLUDED
 #define LABEL_HPP_INCLUDED
 
-#include "../display/font.hpp"
+#include "../gui/font.hpp"
 #include "widget.hpp"
 #include <string>
 
@@ -24,7 +24,7 @@ namespace gui {
 class label : public widget
 {
 public:
-	label(CVideo& video, const std::string& text, int size=font::SIZE_NORMAL,
+	label(ui_window& video, const std::string& text, int size=font::SIZE_NORMAL,
 			const SDL_Color& color=font::NORMAL_COLOR, const bool auto_join=true);
 	const std::string& set_text(const std::string& text);
 	const std::string& get_text() const;

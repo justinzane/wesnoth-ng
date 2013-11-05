@@ -17,22 +17,41 @@
  * Map-generator, with standalone testprogram.
  */
 
-#include "global.hpp"
-
-#include "gettext.hpp"
-#include "language.hpp"
-#include "log.hpp"
-#include "map.hpp"
 #include "mapgen.hpp"
-#include "pathfind/pathfind.hpp"
-#include "pathutils.hpp"
-#include "race.hpp"
-#include "util.hpp"
-#include "wml_exception.hpp"
-#include "formula_string_utils.hpp"
-#include <SDL2/SDL.h>
+
+#include "../board/map.hpp"
+#include "../config.hpp"
+#include "../formula_string_utils.hpp"
+#include "../gettext.hpp"
+//#include "../global.hpp"
+#include "../language.hpp"
+#include "../log.hpp"
+#include "../pathfind/pathfind.hpp"
+#include "../pathutils.hpp"
+#include "../race.hpp"
+#include "../serialization/string_utils.hpp"
+#include "../terrain_translation.hpp"
+#include "../tstring.hpp"
+#include "../util.hpp"
+#include "../wml_exception.hpp"
+
 
 #include <boost/foreach.hpp>
+//#include <SDL2/SDL.h>
+#include <SDL2/SDL_timer.h>
+
+#include <stddef.h>
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 static lg::log_domain log_engine("engine");
 #define ERR_NG LOG_STREAM(err, log_engine)

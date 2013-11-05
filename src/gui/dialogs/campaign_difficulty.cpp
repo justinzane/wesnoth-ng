@@ -72,7 +72,7 @@ tcampaign_difficulty::tcampaign_difficulty(
 	}
 }
 
-void tcampaign_difficulty::pre_show(CVideo& /*video*/, twindow& window)
+void tcampaign_difficulty::pre_show(ui_window& /*video*/, twindow& window)
 {
 	tlistbox& list = find_widget<tlistbox>(&window, "listbox", false);
 	window.keyboard_capture(&list);

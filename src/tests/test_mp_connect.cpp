@@ -17,7 +17,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "game_config_manager.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "multiplayer_connect.hpp"
 #include "multiplayer_ui.hpp"
 
@@ -88,7 +88,7 @@ struct mp_connect_fixture {
 	~mp_connect_fixture()
 	{
 	}
-	CVideo video;
+	ui_window video;
 	char** dummy_argv;
 	commandline_options cmdline_opts;
 	boost::scoped_ptr<game_config_manager> config_manager;

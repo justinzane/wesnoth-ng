@@ -1,16 +1,16 @@
 /*
-   Copyright (C) 2011 - 2013 by Mark de Wever <koraq@xs4all.nl>
-   Part of the Battle for Wesnoth Project http://www.wesnoth.org/
+ Copyright (C) 2011 - 2013 by Mark de Wever <koraq@xs4all.nl>
+ Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY.
 
-   See the COPYING file for more details.
-*/
+ See the COPYING file for more details.
+ */
 
 /**
  * @file
@@ -22,7 +22,10 @@
 #ifndef GUI_WIDGETS_AUXILIARY_EVENT_MESSAGE_HPP_INCLUDED
 #define GUI_WIDGETS_AUXILIARY_EVENT_MESSAGE_HPP_INCLUDED
 
-#include "gui/widgets/helper.hpp"
+#include "../../lib/types/point.hpp"
+//#include "gui/widgets/helper.hpp"
+
+#include <string>
 
 namespace gui2 {
 
@@ -40,52 +43,45 @@ namespace event {
  * This is done by:
  * * @ref REQUEST_PLACEMENT
  */
-struct tmessage
-{
-	virtual ~tmessage() {}
+struct tmessage {
+        virtual ~tmessage() {}
 };
 
 /** The message for MESSAGE_SHOW_TOOLTIP. */
-struct tmessage_show_tooltip
-	: public tmessage
+struct tmessage_show_tooltip:
+    public tmessage
 {
-	tmessage_show_tooltip(
-			  const std::string& message_
-			, const tpoint& location_)
-		: message(message_)
-		, location(location_)
-	{
-	}
+    public:
+        tmessage_show_tooltip(const std::string& message_,
+                              const tpoint& location_) :
+            message(message_), location(location_) {}
 
-	/** The message to show on the tooltip. */
-	const std::string message;
+        /** The message to show on the tooltip. */
+        const std::string message;
 
-	/** The location where to show the tooltip. */
-	const tpoint location;
+        /** The location where to show the tooltip. */
+        const tpoint location;
 };
 
 /** The message for MESSAGE_SHOW_HELPTIP. */
-struct tmessage_show_helptip
-	: public tmessage
+struct tmessage_show_helptip:
+    public tmessage
 {
-	tmessage_show_helptip(
-			  const std::string& message_
-			, const tpoint& location_)
-		: message(message_)
-		, location(location_)
-	{
-	}
+    public:
+        tmessage_show_helptip(const std::string& message_,
+                              const tpoint& location_) :
+            message(message_), location(location_) {}
 
-	/** The message to show on the helptip. */
-	const std::string message;
+        /** The message to show on the helptip. */
+        const std::string message;
 
-	/** The location where to show the helptip. */
-	const tpoint location;
+        /** The location where to show the helptip. */
+        const tpoint location;
 };
 
-} // namespace event
+}  // namespace event
 
-} // namespace gui2
+}  // namespace gui2
 
 #endif
 

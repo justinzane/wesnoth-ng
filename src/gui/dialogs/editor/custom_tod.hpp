@@ -15,7 +15,7 @@
 #ifndef GUI_DIALOGS_CUSTOM_TOD_HPP_INCLUDED
 #define GUI_DIALOGS_CUSTOM_TOD_HPP_INCLUDED
 
-#include "display/filechooser.hpp"
+#include "gui/filechooser.hpp"
 #include "time_of_day.hpp"
 #include "gui/widgets/image.hpp"
 #include "gui/widgets/text_box.hpp"
@@ -44,7 +44,7 @@ public:
 
 	static bool execute(editor::editor_display* display
 			, const std::vector<time_of_day>& tods
-			, CVideo& video)
+			, ui_window& video)
 	{
 		return tcustom_tod(display, tods).show(video);
 	}
@@ -78,7 +78,7 @@ private:
 	virtual const std::string& window_id() const;
 
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog. */
 	void post_show(twindow& window);

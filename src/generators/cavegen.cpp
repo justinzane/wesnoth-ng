@@ -21,7 +21,7 @@
 
 #include "cavegen.hpp"
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "pathfind/pathfind.hpp"
 #include "serialization/string_utils.hpp"
 #include "util.hpp"

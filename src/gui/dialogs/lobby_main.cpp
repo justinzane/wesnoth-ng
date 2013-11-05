@@ -45,7 +45,7 @@
 #include "network.hpp"
 #include "playmp_controller.hpp"
 #include "preferences_display.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
@@ -405,7 +405,7 @@ static void signal_handler_sdl_video_resize(
 		, bool& handled
 		, bool& halt
 		, const tpoint& new_size
-		, CVideo& video)
+		, ui_window& video)
 {
 	DBG_GUI_E << __func__  << ": " << event << ".\n";
 
@@ -433,7 +433,7 @@ static void signal_handler_sdl_video_resize(
 	}
 }
 
-static bool fullscreen(CVideo& video)
+static bool fullscreen(ui_window& video)
 {
 	preferences::set_fullscreen(video , !preferences::fullscreen());
 
@@ -451,7 +451,7 @@ static bool fullscreen(CVideo& video)
 	return true;
 }
 
-void tlobby_main::post_build(CVideo& video, twindow& window)
+void tlobby_main::post_build(ui_window& video, twindow& window)
 {
 	/** @todo Should become a global hotkey after 1.8, then remove it here. */
 	window.register_hotkey(hotkey::HOTKEY_FULLSCREEN
@@ -923,7 +923,7 @@ void tlobby_main::update_selected_game()
 	player_list_dirty_ = true;
 }
 
-void tlobby_main::pre_show(CVideo& /*video*/, twindow& window)
+void tlobby_main::pre_show(ui_window& /*video*/, twindow& window)
 {
 	SCOPE_LB;
 	roomlistbox_ = find_widget<tlistbox>(&window, "room_list", false, true);

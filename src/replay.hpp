@@ -21,7 +21,7 @@
 #define REPLAY_H_INCLUDED
 
 #include "config.hpp"
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 #include "rng.hpp"
 
 #include <deque>

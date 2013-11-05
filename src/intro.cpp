@@ -22,7 +22,7 @@
 
 #include "intro.hpp"
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
 #include "storyscreen/interface.hpp"
@@ -38,7 +38,7 @@ void the_end(display &disp, std::string text, unsigned int duration)
 		duration = 3500;
 
 	SDL_Rect area = screen_area();
-	CVideo &video = disp.video();
+	ui_window &video = disp.video();
 	sdl_fill_rect(video.getSurface(),&area,0);
 
 	update_whole_screen();

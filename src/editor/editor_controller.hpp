@@ -25,9 +25,9 @@
 #include "../controller_base.hpp"
 #include "../help.hpp"
 #include "../mouse_handler_base.hpp"
-#include "../display/tooltips.hpp"
-#include "../display/halo.hpp"
-#include "../display/sound_music_track.hpp"
+#include "../gui/tooltips.hpp"
+#include "../gui/halo.hpp"
+#include "../gui/sound_music_track.hpp"
 
 class map_generator;
 
@@ -80,7 +80,7 @@ class editor_controller : public controller_base,
 		 * to the map can be retrieved between the main loop's end and the controller's
 		 * destruction.
 		 */
-		editor_controller(const config &game_config, CVideo& video);
+		editor_controller(const config &game_config, ui_window& video);
 
 		~editor_controller();
 

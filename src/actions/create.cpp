@@ -24,7 +24,7 @@
 #include "vision.hpp"
 
 #include "../config.hpp"
-#include "../display/game_display.hpp"
+#include "../gui/game_display.hpp"
 #include "../game_events/pump.hpp"
 #include "../game_preferences.hpp"
 #include "../gamestatus.hpp"

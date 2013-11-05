@@ -19,10 +19,10 @@
 
 #include "leader_scroll_dialog.hpp"
 #include "wml_separators.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 
-//#include "display/construct_dialog.hpp"
-//#include "display/display.hpp"
+//#include "gui/construct_dialog.hpp"
+//#include "gui/display.hpp"
 //#include "gettext.hpp"
 #include "marked-up_text.hpp"
 //

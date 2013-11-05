@@ -77,10 +77,10 @@ private:
 	virtual const std::string& window_id() const;
 
 	/** Inherited from tdialog. */
-	virtual void post_build(CVideo& video, twindow& window);
+	virtual void post_build(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** The progress bar time for the logo. */
 	size_t logo_timer_id_;
@@ -98,7 +98,7 @@ private:
 	void update_tip(twindow& window, const bool previous);
 
 	/** Shows the debug clock. */
-	void show_debug_clock_window(CVideo& video);
+	void show_debug_clock_window(ui_window& video);
 };
 
 } // namespace gui2

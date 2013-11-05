@@ -21,7 +21,7 @@
 
 namespace gui {
 
-label::label(CVideo& video, const std::string& text, int size, const SDL_Color& color, const bool auto_join) : widget(video, auto_join), text_(text), size_(size), color_(color)
+label::label(ui_window& video, const std::string& text, int size, const SDL_Color& color, const bool auto_join) : widget(video, auto_join), text_(text), size_(size), color_(color)
 {
 	update_label_size();
 }

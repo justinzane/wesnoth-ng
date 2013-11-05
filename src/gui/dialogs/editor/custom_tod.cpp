@@ -16,9 +16,9 @@
 
 #include "gui/dialogs/editor/custom_tod.hpp"
 
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 #include "filesystem.hpp"
-#include "display/filechooser.hpp"
+#include "gui/filechooser.hpp"
 #include "editor/editor_preferences.hpp"
 #include "editor/editor_display.hpp"
 #include "gui/dialogs/field.hpp"
@@ -246,7 +246,7 @@ void tcustom_tod::update_selected_tod_info(twindow& window)
     window.invalidate_layout();
 }
 
-void tcustom_tod::pre_show(CVideo& /*video*/, twindow& window)
+void tcustom_tod::pre_show(ui_window& /*video*/, twindow& window)
 {
 	assert(!tods_.empty());
 	current_tod_name_ = find_widget<ttext_box>(

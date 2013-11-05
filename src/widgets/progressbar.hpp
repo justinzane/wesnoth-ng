@@ -22,7 +22,7 @@ namespace gui {
 class progress_bar : public widget
 {
 public:
-	progress_bar(CVideo& video);
+	progress_bar(ui_window& video);
 
 	void set_progress_percent(int progress);
 	void set_text(const std::string& text);

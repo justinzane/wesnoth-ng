@@ -31,7 +31,7 @@
 #include "gettext.hpp"
 #include "serialization/string_utils.hpp"
 
-#include "SDL_image.h"
+#include "SDL2/SDL_image.h"
 
 #include <boost/functional/hash.hpp>
 #include <boost/foreach.hpp>

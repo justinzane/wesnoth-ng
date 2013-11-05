@@ -14,7 +14,7 @@
 
 #include "color_range.hpp"
 #include "config.hpp"
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "game_config.hpp"
 #include "image.hpp"
 #include "image_modifications.hpp"

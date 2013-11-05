@@ -24,9 +24,9 @@
 
 #include "../../attack_prediction.hpp"
 #include "../../filesystem.hpp"
-#include "../../display/game_display.hpp"
+#include "../../gui/game_display.hpp"
 #include "../../log.hpp"
-#include "../../map_label.hpp"
+#include "../../board/map_label.hpp"
 #include "../../menu_events.hpp"
 #include "../../pathfind/teleport.hpp"
 #include "../../replay.hpp"

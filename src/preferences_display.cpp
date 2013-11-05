@@ -22,8 +22,8 @@
 #include "global.hpp"
 #include "preferences_display.hpp"
 
-#include "display/construct_dialog.hpp"
-#include "display/display.hpp"
+#include "gui/construct_dialog.hpp"
+#include "gui/display.hpp"
 #include "formatter.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
@@ -62,7 +62,7 @@ display_manager::~display_manager()
 	disp = NULL;
 }
 
-bool detect_video_settings(CVideo& video, std::pair<int,int>& resolution, int& bpp, int& video_flags)
+bool detect_video_settings(ui_window& video, std::pair<int,int>& resolution, int& bpp, int& video_flags)
 {
 	video_flags = fullscreen() ? FULL_SCREEN : 0;
 	resolution = preferences::resolution();
@@ -101,7 +101,7 @@ bool detect_video_settings(CVideo& video, std::pair<int,int>& resolution, int& b
 	return bpp != 0;
 }
 
-void set_fullscreen(CVideo& video, const bool ison)
+void set_fullscreen(ui_window& video, const bool ison)
 {
 	_set_fullscreen(ison);
 
@@ -159,7 +159,7 @@ void set_resolution(const std::pair<int,int>& resolution)
 	}
 }
 
-bool set_resolution(CVideo& video
+bool set_resolution(ui_window& video
 		, const unsigned width, const unsigned height)
 {
 	SDL_Rect rect;
@@ -268,7 +268,7 @@ bool show_video_mode_dialog(display& disp)
 	const resize_lock prevent_resizing;
 	const events::event_context dialog_events_context;
 
-	CVideo& video = disp.video();
+	ui_window& video = disp.video();
 
 	SDL_PixelFormat format = *video.getSurface()->format;
 	format.BitsPerPixel = video.getBpp();

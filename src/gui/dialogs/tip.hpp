@@ -17,7 +17,7 @@
 
 #include <string>
 
-class CVideo;
+class ui_window;
 class t_string;
 
 namespace gui2 {
@@ -38,7 +38,7 @@ namespace tip {
 	 * @param message             The message to show in the tip.
 	 * @param mouse               The position of the mouse.
 	 */
-	void show(CVideo& video
+	void show(ui_window& video
 			, const std::string& window_id
 			, const t_string& message
 			, const tpoint& mouse);

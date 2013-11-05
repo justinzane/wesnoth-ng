@@ -58,7 +58,7 @@ namespace mp
 namespace depcheck
 {
 
-manager::manager(const config& gamecfg, CVideo& video)
+manager::manager(const config& gamecfg, ui_window& video)
 	: video_(video)
 	, depinfo_()
 	, era_()

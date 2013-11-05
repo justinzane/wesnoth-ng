@@ -79,7 +79,7 @@ void tnetwork_transmission::set_subtitle(const std::string& subtitle)
 	subtitle_ = subtitle;
 }
 
-void tnetwork_transmission::pre_show(CVideo& /*video*/, twindow& window)
+void tnetwork_transmission::pre_show(ui_window& /*video*/, twindow& window)
 {
 	// ***** ***** ***** ***** Set up the widgets ***** ***** ***** *****
 	if(!subtitle_.empty()) {

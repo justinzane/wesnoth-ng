@@ -18,7 +18,7 @@
 
 #include "formula_callable.hpp"
 #include "formula_function.hpp"
-#include "map_utils.hpp"
+#include "board/map_utils.hpp"
 
 #include <boost/foreach.hpp>
 

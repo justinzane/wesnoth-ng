@@ -24,7 +24,7 @@
 #include "../formula/ai.hpp"
 
 #include "../../array.hpp"
-#include "../../display/dialogs.hpp"
+#include "../../gui/dialogs.hpp"
 #include "../../game_events/pump.hpp"
 #include "../../gamestatus.hpp"
 #include "../../log.hpp"

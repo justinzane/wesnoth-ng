@@ -22,7 +22,7 @@
 #include <boost/function.hpp>
 
 class config;
-class CVideo;
+class ui_window;
 
 namespace gui2 {
 
@@ -35,7 +35,7 @@ class twindow;
  * @param type                    The type id string of the window, this window
  *                                must be registered at startup.
  */
-twindow* build(CVideo& video, const std::string& type);
+twindow* build(ui_window& video, const std::string& type);
 
 /** Contains the info needed to instantiate a widget. */
 struct tbuilder_widget
@@ -229,7 +229,7 @@ private:
 /**
  * Builds a window.
  */
-twindow *build(CVideo &video, const twindow_builder::tresolution *res);
+twindow *build(ui_window &video, const twindow_builder::tresolution *res);
 
 } // namespace gui2
 

@@ -24,19 +24,19 @@
 #include "ai/manager.hpp"
 #include "ai/game_info.hpp"
 #include "ai/testing.hpp"
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_events/pump.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/transient_message.hpp"
 #include "log.hpp"
-#include "map_label.hpp"
+#include "board/map_label.hpp"
 #include "marked-up_text.hpp"
 #include "playturn.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "formula_string_utils.hpp"
 #include "events.hpp"
 #include "save_blocker.hpp"
@@ -56,7 +56,7 @@ static lg::log_domain log_enginerefac("enginerefac");
 
 playsingle_controller::playsingle_controller(const config& level,
 		game_state& state_of_game, const int ticks, const int num_turns,
-		const config& game_config, CVideo& video, bool skip_replay) :
+		const config& game_config, ui_window& video, bool skip_replay) :
 	play_controller(level, state_of_game, ticks, num_turns, game_config, video, skip_replay),
 	cursor_setter(cursor::NORMAL),
 	data_backlog_(),

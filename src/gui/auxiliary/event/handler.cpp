@@ -16,7 +16,7 @@
 
 #include "gui/auxiliary/event/handler.hpp"
 
-#include "display/clipboard.hpp"
+#include "gui/clipboard.hpp"
 #include "gui/auxiliary/event/dispatcher.hpp"
 #include "gui/auxiliary/timer.hpp"
 #include "gui/auxiliary/log.hpp"
@@ -25,7 +25,7 @@
 #include "gui/widgets/window.hpp"
 #include "hotkeys.hpp"
 #include "utils/foreach.tpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 #include <cassert>
 
@@ -102,7 +102,7 @@ static Uint32 timer_sdl_poll_events(Uint32, void*)
 {
 	try {
 		events::pump();
-	} catch(CVideo::quit&) {
+	} catch(ui_window::quit&) {
 		return 0;
 	}
 	return event_poll_interval;
@@ -485,7 +485,7 @@ void thandler::draw(const bool force)
 	}
 
 	if(!dispatchers_.empty()) {
-		CVideo& video = dynamic_cast<twindow&>(*dispatchers_.back()).video();
+		ui_window& video = dynamic_cast<twindow&>(*dispatchers_.back()).video();
 
 		surface frame_buffer = video.getSurface();
 

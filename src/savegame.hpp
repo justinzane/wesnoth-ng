@@ -19,7 +19,7 @@
 #include "filesystem.hpp"
 #include "gamestatus.hpp"
 #include "tod_manager.hpp"
-#include "display/show_dialog.hpp"
+#include "gui/show_dialog.hpp"
 
 class config_writer;
 class game_display;
@@ -151,11 +151,11 @@ public:
 		This is used by automatically generated replays, start-of-scenario saves, autosaves,
 		and saves from the console (e.g. ":w").
 	*/
-	bool save_game_automatic(CVideo& video, bool ask_for_overwrite = false, const std::string& filename = "");
+	bool save_game_automatic(ui_window& video, bool ask_for_overwrite = false, const std::string& filename = "");
 
 	/** Save a game interactively through the savegame dialog. Used for manual midgame and replay
 		saves. The return value denotes, if the save was successful or not. */
-	bool save_game_interactive(CVideo& video, const std::string& message,
+	bool save_game_interactive(ui_window& video, const std::string& message,
 		gui::DIALOG_TYPE dialog_type);
 
 	const std::string& filename() const { return filename_; }
@@ -166,13 +166,13 @@ protected:
 		or error messages to appear, you have to provide the gui parameter.
 		The return value denotes, if the save was successful or not.
 	*/
-	bool save_game(CVideo* video = NULL, const std::string& filename = "");
+	bool save_game(ui_window* video = NULL, const std::string& filename = "");
 
 	/** Sets the filename and removes invalid characters. Don't set the filename directly but
 		use this method instead. */
 	void set_filename(std::string filename);
 	/** Check, if the filename contains illegal constructs like ".gz". */
-	void check_filename(const std::string& filename, CVideo& video);
+	void check_filename(const std::string& filename, ui_window& video);
 
 	/** Customize the standard error message */
 	void set_error_message(const std::string& error_message) { error_message_ = error_message; }
@@ -195,9 +195,9 @@ private:
 		override this to take effect. */
 	virtual void create_filename() {}
 	/** Display the save game dialog. */
-	virtual int show_save_dialog(CVideo& video, const std::string& message, const gui::DIALOG_TYPE dialog_type);
+	virtual int show_save_dialog(ui_window& video, const std::string& message, const gui::DIALOG_TYPE dialog_type);
 	/** Ask the user if an existing file should be overwritten. */
-	bool check_overwrite(CVideo& video);
+	bool check_overwrite(ui_window& video);
 
 	/** The actual method for saving the game to disk. All interactive filename choosing and
 		data manipulation has to happen before calling this method. */
@@ -280,7 +280,7 @@ public:
 
 private:
 	/** Display the save game dialog. */
-	virtual int show_save_dialog(CVideo& video, const std::string& message, const gui::DIALOG_TYPE dialog_type);
+	virtual int show_save_dialog(ui_window& video, const std::string& message, const gui::DIALOG_TYPE dialog_type);
 };
 
 /** Class for start-of-scenario saves */

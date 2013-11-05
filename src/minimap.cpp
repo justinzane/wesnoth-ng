@@ -20,8 +20,8 @@
 #include "gettext.hpp"
 #include "image.hpp"
 #include "log.hpp"
-#include "map.hpp"
-#include "display/sdl_utils.hpp"
+#include "board/map.hpp"
+#include "gui/sdl_utils.hpp"
 
 #include "team.hpp"
 #include "wml_exception.hpp"

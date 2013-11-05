@@ -19,10 +19,10 @@
 
 #include "../../editor_display.hpp"
 #include "gui/dialogs/unit_create.hpp"
-#include "display/tooltips.hpp"
+#include "gui/tooltips.hpp"
 #include "gettext.hpp"
 
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 
 namespace editor {
 

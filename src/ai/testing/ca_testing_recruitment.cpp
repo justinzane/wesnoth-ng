@@ -25,7 +25,7 @@
 #include "../composite/stage.hpp"
 #include "../../gamestatus.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
+#include "../../board/map.hpp"
 #include "../../resources.hpp"
 #include "../../team.hpp"
 #include "../../wml_exception.hpp"

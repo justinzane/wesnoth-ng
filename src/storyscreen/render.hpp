@@ -26,7 +26,7 @@
 // #include "widgets/button.hpp"
 
 class display;
-class CVideo;
+class ui_window;
 
 namespace gui { class button; }
 
@@ -67,8 +67,9 @@ public:
 private:
 	part& p_;
 	display& disp_;
-	CVideo& video_; // convenience, it's currently obtained from disp_
-	CKey keys_;     // convenience
+	ui_window& video_; // convenience, it's currently obtained from disp_
+	// Removed for SDL2
+	//CKey keys_;     // convenience
 
 	gui::button& next_button_;
 	gui::button& back_button_;

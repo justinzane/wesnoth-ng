@@ -30,15 +30,15 @@
 #include "playmp_controller.hpp"
 #include "replay_controller.hpp"
 #include "log.hpp"
-#include "map_exception.hpp"
+#include "board/map_exception.hpp"
 #include "mp_game_utils.hpp"
 #include "multiplayer.hpp"
 #include "multiplayer_connect_engine.hpp"
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 #include "gettext.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "wml_exception.hpp"
 #include "formula_string_utils.hpp"
 
@@ -178,7 +178,7 @@ static void generate_map(config const* scenario)
 }
 
 void play_replay(display& disp, game_state& gamestate, const config& game_config,
-		CVideo& video)
+		ui_window& video)
 {
 	std::string type = gamestate.classification().campaign_type;
 	if(type.empty())

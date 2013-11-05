@@ -17,8 +17,9 @@
 
 #ifndef GUI2_EXPERIMENTAL_LISTBOX
 
-#include "gui/widgets/generator.hpp"
-#include "gui/widgets/scrollbar_container.hpp"
+#include "generator.hpp"
+#include "scrollbar_container.hpp"
+#include <SDL2/SDL.h>
 
 namespace gui2 {
 
@@ -218,16 +219,16 @@ protected:
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/
 
 	/** Inherited from tscrollbar_container. */
-	void handle_key_up_arrow(SDLMod modifier, bool& handled);
+	void handle_key_up_arrow(SDL_Keymod modifier, bool& handled);
 
 	/** Inherited from tscrollbar_container. */
-	void handle_key_down_arrow(SDLMod modifier, bool& handled);
+	void handle_key_down_arrow(SDL_Keymod modifier, bool& handled);
 
 	/** Inherited from tscrollbar_container. */
-	void handle_key_left_arrow(SDLMod modifier, bool& handled);
+	void handle_key_left_arrow(SDL_Keymod modifier, bool& handled);
 
 	/** Inherited from tscrollbar_container. */
-	void handle_key_right_arrow(SDLMod modifier, bool& handled);
+	void handle_key_right_arrow(SDL_Keymod modifier, bool& handled);
 
 private:
 

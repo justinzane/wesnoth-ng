@@ -15,12 +15,12 @@
 #include "global.hpp"
 
 #include "gettext.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_preferences.hpp"
-#include "display/construct_dialog.hpp"
+#include "gui/construct_dialog.hpp"
 #include "settings.hpp"
-#include "map.hpp"
-#include "map_exception.hpp"
+#include "board/map.hpp"
+#include "board/map_exception.hpp"
 #include "generators/map_create.hpp"
 #include "gui/dialogs/message.hpp"
 #include "gui/dialogs/mp_create_game_choose_mods.hpp"
@@ -266,7 +266,7 @@ const mp_game_settings& configure::get_parameters()
 
 	// Updates the values in the "parameters_" member to match
 	// the values selected by the user with the widgets:
-	parameters_.name = name_entry_.text();
+	parameters_.name = name_entry_.get_text();
 
 	// CHECK
 	parameters_.mp_countdown_init_time = mp_countdown_init_time_val;
@@ -305,7 +305,7 @@ void configure::process_event()
 
 	if(launch_game_.pressed()) {
 		// check if the map is valid
-		if (name_entry_.text() == "") {
+		if (name_entry_.get_text() == "") {
 			gui2::show_transient_message(disp_.video(), "", _("You must enter a name."));
 		} else {
 			set_result(CREATE);

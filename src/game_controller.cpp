@@ -15,13 +15,13 @@
 #include "game_controller.hpp"
 
 #include "about.hpp"
-#include "display/construct_dialog.hpp"
+#include "gui/construct_dialog.hpp"
 #include "gettext.hpp"
 #include "intro.hpp"
 #include "language.hpp"
 #include "loadscreen.hpp"
 #include "log.hpp"
-#include "map_exception.hpp"
+#include "board/map_exception.hpp"
 #include "multiplayer.hpp"
 #include "network.hpp"
 #include "playcampaign.hpp"
@@ -254,7 +254,7 @@ game_controller::game_controller(const commandline_options& cmdline_opts, const 
 game_display& game_controller::disp() {
     if (disp_.get() == NULL) {
         if (get_video_surface() == NULL) {
-            throw CVideo::error();
+            throw ui_window::error();
         }
         disp_.assign(game_display::create_dummy_display(video_));
     }

@@ -15,8 +15,8 @@
 
 #include "controller_base.hpp"
 
-#include "display/dialogs.hpp"
-#include "display/display.hpp"
+#include "gui/dialogs.hpp"
+#include "gui/display.hpp"
 #include "game_preferences.hpp"
 #include "log.hpp"
 #include "mouse_handler_base.hpp"
@@ -27,7 +27,7 @@ static lg::log_domain log_display("display");
 #define ERR_DP LOG_STREAM(err, log_display)
 
 controller_base::controller_base(
-		const int ticks, const config& game_config, CVideo& /*video*/) :
+		const int ticks, const config& game_config, ui_window& /*video*/) :
 	game_config_(game_config),
 	ticks_(ticks),
 	key_(),

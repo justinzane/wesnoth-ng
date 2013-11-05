@@ -18,13 +18,13 @@
 
 #include "widgets/progressbar.hpp"
 
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "marked-up_text.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 namespace gui {
 
-progress_bar::progress_bar(CVideo& video) : widget(video), progress_(0)
+progress_bar::progress_bar(ui_window& video) : widget(video), progress_(0)
 {}
 
 void progress_bar::set_progress_percent(int progress)

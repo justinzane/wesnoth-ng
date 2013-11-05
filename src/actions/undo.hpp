@@ -21,7 +21,7 @@
 #define ACTIONS_UNDO_H_INCLUDED
 
 #include "vision.hpp"
-#include "../map_location.hpp"
+#include "../board/map_location.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>

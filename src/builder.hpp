@@ -21,7 +21,7 @@
 #define BUILDER_H_INCLUDED
 
 #include "animated.hpp"
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 #include "terrain_translation.hpp"
 #include "game_config.hpp"
 

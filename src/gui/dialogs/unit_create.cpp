@@ -86,7 +86,7 @@ tunit_create::tunit_create()
 {
 }
 
-void tunit_create::pre_show(CVideo& /*video*/, twindow& window)
+void tunit_create::pre_show(ui_window& /*video*/, twindow& window)
 {
 	ttoggle_button& male_toggle = find_widget<ttoggle_button>(
 			&window, "male_toggle", false);

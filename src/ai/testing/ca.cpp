@@ -18,22 +18,52 @@
  */
 
 #include "ca.hpp"
-#include "../actions.hpp"
-#include "../manager.hpp"
-#include "../composite/engine.hpp"
-#include "../composite/rca.hpp"
-#include "../composite/stage.hpp"
+
+#include "../../board/map.hpp"
+#include "../../board/map_location.hpp"
+#include "../../config.hpp"
+#include "../../game_config.hpp"
 #include "../../gamestatus.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
-#include "../../resources.hpp"
-#include "../../team.hpp"
+#include "../../movetype.hpp"
 #include "../../pathfind/pathfind.hpp"
 #include "../../pathfind/teleport.hpp"
+#include "../../resources.hpp"
+#include "../../team.hpp"
+#include "../../terrain_translation.hpp"
+#include "../../unit.hpp"
+#include "../../unit_types.hpp"
+#include "../../util.hpp"
+#include "../actions.hpp"
+//#include "../composite/engine.hpp"
+//#include "../composite/rca.hpp"
+#include "../composite/stage.hpp"
+#include "../contexts.hpp"
+#include "../default/contexts.hpp"
+#include "../game_info.hpp"
+#include "../manager.hpp"
 
 #include <boost/foreach.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <SDL2/SDL_timer.h>
 
+#include <stddef.h>
+#include <algorithm>
+#include <cassert>
+#include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <map>
+//#include <numeric>
 #include <numeric>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 static lg::log_domain log_ai_testing_ai_default("ai/ca/testing_ai_default");
 #define DBG_AI_TESTING_AI_DEFAULT LOG_STREAM(debug, log_ai_testing_ai_default)

@@ -28,8 +28,8 @@
 
 #include "editor/action/action.hpp"
 
-#include "../../map.hpp"
-#include "../../map_label.hpp"
+#include "../../board/map.hpp"
+#include "../../board/map_label.hpp"
 
 
 namespace editor {

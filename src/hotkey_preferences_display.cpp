@@ -21,8 +21,8 @@
 
 #include "preferences_display.hpp"
 
-#include "display/construct_dialog.hpp"
-#include "display/display.hpp"
+#include "gui/construct_dialog.hpp"
+#include "gui/display.hpp"
 #include "formatter.hpp"
 #include "formula_string_utils.hpp"
 #include "game_preferences.hpp"

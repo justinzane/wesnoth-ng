@@ -15,7 +15,7 @@
 
 #include "playmp_controller.hpp"
 
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 
 #include "actions/undo.hpp"
 #include "game_end_exceptions.hpp"
@@ -25,7 +25,7 @@
 #include "preferences.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "formula_string_utils.hpp"
 #include "whiteboard/manager.hpp"
 
@@ -38,7 +38,7 @@ unsigned int playmp_controller::replay_last_turn_ = 0;
 
 playmp_controller::playmp_controller(const config& level,
 		game_state& state_of_game, const int ticks,
-		const int num_turns, const config& game_config, CVideo& video,
+		const int num_turns, const config& game_config, ui_window& video,
 		bool skip_replay, bool is_host) :
 	playsingle_controller(level, state_of_game, ticks, num_turns,
 		game_config, video, skip_replay),

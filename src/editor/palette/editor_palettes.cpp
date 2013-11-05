@@ -18,7 +18,7 @@
 
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
-#include "display/tooltips.hpp"
+#include "gui/tooltips.hpp"
 #include "overlay.hpp"
 
 #include "editor/action/mouse/mouse_action.hpp"

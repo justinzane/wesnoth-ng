@@ -36,10 +36,10 @@
 #include "gui/widgets/window.hpp"
 #include "wml_exception.hpp"
 
-#include "../display/dialogs.hpp"
-#include "../display/clipboard.hpp"
-#include "../display/halo.hpp"
-#include "../display/sound.hpp"
+#include "../gui/dialogs.hpp"
+#include "../gui/clipboard.hpp"
+#include "../gui/halo.hpp"
+#include "../gui/sound.hpp"
 #include "../game_preferences.hpp"
 #include "../gettext.hpp"
 #include "../preferences_display.hpp"
@@ -57,7 +57,7 @@ static std::vector<std::string> saved_windows_;
 namespace editor {
 
 
-editor_controller::editor_controller(const config &game_config, CVideo& video)
+editor_controller::editor_controller(const config &game_config, ui_window& video)
 	: controller_base(SDL_GetTicks(), game_config, video)
 	, mouse_handler_base()
 	, active_menu_(editor::MAP)

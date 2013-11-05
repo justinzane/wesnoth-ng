@@ -18,7 +18,7 @@
 #include "flg_manager.hpp"
 #include "gamestatus.hpp"
 #include "multiplayer_ui.hpp"
-#include "display/show_dialog.hpp"
+#include "gui/show_dialog.hpp"
 #include "widgets/combo.hpp"
 
 namespace mp {

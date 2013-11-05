@@ -11,13 +11,25 @@
 
    See the COPYING file for more details.
 */
-#define GETTEXT_DOMAIN "wesnoth-editor"
-
 #include "map_fragment.hpp"
-
 #include "util.hpp"
 
+#include "../../board/map.hpp"
+#include "../../board/map_location.hpp"
+#include "../editor_common.hpp"
+
 #include <boost/foreach.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/type_traits/is_const.hpp>
+
+#include <iostream>
+#include <map>
+#include <set>
+#include <string>
+#include <vector>
+
+#define GETTEXT_DOMAIN "wesnoth-editor"
 
 namespace editor {
 

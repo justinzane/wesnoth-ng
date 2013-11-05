@@ -16,9 +16,9 @@
 
 #include "unit_animation.hpp"
 
-#include "display/game_display.hpp"
-#include "display/halo.hpp"
-#include "map.hpp"
+#include "gui/game_display.hpp"
+#include "gui/halo.hpp"
+#include "board/map.hpp"
 #include "unit.hpp"
 #include "variable.hpp"
 #include "resources.hpp"

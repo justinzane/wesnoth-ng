@@ -23,7 +23,7 @@
 
 namespace gui {
 
-scrollarea::scrollarea(CVideo &video, const bool auto_join)
+scrollarea::scrollarea(ui_window &video, const bool auto_join)
 	: widget(video, auto_join), scrollbar_(video),
 	  old_position_(0), recursive_(false), shown_scrollbar_(false),
 	  shown_size_(0), full_size_(0)

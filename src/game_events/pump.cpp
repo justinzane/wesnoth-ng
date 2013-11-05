@@ -24,7 +24,7 @@
 #include "handlers.hpp"
 
 #include "../game_config.hpp"
-#include "../display/game_display.hpp"
+#include "../gui/game_display.hpp"
 #include "../gamestatus.hpp"
 #include "../gettext.hpp"
 #include "../log.hpp"

@@ -11,24 +11,24 @@ def CheckSDL(context, sdl_lib = "SDL", require_version = None):
         try:
             patchlevel    = int(version[2])
         except (ValueError, IndexError):
-            patch_level = 0
+            patchlevel = 0
 
     backup = backup_env(context.env, ["CPPPATH", "LIBPATH", "LIBS"])
 
     sdldir = context.env.get("sdldir", "")
-    if sdl_lib == "SDL": 
+    if sdl_lib in ["SDL", "SDL2"]:
         if require_version:
-            context.Message("Checking for Simple DirectMedia Layer library version >= %d.%d.%d... " % (major_version, minor_version, patchlevel))
+            context.Message("Checking for SDL2 version >= %d.%d.%d... " %
+                            (major_version, minor_version, patchlevel))
         else:
-            context.Message("Checking for Simple DirectMedia Layer library... ")
+            context.Message("Checking for SDL2... ")
         env = context.env
         if sdldir:
-            env.AppendUnique(CPPPATH = [os.path.join(sdldir, "include/SDL")], LIBPATH = [os.path.join(sdldir, "lib")])
+            env.AppendUnique(CPPPATH = [os.path.join(sdldir, "include/SDL2")],
+                                        LIBPATH = [os.path.join(sdldir, "lib")])
         else:
-            for foo_config in [
-                "pkg-config --cflags --libs sdl",
-                "sdl-config --cflags --libs"
-                ]:
+            for foo_config in ["pkg-config --cflags --libs sdl2",
+                               "sdl2-config --cflags --libs"]:
                 try:
                     env.ParseConfig(foo_config)
                 except OSError:
@@ -37,7 +37,7 @@ def CheckSDL(context, sdl_lib = "SDL", require_version = None):
                     break
         if env["PLATFORM"] == "win32":
             env.AppendUnique(CCFLAGS = ["-D_GNU_SOURCE"])
-            env.AppendUnique(LIBS = Split("mingw32 SDLmain SDL"))
+            env.AppendUnique(LIBS = Split("mingw32 SDLmain SDL2"))
             env.AppendUnique(LINKFLAGS = ["-mwindows"])
     else:
         if require_version:
@@ -45,9 +45,7 @@ def CheckSDL(context, sdl_lib = "SDL", require_version = None):
         else:
             context.Message("Checking for %s library... " % sdl_lib)
         context.env.AppendUnique(LIBS = [sdl_lib])
-    test_program = """
-        #include <%s.h> 
-        \n""" % sdl_lib
+    test_program = "#include <SDL2/%s.h>\n" % sdl_lib
     if require_version:
         test_program += "#if SDL_VERSIONNUM(%s, %s, %s) < SDL_VERSIONNUM(%d, %d, %d)\n#error Library is too old!\n#endif\n" % \
             (sdl_lib.upper() + "_MAJOR_VERSION", \
@@ -59,6 +57,8 @@ def CheckSDL(context, sdl_lib = "SDL", require_version = None):
         {
         }
         \n"""
+    with open("/tmp/sdlcheck.c",'w') as f:
+        f.write(test_program);
     if context.TryLink(test_program, ".c"):
         context.Result("yes")
         return True
@@ -69,7 +69,7 @@ def CheckSDL(context, sdl_lib = "SDL", require_version = None):
 
 def CheckOgg(context):
     test_program = '''
-    #include <SDL_mixer.h>
+    #include <SDL2/SDL_mixer.h>
     #include <stdlib.h>
 
     int main(int argc, char **argv)
@@ -87,6 +87,8 @@ def CheckOgg(context):
     if context.env["host"]:
         context.Result("n/a (cross-compile)")
         return True
+    with open("/tmp/oggcheck.c",'w') as f:
+        f.write(test_program);
     (result, output) = context.TryRun(test_program, ".c")
     if result:
         context.Result("yes")
@@ -97,7 +99,7 @@ def CheckOgg(context):
 
 def CheckPNG(context):
     test_program = '''
-    #include <SDL_image.h>
+    #include <SDL2/SDL_image.h>
     #include <stdlib.h>
 
     int main(int argc, char **argv)
@@ -114,6 +116,8 @@ def CheckPNG(context):
 \n
 '''
     context.Message("Checking for PNG support in SDL... ")
+    with open("/tmp/pngcheck.c",'w') as f:
+        f.write(test_program);
     (result, output) = context.TryRun(test_program, ".c")
     if result:
         context.Result("yes")

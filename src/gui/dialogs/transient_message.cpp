@@ -35,7 +35,7 @@ ttransient_message::ttransient_message(const std::string& title
 	register_image("image", true, image);
 }
 
-void show_transient_message(CVideo& video
+void show_transient_message(ui_window& video
 		, const std::string& title
 		, const std::string& message
 		, const std::string& image
@@ -51,7 +51,7 @@ void show_transient_message(CVideo& video
 	dlg.show(video);
 }
 
-void show_transient_error_message(CVideo& video
+void show_transient_error_message(ui_window& video
 		, const std::string& message
 		, const std::string& image
 		, const bool message_use_markup)

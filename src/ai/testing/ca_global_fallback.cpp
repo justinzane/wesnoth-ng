@@ -21,13 +21,13 @@
 
 #include "../composite/ai.hpp"
 
-#include "../../display/game_display.hpp"
+#include "../../gui/game_display.hpp"
 #include "../../log.hpp"
 #include "../../map.hpp"
 #include "../../map_label.hpp"
 #include "../../replay.hpp"
 #include "../../resources.hpp"
-#include "../../display/sdl_utils.hpp"
+#include "../../gui/sdl_utils.hpp"
 #include "../../team.hpp"
 #include "../../terrain_filter.hpp"
 #include "../../tod_manager.hpp"

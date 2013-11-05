@@ -219,8 +219,8 @@ bool tdispatcher::fire(const tevent event
 class ttrigger_keyboard
 {
 public:
-	ttrigger_keyboard(const SDLKey key
-			, const SDLMod modifier
+	ttrigger_keyboard(const SDL_Keycode key
+			, const SDL_Keymod modifier
 			, const Uint16 unicode)
 		: key_(key)
 		, modifier_(modifier)
@@ -238,15 +238,15 @@ public:
 	}
 
 private:
-	SDLKey key_;
-	SDLMod modifier_;
+	SDL_Keycode key_;
+	SDL_Keymod modifier_;
 	Uint16 unicode_;
 };
 
 bool tdispatcher::fire(const tevent event
 		, twidget& target
-		, const SDLKey key
-		, const SDLMod modifier
+		, const SDL_Keycode key
+		, const SDL_Keymod modifier
 		, const Uint16 unicode)
 {
 	assert(find<tset_event_keyboard>(event, tevent_in_set()));

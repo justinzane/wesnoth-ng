@@ -117,7 +117,7 @@ static void set_weapon_info(twindow& window
 	weapon_list.select_row(best_weapon);
 }
 
-void tunit_attack::pre_show(CVideo& /*video*/, twindow& window) /*@ \label{unit_attack.cpp:pre_show} @*/
+void tunit_attack::pre_show(ui_window& /*video*/, twindow& window) /*@ \label{unit_attack.cpp:pre_show} @*/
 {
 	set_attacker_info(window, *attacker_itor_);
 	set_defender_info(window, *defender_itor_);

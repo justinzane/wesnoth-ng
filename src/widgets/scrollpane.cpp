@@ -40,7 +40,7 @@ private:
 
 namespace gui {
 
-scrollpane::scrollpane(CVideo &video) : scrollarea(video), border_(5)
+scrollpane::scrollpane(ui_window &video) : scrollarea(video), border_(5)
 {
 	content_pos_.x = 0;
 	content_pos_.y = 0;

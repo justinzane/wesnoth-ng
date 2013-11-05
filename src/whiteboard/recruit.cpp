@@ -23,7 +23,7 @@
 #include "utility.hpp"
 #include "visitor.hpp"
 
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "menu_events.hpp"
 #include "play_controller.hpp"
 #include "resources.hpp"

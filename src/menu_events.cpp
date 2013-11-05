@@ -27,9 +27,9 @@
 #include "actions/vision.hpp"
 #include "builder.hpp"
 #include "ai/manager.hpp"
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 #include "formatter.hpp"
-#include "display/filechooser.hpp"
+#include "gui/filechooser.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_events/pump.hpp"
 #include "game_preferences.hpp"
@@ -49,8 +49,8 @@
 #include "gui/widgets/window.hpp"
 #include "help.hpp"
 #include "log.hpp"
-#include "map.hpp"
-#include "map_label.hpp"
+#include "board/map.hpp"
+#include "board/map_label.hpp"
 #include "marked-up_text.hpp"
 #include "menu_events.hpp"
 #include "mouse_events.hpp"
@@ -59,7 +59,7 @@
 #include "replay.hpp"
 #include "resources.hpp"
 #include "savegame.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "statistics_dialog.hpp"
 #include "unit_display.hpp"
 #include "wml_separators.hpp"
@@ -1349,7 +1349,7 @@ void menu_handler::search()
 void menu_handler::do_speak(){
 	//None of the two parameters really needs to be passed since the information belong to members of the class.
 	//But since it makes the called method more generic, it is done anyway.
-	chat_handler::do_speak(textbox_info_.box()->text(),textbox_info_.check() != NULL ? textbox_info_.check()->checked() : false);
+	chat_handler::do_speak(textbox_info_.box()->get_text(),textbox_info_.check() != NULL ? textbox_info_.check()->checked() : false);
 }
 
 

@@ -17,7 +17,7 @@
 
 #include "tests/utils/fake_event_source.hpp"
 
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 
 #include <boost/scoped_ptr.hpp>
 

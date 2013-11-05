@@ -14,7 +14,7 @@
 #include "mp_game_utils.hpp"
 
 #include "config.hpp"
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 #include "formula_string_utils.hpp"
 #include "gamestatus.hpp"
 #include "game_config_manager.hpp"

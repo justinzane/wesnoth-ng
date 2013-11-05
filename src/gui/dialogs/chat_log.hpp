@@ -32,10 +32,10 @@ public:
 	tchat_log(const vconfig &cfg, replay *replay);
 
 	/** Inherited from tdialog. */
-	twindow* build_window(CVideo& video);
+	twindow* build_window(ui_window& video);
 
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	boost::shared_ptr<view> get_view();
 

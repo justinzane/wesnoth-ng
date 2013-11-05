@@ -20,7 +20,7 @@
 #include "game_events/handlers.hpp"
 #include "gettext.hpp"
 #include "log.hpp"
-#include "map_label.hpp"
+#include "board/map_label.hpp"
 #include "replay.hpp"
 #include "replay_controller.hpp"
 #include "resources.hpp"
@@ -36,7 +36,7 @@ static lg::log_domain log_replay("replay");
 #define LOG_REPLAY LOG_STREAM(info, log_replay)
 
 LEVEL_RESULT play_replay_level(const config& game_config,
-		const config* level, CVideo& video, game_state& state_of_game)
+		const config* level, ui_window& video, game_state& state_of_game)
 {
 	try{
 		const int ticks = SDL_GetTicks();
@@ -66,7 +66,7 @@ LEVEL_RESULT play_replay_level(const config& game_config,
 
 replay_controller::replay_controller(const config& level,
 		game_state& state_of_game, const int ticks, const int num_turns,
-		const config& game_config, CVideo& video) :
+		const config& game_config, ui_window& video) :
 	play_controller(level, state_of_game, ticks, num_turns, game_config, video, false),
 	teams_start_(teams_),
 	gamestate_start_(gamestate_),

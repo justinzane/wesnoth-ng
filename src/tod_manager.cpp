@@ -18,7 +18,7 @@
 #include "formula_string_utils.hpp"
 #include "gamestatus.hpp"
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "play_controller.hpp"
 #include "resources.hpp"
 #include "unit.hpp"

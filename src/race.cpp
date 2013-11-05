@@ -44,11 +44,11 @@ static const config &empty_topics() {
 		return cfg;
 }
 
-static void add_prefixes(const wide_string& str, size_t length, markov_prefix_map& res)
+static void add_prefixes(const std::wstring& str, size_t length, markov_prefix_map& res)
 {
 	for(size_t i = 0; i <= str.size(); ++i) {
 		const size_t start = i > length ? i - length : 0;
-		const wide_string key(str.begin() + start, str.begin() + i);
+		const std::wstring key(str.begin() + start, str.begin() + i);
 		const wchar_t c = i != str.size() ? str[i] : 0;
 		res[key].push_back(c);
 	}
@@ -65,13 +65,13 @@ static markov_prefix_map markov_prefixes(const std::vector<std::string>& items, 
 	return res;
 }
 
-static wide_string markov_generate_name(const markov_prefix_map& prefixes,
+static std::wstring markov_generate_name(const markov_prefix_map& prefixes,
 	size_t chain_size, size_t max_len, rand_rng::simple_rng* rng)
 {
 	if(chain_size == 0)
-		return wide_string();
+		return std::wstring();
 
-	wide_string prefix, res;
+	std::wstring prefix, res;
 
 	// Since this function is called in the name description in a MP game it
 	// uses the local locale. The locale between players can be different and
@@ -119,11 +119,11 @@ static wide_string markov_generate_name(const markov_prefix_map& prefixes,
 	// name has end-of-string as a possible next character in the
 	// markov prefix map. If no valid ending is found, use the
 	// originally generated name.
-	wide_string originalRes = res;
+	std::wstring originalRes = res;
 	int prefixLen;
 	while(!res.empty()) {
 		prefixLen = chain_size < res.size() ? chain_size : res.size();
-		prefix = wide_string(res.end() - prefixLen, res.end());
+		prefix = std::wstring(res.end() - prefixLen, res.end());
 
 		const markov_prefix_map::const_iterator i = prefixes.find(prefix);
 		if (i == prefixes.end() || i->second.empty()) {

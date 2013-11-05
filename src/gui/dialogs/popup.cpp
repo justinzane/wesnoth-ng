@@ -17,7 +17,7 @@
 #include "gui/dialogs/popup.hpp"
 
 #include "gui/widgets/window.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 namespace gui2 {
 
@@ -31,7 +31,7 @@ tpopup::~tpopup()
 	hide();
 }
 
-void tpopup::show(CVideo& video
+void tpopup::show(ui_window& video
 		, const bool allow_interaction
 		, const unsigned /*auto_close_time*/)
 {
@@ -63,7 +63,7 @@ void tpopup::hide()
 	}
 }
 
-twindow* tpopup::build_window(CVideo& video) const
+twindow* tpopup::build_window(ui_window& video) const
 {
 	return build(video, window_id());
 }

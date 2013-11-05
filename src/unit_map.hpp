@@ -19,7 +19,7 @@
 #define UNIT_MAP_H_INCLUDED
 
 #include "utils/reference_counter.hpp"
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 
 #include <cassert>
 #include <list>

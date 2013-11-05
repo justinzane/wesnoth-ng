@@ -16,9 +16,9 @@
 #define WIDGET_HPP_INCLUDED
 
 #include "../events.hpp"
-#include "../display/sdl_utils.hpp"
+#include "../gui/sdl_utils.hpp"
 
-class CVideo;
+class ui_window;
 
 namespace gui {
 
@@ -69,7 +69,7 @@ public:
 
 protected:
 	widget(widget const &o);
-	widget(CVideo& video, const bool auto_join=true);
+	widget(ui_window& video, const bool auto_join=true);
 	virtual ~widget();
 
 	// During each relocation, this function should be called to register
@@ -80,7 +80,7 @@ protected:
 	void bg_update();
 	void bg_cancel();
 
-	CVideo& video() const { return *video_; };
+	ui_window& video() const { return *video_; };
 
 	virtual void draw();
 	virtual void draw_contents() {};
@@ -102,7 +102,7 @@ private:
 
 	void hide_override(bool value = true);
 
-	CVideo* video_;
+	ui_window* video_;
 	std::vector< surface_restorer > restorer_;
 	SDL_Rect rect_;
 	mutable bool needs_restore_; // Have we drawn ourselves, so that if moved, we need to restore the background?

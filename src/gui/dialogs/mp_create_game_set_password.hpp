@@ -34,7 +34,7 @@ public:
 	explicit tmp_create_game_set_password(std::string& password);
 
 	/** The excute function see @ref tdialog for more information. */
-	static bool execute(std::string& password, CVideo& video)
+	static bool execute(std::string& password, ui_window& video)
 	{
 		return tmp_create_game_set_password(password).show(video);
 	}

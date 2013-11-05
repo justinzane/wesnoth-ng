@@ -57,7 +57,7 @@ private:
 	virtual const std::string& window_id() const;
 
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Available map generators */
 	std::vector<map_generator*> map_generators_;

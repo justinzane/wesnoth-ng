@@ -26,7 +26,7 @@
 #endif
 #include "gui/widgets/settings.hpp"
 #include "utils/foreach.tpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 #include <boost/bind.hpp>
 
@@ -72,7 +72,7 @@ private:
 	virtual const std::string& window_id() const;
 
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog. */
 	void post_show(twindow& window);
@@ -80,7 +80,7 @@ private:
 
 REGISTER_DIALOG(mp_server_list)
 
-void tmp_server_list::pre_show(CVideo& /*video*/, twindow& window)
+void tmp_server_list::pre_show(ui_window& /*video*/, twindow& window)
 {
 	tlistbox& list = find_widget<tlistbox>(&window, "server_list", false);
 
@@ -142,7 +142,7 @@ void tmp_server_list::post_show(twindow& window)
 REGISTER_DIALOG(mp_connect)
 
 static void show_server_list(
-		  CVideo& video
+		  ui_window& video
 		, twindow& window
 		, tfield_text* host_name)
 {
@@ -165,7 +165,7 @@ tmp_connect::tmp_connect()
 {
 }
 
-void tmp_connect::pre_show(CVideo& video, twindow& window)
+void tmp_connect::pre_show(ui_window& video, twindow& window)
 {
 	assert(host_name_);
 

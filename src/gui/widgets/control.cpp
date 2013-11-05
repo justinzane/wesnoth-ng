@@ -16,7 +16,7 @@
 
 #include "control.hpp"
 
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "formula_string_utils.hpp"
 #include "gui/auxiliary/iterator/walker_widget.hpp"
 #include "gui/auxiliary/log.hpp"

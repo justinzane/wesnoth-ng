@@ -20,7 +20,7 @@
 #include "movetype.hpp"
 
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "resources.hpp"
 #include "terrain_translation.hpp"
 #include "unit_types.hpp" // for attack_type

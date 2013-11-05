@@ -23,12 +23,12 @@
 #include "storyscreen/interface.hpp"
 #include "storyscreen/controller.hpp"
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "gettext.hpp"
 #include "intro.hpp"
 #include "language.hpp"
 #include "log.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "text.hpp"
 
 static lg::log_domain log_engine("engine");

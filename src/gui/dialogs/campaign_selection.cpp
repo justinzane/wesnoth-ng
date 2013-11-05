@@ -107,7 +107,7 @@ void tcampaign_selection::campaign_selected(twindow& window)
 	}
 }
 
-void tcampaign_selection::pre_show(CVideo& /*video*/, twindow& window)
+void tcampaign_selection::pre_show(ui_window& /*video*/, twindow& window)
 {
 	if(new_widgets && false) {
 		/***** Setup campaign tree. *****/

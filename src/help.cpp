@@ -24,16 +24,16 @@
 #include "help.hpp"
 
 #include "about.hpp"
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "exceptions.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/transient_message.hpp"
 #include "language.hpp"
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "marked-up_text.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "unit.hpp"
 #include "unit_helper.hpp"
 #include "wml_separators.hpp"
@@ -263,7 +263,7 @@ struct create_section
 class help_menu : public gui::menu
 {
 public:
-	help_menu(CVideo &video, const section &toplevel, int max_height=-1);
+	help_menu(ui_window &video, const section &toplevel, int max_height=-1);
 	int process();
 
 	/// Make the topic the currently selected one, and expand all
@@ -340,7 +340,7 @@ struct parse_error : public game::error
 class help_text_area : public gui::scrollarea
 {
 public:
-	help_text_area(CVideo &video, const section &toplevel);
+	help_text_area(ui_window &video, const section &toplevel);
 	/// Display the topic.
 	void show_topic(const topic &t);
 
@@ -2066,7 +2066,7 @@ void section::clear()
 	sections.clear();
 }
 
-help_menu::help_menu(CVideo &video, section const &toplevel, int max_height) :
+help_menu::help_menu(ui_window &video, section const &toplevel, int max_height) :
 	gui::menu(video, empty_string_vector, true, max_height, -1, NULL, &gui::menu::bluebg_style),
 	visible_items_(),
 	toplevel_(toplevel),
@@ -2272,7 +2272,7 @@ bool help_menu::visible_item::operator==(const visible_item &vis_item) const
 	return t == vis_item.t && sec == vis_item.sec;
 }
 
-help_text_area::help_text_area(CVideo &video, const section &toplevel) :
+help_text_area::help_text_area(ui_window &video, const section &toplevel) :
 	gui::scrollarea(video),
 	items_(),
 	last_row_(),
@@ -3267,7 +3267,7 @@ void show_help(display &disp, const section &toplevel_sec,
 	const gui::dialog_manager manager;
 	const resize_lock prevent_resizing;
 
-	CVideo& screen = disp.video();
+	ui_window& screen = disp.video();
 	const surface& scr = screen.getSurface();
 
 	const int width  = std::min<int>(font::relative_size(900), scr->w - font::relative_size(20));

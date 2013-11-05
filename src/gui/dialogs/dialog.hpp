@@ -22,7 +22,7 @@
 #include <string>
 #include <vector>
 
-class CVideo;
+class ui_window;
 
 namespace gui2 {
 
@@ -155,7 +155,7 @@ public:
 	 *
 	 * @returns                   Whether the final retval_ == twindow::OK
 	 */
-	bool show(CVideo& video, const unsigned auto_close_time = 0);
+	bool show(ui_window& video, const unsigned auto_close_time = 0);
 
 
 	/***** ***** ***** setters / getters for members ***** ****** *****/
@@ -344,7 +344,7 @@ private:
 	 *                            upon.
 	 * @returns                   The window to show.
 	 */
-	twindow* build_window(CVideo& video) const;
+	twindow* build_window(ui_window& video) const;
 
 	/**
 	 * Actions to be taken directly after the window is build.
@@ -355,7 +355,7 @@ private:
 	 *                            upon.
 	 * @param window              The window just created.
 	 */
-	virtual void post_build(CVideo& /*video*/, twindow& /*window*/) {}
+	virtual void post_build(ui_window& /*video*/, twindow& /*window*/) {}
 
 	/**
 	 * Actions to be taken before showing the window.
@@ -367,7 +367,7 @@ private:
 	 *                            upon.
 	 * @param window              The window to be shown.
 	 */
-	virtual void pre_show(CVideo& /*video*/, twindow& /*window*/) {}
+	virtual void pre_show(ui_window& /*video*/, twindow& /*window*/) {}
 
 	/**
 	 * Actions to be taken after the window has been shown.

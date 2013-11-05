@@ -16,7 +16,7 @@
 #define THREAD_HPP_INCLUDED
 
 #include <SDL2/SDL.h>
-#include "SDL_thread.h"
+#include "SDL2/SDL_thread.h"
 
 #include <list>
 

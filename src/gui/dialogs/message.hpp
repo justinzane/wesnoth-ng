@@ -87,7 +87,7 @@ public:
 
 protected:
 	/** Inherited from tdialog. */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog. */
 	void post_show(twindow& window);
@@ -146,7 +146,7 @@ private:
  *                            when the message doesn't need a scrollbar to
  *                            show itself.
  */
-void show_message(CVideo& video, const std::string& title,
+void show_message(ui_window& video, const std::string& title,
 	const std::string& message, const std::string& button_caption = "",
 	const bool auto_close = true, const bool message_use_markup = false);
 
@@ -166,7 +166,7 @@ void show_message(CVideo& video, const std::string& title,
  *
  * @returns                   The retval of the dialog shown.
  */
-int show_message(CVideo& video, const std::string& title,
+int show_message(ui_window& video, const std::string& title,
 	const std::string& message, const tmessage::tbutton_style button_style,
 	bool message_use_markup = false,
 	bool title_use_markup = false);
@@ -179,7 +179,7 @@ int show_message(CVideo& video, const std::string& title,
  * @param message             The message to show in the dialog.
  * @param message_use_markup  Use markup for the message?
  */
-void show_error_message(CVideo& video, const std::string& message,
+void show_error_message(ui_window& video, const std::string& message,
 	bool message_use_markup = false);
 
 } // namespace gui2

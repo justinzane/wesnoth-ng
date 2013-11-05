@@ -16,7 +16,7 @@
 #define CALLABLE_OBJECTS_HPP_INCLUDED
 
 
-#include "map.hpp"
+#include "board/map.hpp"
 #include "team.hpp"
 
 #define CALLABLE_WRAPPER_START(klass) \

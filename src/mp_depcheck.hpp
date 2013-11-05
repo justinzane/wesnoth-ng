@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 #include "config.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "gettext.hpp"
 
 namespace mp
@@ -48,7 +48,7 @@ enum component_type
 class manager
 {
 public:
-	manager(const config& gamecfg, CVideo& video);
+	manager(const config& gamecfg, ui_window& video);
 
 	/**
 	 * Tries to set the selected era
@@ -155,7 +155,7 @@ private:
 	};
 
 	/** the screen to display dialogs on */
-	CVideo& video_;
+	ui_window& video_;
 
 	/** holds all required info about the components and their dependencies */
 	config depinfo_;

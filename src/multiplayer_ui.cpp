@@ -14,9 +14,9 @@
 
 #include "global.hpp"
 
-#include "display/construct_dialog.hpp"
+#include "gui/construct_dialog.hpp"
 #include "gamestatus.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/mp_cmd_wrapper.hpp"
@@ -26,7 +26,7 @@
 #include "menu_events.hpp"
 #include "multiplayer.hpp"
 #include "multiplayer_ui.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "wml_separators.hpp"
 #include "formula_string_utils.hpp"
 
@@ -378,13 +378,13 @@ void ui::send_chat_message(const std::string& message, bool /*allies_only*/)
 void ui::handle_key_event(const SDL_KeyboardEvent& event)
 {
 	//On enter, adds the current chat message to the chat textbox.
-	if((event.keysym.sym == SDLK_RETURN || event.keysym.sym == SDLK_KP_ENTER) && !entry_textbox_.text().empty()) {
+	if((event.keysym.sym == SDLK_RETURN || event.keysym.sym == SDLK_KP_ENTER) && !entry_textbox_.get_text().empty()) {
 
-		chat_handler::do_speak(entry_textbox_.text());
-		entry_textbox_.clear();
+		chat_handler::do_speak(entry_textbox_.get_text());
+		entry_textbox_.clear_text();
 	// nick tab-completion
 	} else if(event.keysym.sym == SDLK_TAB ) {
-		std::string text = entry_textbox_.text();
+		std::string text = entry_textbox_.get_text();
 		std::vector<std::string> matches = user_list_;
 		// Exclude own nick from tab-completion.
 		matches.erase(std::remove(matches.begin(), matches.end(),

@@ -15,7 +15,7 @@
 #ifndef PREFERENCES_DISPLAY_HPP_INCLUDED
 #define PREFERENCES_DISPLAY_HPP_INCLUDED
 
-class CVideo;
+class ui_window;
 class config;
 class display;
 
@@ -44,9 +44,9 @@ namespace preferences {
 	 *
 	 * @returns                   Whether valid video settings were found.
 	 */
-	bool detect_video_settings(CVideo& video, std::pair<int,int>& resolution, int& bpp, int& video_flags);
+	bool detect_video_settings(ui_window& video, std::pair<int,int>& resolution, int& bpp, int& video_flags);
 
-	void set_fullscreen(CVideo& video, const bool ison);
+	void set_fullscreen(ui_window& video, const bool ison);
 	void set_fullscreen(bool ison);
 	void set_scroll_to_action(bool ison);
 	void set_resolution(const std::pair<int,int>& res);
@@ -61,7 +61,7 @@ namespace preferences {
 	 * @returns                   The status true if width and height are the
 	 *                            size of the framebuffer, false otherwise.
 	 */
-	bool set_resolution(CVideo& video
+	bool set_resolution(ui_window& video
 			, const unsigned width, const unsigned height);
 	void set_turbo(bool ison);
 	void set_ellipses(bool ison);

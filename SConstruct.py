@@ -109,7 +109,7 @@ opts.AddVariables(
     # Compiler/Linker Flags -------------------------------------------------------------------
     ('extra_flags_config',
      'Extra compiler and linker flags to use for configuration and all builds',
-     "-march=core-avx-i -lprofiler -ltcmalloc"),
+     "-fno-show-column -fno-caret-diagnostics  -march=core-avx-i -lprofiler -ltcmalloc"),
     ('extra_flags_base',
      'Extra compiler and linker flags to use for base builds',
      ""),
@@ -506,24 +506,27 @@ if env["prereqs"]:
          conf.CheckBoostIostreamsGZip() and
          conf.CheckBoostIostreamsBZip2() and
          conf.CheckBoost("smart_ptr", header_only = True) and
-         conf.CheckSDL(require_version = '1.2.7') and
-         conf.CheckSDL('SDL_net') or Warning("Base prerequisites are not met."))
+         # TODO: Reenable version check for version >= 2.0
+         conf.CheckSDL() or
+         # TODO: Reenable check for SDL_Net
+         Warning("Base prerequisites are not met."))
 
     env = conf.Finish()
     client_env = env.Clone()
     conf = client_env.Configure(**configure_args)
 
+# TODO Reenable these for SDL2
+#        conf.CheckSDL("SDL_ttf") and \
+#        conf.CheckSDL("SDL_mixer") and \
+#        conf.CheckSDL("SDL_image") and \
+#        conf.CheckOgg() and \
     have_client_prereqs = have_server_prereqs and \
         CheckAsio(conf) and \
         conf.CheckPango("cairo", require_version = "1.21.3") and \
         conf.CheckPKG("fontconfig") and \
         conf.CheckBoost("program_options", require_version="1.35.0") and \
         conf.CheckBoost("regex", require_version = "1.35.0") and \
-        conf.CheckSDL("SDL_ttf", require_version = "2.0.8") and \
-        conf.CheckSDL("SDL_mixer", require_version = '1.2.0') and \
-        conf.CheckSDL("SDL_image", require_version = '1.2.0') and \
         conf.CheckLib("vorbisfile") and \
-        conf.CheckOgg() and \
         conf.CheckCXXHeader("opencv2/opencv.hpp") or \
         Warning("Client prerequisites are not met. wesnoth, cutter and exploder cannot be built.")
 

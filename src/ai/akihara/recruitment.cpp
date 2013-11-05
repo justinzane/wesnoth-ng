@@ -25,7 +25,7 @@
 #include "../../attack_prediction.hpp"
 #include "../../resources.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
+#include "../../board/map.hpp"
 #include "../../team.hpp"
 #include "../../unit_display.hpp"
 #include "../../unit_map.hpp"

@@ -24,7 +24,7 @@
 
 #include <boost/foreach.hpp>
 
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 #include <ctime>
 #include <iostream>

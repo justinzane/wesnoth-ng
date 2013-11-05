@@ -25,7 +25,7 @@ class team;
 class unit;
 class unit_type;
 
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 #include "movetype.hpp"
 
 #include <vector>

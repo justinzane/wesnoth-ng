@@ -17,7 +17,7 @@
 
 #include <string>
 #include "config.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 #include "gui/widgets/widget.hpp"
 #include "gui/widgets/window.hpp"
 
@@ -52,7 +52,7 @@ public:
 	 *
 	 * @param initial_values	The initial values for each option.
 	 */
-	manager(const config& gamecfg, CVideo& video, const config& initial_values);
+	manager(const config& gamecfg, ui_window& video, const config& initial_values);
 
 	/**
 	 * Set the current values the options. This overrides ALL previously set
@@ -136,7 +136,7 @@ private:
 	config values_;
 
 	/** The screen to display the dialog on */
-	CVideo &video_;
+	ui_window &video_;
 
 	/** The id of the selected era */
 	std::string era_;

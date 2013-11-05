@@ -17,7 +17,7 @@
 #include <map>
 
 #include "generic_event.hpp"
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 #include "savegame_config.hpp"
 
 class config;

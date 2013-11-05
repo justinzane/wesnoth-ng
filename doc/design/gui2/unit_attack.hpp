@@ -27,7 +27,7 @@ private:
 	virtual const std::string& window_id() const;
 
 	/** Inherited from tdialog. */ /*@ \label{unit_attack.hpp:pre_show} @*/
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog. */ /*@ \label{unit_attack.hpp:post_show} @*/
 	void post_show(twindow& window);

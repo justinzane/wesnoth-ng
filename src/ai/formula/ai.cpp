@@ -30,7 +30,7 @@
 #include "../manager.hpp"
 
 #include "../../callable_objects.hpp"
-#include "../../display/game_display.hpp"
+#include "../../gui/game_display.hpp"
 #include "../../formula_debugger.hpp"
 #include "../../log.hpp"
 #include "../../menu_events.hpp"

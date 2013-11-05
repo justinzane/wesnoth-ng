@@ -17,7 +17,7 @@
 #ifndef TERRAIN_TRANSLATION_H_INCLUDED
 #define TERRAIN_TRANSLATION_H_INCLUDED
 
-#include <SDL_types.h> //used for Uint32 definition
+#include <SDL2/SDL_types.h> //used for Uint32 definition
 #include <vector>
 #include <map>
 

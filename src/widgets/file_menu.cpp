@@ -32,7 +32,7 @@ static const std::string dir_picture("misc/folder-icon.png");
 static const std::string path_up("..");
 const char file_menu::path_delim('/');
 
-file_menu::file_menu(CVideo &disp, std::string start_file)
+file_menu::file_menu(ui_window &disp, std::string start_file)
 	: menu(disp, empty_string_vector, false),
 	  current_dir_(get_path(start_file)),
 	  chosen_file_(start_file), last_selection_(-1),

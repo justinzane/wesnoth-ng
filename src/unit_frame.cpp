@@ -16,9 +16,9 @@
 
 #include "global.hpp"
 
-#include "display/game_display.hpp"
-#include "display/halo.hpp"
-#include "display/sound.hpp"
+#include "gui/game_display.hpp"
+#include "gui/halo.hpp"
+#include "gui/sound.hpp"
 #include "unit_frame.hpp"
 
 

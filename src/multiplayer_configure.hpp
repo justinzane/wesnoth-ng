@@ -22,7 +22,7 @@
 #include "widgets/scrollpane.hpp"
 #include "widgets/combo.hpp"
 #include "generators/mapgen.hpp"
-#include "display/tooltips.hpp"
+#include "gui/tooltips.hpp"
 #include "mp_options.hpp"
 
 namespace mp {

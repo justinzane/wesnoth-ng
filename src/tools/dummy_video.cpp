@@ -14,12 +14,12 @@
 
 /** @file */
 
-#include "../display/video.hpp"
-#include "../display/sdl_utils.hpp"
+#include "../gui/video.hpp"
+#include "../gui/sdl_utils.hpp"
 
 static surface dummy_screen_surface(NULL);
 
-surface& CVideo::getSurface()
+surface& ui_window::getSurface()
 {
 	return dummy_screen_surface;
 }

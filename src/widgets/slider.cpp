@@ -18,11 +18,11 @@
 
 #include "widgets/slider.hpp"
 #include "game_config.hpp"
-#include "display/font.hpp"
+#include "gui/font.hpp"
 #include "image.hpp"
-#include "display/sound.hpp"
-#include "display/video.hpp"
-
+#include "gui/sound.hpp"
+#include "gui/video.hpp"
+#include <SDL2/SDL.h>
 
 namespace {
 	const std::string slider_image   = ".png";
@@ -33,7 +33,7 @@ namespace {
 
 namespace gui {
 
-slider::slider(CVideo &video, const std::string& image, bool black)
+slider::slider(ui_window &video, const std::string& image, bool black)
 	: widget(video), image_(image::get_image(image + slider_image)),
 	  pressedImage_(image::get_image(image + pressed_image)),
 	  activeImage_(image::get_image(image + active_image)),
@@ -239,9 +239,10 @@ bool slider::requires_event_focus(const SDL_Event* event) const
 	}
 
 	if(event->type == SDL_KEYDOWN) {
-		SDLKey key = event->key.keysym.sym;
+		SDL_Keycode key = event->key.keysym.sym;
 		switch(key) {
 		case SDLK_LEFT:
+		    return true;
 		case SDLK_RIGHT:
 			return true;
 		default:
@@ -276,7 +277,7 @@ void slider::handle_event(const SDL_Event& event)
 		break;
 	case SDL_KEYDOWN:
 		if(focus(&event)) {
-			const SDL_keysym& key = reinterpret_cast<const SDL_KeyboardEvent&>(event).keysym;
+			const SDL_Keysym& key = reinterpret_cast<const SDL_KeyboardEvent&>(event).keysym;
 			const int c = key.sym;
 			if(c == SDLK_LEFT) {
 				sound::play_UI_sound(game_config::sounds::slider_adjust);
@@ -295,7 +296,7 @@ void slider::handle_event(const SDL_Event& event)
 }
 
 template<typename T>
-list_slider<T>::list_slider(CVideo &video) :
+list_slider<T>::list_slider(ui_window &video) :
 	slider(video)
 {
 	set_min(0);
@@ -304,7 +305,7 @@ list_slider<T>::list_slider(CVideo &video) :
 }
 
 template<typename T>
-list_slider<T>::list_slider(CVideo &video, const std::vector<T> &items) :
+list_slider<T>::list_slider(ui_window &video, const std::vector<T> &items) :
 	slider(video),
 	items_(items)
 {

@@ -20,7 +20,7 @@
 #include "config.hpp"
 #include "game_end_exceptions.hpp"
 #include "iterator.hpp"
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 #include "mp_game_settings.hpp"
 #include "random.hpp"
 #include "simple_rng.hpp"

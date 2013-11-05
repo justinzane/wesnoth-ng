@@ -200,7 +200,7 @@ void taddon_filter_options::toggle_dir_callback(ttoggle_button* active)
 	}
 }
 
-void taddon_filter_options::pre_show(CVideo& /*video*/, twindow& window)
+void taddon_filter_options::pre_show(ui_window& /*video*/, twindow& window)
 {
 	tlistbox& list = find_widget<tlistbox>(&window, "statuses_list", false);
 	window.keyboard_capture(&list);

@@ -26,7 +26,7 @@
 #include "../../attack_prediction.hpp"
 #include "../../game_config.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
+#include "../../board/map.hpp"
 #include "../../team.hpp"
 
 static lg::log_domain log_ai("ai/attack");

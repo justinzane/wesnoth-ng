@@ -19,12 +19,12 @@
 #include "multiplayer_connect.hpp"
 
 #include "ai/configuration.hpp"
-#include "display/dialogs.hpp"
-#include "display/game_display.hpp"
+#include "gui/dialogs.hpp"
+#include "gui/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "wml_separators.hpp"
 
 #include <boost/foreach.hpp>

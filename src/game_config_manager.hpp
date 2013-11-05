@@ -17,7 +17,7 @@
 #include "commandline_options.hpp"
 #include "config_cache.hpp"
 #include "gamestatus.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "filesystem.hpp"
 
 class config;

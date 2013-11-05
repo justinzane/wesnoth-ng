@@ -18,12 +18,12 @@
  */
 
 #include "key.h"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 int main( void )
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	CVideo video( 640, 480, 16, 0 );
+	ui_window video( 640, 480, 16, 0 );
 	CKey key;
 	printf( "press enter (escape exits)...\n" );
 	for(;;) {

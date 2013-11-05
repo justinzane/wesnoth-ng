@@ -25,7 +25,7 @@
 #include "statistics.hpp"
 #include "tod_manager.hpp"
 #include "gamestatus.hpp"
-#include "display/halo.hpp"
+#include "gui/halo.hpp"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -72,7 +72,7 @@ class play_controller : public controller_base, public events::observer, public 
 public:
 	play_controller(const config& level, game_state& state_of_game,
 		const int ticks, const int num_turns, const config& game_config,
-		CVideo& video, bool skip_replay);
+		ui_window& video, bool skip_replay);
 	virtual ~play_controller();
 
 	//event handler, overridden from observer
@@ -260,7 +260,7 @@ protected:
 	void update_gui_to_player(const int team_index, const bool observe = false);
 
 private:
-	void init(CVideo &video);
+	void init(ui_window &video);
 	// Expand AUTOSAVES in the menu items, setting the real savenames.
 	void expand_autosaves(std::vector<std::string>& items);
 	std::vector<std::string> savenames_;

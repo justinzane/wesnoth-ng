@@ -20,7 +20,7 @@
 #ifndef GAME_EVENTS_ENTITY_LOCATION_H_INCLUDED
 #define GAME_EVENTS_ENTITY_LOCATION_H_INCLUDED
 
-#include "../map_location.hpp"
+#include "../board/map_location.hpp"
 #include "../unit_map.hpp"
 
 class unit;

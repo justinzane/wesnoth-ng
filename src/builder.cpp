@@ -21,7 +21,7 @@
 
 #include "loadscreen.hpp"
 #include "log.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "serialization/string_utils.hpp"
 #include "image.hpp"
 

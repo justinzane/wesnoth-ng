@@ -18,9 +18,9 @@
 
 #include "savegame.hpp"
 
-#include "display/dialogs.hpp" //FIXME: get rid of this as soon as the two remaining dialogs are moved to gui2
+#include "gui/dialogs.hpp" //FIXME: get rid of this as soon as the two remaining dialogs are moved to gui2
 #include "formula_string_utils.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_end_exceptions.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
@@ -31,8 +31,8 @@
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/window.hpp"
 #include "log.hpp"
-#include "map.hpp"
-#include "map_label.hpp"
+#include "board/map.hpp"
+#include "board/map_label.hpp"
 #include "persist_manager.hpp"
 #include "replay.hpp"
 #include "resources.hpp"
@@ -811,7 +811,7 @@ savegame::savegame(game_state& gamestate, const bool compress_saves, const std::
 	, compress_saves_(compress_saves)
 {}
 
-bool savegame::save_game_automatic(CVideo& video, bool ask_for_overwrite, const std::string& filename)
+bool savegame::save_game_automatic(ui_window& video, bool ask_for_overwrite, const std::string& filename)
 {
 	if (filename == "")
 		create_filename();
@@ -827,7 +827,7 @@ bool savegame::save_game_automatic(CVideo& video, bool ask_for_overwrite, const 
 	return save_game(&video);
 }
 
-bool savegame::save_game_interactive(CVideo& video, const std::string& message,
+bool savegame::save_game_interactive(ui_window& video, const std::string& message,
 									 gui::DIALOG_TYPE dialog_type)
 {
 	show_confirmation_ = true;
@@ -860,7 +860,7 @@ bool savegame::save_game_interactive(CVideo& video, const std::string& message,
 	return save_game(&video);
 }
 
-int savegame::show_save_dialog(CVideo& video, const std::string& message, const gui::DIALOG_TYPE dialog_type)
+int savegame::show_save_dialog(ui_window& video, const std::string& message, const gui::DIALOG_TYPE dialog_type)
 {
 	int res = 0;
 
@@ -883,7 +883,7 @@ int savegame::show_save_dialog(CVideo& video, const std::string& message, const 
 	return res;
 }
 
-bool savegame::check_overwrite(CVideo& video)
+bool savegame::check_overwrite(ui_window& video)
 {
 	std::string filename = filename_;
 	if (save_game_exists(filename, compress_saves_)) {
@@ -896,7 +896,7 @@ bool savegame::check_overwrite(CVideo& video)
 	}
 }
 
-void savegame::check_filename(const std::string& filename, CVideo& video)
+void savegame::check_filename(const std::string& filename, ui_window& video)
 {
 	if (is_compressed_file(filename)) {
 		gui2::show_error_message(video, _("Save names should not end on '.gz' or '.bz2'. "
@@ -926,7 +926,7 @@ void savegame::before_save()
 	gamestate_.replay_data = recorder.get_replay_data();
 }
 
-bool savegame::save_game(CVideo* video, const std::string& filename)
+bool savegame::save_game(ui_window* video, const std::string& filename)
 {
 	static std::string parent, grandparent;
 
@@ -1109,7 +1109,7 @@ oos_savegame::oos_savegame(const config& snapshot_cfg)
 	: ingame_savegame(*resources::state_of_game, *resources::screen, snapshot_cfg, preferences::compress_saves())
 {}
 
-int oos_savegame::show_save_dialog(CVideo& video, const std::string& message, const gui::DIALOG_TYPE /*dialog_type*/)
+int oos_savegame::show_save_dialog(ui_window& video, const std::string& message, const gui::DIALOG_TYPE /*dialog_type*/)
 {
 	static bool ignore_all = false;
 	int res = 0;

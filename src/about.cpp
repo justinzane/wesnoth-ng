@@ -19,8 +19,8 @@
 
 #include "about.hpp"
 
-#include "display/construct_dialog.hpp"
-#include "display/display.hpp"
+#include "gui/construct_dialog.hpp"
+#include "gui/display.hpp"
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
 
@@ -175,7 +175,7 @@ void set_about(const config &cfg)
 void show_about(display &disp, const std::string &campaign)
 {
 	boost::scoped_ptr<cursor::setter> cur(new cursor::setter(cursor::WAIT));
-	CVideo &video = disp.video();
+	ui_window &video = disp.video();
 	surface screen = video.getSurface();
 	if (screen == NULL) return;
 

@@ -22,7 +22,7 @@
 
 #include "events.hpp"
 #include "interface.hpp"
-#include "display/video.hpp"
+#include "gui/video.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -61,7 +61,6 @@ private:
 	void resolve_wml(const vconfig& cfg);
 
 	display& disp_;
-	const resize_lock disp_resize_lock_;
 	const events::event_context evt_context_;
 
 	std::string scenario_name_;

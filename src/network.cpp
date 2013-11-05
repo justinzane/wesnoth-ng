@@ -29,7 +29,8 @@
 
 #include "filesystem.hpp"
 
-
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_net.h>
 #include <cerrno>
 #include <queue>
 #include <iomanip>
@@ -42,20 +43,20 @@
 
 #include <signal.h>
 #if defined(_WIN32) || defined(__WIN32__) || defined (WIN32)
-#undef INADDR_ANY
-#undef INADDR_BROADCAST
-#undef INADDR_NONE
-#include <windows.h>
+    #undef INADDR_ANY
+    #undef INADDR_BROADCAST
+    #undef INADDR_NONE
+    #include <windows.h>
 #else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>  // for TCP_NODELAY
-#ifdef __BEOS__
-#include <socket.h>
-#else
-#include <fcntl.h>
-#endif
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    #include <netinet/tcp.h>  // for TCP_NODELAY
+    #ifdef __BEOS__
+        #include <socket.h>
+    #else
+        #include <fcntl.h>
+    #endif
 #define SOCKET int
 #endif
 

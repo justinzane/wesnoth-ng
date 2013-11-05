@@ -23,7 +23,7 @@
 class game_display;
 class game_state;
 class config;
-class CVideo;
+class ui_window;
 
 enum io_type_t {
 	IO_NONE,
@@ -38,7 +38,7 @@ LEVEL_RESULT play_game(game_display& disp, game_state& state,
 		bool network_game = false);
 
 void play_replay(display& disp, game_state& state,
-		const config& game_config, CVideo& video);
+		const config& game_config, ui_window& video);
 
 #endif // PLAYCAMPAIGN_H_INCLUDED
 

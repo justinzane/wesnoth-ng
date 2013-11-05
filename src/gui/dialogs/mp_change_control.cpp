@@ -28,7 +28,7 @@
 #include "gui/widgets/window.hpp"
 
 #include "formula_string_utils.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_preferences.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
@@ -312,7 +312,7 @@ public:
 	{
 	}
 
-	void pre_show(CVideo &/*video*/, twindow &window)
+	void pre_show(ui_window &/*video*/, twindow &window)
 	{
 		model_.clear_sides();
 		controller_.show_sides_list();
@@ -384,7 +384,7 @@ boost::shared_ptr<tmp_change_control::view> tmp_change_control::get_view()
 	return view_;
 }
 
-void tmp_change_control::pre_show(CVideo& video, twindow& window)
+void tmp_change_control::pre_show(ui_window& video, twindow& window)
 {
 	view_->bind(window);
 	view_->pre_show(video,window);

@@ -12,14 +12,6 @@
  See the COPYING file for more details.
  */
 
-/**
- * @file
- */
-
-#include <set>
-#include <sstream>
-#include <iterator>
-
 #include "side_actions.hpp"
 
 #include "action.hpp"
@@ -35,12 +27,16 @@
 
 #include "actions/create.hpp"
 #include "actions/undo.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_end_exceptions.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "resources.hpp"
 
 #include <boost/foreach.hpp>
+#include <set>
+#include <sstream>
+#include <iterator>
+
 
 namespace wb
 {

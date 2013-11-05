@@ -42,12 +42,12 @@
 #include "wesconfig.h"
 #include "wml_exception.hpp"
 #include "formula_string_utils.hpp"
-#include "map.hpp"
+#include "board/map.hpp"
 #include "pathfind/pathfind.hpp"
 #include "whiteboard/side_actions.hpp"
-#include "display/sound.hpp"
+#include "gui/sound.hpp"
 #include "soundsource.hpp"
-#include "map_label.hpp"
+#include "board/map_label.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>

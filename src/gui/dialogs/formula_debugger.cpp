@@ -64,7 +64,7 @@ namespace gui2 {
 
 REGISTER_DIALOG(formula_debugger)
 
-void tformula_debugger::pre_show(CVideo& /*video*/, twindow& window)
+void tformula_debugger::pre_show(ui_window& /*video*/, twindow& window)
 {
 	// stack label
 	tcontrol* stack_label = find_widget<tcontrol>(

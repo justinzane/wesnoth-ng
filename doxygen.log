@@ -1,0 +1,577 @@
+/home/justin/src/wesnoth-ng/src/ana/api/buffers.hpp:175: warning: missing title after \defgroup buffer
+/home/justin/src/wesnoth-ng/src/jz_exception.cpp:6: warning: Invalid or missing section label
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:6: warning: Invalid or missing section label
+/home/justin/src/wesnoth-ng/src/nacl/plugin.cc:27: warning: include file dir_list.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/justin/src/wesnoth-ng/src/nacl/plugin.cc:34: warning: include file file_list.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/justin/src/wesnoth-ng/src/nacl/plugin.cc:42: warning: include file pack_list.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/justin/src/wesnoth-ng/src/iterator.hpp:16: warning: the name `Generic' supplied as the second argument in the \file statement is not an input file
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:337: warning: no uniquely matching class member found for 
+  anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::unit_mover(const std::vector< map_location > &route, move_unit_spectator *move_spectator, bool skip_sightings, const map_location *replay_dest)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:413: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::check_for_ambushers(const map_location &hex)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:443: warning: no matching class member found for 
+  bool anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::check_for_obstructing_unit(const map_location &hex, const map_location &prev_hex)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:477: warning: no matching class member found for 
+  bool anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::do_move(const route_iterator &step_from, const route_iterator &step_to, unit_display::unit_mover &animator)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:525: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::handle_fog(const map_location &hex, bool ally_interrupts, bool new_animation)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:550: warning: no matching class member found for 
+  bool anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::is_reasonable_stop(const map_location &hex) const
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:570: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::reveal_ambushers()
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:593: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::validate_ambushers()
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:623: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::cache_hidden_units(const route_iterator &start, const route_iterator &stop)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:684: warning: no matching class member found for 
+  bool anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::fire_hex_event(const std::string &event_name, const route_iterator &current, const route_iterator &other)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:713: warning: no matching class member found for 
+  unit_mover::route_iterator anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::plot_turn(const route_iterator &start, const route_iterator &stop)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:779: warning: no uniquely matching class member found for 
+  bool anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::post_wml(const route_iterator &step)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:812: warning: no matching class member found for 
+  bool anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::pump_sighted(const route_iterator &from)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:833: warning: no matching class member found for 
+  std::string anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::read_ambush_string(const unit &ambusher)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:852: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::reveal_ambusher(const map_location &hex, bool update_alert)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:903: warning: no matching class member found for 
+  bool anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::check_expected_movement()
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:916: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::try_actual_movement(bool show)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:1015: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::post_move(undo_list *undo_stack)
+
+/home/justin/src/wesnoth-ng/src/actions/move.cpp:1084: warning: no matching class member found for 
+  void anonymous_namespace move actions::anonymous_namespace{move.cpp}::actions::cpp::unit_mover::feedback() const
+
+/home/justin/src/wesnoth-ng/src/ana/src/asio_timers.cpp:41: warning: documented symbol `time_t_traits::time_type ana::detail::time_t_traits::now' was not declared or defined.
+/home/justin/src/wesnoth-ng/src/ana/src/asio_timers.cpp:47: warning: no uniquely matching class member found for 
+  time_t_traits::time_type ana::detail::time_t_traits::add(const time_type &t, const duration_type &d)
+
+/home/justin/src/wesnoth-ng/src/ana/src/asio_timers.cpp:53: warning: documented symbol `time_t_traits::duration_type ana::detail::time_t_traits::subtract' was not declared or defined.
+/home/justin/src/wesnoth-ng/src/ana/src/asio_timers.cpp:60: warning: documented symbol `bool ana::detail::time_t_traits::less_than' was not declared or defined.
+/home/justin/src/wesnoth-ng/src/ana/src/asio_timers.cpp:67: warning: documented symbol `boost::posix_time::time_duration ana::detail::time_t_traits::to_posix_duration' was not declared or defined.
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:229: warning: no matching class member found for 
+  anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::prob_matrix(unsigned int a_max, unsigned int b_max, bool need_a_slowed, bool need_b_slowed, unsigned int a_cur, unsigned int b_cur, const std::vector< double > a_initial[2], const std::vector< double > b_initial[2])
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:290: warning: no matching class member found for 
+  double *anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::new_plane()
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:307: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::initialize_plane(unsigned plane, unsigned a_cur, unsigned b_cur, const std::vector< double > &a_initial, const std::vector< double > &b_initial)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:337: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::initialize_row(unsigned plane, unsigned row, double row_prob, unsigned b_cur, const std::vector< double > &b_initial)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:375: warning: no uniquely matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::xfer(unsigned dst_plane, unsigned src_plane, unsigned row_dst, unsigned col_dst, unsigned row_src, unsigned col_src, double prob)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:410: warning: no uniquely matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::xfer(unsigned dst_plane, unsigned src_plane, unsigned row_dst, unsigned col_dst, unsigned row_src, unsigned col_src)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:447: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::shift_cols_in_row(unsigned dst, unsigned src, unsigned row, const std::vector< unsigned > &cols, unsigned damage, double prob, int drainmax, int drain_constant, int drain_percent)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:481: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::shift_cols(unsigned dst, unsigned src, unsigned damage, double prob, int drain_constant, int drain_percent)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:514: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::shift_rows_in_col(unsigned dst, unsigned src, unsigned col, const std::vector< unsigned > &rows, unsigned damage, double prob, int drainmax, int drain_constant, int drain_percent)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:548: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::shift_rows(unsigned dst, unsigned src, unsigned damage, double prob, int drain_constant, int drain_percent)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:580: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::move_column(unsigned d_plane, unsigned s_plane, unsigned d_col, unsigned s_col)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:594: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::move_row(unsigned d_plane, unsigned s_plane, unsigned d_row, unsigned s_row)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:609: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::merge_col(unsigned d_plane, unsigned s_plane, unsigned col, unsigned d_row)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:624: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::merge_cols(unsigned d_plane, unsigned s_plane, unsigned d_row)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:642: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::merge_row(unsigned d_plane, unsigned s_plane, unsigned row, unsigned d_col)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:658: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::merge_rows(unsigned d_plane, unsigned s_plane, unsigned d_col)
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:677: warning: no matching class member found for 
+  double anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::prob_of_zero(bool check_a, bool check_b) const
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:710: warning: no matching class member found for 
+  void anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::prob_matrix::sum(unsigned plane, std::vector< double > &row_sums, std::vector< double > &col_sums) const
+
+/home/justin/src/wesnoth-ng/src/attack_prediction.cpp:830: warning: no matching class member found for 
+  anonymous_namespace attack_prediction anonymous_namespace{attack_prediction.cpp}::cpp::combat_matrix::combat_matrix(unsigned int a_max_hp, unsigned int b_max_hp, unsigned int a_hp, unsigned int b_hp, const std::vector< double > a_summary[2], const std::vector< double > b_summary[2], bool a_slows, bool b_slows, unsigned int a_damage, unsigned int b_damage, unsigned int a_slow_damage, unsigned int b_slow_damage, int a_drain_percent, int b_drain_percent, int a_drain_constant, int b_drain_constant)
+
+/home/justin/src/wesnoth-ng/src/campaign_server/campaign_server.cpp:181: warning: no matching class member found for 
+  anonymous_namespace campaign_server anonymous_namespace{campaign_server.cpp}::cpp::campaign_server::campaign_server(const std::string &cfgfile, size_t min_thread, size_t max_thread)
+
+/home/justin/src/wesnoth-ng/src/campaign_server/campaign_server.cpp:245: warning: no matching class member found for 
+  void anonymous_namespace campaign_server anonymous_namespace{campaign_server.cpp}::cpp::campaign_server::convert_binary_to_gzip()
+
+/home/justin/src/wesnoth-ng/src/filesystem.cpp:897: warning: no matching class member found for 
+  file_tree_checksum::file_tree_checksum(const config &cfg)
+Possible candidates:
+  file_tree_checksum::file_tree_checksum()
+  file_tree_checksum::file_tree_checksum(const class config &cfg)
+
+/home/justin/src/wesnoth-ng/src/filesystem.cpp:1009: warning: no matching class member found for 
+  binary_paths_manager::binary_paths_manager(const config &cfg)
+Possible candidates:
+  binary_paths_manager::binary_paths_manager()
+  binary_paths_manager::binary_paths_manager(const class config &cfg)
+  binary_paths_manager::binary_paths_manager(const binary_paths_manager &o)
+
+/home/justin/src/wesnoth-ng/src/formula.cpp:1118: warning: no matching class member found for 
+  game_logic::formula::formula(const token *i1, const token *i2, function_symbol_table *symbols)
+Possible candidates:
+  game_logic::formula::formula(const std::string &str, function_symbol_table *symbols=NULL)
+  game_logic::formula::formula(const formula_tokenizer::token *i1, const formula_tokenizer::token *i2, function_symbol_table *symbols=NULL)
+  game_logic::formula::formula()
+
+/home/justin/src/wesnoth-ng/src/game_events/action_wml.cpp:372: warning: no uniquely matching class member found for 
+  std::string anonymous_namespace action_wml game_events::anonymous_namespace{action_wml.cpp}::game_events::cpp::get_image(const vconfig &cfg, unit_map::iterator speaker)
+
+/home/justin/src/wesnoth-ng/src/game_events/handlers.cpp:128: warning: no matching class member found for 
+  void anonymous_namespace handlers game_events::anonymous_namespace{handlers.cpp}::game_events::cpp::t_event_handlers::add_event_handler(const config &cfg, bool is_menu_item)
+
+/home/justin/src/wesnoth-ng/src/game_events/handlers.cpp:160: warning: no matching class member found for 
+  void anonymous_namespace handlers game_events::anonymous_namespace{handlers.cpp}::game_events::cpp::t_event_handlers::remove_event_handler(std::string const &id)
+
+/home/justin/src/wesnoth-ng/src/game_events/handlers.cpp:189: warning: no uniquely matching class member found for 
+  void anonymous_namespace handlers game_events::anonymous_namespace{handlers.cpp}::game_events::cpp::t_event_handlers::start_buffering()
+
+/home/justin/src/wesnoth-ng/src/game_events/handlers.cpp:204: warning: no uniquely matching class member found for 
+  void anonymous_namespace handlers game_events::anonymous_namespace{handlers.cpp}::game_events::cpp::t_event_handlers::commit_buffer()
+
+/home/justin/src/wesnoth-ng/src/game_preferences_display.cpp:1075: warning: no matching class member found for 
+  const config *anonymous_namespace game_preferences_display preferences::anonymous_namespace{game_preferences_display.cpp}::preferences::cpp::preferences_dialog::get_advanced_pref() const
+
+/home/justin/src/wesnoth-ng/src/gui/auxiliary/canvas.cpp:1190: warning: no matching class member found for 
+  timage::tresize_mode anonymous_namespace canvas gui2::anonymous_namespace{canvas.cpp}::gui2::cpp::timage::get_resize_mode(const std::string &resize_mode)
+
+/home/justin/src/wesnoth-ng/src/gui/auxiliary/event/dispatcher.cpp:246: warning: no matching class member found for 
+  bool gui2::event::tdispatcher::fire(gui2::event::tevent event, gui2::twidget &target, SDLKey key, const SDLMod modifier, const Uint16 unicode)
+Possible candidates:
+  bool gui2::event::tdispatcher::fire(const tevent event, twidget &target)
+  bool gui2::event::tdispatcher::fire(const tevent event, twidget &target, const tpoint &coordinate)
+  bool gui2::event::tdispatcher::fire(const tevent event, twidget &target, const SDL_Keycode key, const SDL_Keymod modifier, const Uint16 unicode)
+  bool gui2::event::tdispatcher::fire(const tevent event, twidget &target, void *)
+  bool gui2::event::tdispatcher::fire(const tevent event, twidget &target, tmessage &message)
+
+/home/justin/src/wesnoth-ng/src/savegame.hpp:76: warning: no matching class member found for 
+  void savegame::savegame::delete_game(const std::string &name)
+
+/home/justin/src/wesnoth-ng/src/serialization/parser.cpp:341: warning: no matching class member found for 
+  std::string anonymous_namespace parser anonymous_namespace{parser.cpp}::cpp::parser::lineno_string(utils::string_map &i18n_symbols, std::string const &lineno, const char *error_string)
+
+/home/justin/src/wesnoth-ng/src/serialization/parser.cpp:501: warning: no uniquely matching class member found for 
+  void anonymous_namespace parser anonymous_namespace{parser.cpp}::cpp::write_key_val_visitor::operator()(t_string const &value) const
+
+/home/justin/src/wesnoth-ng/src/actions/heal.cpp:156: warning: Found unknown command `\patient'
+/home/justin/src/wesnoth-ng/src/gui/auxiliary/iterator/iterator.hpp:88: warning: unable to resolve reference to `operator' for \ref command
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:30: warning: Found unknown command `\type'
+/home/justin/src/wesnoth-ng/src/play_controller.cpp:1206: warning: Found unknown command `\items'
+/home/justin/src/wesnoth-ng/src/unit_abilities.cpp:477: warning: Found unknown command `\parent'
+/home/justin/src/wesnoth-ng/src/actions/heal.cpp:156: warning: Found unknown command `\patient'
+/home/justin/src/wesnoth-ng/src/ai/game_info.cpp:15: warning: explicit link request to 'manager' could not be resolved
+/home/justin/src/wesnoth-ng/src/ai/game_info.cpp:15: warning: explicit link request to 'manager' could not be resolved
+/home/justin/src/wesnoth-ng/src/storyscreen/interface.hpp:61: warning: The following parameters of show_endscreen(display &disp, const t_string &text, unsigned int duration) are not documented:
+  parameter 'disp'
+/home/justin/src/wesnoth-ng/src/intro.hpp:25: warning: The following parameters of the_end(display &disp, std::string text, unsigned int duration) are not documented:
+  parameter 'disp'
+/home/justin/src/wesnoth-ng/src/intro.hpp:25: warning: The following parameters of the_end(display &disp, std::string text, unsigned int duration) are not documented:
+  parameter 'disp'
+/home/justin/src/wesnoth-ng/src/jz_exception.cpp:5: warning: Invalid section id `license'; ignoring section
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:30: warning: Found unknown command `\type'
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:5: warning: Invalid section id `license'; ignoring section
+/home/justin/src/wesnoth-ng/src/scripting/lua.cpp:440: warning: The following parameters of luaW_checkvconfig(lua_State *L, int index, bool allow_missing=false) are not documented:
+  parameter 'L'
+  parameter 'index'
+/home/justin/src/wesnoth-ng/src/scripting/lua.cpp:457: warning: The following parameters of luaW_pcall(lua_State *L, int nArgs, int nRets, bool allow_wml_error) are not documented:
+  parameter 'L'
+  parameter 'nArgs'
+  parameter 'allow_wml_error'
+/home/justin/src/wesnoth-ng/src/scripting/lua.cpp:305: warning: The following parameters of luaW_toconfig(lua_State *L, int index, config &cfg, int tstring_meta) are not documented:
+  parameter 'L'
+  parameter 'index'
+  parameter 'cfg'
+/home/justin/src/wesnoth-ng/src/scripting/lua.cpp:457: warning: The following parameters of luaW_pcall(lua_State *L, int nArgs, int nRets, bool allow_wml_error) are not documented:
+  parameter 'L'
+  parameter 'nArgs'
+  parameter 'allow_wml_error'
+/home/justin/src/wesnoth-ng/src/scripting/lua.cpp:305: warning: The following parameters of luaW_toconfig(lua_State *L, int index, config &cfg, int tstring_meta) are not documented:
+  parameter 'L'
+  parameter 'index'
+  parameter 'cfg'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:450: warning: Found unknown command `\x'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:451: warning: Found unknown command `\y'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:446: warning: The following parameters of put_pixel(const surface &surf, surface_lock &surf_lock, int x, int y, Uint32 pixel) are not documented:
+  parameter 'x'
+  parameter 'y'
+  parameter 'pixel'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:340: warning: Found unknown command `\zoom'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:340: warning: Found unknown command `\offset'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:341: warning: Found unknown command `\offset'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:450: warning: Found unknown command `\x'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:451: warning: Found unknown command `\y'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:446: warning: The following parameters of put_pixel(const surface &surf, surface_lock &surf_lock, int x, int y, Uint32 pixel) are not documented:
+  parameter 'x'
+  parameter 'y'
+  parameter 'pixel'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:340: warning: Found unknown command `\zoom'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:340: warning: Found unknown command `\offset'
+/home/justin/src/wesnoth-ng/src/sdl_utils.hpp:341: warning: Found unknown command `\offset'
+/home/justin/src/wesnoth-ng/src/serialization/preprocessor.hpp:69: warning: The following parameters of preprocess_file(std::string const &fname, preproc_map *defines=NULL) are not documented:
+  parameter 'fname'
+/home/justin/src/wesnoth-ng/src/unit_abilities.cpp:477: warning: Found unknown command `\parent'
+/home/justin/src/wesnoth-ng/src/wml_exception.hpp:91: warning: The following parameters of wml_exception(const char *cond, const char *file, int line, const char *function, const std::string &message, const std::string &dev_message="") are not documented:
+  parameter 'dev_message'
+/home/justin/src/wesnoth-ng/src/wml_exception.hpp:91: warning: The following parameters of wml_exception(const char *cond, const char *file, int line, const char *function, const std::string &message, const std::string &dev_message="") are not documented:
+  parameter 'dev_message'
+/home/justin/src/wesnoth-ng/src/gui/widgets/window.cpp:1530: warning: unable to resolve reference to `tvisible::hidden' for \ref command
+/home/justin/src/wesnoth-ng/src/gui/widgets/window.cpp:1531: warning: unable to resolve reference to `tvisible::visible' for \ref command
+todo:42: warning: explicit link request to 'units' could not be resolved
+deprecated:7: warning: unable to resolve reference to `definition_load_configuration()' for \ref command
+/home/justin/src/wesnoth-ng/src/serialization/validator.hpp:47: warning: The following parameters of abstract_validator::open_tag(const std::string &name, int start_line, const std::string &file, bool addittion=false)=0 are not documented:
+  parameter 'addittion'
+/home/justin/src/wesnoth-ng/src/serialization/validator.hpp:73: warning: The following parameters of abstract_validator::validate_key(const config &cfg, const std::string &name, const std::string &value, int start_line, const std::string &file)=0 are not documented:
+  parameter 'value'
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:340: warning: argument 'timer' of command @param is not found in the argument list of ana_connect_handler::ana_connect_handler()
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:360: warning: argument 'error_code' of command @param is not found in the argument list of ana_connect_handler::handle_connect(ana::error_code, ana::net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:360: warning: argument 'net_id' of command @param is not found in the argument list of ana_connect_handler::handle_connect(ana::error_code, ana::net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:206: warning: argument 'error_code' of command @param is not found in the argument list of ana_handshake_finisher_handler::handle_send(ana::error_code, ana::net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:206: warning: argument 'net_id' of command @param is not found in the argument list of ana_handshake_finisher_handler::handle_send(ana::error_code, ana::net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:312: warning: argument 'error_code' of command @param is not found in the argument list of ana_multiple_receive_handler::handle_disconnect(ana::error_code, ana::net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:312: warning: argument 'net_id' of command @param is not found in the argument list of ana_multiple_receive_handler::handle_disconnect(ana::error_code, ana::net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:311: warning: argument 'error_code' of command @param is not found in the argument list of ana_multiple_receive_handler::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:311: warning: argument 'net_id' of command @param is not found in the argument list of ana_multiple_receive_handler::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:311: warning: argument 'shared_buffer' of command @param is not found in the argument list of ana_multiple_receive_handler::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:282: warning: argument 'component' of command @param is not found in the argument list of ana_multiple_receive_handler::wait_completion(size_t timeout_ms=0)
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:394: warning: The following parameters of ana_network_manager::get_stats(network::connection connection_num=0, ana::stat_type type=ana::ACCUMULATED) are not documented:
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:530: warning: argument 'error_code' of command @param is not found in the argument list of ana_network_manager::handle_disconnect(ana::error_code, ana::net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:530: warning: argument 'net_id' of command @param is not found in the argument list of ana_network_manager::handle_disconnect(ana::error_code, ana::net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:526: warning: argument 'error_code' of command @param is not found in the argument list of ana_network_manager::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:526: warning: argument 'net_id' of command @param is not found in the argument list of ana_network_manager::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:526: warning: argument 'shared_buffer' of command @param is not found in the argument list of ana_network_manager::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:524: warning: argument 'error_code' of command @param is not found in the argument list of ana_network_manager::handle_send(ana::error_code, ana::net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:524: warning: argument 'net_id' of command @param is not found in the argument list of ana_network_manager::handle_send(ana::error_code, ana::net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:250: warning: argument 'error_code' of command @param is not found in the argument list of ana_receive_handler::handle_disconnect(ana::error_code, ana::net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:250: warning: argument 'net_id' of command @param is not found in the argument list of ana_receive_handler::handle_disconnect(ana::error_code, ana::net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:249: warning: argument 'error_code' of command @param is not found in the argument list of ana_receive_handler::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:249: warning: argument 'net_id' of command @param is not found in the argument list of ana_receive_handler::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:249: warning: argument 'shared_buffer' of command @param is not found in the argument list of ana_receive_handler::handle_receive(ana::error_code, ana::net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:191: warning: argument 'error_code' of command @param is not found in the argument list of ana_send_handler::handle_send(ana::error_code, ana::net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:191: warning: argument 'net_id' of command @param is not found in the argument list of ana_send_handler::handle_send(ana::error_code, ana::net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_client.hpp:67: warning: argument 'handler' of command @param is not found in the argument list of asio_client::connect(ana::connection_handler *) inherited from member connect at line 638 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_client.hpp:69: warning: The following parameters of asio_client::connect_through_proxy(std::string proxy_address, std::string proxy_port, ana::connection_handler *handler, std::string user_name="", std::string password="") are not documented:
+  parameter 'proxy_address'
+  parameter 'proxy_port'
+  parameter 'user_name'
+  parameter 'password'
+/home/justin/src/wesnoth-ng/src/ana/src/asio_client.hpp:77: warning: argument 'send_type' of command @param is not found in the argument list of asio_client::send(boost::asio::const_buffer buffer, ana::send_handler *handler, ana::send_type type) inherited from member send at line 681 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_client.hpp:77: warning: The following parameters of asio_client::send(boost::asio::const_buffer buffer, ana::send_handler *handler, ana::send_type type) are not documented:
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:155: warning: argument 'id' of command @param is not found in the argument list of asio_server::expecting_message(ana::net_id, size_t ms_until_timeout) inherited from member expecting_message at line 526 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:155: warning: argument 'time' of command @param is not found in the argument list of asio_server::expecting_message(ana::net_id, size_t ms_until_timeout) inherited from member expecting_message at line 526 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:155: warning: The following parameters of asio_server::expecting_message(ana::net_id, size_t ms_until_timeout) are not documented:
+  parameter 'ms_until_timeout'
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:103: warning: argument 'send_type' of command @param is not found in the argument list of asio_server::send_all(boost::asio::const_buffer buffer, ana::send_handler *handler, ana::send_type type) inherited from member send_all at line 355 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:103: warning: The following parameters of asio_server::send_all(boost::asio::const_buffer buffer, ana::send_handler *handler, ana::send_type type) are not documented:
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:117: warning: argument 'send_type' of command @param is not found in the argument list of asio_server::send_all_except(ana::net_id except_id, boost::asio::const_buffer buffer, ana::send_handler *handler, ana::send_type type) inherited from member send_all_except at line 402 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:117: warning: The following parameters of asio_server::send_all_except(ana::net_id except_id, boost::asio::const_buffer buffer, ana::send_handler *handler, ana::send_type type) are not documented:
+  parameter 'except_id'
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:107: warning: argument 'send_type' of command @param is not found in the argument list of asio_server::send_if(boost::asio::const_buffer buffer, ana::send_handler *handler, const ana::client_predicate &predicate, ana::send_type type) inherited from member send_if at line 379 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:107: warning: The following parameters of asio_server::send_if(boost::asio::const_buffer buffer, ana::send_handler *handler, const ana::client_predicate &predicate, ana::send_type type) are not documented:
+  parameter 'predicate'
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:112: warning: argument 'send_type' of command @param is not found in the argument list of asio_server::send_one(ana::net_id id, boost::asio::const_buffer buffer, ana::send_handler *handler, ana::send_type type) inherited from member send_one at line 424 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/src/asio_server.hpp:112: warning: The following parameters of asio_server::send_one(ana::net_id id, boost::asio::const_buffer buffer, ana::send_handler *handler, ana::send_type type) are not documented:
+  parameter 'id'
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/test/ana_client.cpp:172: warning: argument 'error_code' of command @param is not found in the argument list of ChatClient::handle_connect(ana::error_code, net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/test/ana_client.cpp:172: warning: argument 'net_id' of command @param is not found in the argument list of ChatClient::handle_connect(ana::error_code, net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:241: warning: argument 'error_code' of command @param is not found in the argument list of ChatClient::handle_connect(ana::error_code, net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:241: warning: argument 'net_id' of command @param is not found in the argument list of ChatClient::handle_connect(ana::error_code, net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/test/ana_client.cpp:183: warning: argument 'error_code' of command @param is not found in the argument list of ChatClient::handle_disconnect(ana::error_code, net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/test/ana_client.cpp:183: warning: argument 'net_id' of command @param is not found in the argument list of ChatClient::handle_disconnect(ana::error_code, net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:252: warning: argument 'error_code' of command @param is not found in the argument list of ChatClient::handle_disconnect(ana::error_code, net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:252: warning: argument 'net_id' of command @param is not found in the argument list of ChatClient::handle_disconnect(ana::error_code, net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/test/ana_client.cpp:189: warning: argument 'error_code' of command @param is not found in the argument list of ChatClient::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/test/ana_client.cpp:189: warning: argument 'net_id' of command @param is not found in the argument list of ChatClient::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/test/ana_client.cpp:189: warning: argument 'shared_buffer' of command @param is not found in the argument list of ChatClient::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:258: warning: argument 'error_code' of command @param is not found in the argument list of ChatClient::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:258: warning: argument 'net_id' of command @param is not found in the argument list of ChatClient::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:258: warning: argument 'shared_buffer' of command @param is not found in the argument list of ChatClient::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:270: warning: argument 'error_code' of command @param is not found in the argument list of ChatClient::handle_send(ana::error_code, net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/client.cpp:270: warning: argument 'net_id' of command @param is not found in the argument list of ChatClient::handle_send(ana::error_code, net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:74: warning: argument 'error_code' of command @param is not found in the argument list of ChatServer::handle_connect(ana::error_code, net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:74: warning: argument 'net_id' of command @param is not found in the argument list of ChatServer::handle_connect(ana::error_code, net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:85: warning: argument 'error_code' of command @param is not found in the argument list of ChatServer::handle_disconnect(ana::error_code, net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:85: warning: argument 'net_id' of command @param is not found in the argument list of ChatServer::handle_disconnect(ana::error_code, net_id) inherited from member handle_disconnect at line 139 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:126: warning: argument 'error_code' of command @param is not found in the argument list of ChatServer::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:126: warning: argument 'net_id' of command @param is not found in the argument list of ChatServer::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:126: warning: argument 'shared_buffer' of command @param is not found in the argument list of ChatServer::handle_receive(ana::error_code, net_id, ana::read_buffer) inherited from member handle_receive at line 125 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:93: warning: argument 'error_code' of command @param is not found in the argument list of ChatServer::handle_send(ana::error_code, net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/ana/apps/chat/server.cpp:93: warning: argument 'net_id' of command @param is not found in the argument list of ChatServer::handle_send(ana::error_code, net_id, ana::operation_id) inherited from member handle_send at line 322 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:154: warning: argument 'error_code' of command @param is not found in the argument list of clients_manager::handle_connect(ana::error_code, ana::net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/network_manager_ana.hpp:154: warning: argument 'net_id' of command @param is not found in the argument list of clients_manager::handle_connect(ana::error_code, ana::net_id) inherited from member handle_connect at line 302 in file /home/justin/src/wesnoth-ng/src/ana/api/ana.hpp
+/home/justin/src/wesnoth-ng/src/display.hpp:954: warning: argument 'blit' of command @param is not found in the argument list of display::drawing_buffer_add(const tdrawing_layer layer, const map_location &loc, int x, int y, const surface &surf, const SDL_Rect &clip=SDL_Rect())
+/home/justin/src/wesnoth-ng/src/display.hpp:954: warning: The following parameters of display::drawing_buffer_add(const tdrawing_layer layer, const map_location &loc, int x, int y, const surface &surf, const SDL_Rect &clip=SDL_Rect()) are not documented:
+  parameter 'x'
+  parameter 'y'
+  parameter 'surf'
+  parameter 'clip'
+/home/justin/src/wesnoth-ng/src/joystick.hpp:41: warning: The following parameters of joystick_manager::update_highlighted_hex(map_location &highlighted_hex, const map_location &selected_hex) are not documented:
+  parameter 'selected_hex'
+/home/justin/src/wesnoth-ng/src/play_controller.cpp:1206: warning: Found unknown command `\items'
+/home/justin/src/wesnoth-ng/src/play_controller.cpp:1206: warning: Found unknown command `\items'
+/home/justin/src/wesnoth-ng/src/builder.hpp:287: warning: The following parameters of terrain_builder::tile::rebuild_cache(const std::string &tod, logs *log=NULL) are not documented:
+  parameter 'log'
+/home/justin/src/wesnoth-ng/src/wesmage/filter.hpp:50: warning: unable to resolve reference to `tfilter_description::tparameter::description' for \ref command
+/home/justin/src/wesnoth-ng/src/unit_types.hpp:256: warning: Found unknown command `\variation_id'
+/home/justin/src/wesnoth-ng/src/actions/vision.cpp:311: warning: The following parameters of actions::shroud_clearer::clear_unit(const map_location &view_loc, team &view_team, size_t viewer_id, int sight_range, bool slowed, const movetype::terrain_costs &costs, const map_location &real_loc, const std::set< map_location > *known_units=NULL, size_t *enemy_count=NULL, size_t *friend_count=NULL, move_unit_spectator *spectator=NULL, bool instant=true) are not documented:
+  parameter 'view_loc'
+  parameter 'view_team'
+  parameter 'viewer_id'
+  parameter 'sight_range'
+  parameter 'slowed'
+  parameter 'costs'
+/home/justin/src/wesnoth-ng/src/actions/vision.cpp:384: warning: The following parameters of actions::shroud_clearer::clear_unit(const map_location &view_loc, const unit &viewer, team &view_team, const std::set< map_location > *known_units=NULL, size_t *enemy_count=NULL, size_t *friend_count=NULL, move_unit_spectator *spectator=NULL, bool instant=true) are not documented:
+  parameter 'view_loc'
+  parameter 'viewer'
+  parameter 'view_team'
+/home/justin/src/wesnoth-ng/src/actions/vision.cpp:417: warning: The following parameters of actions::shroud_clearer::clear_unit(const map_location &view_loc, team &view_team, const clearer_info &viewer, bool instant) are not documented:
+  parameter 'view_loc'
+  parameter 'view_team'
+  parameter 'viewer'
+/home/justin/src/wesnoth-ng/src/actions/undo.cpp:222: warning: The following parameters of actions::undo_list::undo_action::create(const config &cfg, const std::string &tag) are not documented:
+  parameter 'cfg'
+/home/justin/src/wesnoth-ng/src/ai/actions.hpp:302: warning: The following parameters of ai::actions::execute_attack_action(side_number side, bool execute, const map_location &attacker_loc, const map_location &defender_loc, int attacker_weapon, double aggression, const unit_advancements_aspect &advancements=unit_advancements_aspect()) are not documented:
+  parameter 'advancements'
+/home/justin/src/wesnoth-ng/src/ai/actions.hpp:324: warning: The following parameters of ai::actions::execute_move_action(side_number side, bool execute, const map_location &from, const map_location &to, bool remove_movement, bool unreach_is_ok=false) are not documented:
+  parameter 'unreach_is_ok'
+/home/justin/src/wesnoth-ng/src/ai/actions.hpp:345: warning: The following parameters of ai::actions::execute_recall_action(side_number side, bool execute, const std::string &unit_id, const map_location &where, const map_location &from) are not documented:
+  parameter 'from'
+/home/justin/src/wesnoth-ng/src/ai/actions.hpp:365: warning: The following parameters of ai::actions::execute_recruit_action(side_number side, bool execute, const std::string &unit_name, const map_location &where, const map_location &from) are not documented:
+  parameter 'from'
+/home/justin/src/wesnoth-ng/src/ai/composite/rca.hpp:43: warning: argument 'ai' of command @param is not found in the argument list of ai::candidate_action::candidate_action(rca_context &context, const config &cfg)
+/home/justin/src/wesnoth-ng/src/ai/composite/rca.hpp:43: warning: argument 'name' of command @param is not found in the argument list of ai::candidate_action::candidate_action(rca_context &context, const config &cfg)
+/home/justin/src/wesnoth-ng/src/ai/composite/rca.hpp:43: warning: argument 'type' of command @param is not found in the argument list of ai::candidate_action::candidate_action(rca_context &context, const config &cfg)
+/home/justin/src/wesnoth-ng/src/ai/composite/rca.hpp:43: warning: The following parameters of ai::candidate_action::candidate_action(rca_context &context, const config &cfg) are not documented:
+  parameter 'context'
+  parameter 'cfg'
+/home/justin/src/wesnoth-ng/src/ai/configuration.hpp:111: warning: The following parameters of ai::configuration::parse_side_config(side_number side, const config &cfg, config &parsed_cfg) are not documented:
+  parameter 'side'
+/home/justin/src/wesnoth-ng/src/ai/configuration.hpp:122: warning: The following parameters of ai::configuration::upgrade_aspect_config_from_1_07_02_to_1_07_03(side_number side, const config &cfg, config &parsed_cfg, const std::string &id, bool aspect_was_attribute=true) are not documented:
+  parameter 'side'
+/home/justin/src/wesnoth-ng/src/ai/configuration.hpp:103: warning: The following parameters of ai::configuration::upgrade_aspect_configs_from_1_07_02_to_1_07_03(side_number side, const config::const_child_itors &ai_parameters, config &parsed_cfg) are not documented:
+  parameter 'side'
+/home/justin/src/wesnoth-ng/src/ai/configuration.hpp:144: warning: argument 'parsed_cfg' of command @param is not found in the argument list of ai::configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side, config &cfg)
+/home/justin/src/wesnoth-ng/src/ai/configuration.hpp:144: warning: The following parameters of ai::configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side, config &cfg) are not documented:
+  parameter 'side'
+/home/justin/src/wesnoth-ng/src/ai/contexts.cpp:373: warning: explicit link request to 'units' could not be resolved
+/home/justin/src/wesnoth-ng/src/ai/contexts.hpp:1206: warning: The following parameters of ai::readonly_context_impl::check_move_action(const map_location &from, const map_location &to, bool remove_movement=true, bool unreach_is_ok=false) are not documented:
+  parameter 'unreach_is_ok'
+/home/justin/src/wesnoth-ng/src/ai/contexts.hpp:1220: warning: The following parameters of ai::readonly_context_impl::check_recall_action(const std::string &id, const map_location &where=map_location::null_location, const map_location &from=map_location::null_location) are not documented:
+  parameter 'from'
+/home/justin/src/wesnoth-ng/src/ai/contexts.hpp:1233: warning: The following parameters of ai::readonly_context_impl::check_recruit_action(const std::string &unit_name, const map_location &where=map_location::null_location, const map_location &from=map_location::null_location) are not documented:
+  parameter 'from'
+/home/justin/src/wesnoth-ng/src/ai/contexts.hpp:1601: warning: The following parameters of ai::readwrite_context_impl::execute_move_action(const map_location &from, const map_location &to, bool remove_movement=true, bool unreach_is_ok=false) are not documented:
+  parameter 'unreach_is_ok'
+/home/justin/src/wesnoth-ng/src/ai/contexts.hpp:1614: warning: The following parameters of ai::readwrite_context_impl::execute_recall_action(const std::string &id, const map_location &where=map_location::null_location, const map_location &from=map_location::null_location) are not documented:
+  parameter 'from'
+/home/justin/src/wesnoth-ng/src/ai/contexts.hpp:1627: warning: The following parameters of ai::readwrite_context_impl::execute_recruit_action(const std::string &unit_name, const map_location &where=map_location::null_location, const map_location &from=map_location::null_location) are not documented:
+  parameter 'from'
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:638: warning: argument 'handler' of command @param is not found in the argument list of ana::client::connect(connection_handler *)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:649: warning: The following parameters of ana::client::connect_through_proxy(std::string proxy_address, std::string proxy_port, connection_handler *handler, std::string user_name="", std::string password="")=0 are not documented:
+  parameter 'proxy_address'
+  parameter 'proxy_port'
+  parameter 'user_name'
+  parameter 'password'
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:630: warning: argument 'port' of command @param is not found in the argument list of ana::client::create(ana::address address, ana::port pt)
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:630: warning: The following parameters of ana::client::create(ana::address address, ana::port pt) are not documented:
+  parameter 'pt'
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:681: warning: argument 'send_type' of command @param is not found in the argument list of ana::client::send(boost::asio::const_buffer buffer, send_handler *handler, send_type type=COPY_BUFFER)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:681: warning: The following parameters of ana::client::send(boost::asio::const_buffer buffer, send_handler *handler, send_type type=COPY_BUFFER)=0 are not documented:
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/api/predicates.hpp:52: warning: argument 'client' of command @param is not found in the argument list of ana::client_predicate::selects(net_id) const =0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:302: warning: argument 'error_code' of command @param is not found in the argument list of ana::connection_handler::handle_connect(error_code, net_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:302: warning: argument 'net_id' of command @param is not found in the argument list of ana::connection_handler::handle_connect(error_code, net_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:139: warning: argument 'error_code' of command @param is not found in the argument list of ana::listener_handler::handle_disconnect(error_code, net_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:139: warning: argument 'net_id' of command @param is not found in the argument list of ana::listener_handler::handle_disconnect(error_code, net_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:125: warning: argument 'error_code' of command @param is not found in the argument list of ana::listener_handler::handle_receive(error_code, net_id, read_buffer)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:125: warning: argument 'net_id' of command @param is not found in the argument list of ana::listener_handler::handle_receive(error_code, net_id, read_buffer)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:125: warning: argument 'shared_buffer' of command @param is not found in the argument list of ana::listener_handler::handle_receive(error_code, net_id, read_buffer)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:322: warning: argument 'error_code' of command @param is not found in the argument list of ana::send_handler::handle_send(error_code, net_id, operation_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:322: warning: argument 'net_id' of command @param is not found in the argument list of ana::send_handler::handle_send(error_code, net_id, operation_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:526: warning: argument 'id' of command @param is not found in the argument list of ana::server::expecting_message(net_id, size_t ms_until_timeout)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:526: warning: argument 'time' of command @param is not found in the argument list of ana::server::expecting_message(net_id, size_t ms_until_timeout)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:526: warning: The following parameters of ana::server::expecting_message(net_id, size_t ms_until_timeout)=0 are not documented:
+  parameter 'ms_until_timeout'
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:355: warning: argument 'send_type' of command @param is not found in the argument list of ana::server::send_all(boost::asio::const_buffer buffer, send_handler *handler, send_type type=COPY_BUFFER)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:355: warning: The following parameters of ana::server::send_all(boost::asio::const_buffer buffer, send_handler *handler, send_type type=COPY_BUFFER)=0 are not documented:
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:402: warning: argument 'send_type' of command @param is not found in the argument list of ana::server::send_all_except(net_id except_id, boost::asio::const_buffer buffer, send_handler *handler, send_type type=COPY_BUFFER)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:402: warning: The following parameters of ana::server::send_all_except(net_id except_id, boost::asio::const_buffer buffer, send_handler *handler, send_type type=COPY_BUFFER)=0 are not documented:
+  parameter 'except_id'
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:379: warning: argument 'send_type' of command @param is not found in the argument list of ana::server::send_if(boost::asio::const_buffer buffer, send_handler *handler, const client_predicate &predicate, send_type type=COPY_BUFFER)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:379: warning: The following parameters of ana::server::send_if(boost::asio::const_buffer buffer, send_handler *handler, const client_predicate &predicate, send_type type=COPY_BUFFER)=0 are not documented:
+  parameter 'predicate'
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:424: warning: argument 'send_type' of command @param is not found in the argument list of ana::server::send_one(net_id id, boost::asio::const_buffer buffer, send_handler *handler, send_type type=COPY_BUFFER)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:424: warning: The following parameters of ana::server::send_one(net_id id, boost::asio::const_buffer buffer, send_handler *handler, send_type type=COPY_BUFFER)=0 are not documented:
+  parameter 'id'
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:560: warning: argument 'buffer' of command @param is not found in the argument list of ana::server::client_proxy::send(detail::shared_buffer, send_handler *, sender *, operation_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:560: warning: argument 'handler' of command @param is not found in the argument list of ana::server::client_proxy::send(detail::shared_buffer, send_handler *, sender *, operation_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/ana.hpp:560: warning: argument 'sender' of command @param is not found in the argument list of ana::server::client_proxy::send(detail::shared_buffer, send_handler *, sender *, operation_id)=0
+/home/justin/src/wesnoth-ng/src/ana/api/timers.hpp:251: warning: The following parameters of ana::detail::timed_sender::start_timer(timer *timer, shared_buffer buffer, Handler handler) const are not documented:
+  parameter 'timer'
+/home/justin/src/wesnoth-ng/src/actions/heal.cpp:156: warning: Found unknown command `\patient'
+/home/justin/src/wesnoth-ng/src/actions/heal.cpp:156: warning: Found unknown command `\patient'
+/home/justin/src/wesnoth-ng/src/unit_abilities.cpp:477: warning: Found unknown command `\parent'
+/home/justin/src/wesnoth-ng/src/unit_abilities.cpp:477: warning: Found unknown command `\parent'
+/home/justin/src/wesnoth-ng/src/game_events/action_wml.cpp:408: warning: The following parameters of game_events::anonymous_namespace{action_wml.cpp}::handle_speaker(const queued_event &event_info, const vconfig &cfg, bool scroll) are not documented:
+  parameter 'scroll'
+/home/justin/src/wesnoth-ng/src/gui/widgets/settings.hpp:106: warning: argument 'config' of command @param is not found in the argument list of gui2::load_widget_definitions(tgui_definition &gui_definition, const std::string &definition_type, const config &cfg, const char *key)
+/home/justin/src/wesnoth-ng/src/gui/widgets/settings.hpp:106: warning: The following parameters of gui2::load_widget_definitions(tgui_definition &gui_definition, const std::string &definition_type, const config &cfg, const char *key) are not documented:
+  parameter 'cfg'
+/home/justin/src/wesnoth-ng/src/gui/dialogs/message.hpp:137: warning: The following parameters of gui2::show_message(CVideo &video, const std::string &title, const std::string &message, const std::string &button_caption="", const bool auto_close=true, const bool message_use_markup=false) are not documented:
+  parameter 'message_use_markup'
+/home/justin/src/wesnoth-ng/src/gui/dialogs/addon/description.hpp:31: warning: argument 'state' of command @param is not found in the argument list of gui2::taddon_description::taddon_description(const std::string &addon_id, const addons_list &addons_list, const addons_tracking_list &addon_states)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/addon/description.hpp:31: warning: The following parameters of gui2::taddon_description::taddon_description(const std::string &addon_id, const addons_list &addons_list, const addons_tracking_list &addon_states) are not documented:
+  parameter 'addon_states'
+/home/justin/src/wesnoth-ng/src/gui/dialogs/addon/uninstall_list.hpp:30: warning: argument 'addon_names_map' of command @param is not found in the argument list of gui2::taddon_uninstall_list::taddon_uninstall_list(const std::map< std::string, std::string > &addon_titles_map)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/addon/uninstall_list.hpp:30: warning: The following parameters of gui2::taddon_uninstall_list::taddon_uninstall_list(const std::map< std::string, std::string > &addon_titles_map) are not documented:
+  parameter 'addon_titles_map'
+/home/justin/src/wesnoth-ng/src/gui/widgets/control.hpp:42: warning: The following parameters of gui2::tcontrol::tcontrol(const implementation::tbuilder_control &builder, const unsigned canvas_count, const std::string &control_type) are not documented:
+  parameter 'control_type'
+/home/justin/src/wesnoth-ng/src/gui/widgets/control.hpp:136: warning: unable to resolve reference to `ttext::set_characters_per_line' for \ref command
+/home/justin/src/wesnoth-ng/src/gui/dialogs/dialog.hpp:351: warning: argument 'video' of command @param is not found in the argument list of gui2::tdialog::post_build(CVideo &, twindow &)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/dialog.hpp:351: warning: argument 'window' of command @param is not found in the argument list of gui2::tdialog::post_build(CVideo &, twindow &)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/dialog.hpp:374: warning: argument 'window' of command @param is not found in the argument list of gui2::tdialog::post_show(twindow &)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/dialog.hpp:362: warning: argument 'video' of command @param is not found in the argument list of gui2::tdialog::pre_show(CVideo &, twindow &)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/dialog.hpp:362: warning: argument 'window' of command @param is not found in the argument list of gui2::tdialog::pre_show(CVideo &, twindow &)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/edit_text.hpp:37: warning: argument 'name' of command @param is not found in the argument list of gui2::tedit_text::execute(const std::string &title, const std::string &label, std::string &text, CVideo &video)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/edit_text.hpp:37: warning: argument 'name' of command @param is not found in the argument list of gui2::tedit_text::execute(const std::string &title, const std::string &label, std::string &text, CVideo &video)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/edit_text.hpp:37: warning: The following parameters of gui2::tedit_text::execute(const std::string &title, const std::string &label, std::string &text, CVideo &video) are not documented:
+  parameter 'title'
+  parameter 'label'
+  parameter 'text'
+  parameter 'video'
+/home/justin/src/wesnoth-ng/src/gui/dialogs/editor/editor_edit_label.hpp:28: warning: argument 'team_only' of command @param is not found in the argument list of gui2::teditor_edit_label::teditor_edit_label(std::string &text, bool &immutable, bool &visible_fog, bool &visible_shroud)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/editor/editor_edit_label.hpp:28: warning: argument 'team_only' of command @param is not found in the argument list of gui2::teditor_edit_label::teditor_edit_label(std::string &text, bool &immutable, bool &visible_fog, bool &visible_shroud)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/editor/editor_edit_label.hpp:28: warning: The following parameters of gui2::teditor_edit_label::teditor_edit_label(std::string &text, bool &immutable, bool &visible_fog, bool &visible_shroud) are not documented:
+  parameter 'immutable'
+  parameter 'visible_fog'
+  parameter 'visible_shroud'
+/home/justin/src/wesnoth-ng/src/gui/dialogs/field.hpp:132: warning: argument 'window' of command @param is not found in the argument list of gui2::tfield_::detach_from_window()
+/home/justin/src/wesnoth-ng/src/gui/dialogs/mp_change_control.hpp:40: warning: argument 'window' of command @param is not found in the argument list of gui2::tmp_change_control::post_show(twindow &) inherited from member post_show at line 374 in file /home/justin/src/wesnoth-ng/src/gui/dialogs/dialog.hpp
+/home/justin/src/wesnoth-ng/src/gui/widgets/pane.hpp:70: warning: argument 'label' of command @param is not found in the argument list of gui2::tpane::create_item(const std::map< std::string, string_map > &item_data, const std::map< std::string, std::string > &tags)
+/home/justin/src/wesnoth-ng/src/gui/widgets/pane.hpp:70: warning: The following parameters of gui2::tpane::create_item(const std::map< std::string, string_map > &item_data, const std::map< std::string, std::string > &tags) are not documented:
+  parameter 'item_data'
+  parameter 'tags'
+/home/justin/src/wesnoth-ng/src/gui/dialogs/popup.hpp:104: warning: argument 'video' of command @param is not found in the argument list of gui2::tpopup::post_build(CVideo &, twindow &)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/popup.hpp:104: warning: argument 'window' of command @param is not found in the argument list of gui2::tpopup::post_build(CVideo &, twindow &)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/popup.hpp:113: warning: argument 'video' of command @param is not found in the argument list of gui2::tpopup::pre_show(CVideo &, twindow &)
+/home/justin/src/wesnoth-ng/src/gui/dialogs/popup.hpp:113: warning: argument 'window' of command @param is not found in the argument list of gui2::tpopup::pre_show(CVideo &, twindow &)
+/home/justin/src/wesnoth-ng/src/gui/widgets/tree_view.hpp:36: warning: argument 'has_minimum' of command @param is not found in the argument list of gui2::ttree_view::ttree_view(const std::vector< tnode_definition > &node_definitions)
+/home/justin/src/wesnoth-ng/src/gui/widgets/tree_view.hpp:36: warning: argument 'has_maximum' of command @param is not found in the argument list of gui2::ttree_view::ttree_view(const std::vector< tnode_definition > &node_definitions)
+/home/justin/src/wesnoth-ng/src/gui/widgets/tree_view.hpp:36: warning: argument 'placement' of command @param is not found in the argument list of gui2::ttree_view::ttree_view(const std::vector< tnode_definition > &node_definitions)
+/home/justin/src/wesnoth-ng/src/gui/widgets/tree_view.hpp:36: warning: argument 'select' of command @param is not found in the argument list of gui2::ttree_view::ttree_view(const std::vector< tnode_definition > &node_definitions)
+/home/justin/src/wesnoth-ng/src/gui/widgets/tree_view.hpp:36: warning: The following parameters of gui2::ttree_view::ttree_view(const std::vector< tnode_definition > &node_definitions) are not documented:
+  parameter 'node_definitions'
+/home/justin/src/wesnoth-ng/src/gui/widgets/widget.hpp:279: warning: unable to resolve reference to `tscrollbar_mode::always_visible' for \ref command
+/home/justin/src/wesnoth-ng/src/gui/widgets/widget.hpp:123: warning: unable to resolve reference to `dirty_' for \ref command
+/home/justin/src/wesnoth-ng/src/gui/widgets/widget.hpp:131: warning: unable to resolve reference to `dirty_' for \ref command
+/home/justin/src/wesnoth-ng/src/gui/widgets/widget.hpp:139: warning: unable to resolve reference to `dirty_' for \ref command
+/home/justin/src/wesnoth-ng/src/gui/widgets/window.hpp:170: warning: argument 'auto_close_timeout' of command @param is not found in the argument list of gui2::twindow::show_non_modal()
+/home/justin/src/wesnoth-ng/src/gui/widgets/window.hpp:155: warning: argument 'auto_close_timeout' of command @param is not found in the argument list of gui2::twindow::show_tooltip()
+/home/justin/src/wesnoth-ng/src/gui/auxiliary/event/handler.hpp:294: warning: argument 'dispatcher' of command @param is not found in the argument list of gui2::event::thandler::capture_keyboard(tdispatcher *)
+/home/justin/src/wesnoth-ng/src/gui/auxiliary/iterator/iterator.hpp:88: warning: unable to resolve reference to `operator' for \ref command
+/home/justin/src/wesnoth-ng/src/gui/auxiliary/iterator/iterator.hpp:88: warning: unable to resolve reference to `operator' for \ref command
+/home/justin/src/wesnoth-ng/src/gui/auxiliary/iterator/walker.hpp:103: warning: unable to resolve reference to `at_end(level)' for \ref command
+/home/justin/src/wesnoth-ng/src/image_modifications.hpp:186: warning: Found unknown command `\zoom'
+/home/justin/src/wesnoth-ng/src/image_modifications.hpp:186: warning: Found unknown command `\offset'
+/home/justin/src/wesnoth-ng/src/image_modifications.hpp:187: warning: Found unknown command `\offset'
+/home/justin/src/wesnoth-ng/src/image_modifications.hpp:193: warning: Found unknown command `\degrees'
+/home/justin/src/wesnoth-ng/src/image_modifications.hpp:197: warning: Found unknown command `\degrees'
+/home/justin/src/wesnoth-ng/src/image_modifications.hpp:198: warning: Found unknown command `\offset'
+/home/justin/src/wesnoth-ng/src/image_modifications.hpp:198: warning: Found unknown command `\zoom'
+/home/justin/src/wesnoth-ng/src/image_modifications.cpp:583: warning: Found unknown command `\Deprecated'
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:30: warning: Found unknown command `\type'
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:30: warning: Found unknown command `\type'
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:30: warning: Found unknown command `\type'
+/home/justin/src/wesnoth-ng/src/multiplayer.hpp:52: warning: The following parameters of mp::start_client(game_display &disp, const config &game_config, game_state &state, const std::string &host) are not documented:
+  parameter 'state'
+/home/justin/src/wesnoth-ng/src/multiplayer.hpp:36: warning: The following parameters of mp::start_local_game(game_display &disp, const config &game_config, game_state &state) are not documented:
+  parameter 'state'
+/home/justin/src/wesnoth-ng/src/pathfind/pathfind.cpp:872: warning: The following parameters of pathfind::full_cost_map::add_unit(const unit &u, bool use_max_moves=true) are not documented:
+  parameter 'use_max_moves'
+/home/justin/src/wesnoth-ng/src/pathfind/pathfind.cpp:551: warning: The following parameters of pathfind::vision_path::vision_path(const unit &viewer, map_location const &loc, const std::map< map_location, int > &jamming_map) are not documented:
+  parameter 'jamming_map'
+/home/justin/src/wesnoth-ng/src/pathfind/pathfind.cpp:577: warning: The following parameters of pathfind::vision_path::vision_path(const movetype::terrain_costs &view_costs, bool slowed, int sight_range, const map_location &loc, const std::map< map_location, int > &jamming_map) are not documented:
+  parameter 'jamming_map'
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:130: warning: argument 'name' of command @param is not found in the argument list of schema_validation::class_error_container::add_link_error(const std::string &file, int line, const std::string &link)
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:130: warning: The following parameters of schema_validation::class_error_container::add_link_error(const std::string &file, int line, const std::string &link) are not documented:
+  parameter 'link'
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:106: warning: argument 'name' of command @param is not found in the argument list of schema_validation::class_error_container::add_type_error(const std::string &file, int line, const std::string &type)
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:106: warning: The following parameters of schema_validation::class_error_container::add_type_error(const std::string &file, int line, const std::string &type) are not documented:
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:120: warning: argument 'name' of command @param is not found in the argument list of schema_validation::class_error_container::overriding_type_error(const std::string &file, int line, const std::string &type)
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:120: warning: The following parameters of schema_validation::class_error_container::overriding_type_error(const std::string &file, int line, const std::string &type) are not documented:
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:138: warning: argument 'name' of command @param is not found in the argument list of schema_validation::class_error_container::remove_link_errors(const std::string &link)
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:138: warning: The following parameters of schema_validation::class_error_container::remove_link_errors(const std::string &link) are not documented:
+  parameter 'link'
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:114: warning: argument 'name' of command @param is not found in the argument list of schema_validation::class_error_container::remove_type_errors(const std::string &type)
+/home/justin/src/wesnoth-ng/src/tools/schema/error_container.hpp:114: warning: The following parameters of schema_validation::class_error_container::remove_type_errors(const std::string &type) are not documented:
+  parameter 'type'
+/home/justin/src/wesnoth-ng/src/serialization/schema_validator.hpp:54: warning: The following parameters of schema_validation::schema_validator::open_tag(const std::string &name, int start_line=0, const std::string &file="", bool addittion=false) are not documented:
+  parameter 'addittion'
+/home/justin/src/wesnoth-ng/src/serialization/schema_validator.hpp:63: warning: The following parameters of schema_validation::schema_validator::validate_key(const config &cfg, const std::string &name, const std::string &value, int start_line, const std::string &file) are not documented:
+  parameter 'value'
+/home/justin/src/wesnoth-ng/src/storyscreen/render.hpp:53: warning: argument 'skip_button' of command @param is not found in the argument list of storyscreen::part_ui::part_ui(part &p, display &disp, gui::button &next_button, gui::button &back_button, gui::button &play_button)
+/home/justin/src/wesnoth-ng/src/storyscreen/render.hpp:53: warning: The following parameters of storyscreen::part_ui::part_ui(part &p, display &disp, gui::button &next_button, gui::button &back_button, gui::button &play_button) are not documented:
+  parameter 'back_button'
+  parameter 'play_button'
+/home/justin/src/wesnoth-ng/src/terrain_translation.cpp:90: warning: argument 'min_size' of command @param is not found in the argument list of t_translation::number_to_string_(t_terrain terrain, const int start_position=-1)
+/home/justin/src/wesnoth-ng/src/unit_display.cpp:470: warning: The following parameters of unit_display::move_unit(const std::vector< map_location > &path, unit &u, bool animate, map_location::DIRECTION dir, bool force_scroll) are not documented:
+  parameter 'force_scroll'
+/home/justin/src/wesnoth-ng/src/utils/const_clone.tpp:25: warning: unable to resolve reference to `tconst_duplicator' for \ref command
+/home/justin/src/wesnoth-ng/src/utils/const_clone.tpp:39: warning: unable to resolve reference to `boost::enable_if' for \ref command
+/home/justin/src/wesnoth-ng/src/whiteboard/utility.hpp:62: warning: The following parameters of wb::future_visible_unit(int on_side, map_location hex, int viewer_side=wb::viewer_side()) are not documented:
+  parameter 'hex'
+  parameter 'viewer_side'
+</home/justin/src/wesnoth-ng/src/ai/>:1: warning: explicit link request to 'manager' could not be resolved
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:30: warning: Found unknown command `\type'
+/home/justin/src/wesnoth-ng/src/jz_exception.hpp:30: warning: Found unknown command `\type'
+/home/justin/src/wesnoth-ng/src/ai/game_info.cpp:15: warning: explicit link request to 'manager' could not be resolved

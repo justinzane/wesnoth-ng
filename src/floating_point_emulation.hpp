@@ -62,7 +62,7 @@
 #include "global.hpp"
 #include "util.hpp"
 
-#include <SDL_types.h>
+#include <SDL2/SDL_types.h>
 
 #include <boost/utility/enable_if.hpp>
 

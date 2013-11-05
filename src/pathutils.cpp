@@ -21,7 +21,7 @@
 
 #include "pathutils.hpp"
 
-#include "map.hpp"
+#include "board/map.hpp"
 
 #include <boost/foreach.hpp>
 

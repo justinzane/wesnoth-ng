@@ -16,7 +16,7 @@
 
 #include "gui/dialogs/title_screen.hpp"
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "game_config.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
@@ -158,7 +158,7 @@ static void animate_logo(
 	}
 }
 
-static bool fullscreen(CVideo& video)
+static bool fullscreen(ui_window& video)
 {
 	preferences::set_fullscreen(video , !preferences::fullscreen());
 
@@ -176,7 +176,7 @@ static bool fullscreen(CVideo& video)
 	return true;
 }
 
-void ttitle_screen::post_build(CVideo& video, twindow& window)
+void ttitle_screen::post_build(ui_window& video, twindow& window)
 {
 	/** @todo Should become a title screen hotkey. */
 	window.register_hotkey(hotkey::TITLE_SCREEN__RELOAD_WML
@@ -277,7 +277,7 @@ void ttitle_screen::post_build(CVideo& video, twindow& window)
 					, QUIT_GAME));
 }
 
-void ttitle_screen::pre_show(CVideo& video, twindow& window)
+void ttitle_screen::pre_show(ui_window& video, twindow& window)
 {
 	set_restore(false);
 	window.set_click_dismiss(false);
@@ -412,7 +412,7 @@ void ttitle_screen::update_tip(twindow& window, const bool previous)
 	tips.select_page(page);
 }
 
-void ttitle_screen::show_debug_clock_window(CVideo& video)
+void ttitle_screen::show_debug_clock_window(ui_window& video)
 {
 	assert(show_debug_clock_button);
 

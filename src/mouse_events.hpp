@@ -16,7 +16,7 @@
 #ifndef MOUSE_EVENTS_H_INCLUDED
 #define MOUSE_EVENTS_H_INCLUDED
 
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "mouse_handler_base.hpp"
 
 class battle_context;

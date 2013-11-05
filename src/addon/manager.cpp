@@ -17,10 +17,10 @@
 
 #include "addon/manager.hpp"
 #include "addon/manager_ui.hpp"
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 #include "filesystem.hpp"
 #include "formatter.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/addon_connect.hpp"

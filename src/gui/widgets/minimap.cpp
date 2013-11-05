@@ -21,8 +21,8 @@
 #include "gui/auxiliary/window_builder/minimap.hpp"
 #include "gui/widgets/detail/register.tpp"
 #include "gui/widgets/settings.hpp"
-#include "map.hpp"
-#include "map_exception.hpp"
+#include "board/map.hpp"
+#include "board/map_exception.hpp"
 #include "../../minimap.hpp"
 
 #include <boost/bind.hpp>

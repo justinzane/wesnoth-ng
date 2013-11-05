@@ -21,7 +21,7 @@
 #ifndef GUI_WIDGETS_WINDOW_HPP_INCLUDED
 #define GUI_WIDGETS_WINDOW_HPP_INCLUDED
 
-#include "display/cursor.hpp"
+#include "gui/cursor.hpp"
 #include "gui/auxiliary/formula.hpp"
 #include "gui/widgets/helper.hpp"
 #include "gui/widgets/panel.hpp"
@@ -32,7 +32,7 @@
 #include <string>
 #include <boost/function.hpp>
 
-class CVideo;
+class ui_window;
 
 namespace gui2{
 
@@ -53,14 +53,14 @@ class twindow
 	, public cursor::setter
 {
 	friend class tdebug_layout_graph;
-	friend twindow *build(CVideo &, const twindow_builder::tresolution *);
+	friend twindow *build(ui_window &, const twindow_builder::tresolution *);
 	friend struct twindow_implementation;
 	friend class tinvalidate_layout_blocker;
 	friend class tpane;
 
 public:
 
-	twindow(CVideo& video,
+	twindow(ui_window& video,
 		tformula<unsigned>x,
 		tformula<unsigned>y,
 		tformula<unsigned>w,
@@ -384,7 +384,7 @@ public:
 
 	/***** ***** ***** setters / getters for members ***** ****** *****/
 
-	CVideo& video() { return video_; }
+	ui_window& video() { return video_; }
 
 	/**
 	 * Sets there return value of the window.
@@ -416,7 +416,7 @@ public:
 private:
 
 	/** Needed so we can change what's drawn on the screen. */
-	CVideo& video_;
+	ui_window& video_;
 
 	/** The status of the window. */
 	tstatus status_;

@@ -15,7 +15,7 @@
 #ifndef REPORTS_HPP_INCLUDED
 #define REPORTS_HPP_INCLUDED
 
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 
 //this module is responsible for outputting textual reports of
 //various game and unit statistics

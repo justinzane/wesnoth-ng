@@ -40,10 +40,10 @@
 #include "actions/heal.hpp"
 #include "actions/undo.hpp"
 #include "actions/vision.hpp"
-#include "display/dialogs.hpp"
-#include "display/halo.hpp"
-#include "display/sound.hpp"
-#include "display/tooltips.hpp"
+#include "gui/dialogs.hpp"
+#include "gui/halo.hpp"
+#include "gui/sound.hpp"
+#include "gui/tooltips.hpp"
 #include "game_events/handlers.hpp"
 #include "game_events/pump.hpp"
 #include "pathfind/teleport.hpp"
@@ -83,7 +83,7 @@ static void clear_resources()
 
 play_controller::play_controller(const config& level, game_state& state_of_game,
 		const int ticks, const int num_turns, const config& game_config,
-		CVideo& video, bool skip_replay) :
+		ui_window& video, bool skip_replay) :
 	controller_base(ticks, game_config, video),
 	observer(),
 	savegame_config(),
@@ -162,7 +162,7 @@ play_controller::~play_controller()
 	clear_resources();
 }
 
-void play_controller::init(CVideo& video){
+void play_controller::init(ui_window& video){
 	util::scoped_resource<loadscreen::global_loadscreen_manager*, util::delete_item> scoped_loadscreen_manager;
 	loadscreen::global_loadscreen_manager* loadscreen_manager = loadscreen::global_loadscreen_manager::get();
 	if (!loadscreen_manager)
@@ -954,7 +954,7 @@ void play_controller::enter_textbox()
 		return;
 	}
 
-	const std::string str = menu_handler_.get_textbox().box()->text();
+	const std::string str = menu_handler_.get_textbox().box()->get_text();
 	const unsigned int team_num = player_number_;
 	events::mouse_handler& mousehandler = mouse_handler_;
 

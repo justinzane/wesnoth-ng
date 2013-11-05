@@ -21,7 +21,7 @@
 #include <vector>
 
 #include <SDL2/SDL.h>
-#include "../display/sdl_utils.hpp"
+#include "../gui/sdl_utils.hpp"
 #include "scrollarea.hpp"
 
 namespace gui {
@@ -47,7 +47,7 @@ public:
 	//- @param d the display object
 	//- @param pane the widget where wheel events take place
 	//- @param callback a callback interface for warning that the grip has been moved
-	scrollpane(CVideo &video);
+	scrollpane(ui_window &video);
 
 	virtual void set_location(SDL_Rect const &rect);
 

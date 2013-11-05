@@ -15,8 +15,8 @@
 #ifndef IMAGE_HPP_INCLUDED
 #define IMAGE_HPP_INCLUDED
 
-#include "map_location.hpp"
-#include "display/sdl_utils.hpp"
+#include "board/map_location.hpp"
+#include "gui/sdl_utils.hpp"
 #include "terrain_translation.hpp"
 #include "game_config.hpp"
 

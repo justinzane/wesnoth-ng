@@ -22,7 +22,7 @@
 #include "global.hpp"
 #include "wml_exception.hpp"
 
-#include "display/display.hpp"
+#include "gui/display.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/message.hpp"
 #include "formula_string_utils.hpp"

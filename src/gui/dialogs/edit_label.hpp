@@ -36,7 +36,7 @@ public:
 	tedit_label(std::string& label, bool& team_only);
 
 	/** The execute function see @ref tdialog for more information. */
-	static bool execute(std::string& label, bool& team_only, CVideo& video)
+	static bool execute(std::string& label, bool& team_only, ui_window& video)
 	{
 		return tedit_label(label, team_only).show(video);
 	}

@@ -87,7 +87,7 @@ tmp_cmd_wrapper::tmp_cmd_wrapper(const t_string& user)
 	set_always_save_fields(true);
 }
 
-void tmp_cmd_wrapper::pre_show(CVideo& /*video*/, twindow& window)
+void tmp_cmd_wrapper::pre_show(ui_window& /*video*/, twindow& window)
 {
 #if defined(_WIN32) || defined(__APPLE__)
 	ttext_box* message =

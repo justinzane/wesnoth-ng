@@ -14,7 +14,7 @@
 #ifndef UNIT_TYPES_H_INCLUDED
 #define UNIT_TYPES_H_INCLUDED
 
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 #include "movetype.hpp"
 #include "race.hpp"
 #include "util.hpp"

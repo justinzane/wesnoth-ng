@@ -67,7 +67,7 @@ tmp_create_game_choose_mods::tmp_create_game_choose_mods
 {
 }
 
-void tmp_create_game_choose_mods::pre_show(CVideo &/*video*/, twindow &window)
+void tmp_create_game_choose_mods::pre_show(ui_window &/*video*/, twindow &window)
 {
 	mod_list_ = find_widget<tlistbox>(&window, "mod_list", false, true);
 

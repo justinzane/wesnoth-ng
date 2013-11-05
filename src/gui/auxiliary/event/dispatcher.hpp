@@ -15,15 +15,25 @@
 #ifndef GUI_WIDGETS_AUXILIARY_EVENT_DISPATCHER_HPP_INCLUDED
 #define GUI_WIDGETS_AUXILIARY_EVENT_DISPATCHER_HPP_INCLUDED
 
-#include "gui/auxiliary/event/handler.hpp"
-#include "hotkeys.hpp"
+#include "handler.hpp"
+#include "message.hpp"
 
-#include <SDL2/SDL.h>
-#include <boost/function.hpp>
-#include <boost/mpl/int.hpp>
+#include "../../../hotkeys.hpp"
+#include "../../lib/types/point.hpp"
+
+#include <boost/function/function_fwd.hpp>
+#include <boost/function/function_template.hpp>
+//#include <boost/function.hpp>
+#include <boost/mpl/aux_/integral_wrapper.hpp>
+#include <boost/mpl/has_key.hpp>
+//#include <boost/mpl/int.hpp>
 #include <boost/utility/enable_if.hpp>
+//#include <SDL2/SDL.h>
+#include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_stdinc.h>
 
 #include <map>
+#include <vector>
 
 namespace gui2 {
 

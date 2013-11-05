@@ -14,12 +14,12 @@
 
 #include "global.hpp"
 
-#include "display/dialogs.hpp"
+#include "gui/dialogs.hpp"
 #include "gettext.hpp"
 #include "game_config_manager.hpp"
 #include "game_preferences.hpp"
 #include "gui/dialogs/transient_message.hpp"
-#include "display/game_display.hpp"
+#include "gui/game_display.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
 #include "mp_game_utils.hpp"

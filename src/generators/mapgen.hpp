@@ -21,7 +21,7 @@ class config;
 class display;
 
 #include "exceptions.hpp"
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 
 #include <map>
 

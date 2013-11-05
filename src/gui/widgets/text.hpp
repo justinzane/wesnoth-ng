@@ -251,14 +251,14 @@ private:
 	 *
 	 * The behavior is implementation defined.
 	 */
-	virtual void handle_key_up_arrow(SDLMod modifier, bool& handled) = 0;
+	virtual void handle_key_up_arrow(SDL_Keymod modifier, bool& handled) = 0;
 
 	/**
 	 * Down arrow key pressed.
 	 *
 	 * The behavior is implementation defined.
 	 */
-	virtual void handle_key_down_arrow(SDLMod modifier, bool& handled) = 0;
+	virtual void handle_key_down_arrow(SDL_Keymod modifier, bool& handled) = 0;
 
 	/**
 	 * Clears the current line.
@@ -268,7 +268,7 @@ private:
 	 * Shift                      Ignored.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_clear_line(SDLMod modifier, bool& handled) = 0;
+	virtual void handle_key_clear_line(SDL_Keymod modifier, bool& handled) = 0;
 
 	/**
 	 * Left arrow key pressed.
@@ -279,7 +279,7 @@ private:
 	 * Shift                      Selects the text while moving.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_left_arrow(SDLMod modifier, bool& handled);
+	virtual void handle_key_left_arrow(SDL_Keymod modifier, bool& handled);
 
 	/**
 	 * Right arrow key pressed.
@@ -290,7 +290,7 @@ private:
 	 * Shift                      Selects the text while moving.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_right_arrow(SDLMod modifier, bool& handled);
+	virtual void handle_key_right_arrow(SDL_Keymod modifier, bool& handled);
 
 	/**
 	 * Home key pressed.
@@ -302,7 +302,7 @@ private:
 	 * Shift                      Selects the text while moving.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_home(SDLMod modifier, bool& handled);
+	virtual void handle_key_home(SDL_Keymod modifier, bool& handled);
 
 	/**
 	 * End key pressed.
@@ -312,7 +312,7 @@ private:
 	 * Shift                      Selects the text while moving.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_end(SDLMod modifier, bool& handled);
+	virtual void handle_key_end(SDL_Keymod modifier, bool& handled);
 
 	/**
 	 * Backspace key pressed.
@@ -323,7 +323,7 @@ private:
 	 * Shift                      Ignored.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_backspace(SDLMod modifier, bool& handled);
+	virtual void handle_key_backspace(SDL_Keymod modifier, bool& handled);
 
 	/**
 	 * Delete key pressed.
@@ -337,7 +337,7 @@ private:
 	 * Shift                      Ignored.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_delete(SDLMod modifier, bool& handled);
+	virtual void handle_key_delete(SDL_Keymod modifier, bool& handled);
 
 	/**
 	 * Page up key.
@@ -347,7 +347,7 @@ private:
 	 * Shift                      Ignored.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_page_up(SDLMod /*modifier*/, bool& /*handled*/) {}
+	virtual void handle_key_page_up(SDL_Keymod /*modifier*/, bool& /*handled*/) {}
 
 	/**
 	 * Page down key.
@@ -357,7 +357,7 @@ private:
 	 * Shift                      Ignored.
 	 * Alt                        Ignored.
 	 */
-	virtual void handle_key_page_down(SDLMod /*modifier*/, bool& /*handled*/) {}
+	virtual void handle_key_page_down(SDL_Keymod /*modifier*/, bool& /*handled*/) {}
 
 protected:
 	/**
@@ -373,7 +373,7 @@ protected:
 	 * Alt                        Ignored.
 	 */
 	virtual void handle_key_default(
-		bool& handled, SDLKey key, SDLMod modifier, Uint16 unicode);
+		bool& handled, SDL_Keycode key, SDL_Keymod modifier, Uint16 unicode);
 
 private:
 
@@ -393,7 +393,7 @@ private:
 			const event::tevent event, bool& handled);
 
 	void signal_handler_sdl_key_down(const event::tevent event, bool& handled
-			, const SDLKey key, SDLMod modifier, const Uint16 unicode);
+			, const SDL_Keycode key, SDL_Keymod modifier, const Uint16 unicode);
 
 	void signal_handler_receive_keyboard_focus(const event::tevent event);
 	void signal_handler_lose_keyboard_focus(const event::tevent event);

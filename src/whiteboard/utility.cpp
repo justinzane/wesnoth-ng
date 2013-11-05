@@ -26,8 +26,8 @@
 #include "side_actions.hpp"
 
 #include "actions/create.hpp"
-#include "display/game_display.hpp"
-#include "map.hpp"
+#include "gui/game_display.hpp"
+#include "board/map.hpp"
 #include "play_controller.hpp"
 #include "resources.hpp"
 #include "team.hpp"

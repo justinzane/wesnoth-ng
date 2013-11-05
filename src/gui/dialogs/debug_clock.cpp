@@ -75,7 +75,7 @@ namespace gui2 {
 
 REGISTER_DIALOG(debug_clock)
 
-void tdebug_clock::pre_show(CVideo& /*video*/, twindow& window)
+void tdebug_clock::pre_show(ui_window& /*video*/, twindow& window)
 {
 	hour_percentage_ = find_widget<tprogress_bar>(
 			  &window
@@ -121,7 +121,7 @@ void tdebug_clock::pre_show(CVideo& /*video*/, twindow& window)
 	update_time(true);
 }
 
-void tdebug_clock::post_show(CVideo& /*video*/)
+void tdebug_clock::post_show(ui_window& /*video*/)
 {
 	window_->disconnect_signal<event::DRAW>(signal_);
 }

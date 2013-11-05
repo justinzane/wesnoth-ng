@@ -16,7 +16,7 @@
 
 #include "gui/widgets/text.hpp"
 
-#include "display/clipboard.hpp"
+#include "gui/clipboard.hpp"
 #include "gui/auxiliary/log.hpp"
 #include "serialization/string_utils.hpp"
 
@@ -153,9 +153,9 @@ void ttext_::copy_selection(const bool mouse)
 		start -= length;
 	}
 
-	const wide_string& wtext = utils::string_to_wstring(text_.text());
+	const std::wstring& wtext = utils::string_to_wstring(text_.text());
 	const std::string& text = utils::wstring_to_string(
-		wide_string(wtext.begin() + start, wtext.begin() + start + length));
+		std::wstring(wtext.begin() + start, wtext.begin() + start + length));
 
 	copy_to_clipboard(text, mouse);
 }

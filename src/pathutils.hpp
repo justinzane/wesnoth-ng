@@ -17,7 +17,7 @@
 #ifndef PATHUTILS_H_INCLUDED
 #define PATHUTILS_H_INCLUDED
 
-#include "map_location.hpp"
+#include "board/map_location.hpp"
 
 class gamemap;
 

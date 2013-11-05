@@ -71,7 +71,7 @@ public:
 			, int& height
 			, EXPAND_DIRECTION& expand_direction
 			, bool& copy_edge_terrain
-			, CVideo& video)
+			, ui_window& video)
 	{
 		return teditor_resize_map(
 				  width
@@ -110,7 +110,7 @@ private:
 	void set_direction_icon(int index, std::string icon);
 
 	/** Inherited from tdialog */
-	void pre_show(CVideo& video, twindow& window);
+	void pre_show(ui_window& video, twindow& window);
 
 	/** Inherited from tdialog, implemented by REGISTER_DIALOG. */
 	virtual const std::string& window_id() const;

@@ -16,14 +16,14 @@
 #define EDITOR_EDITOR_DISPLAY_HPP_INCLUDED
 
 #include "map/editor_map.hpp"
-#include "../display/display.hpp"
+#include "../gui/display.hpp"
 
 namespace editor {
 
 class editor_display : public display
 {
 public:
-	editor_display(unit_map* units, CVideo& video, const editor_map* map,
+	editor_display(unit_map* units, ui_window& video, const editor_map* map,
 			const std::vector<team>* t, const config& theme_cfg, const config& level);
 
 	bool in_editor() const { return true; }

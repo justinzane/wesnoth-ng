@@ -15,11 +15,11 @@
 
 #include "mouse_handler_base.hpp"
 
-#include "display/cursor.hpp"
-#include "display/display.hpp"
+#include "gui/cursor.hpp"
+#include "gui/display.hpp"
 #include "log.hpp"
 #include "preferences.hpp"
-#include "display/tooltips.hpp"
+#include "gui/tooltips.hpp"
 
 static lg::log_domain log_display("display");
 #define WRN_DP LOG_STREAM(warn, log_display)

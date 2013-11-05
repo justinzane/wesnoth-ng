@@ -15,7 +15,7 @@
 #ifndef TEXT_HPP_INCLUDED
 #define TEXT_HPP_INCLUDED
 
-#include "display/sdl_utils.hpp"
+#include "gui/sdl_utils.hpp"
 
 #include <boost/noncopyable.hpp>
 
