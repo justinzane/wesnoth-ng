@@ -109,7 +109,7 @@ opts.AddVariables(
     # Compiler/Linker Flags -------------------------------------------------------------------
     ('extra_flags_config',
      'Extra compiler and linker flags to use for configuration and all builds',
-     "--march=corei7-avx -mno-aes -mpclmul -mpopcnt -mno-fma -mno-fma4 -mno-xop -mno-bmi -mno-bmi2 -mavx -mno-avx2 -msse4.2 -msse4.1 -mno-lzcnt -mno-rtm -mno-rdrnd -mf16c -mno-rdseed -mno-prfchw -lprofiler -ltcmalloc"),
+     "-march=core-avx-i -lprofiler -ltcmalloc"),
     ('extra_flags_base',
      'Extra compiler and linker flags to use for base builds',
      ""),
