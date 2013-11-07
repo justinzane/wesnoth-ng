@@ -69,3 +69,7 @@ Project.suo
 *.vcproj.*.user
 /asdf.png
 /asdfasdf.py
+/compile_commands.json
+/schema_generator-ng
+/schema_validator-ng
+/wesmage-ng

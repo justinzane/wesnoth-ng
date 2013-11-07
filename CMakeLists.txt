@@ -6,38 +6,27 @@
 # * Test everything
 # * install .desktop files taking binary prefix and suffix into account
 
-# set minimum version
-cmake_minimum_required(VERSION 2.6.0)
+cmake_minimum_required(VERSION 2.8.0)
 
+set(CMAKE_C_COMPILER   "/usr/bin/distcc" CACHE STRING "CMAKE c   Compiler")
+set(CMAKE_CXX_COMPILER "/usr/bin/distcc" CACHE STRING "CMAKE c++ Compiler")
 include(CheckCXXCompilerFlag)
-
 if(COMMAND cmake_policy)
 	cmake_policy(SET CMP0005 OLD)
 endif(COMMAND cmake_policy)
-
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
-
-# use our own version of FindBoost.cmake and other Find* scripts
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-
+include(SearchForStuff)
 find_package(SDL 1.2.7 REQUIRED)
 find_package(Boost 1.36 REQUIRED COMPONENTS iostreams program_options regex system)
-
-# no, gettext executables are not required when NLS is deactivated
 find_package(Gettext)
-# yes, libintl is *required* even when NLS is deactivated (this is to compile
-# src/gettext.cpp since it includes libintl.h)
 find_package(Libintl REQUIRED)
-
 find_package(X11)
 
 if(NOT MSVC)
-	#needed to get some SDL defines in... (as of rev31694 -D_GNU_SOURCE=1 is required!)
 	set(SDL_CONFIG "sdl-config" CACHE STRING "Path to sdl-config script")
 	exec_program(${SDL_CONFIG} ARGS "--cflags" OUTPUT_VARIABLE SDL_CFLAGS)
 	add_definitions(${SDL_CFLAGS})
-
-	# Use the safer `mkstemp' instead of `tmpnam' on POSIX systems.
 	add_definitions(-DLUA_USE_POSIX)
 endif(NOT MSVC)
 
@@ -46,42 +35,6 @@ if(MSVC)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 	add_definitions(-DNOMINMAX)
 endif(MSVC)
-
-#check for some compiler/arch specific things and export defines accordingly...
-include(SearchForStuff)
-
-#
-# Options
-#
-
-#Path options
-set(BINDIR "bin" CACHE STRING "Where to install binaries")
-set(DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" CACHE STRING "Sets the root of data directories to a non-default location")
-set(DOCDIR "${DATAROOTDIR}/doc/wesnoth" CACHE STRING "Sets the doc directory to a non-default location.")
-set(MANDIR "${DATAROOTDIR}/man" CACHE STRING "Where to install manpages")
-set(DATADIRNAME "wesnoth" CACHE STRING "change the name of the directory for the read-only architecture-independent game data")
-set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}" CACHE STRING "change the dir where binaries are placed right at compile time")
-set(LOCALEDIR "translations" CACHE STRING "change the name of the locale data directory to a non-default name")
-set(PREFERENCES_DIR "" CACHE STRING "Use a non-default preferences directory (.wesnoth on unix)")
-set(DEFAULT_PREFS_FILE "" CACHE STRING "Set system wide preferences file")
-
-#Game options
-option(ENABLE_FRIBIDI "Enable FriBIDi support" ON)
-
-#server options
-set(SERVER_UID "" CACHE STRING "User id of the user who runs wesnothd")
-set(SERVER_GID "" CACHE STRING "Group id of the user who runs wesnothd")
-set(FIFO_DIR "/var/run/wesnothd" CACHE STRING "Directory for the wesnothd fifo socket file")
-
-#build options
-option(ENABLE_GAME "Enable compilation of the game" ON)
-option(ENABLE_CAMPAIGN_SERVER "Enable compilation of campaign server")
-option(ENABLE_SERVER "Enable compilation of server" ON)
-option(ENABLE_TOOLS "Enable building and installation of tools for artists and WML maintainers")
-option(ENABLE_TESTS "Build unit tests")
-option(ENABLE_NLS "Enable building of translations" ON)
-option(ENABLE_LOW_MEM "Reduce memory usage by removing extra functionality" OFF)
-option(ENABLE_OMP "Enables OpenMP, and has additional dependencies" OFF)
 
 if(NOT DEFINED ENABLE_DISPLAY_REVISION)
 	# Test whether the code is used in a repository if not autorevision will
@@ -108,56 +61,63 @@ if(NOT DEFINED ENABLE_DISPLAY_REVISION)
 
 	unset(ENABLE_DISPLAY_REVISION_TEST_OUTPUT)
 	unset(ENABLE_DISPLAY_REVISION_TEST_ERRNO)
-
 endif()
 
-option(
-	ENABLE_DISPLAY_REVISION
-	"Enable the display of the revision number in the game, only enable it when in a checkout"
-	${DEFAULT_ENABLE_DISPLAY_REVISION}
-)
-
-
-# The use of shared libraries makes compilation debug versions faster but
-# results in extra shared libraries. For installation this is not practical
-# since the libraries need to be given SONAMES and kept in sync. Therefore
-# installation is not supported for this option and will probably fail.
-set(ENABLE_SHARED_LIBRARIES OFF CACHE BOOL "Enables shared libraries, this option is meant for development only, installation is *NOT* supported")
-mark_as_advanced(on ENABLE_SHARED_LIBRARIES)
-
-if(UNIX AND NOT APPLE AND NOT CYGWIN)
-	option(ENABLE_DESKTOP_ENTRY "enable installation of desktop entry files" ON)
-	set(ICONDIR "${DATAROOTDIR}/pixmaps" CACHE STRING "Sets the icon directory for desktop entry to a non-default location.")
-	set(DESKTOPDIR "${DATAROOTDIR}/applications/" CACHE STRING "Sets the desktop file directory for desktop entry to a non-default location.")
-endif(UNIX AND NOT APPLE AND NOT CYGWIN)
-
-option(ENABLE_STRICT_COMPILATION "Sets the strict compilation mode" ON)
+#---------------------------------------------------------------------------------------
+# Options
+# Path options -------------------------------------------------------------------------
+set(BINDIR "bin" CACHE STRING "Where to install binaries")
+set(DATAROOTDIR "${CMAKE_INSTALL_PREFIX}/share" CACHE STRING "Sets root of data dirs to nondefault location")
+set(DOCDIR "${DATAROOTDIR}/doc/wesnoth" CACHE STRING "Sets the doc dir to a non-default location.")
+set(MANDIR "${DATAROOTDIR}/man" CACHE STRING "Where to install manpages")
+set(DATADIRNAME "wesnoth" CACHE STRING "change name of dir for the read-only arch-independent game data")
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}" CACHE STRING "change dir for binaries at compile time")
+set(LOCALEDIR "translations" CACHE STRING "change name of locale data directory to a nondefault name")
+set(PREFERENCES_DIR "" CACHE STRING "Use a non-default prefs directory (.wesnoth on unix)")
+set(DEFAULT_PREFS_FILE "" CACHE STRING "Set system wide prefs file")
+# Game options -------------------------------------------------------------------------
+option(ENABLE_FRIBIDI "Enable FriBIDi support" OFF)
+# Server options -----------------------------------------------------------------------
+set(SERVER_UID "" CACHE STRING "User id of the user who runs wesnothd")
+set(SERVER_GID "" CACHE STRING "Group id of the user who runs wesnothd")
+set(FIFO_DIR "/var/run/wesnothd" CACHE STRING "Directory for the wesnothd fifo socket file")
+# Build options ------------------------------------------------------------------------
+set(C_FLAGS_USER   "$ENV{CFLAGS} -march=corei7-avx" CACHE STRING "CFLAGS for initial generation." FORCE)
+set(CXX_FLAGS_USER "$ENV{CXXFLAGS} -march=corei7-avx" CACHE STRING "CXXFLAGS for initial generation." FORCE)
+set(LD_FLAGS_USER  "$ENV{LDFLAGS} -Wl,-profile,/usr/lib/LLVMgold.so -lprofiler -ltcmalloc" CACHE STRING "LDFLAGS for initial generation." FORCE)
+option(ENABLE_GAME "Enable compilation of the game" ON)
+option(ENABLE_CAMPAIGN_SERVER "Enable compilation of campaign server" ON)
+option(ENABLE_SERVER "Enable compilation of server" ON)
+option(ENABLE_TOOLS "Enable building and installation of tools for artists and WML maintainers" ON)
+option(ENABLE_TESTS "Build unit tests" OFF)
+option(ENABLE_NLS "Enable building of translations" OFF)
+option(ENABLE_LOW_MEM "Reduce memory usage by removing extra functionality" OFF)
+option(ENABLE_OMP "Enables OpenMP, and has additional dependencies" OFF)
+option(ENABLE_STRICT_COMPILATION "Sets the strict compilation mode" OFF)
 option(ENABLE_PEDANTIC_COMPILATION "Sets the pedantic compilation mode" OFF)
-option(ENABLE_DEBUG_WINDOW_LAYOUT "Add the debug option to allow the generation of debug layout files in dot format" OFF)
-option ( USE_ANA_NETWORK "Compile network module using ana" OFF )
-option(ENABLE_DESIGN_DOCUMENTS "Enables the generation of design documents, and has additional dependencies" OFF)
-
-#misc options
-if(NOT MSVC)
-	# Pot updates don't work at Windows so no reason to even try
-	option(ENABLE_POT_UPDATE_TARGET "Enables the tools to update the pot files and manuals. This target has extra dependencies." OFF)
-endif(NOT MSVC)
-
+option(ENABLE_DEBUG_WINDOW_LAYOUT "Enable generation of debug layout files in dot format" OFF)
+option(ENABLE_DESIGN_DOCUMENTS "Enable generation of design docs and has additional dependencies" OFF)
+option(ENABLE_DISPLAY_REVISION "Enable display of build number in game" ON)
+# Misc options---------------------------------------------------------------------------
+set(ENABLE_SHARED_LIBRARIES OFF CACHE BOOL "Enables shared libs - for development only.")
+    mark_as_advanced(on ENABLE_SHARED_LIBRARIES)
 if(UNIX AND NOT APPLE AND NOT CYGWIN)
-	option(ENABLE_NOTIFICATIONS "Enable Window manager notification messages" ON)
+	option(ENABLE_DESKTOP_ENTRY "Enable install of FreeDesktop.org entry files" ON)
+	set(ICONDIR "${DATAROOTDIR}/pixmaps" CACHE STRING "Set desktop icon dir to nondefault location.")
+	set(DESKTOPDIR "${DATAROOTDIR}/applications/" CACHE STRING "Set desktop file dir to nondefault location.")
+    option(ENABLE_NOTIFICATIONS "Enable Window manager notification messages" ON)
 endif(UNIX AND NOT APPLE AND NOT CYGWIN)
-
-set(BINARY_SUFFIX "" CACHE STRING "Suffix behind all binaries")
+if(NOT MSVC)
+	option(ENABLE_POT_UPDATE_TARGET "Enable update of pot files and manuals. Extra dependencies." OFF)
+endif(NOT MSVC)
+set(BINARY_SUFFIX "-ng" CACHE STRING "Suffix behind all binaries")
 set(BINARY_PREFIX "" CACHE STRING "Prefix in front of all binaries")
+# End of options ------------------------------------------------------------------------
 
-#
+#----------------------------------------------------------------------------------------
 # Handle options (set paths/definitions/etc...)
-#
-
-##### Set the compiler flags.
-
+# Set the compiler flags. ---------------------------------------------------------------
 # This macro checks whether a compiler supports a compiler flag.
-#
 # If the flag is supported the flag will be added to the target compiler flags.
 # GCC seems to be quite happy to accept flags it does not support when there is
 # a `no' in it e.g. -Wno-not_supported_flag but will fail to compile with
@@ -183,171 +143,58 @@ macro(check_compiler_has_flag target flag variable)
 	endif(${variable})
 endmacro(check_compiler_has_flag)
 
+### Set the environment compiler flags.-------------------------------------------
+message(STATUS "Environment compiler flags set to »${C_FLAGS_USER}«")
+message(STATUS "Environment compiler flags set to »${CXX_FLAGS_USER}«")
+message(STATUS "Environment compiler flags set to »${LD_FLAGS_USER}«")
 
-### Set the environment compiler flags.
-
-if(CONFIGURED)
-	# The CONFIGURED flag was replaced when trunk `was' 1.11, before the release of 1.11.0
-	message("Builed files depending on 'CONFIGURED' found, please regenerate your build files.")
-	set(CXX_FLAGS_USER
-		"${CMAKE_CXX_FLAGS}"
-		CACHE
-		STRING
-		"The CXXFLAGS environment variable used for the initial generation."
-		FORCE
-	)
-	unset(CONFIGURED CACHE)
-endif(CONFIGURED)
-
-if(NOT DEFINED CXX_FLAGS_USER)
-
-	message(STATUS "Environment compiler flags set to »${CXX_FLAGS_USER}«")
-	set(CXX_FLAGS_USER
-		"$ENV{CXXFLAGS}"
-		CACHE
-		STRING
-		"The CXXFLAGS environment variable used for the initial generation."
-		FORCE
-	)
-
-endif(NOT DEFINED CXX_FLAGS_USER)
-
-
-### Set default Wesnoth project compiler flags
+### Set default Wesnoth project compiler flags -----------------------------------
 if(MSVC AND NOT DEFINED CXX_FLAGS_MSVC)
-	# MSVC sets some initial compilation flags, these need to
-	# be preserved.
-	set(CXX_FLAGS_MSVC
-		"${CMAKE_CXX_FLAGS_INIT}"
-		CACHE
-		STRING
-		"The initial CXX flags for MSVC"
-		FORCE
-	)
+	# MSVC sets some initial compilation flags, these need to be preserved.
+	set(CXX_FLAGS_MSVC "${CMAKE_CXX_FLAGS_INIT}" CACHE STRING "The initial CXX flags for MSVC" FORCE)
 endif(MSVC AND NOT DEFINED CXX_FLAGS_MSVC)
-
 set(CXX_FLAGS_PROJECT)
-check_compiler_has_flag(CXX_FLAGS_PROJECT "-std=c++98" HAS_COMPILER_FLAG_STD)
+check_compiler_has_flag(CXX_FLAGS_PROJECT "-std=c++11" HAS_COMPILER_FLAG_STD)
 check_compiler_has_flag(CXX_FLAGS_PROJECT "-W" HAS_COMPILER_FLAG_W)
-# MSVC's -Wall is not like gcc's, it really enables *all* warnings which include zillions for system headers and doesn't make sense.
 if(NOT MSVC)
-check_compiler_has_flag(CXX_FLAGS_PROJECT "-Wall" HAS_COMPILER_FLAG_WALL)
+    check_compiler_has_flag(CXX_FLAGS_PROJECT "-Wall" HAS_COMPILER_FLAG_WALL)
 endif(NOT MSVC)
 
-
-### Set strict compiler flags.
-
+### Set strict compiler flags. ---------------------------------------------------
 set(CXX_FLAGS_STRICT_COMPILATION)
-check_compiler_has_flag(
-	CXX_FLAGS_STRICT_COMPILATION
-	"-Werror"
-	HAS_COMPILER_FLAG_WERROR
-)
+check_compiler_has_flag(CXX_FLAGS_STRICT_COMPILATION "-Werror" HAS_COMPILER_FLAG_WERROR)
 
 # The current unit test code breaks strict aliasing with g++ 4.4.
-check_compiler_has_flag(
-	CXX_FLAGS_STRICT_COMPILATION
-	"-Wstrict-aliasing"
-	HAS_COMPILER_FLAG_WERROR_STRICT_ALIASING
-	"-Wno-strict-aliasing"
-)
+check_compiler_has_flag(CXX_FLAGS_STRICT_COMPILATION "-Wstrict-aliasing" HAS_COMPILER_FLAG_WERROR_STRICT_ALIASING "-Wno-strict-aliasing")
 
 # This flag is/will be added in gcc-4.8 and fails with BOOST_STATIC_ASSERT
-check_compiler_has_flag(
-	CXX_FLAGS_STRICT_COMPILATION
-	"-Wunused-local-typedefs"
-	HAS_COMPILER_FLAG_WUNUSED_LOCAL_TYPEDEFS
-	"-Wno-unused-local-typedefs"
-)
+check_compiler_has_flag(CXX_FLAGS_STRICT_COMPILATION "-Wunused-local-typedefs" HAS_COMPILER_FLAG_WUNUSED_LOCAL_TYPEDEFS "-Wno-unused-local-typedefs")
 
 # This flag is/will be added in gcc-4.8 and fails with png in C++11 mode
-check_compiler_has_flag(
-	CXX_FLAGS_STRICT_COMPILATION
-	"-Wliteral-suffix"
-	HAS_COMPILER_FLAG_WLITERAL_SUFFIX
-	"-Wno-literal-suffix"
-)
+check_compiler_has_flag(CXX_FLAGS_STRICT_COMPILATION "-Wliteral-suffix" HAS_COMPILER_FLAG_WLITERAL_SUFFIX "-Wno-literal-suffix")
 
 # This removes a lot of warnings from Clang regarding unused -I arguments
-check_compiler_has_flag(
-	CXX_FLAGS_STRICT_COMPILATION
-	"-Qunused-arguments"
-	HAS_COMPILER_FLAG_QUNUSED_ARGUMENTS
-)
+check_compiler_has_flag(CXX_FLAGS_STRICT_COMPILATION "-Qunused-arguments" HAS_COMPILER_FLAG_QUNUSED_ARGUMENTS)
+# Silences Clang warnings about declaring a class a class first and a struct later.
+check_compiler_has_flag(CXX_FLAGS_STRICT_COMPILATION "-Wmismatched-tags" HAS_COMPILER_FLAG_WMISMATCHED_TAGS	"-Wno-mismatched-tags")
 
-# Silences Clang warnings about declaring a class a class first and
-# a struct later.
-check_compiler_has_flag(
-	CXX_FLAGS_STRICT_COMPILATION
-	"-Wmismatched-tags"
-	HAS_COMPILER_FLAG_WMISMATCHED_TAGS
-	"-Wno-mismatched-tags"
-)
-
-check_compiler_has_flag(
-	CXX_FLAGS_STRICT_COMPILATION
-	"-Wnull-conversion"
-	HAS_COMPILER_FLAG_WNULL_CONVERSION
-	"-Wno-null-conversion"
-)
+check_compiler_has_flag(CXX_FLAGS_STRICT_COMPILATION "-Wnull-conversion" HAS_COMPILER_FLAG_WNULL_CONVERSION	"-Wno-null-conversion")
 
 if(NOT CMAKE_COMPILER_IS_GNUCXX)
-	# Silences warnings about overloaded virtuals.
-	# (GCC doesn't complain Clang does.)
-	check_compiler_has_flag(
-		CXX_FLAGS_STRICT_COMPILATION
-		"-Woverloaded-virtual"
-		HAS_COMPILER_FLAG_WOVERLOADED_VIRTUAL
-		"-Wno-overloaded-virtual"
-	)
+	# Silences warnings about overloaded virtuals. (GCC doesn't complain Clang does.)
+	check_compiler_has_flag(CMAKE_CXXFLAGS_PROJECT "-Woverloaded-virtual" HAS_COMPILER_FLAG_WOVERLOADED_VIRTUAL "-Wno-overloaded-virtual")
 endif(NOT CMAKE_COMPILER_IS_GNUCXX)
 
-check_compiler_has_flag(
-	CXX_FLAGS_STRICT_COMPILATION
-	"-Wdeprecated-register"
-	HAS_COMPILER_FLAG_WDEPRECATED_REGISTER
-	"-Wno-deprecated-register"
-)
+check_compiler_has_flag(CXX_FLAGS_STRICT_COMPILATION "-Wdeprecated-register" HAS_COMPILER_FLAG_WDEPRECATED_REGISTER "-Wno-deprecated-register")
 
-
-### Set pedantic compiler flags.
-
+### Set pedantic compiler flags. ---------------------------------------------------------
 set(CXX_FLAGS_PEDANTIC_COMPILATION)
-check_compiler_has_flag(
-	CXX_FLAGS_PEDANTIC_COMPILATION
-	"-Wextra"
-	HAS_COMPILER_FLAG_WEXTRA
-)
-
-check_compiler_has_flag(
-	CXX_FLAGS_PEDANTIC_COMPILATION
-	"-Winit-self"
-	HAS_COMPILER_FLAG_WINIT_SELF
-)
-
-check_compiler_has_flag(
-	CXX_FLAGS_PEDANTIC_COMPILATION
-	"-Wlogical-op"
-	HAS_COMPILER_FLAG_WLOGICAL_OP
-)
-
-check_compiler_has_flag(
-	CXX_FLAGS_PEDANTIC_COMPILATION
-	"-Wmissing-declarations"
-	HAS_COMPILER_FLAG_WMISSING_DECLARATIONS
-)
-
-check_compiler_has_flag(
-	CXX_FLAGS_PEDANTIC_COMPILATION
-	"-Wredundant-decls"
-	HAS_COMPILER_FLAG_WREDUNDANT_DECLS
-)
-
-check_compiler_has_flag(
-	CXX_FLAGS_PEDANTIC_COMPILATION
-	"-Wctor-dtor-privacy"
-	HAS_COMPILER_FLAG_WCTOR_DTOR_PRIVACY
-)
+check_compiler_has_flag(CXX_FLAGS_PEDANTIC_COMPILATION "-Wextra" HAS_COMPILER_FLAG_WEXTRA)
+check_compiler_has_flag(CXX_FLAGS_PEDANTIC_COMPILATION "-Winit-self" HAS_COMPILER_FLAG_WINIT_SELF)
+check_compiler_has_flag(CXX_FLAGS_PEDANTIC_COMPILATION "-Wlogical-op" HAS_COMPILER_FLAG_WLOGICAL_OP)
+check_compiler_has_flag(CXX_FLAGS_PEDANTIC_COMPILATION "-Wmissing-declarations" HAS_COMPILER_FLAG_WMISSING_DECLARATIONS)
+check_compiler_has_flag(CXX_FLAGS_PEDANTIC_COMPILATION "-Wredundant-decls" HAS_COMPILER_FLAG_WREDUNDANT_DECLS)
+check_compiler_has_flag(CXX_FLAGS_PEDANTIC_COMPILATION "-Wctor-dtor-privacy" HAS_COMPILER_FLAG_WCTOR_DTOR_PRIVACY)
 
 check_compiler_has_flag(
 	CXX_FLAGS_PEDANTIC_COMPILATION
@@ -404,22 +251,17 @@ endif(ENABLE_STRICT_COMPILATION)
 if(ENABLE_PEDANTIC_COMPILATION)
 	set(COMPILER_FLAGS "${COMPILER_FLAGS} ${CXX_FLAGS_PEDANTIC_COMPILATION}")
 endif(ENABLE_PEDANTIC_COMPILATION)
-set(COMPILER_FLAGS "${COMPILER_FLAGS} ${CXX_FLAGS_USER}")
+set(COMPILER_FLAGS "${CXX_FLAGS_USER} ${COMPILER_FLAGS}")
 
 if(NOT "${CMAKE_CXX_FLAGS}" STREQUAL "${COMPILER_FLAGS}")
 	message(STATUS "CMake compiler flags set to »${COMPILER_FLAGS}«")
-	set(CMAKE_CXX_FLAGS
-		"${COMPILER_FLAGS}"
-		CACHE
-		STRING
-		"Global flags used by the CXX compiler during all builds."
-		FORCE
-	)
+	set(CMAKE_CXX_FLAGS "${COMPILER_FLAGS}" 
+        CACHE STRING "Global flags used by the CXX compiler during all builds." FORCE)
 endif(NOT "${CMAKE_CXX_FLAGS}" STREQUAL "${COMPILER_FLAGS}")
 
 if(UNIX AND NOT CMAKE_COMPILER_IS_GNUCXX)
 	# Assume the compiler is the clang compiler.
-	set(CMAKE_EXE_LINKER_FLAGS "-lstdc++ -lm ${CMAKE_EXE_LINKER_FLAGS}")
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 endif(UNIX AND NOT CMAKE_COMPILER_IS_GNUCXX)
 
 # compose datadir path of datarootdir and datadirname
@@ -614,6 +456,6 @@ add_custom_target(uninstall
 # Packaging stuff
 #
 
-include(CPack)
-set(CPACK_GENERATOR "TGZ")
-set(CPACK_SOURCE_GENERATOR "TGZ")
+#include(CPack)
+#set(CPACK_GENERATOR "TGZ")
+#set(CPACK_SOURCE_GENERATOR "TGZ")
