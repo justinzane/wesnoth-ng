@@ -12,22 +12,40 @@
    See the COPYING file for more details.
 */
 
-#define GETTEXT_DOMAIN "wesnoth-lib"
+#include "debug_clock.hpp"
 
-#include "gui/dialogs/debug_clock.hpp"
+#include "dialog.hpp"
 
-#include "gui/auxiliary/find_widget.tpp"
-#include "gui/dialogs/dialog.hpp"
-#include "gui/widgets/integer_selector.hpp"
-#include "gui/widgets/window.hpp"
-#include "gui/widgets/settings.hpp"
-#include "gui/widgets/pane.hpp"
-#include "gui/widgets/progress_bar.hpp"
-#include "utils/foreach.tpp"
+#include "../../tstring.hpp"
+#include "../../util.hpp"
+#include "../../utils/foreach.tpp"
+#include "../../variant.hpp"
+#include "../auxiliary/canvas.hpp"
+#include "../auxiliary/event/handler.hpp"
+#include "../auxiliary/find_widget.tpp"
+#include "../video.hpp"
+#include "../widgets/integer_selector.hpp"
+#include "../widgets/pane.hpp"
+#include "../widgets/progress_bar.hpp"
+#include "../widgets/settings.hpp"
+#include "../widgets/window.hpp"
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/bind/bind_mf_cc.hpp>
+//#include <boost/bind.hpp>
+#include <boost/foreach.hpp>
+#include <boost/function/function_template.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/typeof/native.hpp>
 
 #include <ctime>
+#include <iterator>
+#include <map>
+#include <string>
+#include <utility>
+
+#define GETTEXT_DOMAIN "wesnoth-lib"
 
 namespace gui2 {
 

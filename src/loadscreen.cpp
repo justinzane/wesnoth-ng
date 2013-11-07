@@ -19,18 +19,25 @@
 
 #include "loadscreen.hpp"
 
-#include "log.hpp"
-#include "gui/font.hpp"
-#include "marked-up_text.hpp"
+//#include "filesystem.hpp"
 #include "gettext.hpp"
-#include "filesystem.hpp"
-#include "gui/video.hpp"
 #include "image.hpp"
+#include "log.hpp"
+#include "marked-up_text.hpp"
 
+#include "gui/font.hpp"
+#include "gui/video.hpp"
+
+#include <libintl.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_surface.h>
 
 #include <cassert>
+#include <cstdbool>
+#include <cstring>
+#include <iostream>
 
 static lg::log_domain log_display("display");
 static lg::log_domain log_loadscreen("loadscreen");
@@ -111,7 +118,8 @@ void loadscreen::draw_screen(const std::string &text)
 	// Pump events and make sure to redraw the logo if there's a chance that it's been obscured
 	SDL_Event ev;
 	while(SDL_PollEvent(&ev)) {
-		if(ev.type == SDL_VIDEORESIZE || ev.type == SDL_VIDEOEXPOSE) {
+		if (ev.type == SDL_WINDOWEVENT_EXPOSED ||
+		    ev.type == SDL_WINDOWEVENT_SIZE_CHANGED) {
 			logo_drawn_ = false;
 		}
 	}
@@ -126,11 +134,13 @@ void loadscreen::draw_screen(const std::string &text)
 		if (area.x > 0 && area.y > 0) {
 			pby_offset_ = (pbh + area.h)/2;
 			sdl_blit(logo_surface_, 0, gdis, &area);
-		} else {
-			if (!screen_.faked()) {  // Avoid error if --nogui is used.
-				ERR_DP << "loadscreen: Logo image is too big." << std::endl;
-			}
 		}
+//		} else {
+		    ///@todo removed fakes for SDL2
+//			if (!screen_.faked()) {  // Avoid error if --nogui is used.
+//				ERR_DP << "loadscreen: Logo image is too big." << std::endl;
+//			}
+//		}
 		logo_drawn_ = true;
 		update_rect(area.x, area.y, area.w, area.h);
 	}
@@ -185,7 +195,8 @@ void loadscreen::draw_screen(const std::string &text)
 	}
 	// Update the rectangle.
 	update_rect(pbx, pby, pbw + 2*(bw + bispw), pbh + 2*(bw + bispw));
-	screen_.flip();
+	///@todo FIXME once rendering is fixed
+//	screen_.flip();
 }
 
 void loadscreen::clear_screen()
@@ -197,7 +208,8 @@ void loadscreen::clear_screen()
 	// Make everything black.
 	sdl_fill_rect(disp,&area,SDL_MapRGB(disp->format,0,0,0));
 	update_whole_screen();
-	screen_.flip();
+	/// @todo FIXME once rendering is fixed
+//	screen_.flip();
 }
 
 loadscreen *loadscreen::global_loadscreen = 0;

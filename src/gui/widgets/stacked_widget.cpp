@@ -12,19 +12,31 @@
  See the COPYING file for more details.
  */
 
-#define GETTEXT_DOMAIN "wesnoth-lib"
-
-#include "gui/widgets/stacked_widget.hpp"
-
-#include "gui/auxiliary/find_widget.tpp"
 #include "gui/auxiliary/widget_definition/stacked_widget.hpp"
 #include "gui/auxiliary/window_builder/stacked_widget.hpp"
-#include "gui/widgets/detail/register.tpp"
-#include "gui/widgets/settings.hpp"
-#include "gui/widgets/generator.hpp"
-#include "../utils/foreach.tpp"
+#include "stacked_widget.hpp"
 
-#include <boost/bind.hpp>
+#include "generator.hpp"
+#include "grid.hpp"
+#include "settings.hpp"
+
+#include "detail/register.tpp"
+
+#include "../auxiliary/find_widget.tpp"
+#include "../auxiliary/window_builder.hpp"
+
+#include <boost/bind/arg.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/bind/bind_cc.hpp>
+#include <boost/foreach.hpp>
+//#include <boost/bind.hpp>
+#include <stddef.h>
+#include <cassert>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#define GETTEXT_DOMAIN "wesnoth-lib"
 
 namespace gui2 {
 
@@ -90,7 +102,7 @@ void swap_grid(tgrid* grid, tgrid* content_grid, twidget* widget, const std::str
 void tstacked_widget::finalize(std::vector<tbuilder_grid_const_ptr> widget_builder) {
     assert(generator_);
     string_map empty_data;
-    FOREACH(const AUTO& builder, widget_builder) {
+    boost::foreach(const AUTO& builder, widget_builder) {
         generator_->create_item( -1, builder, empty_data, NULL);
     }
     swap_grid(NULL, &grid(), generator_, "_content_grid");

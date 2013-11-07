@@ -14,11 +14,16 @@
 #ifndef FONT_HPP_INCLUDED
 #define FONT_HPP_INCLUDED
 
-#include "exceptions.hpp"
-#include <SDL2/SDL.h>
+#include "sdl_utils.hpp"
+
+#include "../exceptions.hpp"
+
+#include <stddef.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "gui/sdl_utils.hpp"
+#include <string>
 
 class t_string;
 

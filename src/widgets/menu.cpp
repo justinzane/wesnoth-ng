@@ -618,7 +618,7 @@ bool menu::requires_event_focus(const SDL_Event* event) const {
     }
 
     if (event->type == SDL_KEYDOWN) {
-        SDL_Keycode key = event->key.keysym;
+        SDL_Keycode key = SDL_SCANCODE_TO_KEYCODE(event->key.keysym.scancode);
         if ( !click_selects_) {
             switch (key) {
                 case SDLK_UP:
@@ -688,7 +688,7 @@ void menu::handle_event(const SDL_Event& event) {
                 // this double click was generated from a click that
                 // already has helped in generating a double click.
                 SDL_Event ev;
-                SDL_PeepEvents( &ev, 1, SDL_PEEKEVENT, SDL_EVENTMASK(SDL_USEREVENT));
+                SDL_PeepEvents(&ev, 1, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT);
                 if (ev.type == SDL_USEREVENT) {
                     ignore_next_doubleclick_ = true;
                 }

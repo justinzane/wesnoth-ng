@@ -38,13 +38,13 @@ public:
 	/***** ***** ***** inherited ***** ****** *****/
 
 	/** See @ref tcontrol::get_active. */
-	virtual bool get_active() const OVERRIDE;
+	virtual bool get_active() const override;
 
 	/** See @ref tcontrol::get_state. */
-	virtual unsigned get_state() const OVERRIDE;
+	virtual unsigned get_state() const override;
 
 	/** See @ref twidget::layout_children. */
-	virtual void layout_children() OVERRIDE;
+	virtual void layout_children() override;
 
 private:
 
@@ -66,10 +66,10 @@ private:
 	tgenerator_* generator_;
 
 	/** See @ref tcontrol::get_control_type. */
-	virtual const std::string& get_control_type() const OVERRIDE;
+	virtual const std::string& get_control_type() const override;
 
 	/** See @ref tcontainer_::set_self_active. */
-	virtual void set_self_active(const bool active) OVERRIDE;
+	virtual void set_self_active(const bool active) override;
 };
 
 } // namespace gui2

@@ -22,27 +22,47 @@
 #include "undo.hpp"
 #include "vision.hpp"
 
-#include "../gui/game_display.hpp"
+#include "../board/map.hpp"
+#include "../board/map_location.hpp"
+#include "../config.hpp"
+#include "../formula_string_utils.hpp"
+#include "../game_events/entity_location.hpp"
 #include "../game_events/pump.hpp"
 #include "../game_preferences.hpp"
 #include "../gettext.hpp"
+#include "../gui/font.hpp"
+#include "../gui/game_display.hpp"
 #include "../hotkeys.hpp"
 #include "../log.hpp"
-#include "../map.hpp"
 #include "../mouse_handler_base.hpp"
 #include "../pathfind/pathfind.hpp"
 #include "../replay.hpp"
 #include "../resources.hpp"
-#include "../unit_display.hpp"
-#include "../formula_string_utils.hpp"
+#include "../serialization/string_utils.hpp"
 #include "../team.hpp"
+#include "../tstring.hpp"
 #include "../unit.hpp"
+#include "../unit_display.hpp"
+#include "../util.hpp"
 #include "../whiteboard/manager.hpp"
 
 #include <boost/foreach.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <stddef.h>
+#include <SDL2/SDL_pixels.h>
+
+#include <cassert>
+#include <cstdbool>
 #include <deque>
-#include <map>
-#include <set>
+#include <iostream>
+#include <iterator>
+//#include <map>
+//#include <set>
+#include <string>
+#include <utility>
 
 static lg::log_domain log_engine("engine");
 #define DBG_NG LOG_STREAM(debug, log_engine)

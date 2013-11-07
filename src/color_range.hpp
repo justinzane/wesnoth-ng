@@ -17,18 +17,25 @@
 #ifndef COLOR_RANGE_H_INCLUDED
 #define COLOR_RANGE_H_INCLUDED
 
+//#include "global.hpp"
+
+//#include <opencv2/opencv.hpp>
+//#include <stdint.h>
+//#include <stdlib.h>
+//#include <SDL2/SDL.h>
+#include <SDL2/SDL_stdinc.h>
+//#include <SDL2/SDL_types.h>
+
+#include <cstdbool>
+#include <map>
+#include <string>
+#include <vector>
+
 //These macros interfere with MS VC++
 #ifdef _MSC_VER
 #undef max
 #undef min
 #endif
-
-#include "global.hpp"
-#include <SDL/SDL.h>
-#include <SDL/SDL_types.h>
-#include <opencv2/opencv.hpp>
-#include <stdint.h>
-#include <stdlib.h>
 
 /**
  * @brief Sets of colors used as team colors.

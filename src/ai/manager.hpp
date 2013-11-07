@@ -22,13 +22,20 @@
 #ifndef AI_MANAGER_HPP_INCLUDED
 #define AI_MANAGER_HPP_INCLUDED
 
+#include "game_info.hpp"
+
+#include "composite/ai.hpp"
+
 #include "../config.hpp"
 #include "../generic_event.hpp"
 
-#include "game_info.hpp"
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <stddef.h>
 
-#include <stack>
 #include <deque>
+#include <map>
+#include <stack>
+#include <string>
 
 
 namespace ai {

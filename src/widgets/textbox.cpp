@@ -12,6 +12,13 @@
  See the COPYING file for more details.
  */
 
+#include "global.hpp"
+
+#include "widgets/textbox.hpp"
+#include "gui/clipboard.hpp"
+#include "log.hpp"
+#include "gui/video.hpp"
+
 #include "../events.hpp"
 #include "../gui/sdl_utils.hpp"
 #include "../util.hpp"
@@ -37,13 +44,6 @@
 
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
-#include "global.hpp"
-
-#include "widgets/textbox.hpp"
-#include "gui/clipboard.hpp"
-#include "log.hpp"
-#include "gui/video.hpp"
-
 static lg::log_domain log_display("display");
 #define WRN_DP LOG_STREAM(warn, log_display)
 #define DBG_G LOG_STREAM(debug, lg::general)
@@ -63,7 +63,8 @@ textbox::textbox(ui_window &video,
                  const bool auto_join) :
     scrollarea(video, auto_join),
     max_size_(max_size),
-    text_(utils::string_to_wstring(text)),
+    /// @todo FIXME
+    //text_(text),
     cursor_(text_.size()),
     selstart_( -1),
     selend_( -1),
@@ -105,7 +106,7 @@ void textbox::append_text(const std::string& text, bool auto_scroll, const SDL_C
         return;
     }
     const bool is_at_bottom = get_position() == get_max_position();
-    const std::wstring& wtext = utils::string_to_wstring(text);
+    const wide_string& wtext = utils::string_to_wstring(text);
 
     const surface new_text = add_text_line(wtext, color);
     surface new_surface = create_compatible_surface(
@@ -158,7 +159,7 @@ void textbox::draw_contents() {
         src.w = std::min<size_t>(loc.w, text_image_->w);
         src.h = std::min<size_t>(loc.h, text_image_->h);
         src.x = text_pos_;
-        SDL_Rect dest = screen_area();
+        SDL_Rect dest = ui_window::get_window_rect();
         dest.x = loc.x;
         dest.y = loc.y;
 
@@ -227,11 +228,11 @@ surface textbox::add_text_line(const wide_string& text, const SDL_Color& color) 
     // some more complex scripts (that is, RTL languages). This part of the work should
     // actually be done by the font-rendering system.
     std::string visible_string;
-    std::wstring wrapped_text;
+    wide_string wrapped_text;
 
-    std::wstring::const_iterator backup_itor = text.end();
+    wide_string::const_iterator backup_itor = text.end();
 
-    std::wstring::const_iterator itor = text.begin();
+    wide_string::const_iterator itor = text.begin();
     while (itor != text.end()) {
         //If this is a space, save copies of the current state so we can roll back
         if (char( *itor) == ' ') {
@@ -269,7 +270,9 @@ surface textbox::add_text_line(const wide_string& text, const SDL_Color& color) 
         }
     }
 
-    const std::string s = utils::wstring_to_string(wrapped_text);
+    /// @todo FIXME
+    //    const std::string s = utils::wstring_to_string(wrapped_text);
+    std::string s = "";
     const surface res(font::get_rendered_text(s, font_size, color));
 
     return res;
@@ -277,8 +280,9 @@ surface textbox::add_text_line(const wide_string& text, const SDL_Color& color) 
 
 void textbox::update_text_cache(bool changed, const SDL_Color& color) {
     if (changed) {
-        char_x_.clear_text();
-        char_y_.clear_text();
+        /// @todo FIXME
+//        char_x_.clear_text();
+//        char_y_.clear_text();
 
         text_image_.assign(add_text_line(text_, color));
     }
@@ -304,11 +308,11 @@ void textbox::update_text_cache(bool changed, const SDL_Color& color) {
  */
 namespace {
 #ifdef __APPLE__
-    const unsigned int copypaste_modifier = KMOD_LMETA | KMOD_RMETA;
+const unsigned int copypaste_modifier = KMOD_LMETA | KMOD_RMETA;
 #else
-    const unsigned int copypaste_modifier = KMOD_CTRL;
+const unsigned int copypaste_modifier = KMOD_CTRL;
 #endif
-} //end anon namespace
+}  //end anon namespace
 
 bool textbox::requires_event_focus(const SDL_Event* event) const {
     if ( !focus_ || hidden() || !enabled()) {
@@ -340,37 +344,38 @@ bool textbox::requires_event_focus(const SDL_Event* event) const {
     return false;
 }
 
-
-
 void textbox::handle_event(const SDL_Event& event, bool was_forwarded) {
     if ( !enabled()) return;
 
+    /// @todo Explain why we pass this to another handler?
     scrollarea::handle_event(event);
-    if (hidden()) return;
+
+    if (hidden()) { return; }
 
     bool changed = false;
 
     const int old_selstart = selstart_;
     const int old_selend = selend_;
 
-    //Sanity check: verify that selection start and end are within text
-    //boundaries
+    //Sanity check: verify that selection start and end are within text boundaries
     if (is_selection() && ! (size_t(selstart_) <= text_.size()
         && size_t(selend_) <= text_.size())) {
         WRN_DP<< "out-of-boundary selection\n";
         selstart_ = selend_ = -1;
     }
 
-    int mousex, mousey;
-    const Uint8 mousebuttons = SDL_GetMouseState( &mousex, &mousey);
-    if ( ! (mousebuttons & SDL_BUTTON(1))) {
-        grabmouse_ = false;
-    }
+    SDL_MouseButtonEvent& mbevt = reinterpret_cast<SDL_MouseButtonEvent&>(event);
+    int mousex = mbevt.x;
+    int mousey = mbevt.y;
+    const Uint8 mousebuttons = mbevt.button;
+    /// @todo Verify that this logic is correct.
+    if (!(mousebuttons & 1)) { grabmouse_ = false; }
 
     SDL_Rect const &loc = inner_location();
-    bool clicked_inside = !mouse_locked()
-        && (event.type == SDL_MOUSEBUTTONDOWN && (mousebuttons & SDL_BUTTON(1))
-            && point_in_rect(mousex, mousey, loc));
+    bool clicked_inside = !mouse_locked() &&
+                          (mbevt.type == SDL_MOUSEBUTTONDOWN &&
+                           (mousebuttons & 1) &&
+                           point_in_rect(mousex, mousey, loc));
     if (clicked_inside) {
         set_focus(true);
     }
@@ -423,137 +428,141 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded) {
         return;
     }
 
-    const char key = reinterpret_cast<const SDL_TextInputEvent&>(event.key;
-    const SDL_Keymod modifiers = SDL_GetModState();
+    ///@todo FIXME
+    SDL_TextInputEvent& tievt = reinterpret_cast<SDL_TextInputEvent&>(event.key);
+        const SDL_Keymod modifiers = SDL_GetModState();
 
-    const int c = key.sym;
-    const int old_cursor = cursor_;
+        const Uint32 c = tievt.text;
+        const int old_cursor = cursor_;
 
-    if (editable_) {
-        if (c == SDLK_LEFT && cursor_ > 0) --cursor_;
+        if (editable_) {
+            if (c == SDLK_LEFT && cursor_ > 0) --cursor_;
 
-        if (c == SDLK_RIGHT && cursor_ < static_cast<int>(text_.size())) ++cursor_;
+            if (c == SDLK_RIGHT && cursor_ < static_cast<int>(text_.size())) ++cursor_;
 
-        // ctrl-a, ctrl-e and ctrl-u are readline style shortcuts, even on Macs
-        if (c == SDLK_END || (c == SDLK_e && (modifiers & KMOD_CTRL))) cursor_ = text_.size();
+            // ctrl-a, ctrl-e and ctrl-u are readline style shortcuts, even on Macs
+            if (c == SDLK_END || (c == SDLK_e && (modifiers & KMOD_CTRL))) cursor_ =
+                text_.size();
 
-        if (c == SDLK_HOME || (c == SDLK_a && (modifiers & KMOD_CTRL))) cursor_ = 0;
+            if (c == SDLK_HOME || (c == SDLK_a && (modifiers & KMOD_CTRL))) cursor_ = 0;
 
-        if ( (old_cursor != cursor_) && (modifiers & KMOD_SHIFT)) {
-            if (selstart_ == -1) selstart_ = old_cursor;
-            selend_ = cursor_;
-        }
-    } else if (c == SDLK_LEFT || c == SDLK_RIGHT || c == SDLK_END || c == SDLK_HOME) {
-        pass_event_to_target(event);
-    }
-
-    if (editable_) {
-        if (c == SDLK_BACKSPACE) {
-            changed = true;
-            if (is_selection()) {
-                erase_selection();
-            } else if (cursor_ > 0) {
-                --cursor_;
-                text_.erase(text_.begin() + cursor_);
+            if ( (old_cursor != cursor_) && (modifiers & KMOD_SHIFT)) {
+                if (selstart_ == -1) selstart_ = old_cursor;
+                selend_ = cursor_;
             }
+        } else if (c == SDLK_LEFT || c == SDLK_RIGHT || c == SDLK_END || c == SDLK_HOME) {
+            pass_event_to_target(event);
         }
 
-        if (c == SDLK_u && (modifiers & KMOD_CTRL)) {  // clear_text line
-            changed = true;
-            cursor_ = 0;
-            text_.resize(0);
-        }
-
-        if (c == SDLK_DELETE && !text_.empty()) {
-            changed = true;
-            if (is_selection()) {
-                erase_selection();
-            } else {
-                if (cursor_ < static_cast<int>(text_.size())) {
+        if (editable_) {
+            if (c == SDLK_BACKSPACE) {
+                changed = true;
+                if (is_selection()) {
+                    erase_selection();
+                } else if (cursor_ > 0) {
+                    --cursor_;
                     text_.erase(text_.begin() + cursor_);
                 }
             }
-        }
-    } else if (c == SDLK_BACKSPACE || c == SDLK_DELETE
-               || (c == SDLK_u && (modifiers & KMOD_CTRL))) {
-        pass_event_to_target(event);
-    }
 
-    wchar_t character = key.unicode;
+            if (c == SDLK_u && (modifiers & KMOD_CTRL)) {  // clear_text line
+                changed = true;
+                cursor_ = 0;
+                text_.resize(0);
+            }
 
-    //movement characters may have a "Unicode" field on some platforms, so ignore it.
-    if ( ! (c == SDLK_UP || c == SDLK_DOWN || c == SDLK_LEFT || c == SDLK_RIGHT
-            || c == SDLK_DELETE || c == SDLK_BACKSPACE || c == SDLK_END || c == SDLK_HOME
-            || c == SDLK_PAGEUP || c == SDLK_PAGEDOWN)) {
-        if (character != 0) {
-            DBG_G<< "Char: " << character << ", c = " << c << "\n";
+            if (c == SDLK_DELETE && !text_.empty()) {
+                changed = true;
+                if (is_selection()) {
+                    erase_selection();
+                } else {
+                    if (cursor_ < static_cast<int>(text_.size())) {
+                        text_.erase(text_.begin() + cursor_);
+                    }
+                }
+            }
+        } else if (c == SDLK_BACKSPACE || c == SDLK_DELETE
+                   || (c == SDLK_u && (modifiers & KMOD_CTRL))) {
+            pass_event_to_target(event);
         }
-        if((event.key.keysym.mod & copypaste_modifier)
+
+        wchar_t character = c;
+
+        //movement characters may have a "Unicode" field on some platforms, so ignore it.
+        if ( ! (c == SDLK_UP || c == SDLK_DOWN || c == SDLK_LEFT || c == SDLK_RIGHT
+                || c == SDLK_DELETE || c == SDLK_BACKSPACE || c == SDLK_END || c == SDLK_HOME
+                || c == SDLK_PAGEUP || c == SDLK_PAGEDOWN)) {
+            if (character != 0) {
+                DBG_G<< "Char: " << character << ", c = " << c << "\n";
+            }
+            if((event.key.keysym.mod & copypaste_modifier)
 //on windows SDL fires for AltGr lctrl+ralt (needed to access @ etc on certain keyboards)
 #ifdef _WIN32
-            && !(event.key.keysym.mod & KMOD_ALT)
+                && !(event.key.keysym.mod & KMOD_ALT)
 #endif
-        ) {
-            switch(c) {
-                case SDLK_v:  // paste
-                {
-                    if(!editable()) {
-                        pass_event_to_target(event);
-                        break;
+            ) {
+                switch(c) {
+                    case SDLK_v:  // paste
+                    {
+                        if(!editable()) {
+                            pass_event_to_target(event);
+                            break;
+                        }
+
+                        changed = true;
+                        if(is_selection())
+                        erase_selection();
+
+                        std::string str = copy_from_clipboard(false);
+
+                        //cut off anything after the first newline
+                        str.erase(std::find_if(str.begin(),str.end(),utils::isnewline),str.end());
+
+                        wide_string s = utils::string_to_wstring(str);
+
+                        if(text_.size() < max_size_) {
+                            if(s.size() + text_.size() > max_size_) {
+                                s.resize(max_size_ - text_.size());
+                            }
+                            text_.insert(text_.begin()+cursor_, s.begin(), s.end());
+                            cursor_ += s.size();
+                        }
+
                     }
 
+                    break;
+
+                    case SDLK_c:  // copy
+                    {
+                        if(is_selection())
+                        {
+                            const size_t beg = std::min<size_t>(size_t(selstart_),size_t(selend_));
+                            const size_t end = std::max<size_t>(size_t(selstart_),size_t(selend_));
+
+                            wide_string ws = wide_string(text_.begin() + beg, text_.begin() + end);
+                            /// @todo FIXME
+                            //std::string s = utils::wstring_to_string(ws);
+                            std::string s = "";
+                            copy_to_clipboard(s, false);
+                        }
+                    }
+                    break;
+                }
+            } else if(editable_) {
+                if(character >= 32 && character != 127) {
                     changed = true;
                     if(is_selection())
                     erase_selection();
 
-                    std::string str = copy_from_clipboard(false);
-
-                    //cut off anything after the first newline
-                    str.erase(std::find_if(str.begin(),str.end(),utils::isnewline),str.end());
-
-                    std::wstring s = utils::string_to_wstring(str);
-
-                    if(text_.size() < max_size_) {
-                        if(s.size() + text_.size() > max_size_) {
-                            s.resize(max_size_ - text_.size());
-                        }
-                        text_.insert(text_.begin()+cursor_, s.begin(), s.end());
-                        cursor_ += s.size();
-                    }
-
-                }
-
-                break;
-
-                case SDLK_c:  // copy
-                {
-                    if(is_selection())
-                    {
-                        const size_t beg = std::min<size_t>(size_t(selstart_),size_t(selend_));
-                        const size_t end = std::max<size_t>(size_t(selstart_),size_t(selend_));
-
-                        std::wstring ws = std::wstring(text_.begin() + beg, text_.begin() + end);
-                        std::string s = utils::wstring_to_string(ws);
-                        copy_to_clipboard(s, false);
+                    if(text_.size() + 1 <= max_size_) {
+                        text_.insert(text_.begin()+cursor_,character);
+                        ++cursor_;
                     }
                 }
-                break;
+            } else {
+                pass_event_to_target(event);
             }
-        } else if(editable_) {
-            if(character >= 32 && character != 127) {
-                changed = true;
-                if(is_selection())
-                erase_selection();
-
-                if(text_.size() + 1 <= max_size_) {
-                    text_.insert(text_.begin()+cursor_,character);
-                    ++cursor_;
-                }
-            }
-        } else {
-            pass_event_to_target(event);
         }
-    }
 
     if (is_selection() && (selend_ != cursor_)) selstart_ = selend_ = -1;
 

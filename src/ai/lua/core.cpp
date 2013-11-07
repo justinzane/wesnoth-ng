@@ -18,33 +18,49 @@
  *
  */
 
-#include "lua/lualib.h"
-#include "lua/lauxlib.h"
-#include "lua/llimits.h"
-
-#include <cassert>
-#include <cstring>
-
 #include "core.hpp"
-#include "../../scripting/lua.hpp"
-#include "../../scripting/lua_api.hpp"
-#include "lua_object.hpp" // (Nephro)
 
-#include "../../attack_prediction.hpp"
-#include "../../filesystem.hpp"
-#include "../../gui/game_display.hpp"
-#include "../../gamestatus.hpp"
+#include "lua_object.hpp" // (Nephro)
+#include "unit_advancements_aspect.hpp"
+
+//#include "../../attack_prediction.hpp"
+//#include "../../board/map.hpp"
+#include "../../board/map_location.hpp"
+#include "../../config.hpp"
+//#include "../../filesystem.hpp"
+//#include "../../gamestatus.hpp"
+//#include "../../gui/game_display.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
+#include "../../lua/lauxlib.h"
+#include "../../lua/lua.h"
 #include "../../pathfind/pathfind.hpp"
-#include "../../play_controller.hpp"
-#include "../../resources.hpp"
-#include "../../terrain_translation.hpp"
+//#include "../../play_controller.hpp"
+//#include "../../resources.hpp"
+//#include "../../scripting/lua.hpp"
+#include "../../scripting/lua_api.hpp"
 #include "../../terrain_filter.hpp"
+//#include "../../terrain_translation.hpp"
 #include "../../unit.hpp"
 #include "../actions.hpp"
+//#include "../composite/contexts.hpp"
 #include "../composite/engine_lua.hpp"
-#include "../composite/contexts.hpp"
+#include "../default/contexts.hpp"
+#include "../game_info.hpp"
+//#include "lua/llimits.h"
+//#include "lua/lualib.h"
+
+#include <stddef.h>
+
+//#include <cassert>
+#include <cstdbool>
+//#include <cstring>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 static lg::log_domain log_ai_engine_lua("ai/engine/lua");
 #define LOG_LUA LOG_STREAM(info, log_ai_engine_lua)

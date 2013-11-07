@@ -12,16 +12,24 @@
  See the COPYING file for more details.
  */
 
-#define GETTEXT_DOMAIN "wesnoth-lib"
-
-#include "label.hpp"
-
 #include "../auxiliary/widget_definition/label.hpp"
 #include "../auxiliary/window_builder/label.hpp"
-#include "../detail/register.tpp"
-#include "../settings.hpp"
+#include "label.hpp"
 
-#include <boost/bind.hpp>
+#include "settings.hpp"
+
+#include "detail/register.tpp"
+
+#include "../auxiliary/window_builder.hpp"
+
+#include <boost/bind/arg.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/bind/bind_cc.hpp>
+//#include <boost/bind.hpp>
+
+#include <string>
+
+#define GETTEXT_DOMAIN "wesnoth-lib"
 
 namespace gui2 {
 

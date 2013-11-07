@@ -12,13 +12,35 @@
    See the COPYING file for more details.
 */
 
+#include "generator.hpp"
+
+#include "generator_private.hpp"
+#include "grid.hpp"
+#include "window.hpp"
+#include "toggle_button.hpp"
+#include "toggle_panel.hpp"
+
+#include "../../utils/foreach.tpp"
+#include "../../wml_exception.hpp"
+#include "../lib/types/point.hpp"
+
+#include <boost/foreach.hpp>
+#include <boost/function/function_fwd.hpp>
+#include <boost/function/function_template.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/typeof/native.hpp>
+#include <stddef.h>
+#include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_rect.h>
+
+#include <cassert>
+#include <map>
+#include <string>
+#include <utility>
+
 #define GETTEXT_DOMAIN "wesnoth-lib"
-
-#include "gui/widgets/generator_private.hpp"
-
-#include "gui/widgets/window.hpp"
-#include "utils/foreach.tpp"
-#include "wml_exception.hpp"
 
 namespace gui2 {
 
@@ -252,7 +274,7 @@ const twidget* thorizontal_list::find_at(const tpoint& coordinate,
 }
 
 void thorizontal_list::handle_key_left_arrow(
-		SDLMod /*modifier*/, bool& handled)
+		SDL_Keymod /*modifier*/, bool& handled)
 {
 	if(get_selected_item_count() == 0) {
 		return;
@@ -274,7 +296,7 @@ void thorizontal_list::handle_key_left_arrow(
 }
 
 void thorizontal_list::handle_key_right_arrow(
-		SDLMod /*modifier*/, bool& handled)
+		SDL_Keymod /*modifier*/, bool& handled)
 {
 	if(get_selected_item_count() == 0) {
 		return;
@@ -455,7 +477,7 @@ const twidget* tvertical_list::find_at(const tpoint& coordinate,
 	return NULL;
 }
 
-void tvertical_list::handle_key_up_arrow(SDLMod /*modifier*/, bool& handled)
+void tvertical_list::handle_key_up_arrow(SDL_Keymod /*modifier*/, bool& handled)
 {
 	if(get_selected_item_count() == 0) {
 		return;
@@ -476,7 +498,7 @@ void tvertical_list::handle_key_up_arrow(SDLMod /*modifier*/, bool& handled)
 	}
 }
 
-void tvertical_list::handle_key_down_arrow(SDLMod /*modifier*/, bool& handled)
+void tvertical_list::handle_key_down_arrow(SDL_Keymod /*modifier*/, bool& handled)
 {
 	if(get_selected_item_count() == 0) {
 		return;

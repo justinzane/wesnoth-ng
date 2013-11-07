@@ -12,13 +12,17 @@
    See the COPYING file for more details.
 */
 
+#include "text_box.hpp"
+
+#include "../../../config.hpp"
+#include "../../../log.hpp"
+#include "../../../tstring.hpp"
+#include "../log.hpp"
+
+#include <iostream>
+#include <string>
+
 #define GETTEXT_DOMAIN "wesnoth-lib"
-
-#include "gui/auxiliary/window_builder/text_box.hpp"
-
-#include "config.hpp"
-#include "gui/auxiliary/log.hpp"
-#include "gui/widgets/text_box.hpp"
 
 namespace gui2 {
 
@@ -30,8 +34,7 @@ tbuilder_text_box::tbuilder_text_box(const config& cfg)
 {
 }
 
-twidget* tbuilder_text_box::build() const
-{
+twidget* tbuilder_text_box::build() const {
 	ttext_box* widget = new ttext_box();
 
 	init_control(widget);

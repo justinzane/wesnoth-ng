@@ -20,29 +20,56 @@
 
 #include "recruitment.hpp"
 
-#include "../actions.hpp"
-#include "../composite/rca.hpp"
-#include "../manager.hpp"
 #include "../../actions/attack.hpp"
 #include "../../attack_prediction.hpp"
+#include "../../board/map.hpp"
+#include "../../board/map_label.hpp"
+#include "../../board/map_location.hpp"
+#include "../../config.hpp"
+#include "../../game_config.hpp"
 #include "../../gui/game_display.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
-#include "../../map_label.hpp"
+#include "../../movetype.hpp"
 #include "../../pathfind/pathfind.hpp"
 #include "../../pathutils.hpp"
 #include "../../resources.hpp"
+#include "../../serialization/string_utils.hpp"
 #include "../../team.hpp"
+#include "../../terrain_translation.hpp"
+#include "../../time_of_day.hpp"
 #include "../../tod_manager.hpp"
+#include "../../tstring.hpp"
 #include "../../unit_map.hpp"
 #include "../../unit_types.hpp"
 #include "../../util.hpp"
 #include "../../variable.hpp"
-#include "../../wml_exception.hpp"
+//#include "../../wml_exception.hpp"
+#include "../actions.hpp"
+//#include "../composite/rca.hpp"
+#include "../game_info.hpp"
+#include "../manager.hpp"
 
-#include <boost/foreach.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <math.h>
+//#include <boost/foreach.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+//#include <boost/scoped_ptr.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/type_traits/is_const.hpp>
+//#include <math.h>
+#include <stddef.h>
+
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdbool>
+#include <cstdlib>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 static lg::log_domain log_ai_recruitment("ai/recruitment");
 #define LOG_AI_RECRUITMENT LOG_STREAM(info, log_ai_recruitment)

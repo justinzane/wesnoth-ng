@@ -22,29 +22,48 @@
 #include "vision.hpp"
 
 #include "../attack_prediction.hpp"
+#include "../board/map.hpp"
+#include "../board/map_location.hpp"
+#include "../config.hpp"
 #include "../game_config.hpp"
-#include "../gui/game_display.hpp"
+#include "../game_errors.hpp"
+#include "../game_events/entity_location.hpp"
 #include "../game_events/pump.hpp"
 #include "../game_preferences.hpp"
 #include "../gamestatus.hpp"
 #include "../gettext.hpp"
+#include "../gui/game_display.hpp"
 #include "../log.hpp"
-#include "../map.hpp"
 #include "../mouse_handler_base.hpp"
+#include "../race.hpp"
 #include "../random.hpp"
 #include "../replay.hpp"
 #include "../resources.hpp"
 #include "../statistics.hpp"
 #include "../team.hpp"
+#include "../time_of_day.hpp"
 #include "../tod_manager.hpp"
+#include "../tstring.hpp"
 #include "../unit.hpp"
 #include "../unit_abilities.hpp"
 #include "../unit_display.hpp"
 #include "../unit_map.hpp"
+#include "../util.hpp"
 #include "../whiteboard/manager.hpp"
 #include "../wml_exception.hpp"
 
-#include <boost/foreach.hpp>
+//#include <boost/foreach.hpp>
+#include <stddef.h>
+
+#include <algorithm>
+#include <cassert>
+#include <cstdbool>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <set>
+#include <string>
+#include <utility>
 
 static lg::log_domain log_engine("engine");
 #define DBG_NG LOG_STREAM(debug, log_engine)

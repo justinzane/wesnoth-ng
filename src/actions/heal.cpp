@@ -19,10 +19,14 @@
 
 #include "heal.hpp"
 
-#include "../gui/game_display.hpp"
+#include "../board/map.hpp"
+#include "../board/map_location.hpp"
+#include "../config.hpp"
+#include "../game_config.hpp"
 #include "../gettext.hpp"
+#include "../gui/game_display.hpp"
 #include "../log.hpp"
-#include "../map.hpp"
+#include "../race.hpp"
 #include "../replay.hpp"
 #include "../resources.hpp"
 #include "../team.hpp"
@@ -32,7 +36,18 @@
 #include "../unit_map.hpp"
 
 #include <boost/foreach.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/type_traits/is_const.hpp>
+
+#include <algorithm>
+#include <cassert>
+#include <climits>
+#include <cstdbool>
+#include <iostream>
+#include <iterator>
 #include <list>
+#include <string>
 #include <vector>
 
 static lg::log_domain log_engine("engine");

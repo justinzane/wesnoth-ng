@@ -13,30 +13,46 @@
  See the COPYING file for more details.
  */
 
-#define GETTEXT_DOMAIN "wesnoth-lib"
+#include "font.hpp"
 
-#include "global.hpp"
+#include "tooltips.hpp"
+#include "video.hpp"
 
-#include "config.hpp"
-#include "filesystem.hpp"
-#include "gui/font.hpp"
-#include "game_config.hpp"
-#include "log.hpp"
-#include "marked-up_text.hpp"
-#include "text.hpp"
-#include "gui/tooltips.hpp"
-#include "gui/video.hpp"
-#include "serialization/parser.hpp"
-#include "serialization/preprocessor.hpp"
-#include "serialization/string_utils.hpp"
+#include "../config.hpp"
+#include "../filesystem.hpp"
+#include "../game_config.hpp"
+#include "../log.hpp"
+#include "../marked-up_text.hpp"
+#include "../serialization/parser.hpp"
+#include "../serialization/preprocessor.hpp"
+#include "../serialization/string_utils.hpp"
+#include "../text.hpp"
+#include "../tstring.hpp"
+#include "../util.hpp"
 
 #include <boost/foreach.hpp>
-#include <SDL2/SDL.h>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <cairo/cairo-features.h>
+#include <stddef.h>
+#include <SDL2/SDL_error.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_surface.h>
+
+#include <algorithm>
+#include <cstdbool>
+#include <iostream>
+#include <iterator>
 #include <list>
+#include <map>
 #include <set>
 #include <stack>
-
-#include <cairo-features.h>
+#include <string>
+#include <utility>
+#include <vector>
 
 #ifdef CAIRO_HAS_WIN32_FONT
 #include <windows.h>
@@ -46,6 +62,8 @@
 #ifdef CAIRO_HAS_FT_FONT
 #include <fontconfig/fontconfig.h>
 #endif
+
+#define GETTEXT_DOMAIN "wesnoth-lib"
 
 static lg::log_domain log_font("font");
 #define DBG_FT LOG_STREAM(debug, log_font)
@@ -983,7 +1001,7 @@ surface floating_label::create_surface() {
     return surf_;
 }
 
-void floating_label::draw(surface screen) {
+void floating_label::draw(surface surf) {
     if ( !visible_) {
         buf_.assign(NULL);
         return;
@@ -995,32 +1013,32 @@ void floating_label::draw(surface screen) {
     }
 
     if (buf_ == NULL) {
-        buf_.assign(create_compatible_surface(screen, surf_->w, surf_->h));
+        buf_.assign(create_compatible_surface(surf, surf_->w, surf_->h));
         if (buf_ == NULL) {
             return;
         }
     }
 
-    if (screen == NULL) {
+    if (surf == NULL) {
         return;
     }
 
     SDL_Rect rect = create_rect(xpos(surf_->w), ypos_, surf_->w, surf_->h);
-    const clip_rect_setter clip_setter(screen, &clip_rect_);
-    sdl_blit(screen, &rect, buf_, NULL);
-    sdl_blit(surf_, NULL, screen, &rect);
+    const clip_rect_setter clip_setter(surf, &clip_rect_);
+    sdl_blit(surf, &rect, buf_, NULL);
+    sdl_blit(surf_, NULL, surf, &rect);
 
     update_rect(rect);
 }
 
-void floating_label::undraw(surface screen) {
-    if (screen == NULL || buf_ == NULL) {
+void floating_label::undraw(surface surf) {
+    if (surf == NULL || buf_ == NULL) {
         return;
     }
 
     SDL_Rect rect = create_rect(xpos(surf_->w), ypos_, surf_->w, surf_->h);
-    const clip_rect_setter clip_setter(screen, &clip_rect_);
-    sdl_blit(buf_, NULL, screen, &rect);
+    const clip_rect_setter clip_setter(surf, &clip_rect_);
+    sdl_blit(buf_, NULL, surf, &rect);
 
     update_rect(rect);
 
@@ -1092,10 +1110,9 @@ SDL_Rect get_floating_label_rect(int handle) {
 }
 
 floating_label_context::floating_label_context() {
-    SDL_Window* wes_win;    /** @todo: GET THE WINDOW POINTER! */
-    surface const screen = SDL_GetWindowSurface(wes_win);
-    if (screen != NULL) {
-        draw_floating_labels(screen);
+    surface surf = ui_window::get_surface();
+    if (surf != NULL) {
+        draw_floating_labels(surf);
     }
 
     label_contexts.push(std::set<int>());
@@ -1109,14 +1126,13 @@ floating_label_context::~floating_label_context() {
 
     label_contexts.pop();
 
-    SDL_Window* wes_win;    /** @todo: GET THE WINDOW POINTER! */
-    surface const screen = SDL_GetWindowSurface(wes_win);
-    if (screen != NULL) {
-        undraw_floating_labels(screen);
+    surface surf = ui_window::get_surface();
+    if (surf != NULL) {
+        undraw_floating_labels(surf);
     }
 }
 
-void draw_floating_labels(surface screen) {
+void draw_floating_labels(surface surf) {
     if (label_contexts.empty()) {
         return;
     }
@@ -1127,12 +1143,12 @@ void draw_floating_labels(surface screen) {
     //are displayed over earlier added labels.
     for (label_map::iterator i = labels.begin(); i != labels.end(); ++i) {
         if (context.count(i->first) > 0) {
-            i->second.draw(screen);
+            i->second.draw(surf);
         }
     }
 }
 
-void undraw_floating_labels(surface screen) {
+void undraw_floating_labels(surface surf) {
     if (label_contexts.empty()) {
         return;
     }
@@ -1143,7 +1159,7 @@ void undraw_floating_labels(surface screen) {
     //into the exact state it started in.
     for (label_map::reverse_iterator i = labels.rbegin(); i != labels.rend(); ++i) {
         if (context.count(i->first) > 0) {
-            i->second.undraw(screen);
+            i->second.undraw(surf);
         }
     }
 

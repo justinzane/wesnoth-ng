@@ -19,20 +19,31 @@
 
 #include "ca_global_fallback.hpp"
 
-#include "../composite/ai.hpp"
-
-#include "../../gui/game_display.hpp"
+//#include "../../board/map.hpp"
+#include "../../board/map_label.hpp"
+#include "../../board/map_location.hpp"
+#include "../../config.hpp"
+#include "../../gui/display.hpp"
+//#include "../../gui/game_display.hpp"
+#include "../../gui/sdl_utils.hpp"
 #include "../../log.hpp"
-#include "../../map.hpp"
-#include "../../map_label.hpp"
 #include "../../replay.hpp"
 #include "../../resources.hpp"
-#include "../../gui/sdl_utils.hpp"
 #include "../../team.hpp"
-#include "../../terrain_filter.hpp"
-#include "../../tod_manager.hpp"
+//#include "../../terrain_filter.hpp"
+//#include "../../tod_manager.hpp"
+#include "../../unit.hpp"
+#include "../../util.hpp"
+//#include "../composite/ai.hpp"
 
 #include <boost/foreach.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <SDL/SDL_timer.h>
+#include <SDL2/SDL_pixels.h>
+
+#include <cstdbool>
+#include <iostream>
+#include <string>
 
 namespace ai {
 

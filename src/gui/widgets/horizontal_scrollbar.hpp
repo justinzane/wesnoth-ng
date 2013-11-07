@@ -57,7 +57,7 @@ private:
 		{ return current.x - original.x; }
 
 	/** See @ref tcontrol::get_control_type. */
-	virtual const std::string& get_control_type() const OVERRIDE;
+	virtual const std::string& get_control_type() const override;
 };
 
 } // namespace gui2

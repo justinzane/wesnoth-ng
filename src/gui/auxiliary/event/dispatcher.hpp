@@ -21,14 +21,12 @@
 #include "../../../hotkeys.hpp"
 #include "../../lib/types/point.hpp"
 
-#include <boost/function/function_fwd.hpp>
-#include <boost/function/function_template.hpp>
-//#include <boost/function.hpp>
+#include <boost/function.hpp>
 #include <boost/mpl/aux_/integral_wrapper.hpp>
 #include <boost/mpl/has_key.hpp>
-//#include <boost/mpl/int.hpp>
+#include <boost/mpl/int.hpp>
 #include <boost/utility/enable_if.hpp>
-//#include <SDL2/SDL.h>
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_stdinc.h>
 
@@ -271,9 +269,10 @@ class tdispatcher {
          * @param position               The position to place the callback.
          */
         template <tevent E>
-        typename boost::enable_if<boost::mpl::has_key<tset_event, boost::mpl::int_<E> > >::type connect_signal(const tsignal_function& signal,
-                                                                                                               const tposition position =
-                                                                                                                   back_child) {
+        typename boost::enable_if<boost::mpl::has_key<tset_event,
+                                                      boost::mpl::int_<E> > >::type
+                                  connect_signal(const tsignal_function& signal,
+                                                 const tposition position = back_child) {
             signal_queue_.connect_signal(E, position, signal);
         }
 
@@ -288,9 +287,10 @@ class tdispatcher {
          *                               was added in front or back.)
          */
         template <tevent E>
-        typename boost::enable_if<boost::mpl::has_key<tset_event, boost::mpl::int_<E> > >::type disconnect_signal(const tsignal_function& signal,
-                                                                                                                  const tposition position =
-                                                                                                                      back_child) {
+        typename boost::enable_if<boost::mpl::has_key<tset_event,
+                                                      boost::mpl::int_<E> > >::type
+                                  disconnect_signal(const tsignal_function& signal,
+                                                    const tposition position = back_child) {
             signal_queue_.disconnect_signal(E, position, signal);
         }
 
@@ -672,13 +672,15 @@ inline void connect_signal_pre_key_press(tdispatcher& dispatcher,
 /** Connects a signal handler for a left mouse button click. */
 inline void connect_signal_mouse_left_click(tdispatcher& dispatcher,
                                             const tsignal_function& signal) {
-    dispatcher.connect_signal<LEFT_BUTTON_CLICK>(signal);
+    ///@todo FIXME this needs to be reworked for SDL2
+    //dispatcher.connect_signal<SDL_MOUSEBUTTONDOWN>(signal);
 }
 
 /** Disconnects a signal handler for a left mouse button click. */
 inline void disconnect_signal_mouse_left_click(tdispatcher& dispatcher,
                                                const tsignal_function& signal) {
-    dispatcher.disconnect_signal<LEFT_BUTTON_CLICK>(signal);
+    ///@todo FIXME this needs to be reworked for SDL2
+    //dispatcher.disconnect_signal<SDL_MOUSEBUTTONDOWN>(signal);
 }
 
 /** Connects a signal handler for getting a notification upon modification. */

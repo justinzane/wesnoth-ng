@@ -33,22 +33,22 @@ public:
 	}
 
 	/** See @ref twidget::can_wrap. */
-	virtual bool can_wrap() const OVERRIDE;
+	virtual bool can_wrap() const override;
 
 	/** See @ref tcontrol::get_characters_per_line. */
-	virtual unsigned get_characters_per_line() const OVERRIDE;
+	virtual unsigned get_characters_per_line() const override;
 
 	/** See @ref tcontrol::set_active. */
-	virtual void set_active(const bool active) OVERRIDE;
+	virtual void set_active(const bool active) override;
 
 	/** See @ref tcontrol::get_active. */
-	virtual bool get_active() const OVERRIDE;
+	virtual bool get_active() const override;
 
 	/** See @ref tcontrol::get_state. */
-	virtual unsigned get_state() const OVERRIDE;
+	virtual unsigned get_state() const override;
 
 	/** See @ref twidget::disable_click_dismiss. */
-	bool disable_click_dismiss() const OVERRIDE;
+	bool disable_click_dismiss() const override;
 
 	/***** ***** ***** setters / getters for members ***** ****** *****/
 
@@ -86,7 +86,7 @@ private:
 	unsigned characters_per_line_;
 
 	/** See @ref tcontrol::get_control_type. */
-	virtual const std::string& get_control_type() const OVERRIDE;
+	virtual const std::string& get_control_type() const override;
 };
 
 } // namespace gui2

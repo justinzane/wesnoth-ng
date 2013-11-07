@@ -33,7 +33,16 @@
 #ifndef DISPLAY_H_INCLUDED
 #define DISPLAY_H_INCLUDED
 
+#include "drawing_buffer_key.hpp"
+#include "font.hpp"
 #include "sdl_utils.hpp"
+#include "tblit.hpp"
+#include "tdrawing_layer.hpp"
+#include "theme.hpp"
+#include "video.hpp"
+
+//#include "widgets/button.hpp"
+//#include "widgets/slider.hpp"
 
 #include "../animated.hpp"
 #include "../board/map.hpp"
@@ -43,123 +52,114 @@
 #include "../config.hpp"
 #include "../generic_event.hpp"
 #include "../image.hpp"
+#include "../overlay.hpp"
+#include "../team.hpp"
+#include "../time_of_day.hpp"
 #include "../unit.hpp"
 #include "../unit_map.hpp"
 #include "../util.hpp"
-#include "../whiteboard/arrow.hpp"
+//#include "../whiteboard/arrow.hpp"
 #include "../widgets/button.hpp"
 #include "../widgets/slider.hpp"
-
-#include "/usr/lib/gcc/x86_64-unknown-linux-gnu/4.8.2/include/stddef.h"
+//#include "key.hpp"
 
 #include <boost/function/function_fwd.hpp>
 #include <boost/function/function_template.hpp>
+#include <boost/function.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/smart_ptr/scoped_ptr.hpp>
+#include <stddef.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_stdinc.h>
 
 #include <algorithm>
+#include <cstdbool>
 #include <iterator>
+#include <list>
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
 
-class config;
-class terrain_builder;
-struct time_of_day;
-class map_labels;
-class arrow;
-
-#include "gui/font.hpp"
-#include "key.hpp"
-#include "team.hpp"
-#include "time_of_day.hpp"
-#include "theme.hpp"
-#include "video.hpp"
-#include "widgets/button.hpp"
-#include "widgets/slider.hpp"
-
-#include "overlay.hpp"
-
-#include <list>
-
-#include <boost/function.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <map>
-
-class gamemap;
+//class config;
+//class terrain_builder;
+//struct time_of_day;
+//class map_labels;
+//class arrow;
+//class gamemap;
 
 class display {
     public:
+        /**
+         * @brief Constructor
+         * @param units     Container of <unit,location>
+         * @param video     Wesnoth's main window.
+         * @param map       The game board.
+         * @param t         Vector of teams.
+         * @param theme_cfg Selected display theme.
+         * @param level     ??? Difficulty level ???
+         */
         display(unit_map* units,
                 ui_window& video,
                 const gamemap* map,
                 const std::vector<team>* t,
                 const config& theme_cfg,
                 const config& level);
+
+        /** Virtual destructor */
         virtual ~display();
-        static display* get_singleton() {
-            return singleton_;
-        }
 
-        bool show_everything() const {
-            return !viewpoint_;
-        }
+        /** @todo WTF? Public constructor and singleton? */
+        static display* get_singleton() { return singleton_; }
 
-        const std::vector<team>& get_teams() const {
-            return *teams_;
-        }
+        /** @todo WRITEME */
+        bool show_everything() const { return !viewpoint_; }
+
+        /** @todo WRITEME */
+        const std::vector<team>& get_teams() const { return *teams_; }
 
         /** The playing team is the team whose turn it is. */
-        size_t playing_team() const {
-            return activeTeam_;
-        }
+        size_t playing_team() const { return activeTeam_; }
 
-        bool team_valid() const {
-            return currentTeam_ < teams_->size();
-        }
+        /** @todo WRITEME */
+        bool team_valid() const { return currentTeam_ < teams_->size(); }
 
         /** The viewing team is the team currently viewing the game. */
-        size_t viewing_team() const {
-            return currentTeam_;
-        }
-        int viewing_side() const {
-            return currentTeam_ + 1;
-        }
+        size_t viewing_team() const { return currentTeam_; }
+
+        int viewing_side() const { return currentTeam_ + 1; }
 
         /**
-         * Sets the team controlled by the player using the computer.
-         * Data from this team will be displayed in the game status.
+         * @brief Sets the team controlled by the player using the computer;
+         * data from this team will be displayed in the game status.
+         * @param team      handle of the team
+         * @param observe   WRITEME
          */
         void set_team(size_t team, bool observe = false);
 
-        /**
-         * set_playing_team sets the team whose turn it currently is
-         */
+        /** @brief set_playing_team sets the team whose turn it currently is */
         void set_playing_team(size_t team);
 
-        /**
-         * Cancels all the exclusive draw requests.
-         */
-        void clear_exclusive_draws() {
-            exclusive_unit_draw_requests_.clear();
-        }
-        unit_map& get_units() {
-            return *units_;
-        }
-        const unit_map& get_const_units() const {
-            return *units_;
-        }
+        /** Cancels all the exclusive draw requests. */
+        void clear_exclusive_draws() { exclusive_unit_draw_requests_.clear(); }
+
+        /** @brief TODO WRITEME */
+        unit_map& get_units() { return *units_; }
+
+        /** @brief TODO WRITEME */
+        const unit_map& get_const_units() const { return *units_; }
 
         /**
-         * Allows a unit to request to be the only one drawn in its hex. Useful for situations where
-         * multiple units (one real, multiple temporary) can end up stacked, such as with the whiteboard.
+         * @brief Allows a unit to request to be the only one drawn in its hex. Useful for
+         * situations where multiple units (one real, multiple temporary) can end up stacked,
+         * such as with the whiteboard.
          * @param loc The location of the unit requesting exclusivity.
          * @param unit The unit requesting exclusivity.
          * @return false if there's already an exclusive draw request for this location.
          */
         bool add_exclusive_draw(const map_location& loc, unit& unit);
+
         /**
          * Cancels an exclusive draw request.
          * @return The id of the unit whose exclusive draw request was canceled, or else
@@ -167,6 +167,7 @@ class display {
          */
         std::string remove_exclusive_draw(const map_location& loc);
 
+        /** @brief TODO WRITEME */
         void draw_bar(const std::string& image,
                       int xpos,
                       int ypos,
@@ -206,22 +207,36 @@ class display {
          */
         void reload_map();
 
+        /** @brief TODO WRITEME */
         void change_map(const gamemap* m);
+
+        /** @brief TODO WRITEME */
         void change_teams(const std::vector<team>* teams);
+
+        /** @brief TODO WRITEME */
         void change_units(unit_map* units);
 
+        /** @brief TODO WRITEME */
         static Uint32 rgb(Uint8 red, Uint8 green, Uint8 blue) {
             return 0xFF000000 | (red << 16) | (green << 8) | blue;
         }
+
+        /** @brief TODO WRITEME */
         static Uint8 red(Uint32 color) {
             return (color & 0x00FF0000) >> 16;
         }
+
+        /** @brief TODO WRITEME */
         static Uint8 green(Uint32 color) {
             return (color & 0x0000FF00) >> 8;
         }
+
+        /** @brief TODO WRITEME */
         static Uint8 blue(Uint32 color) {
             return (color & 0x000000FF);
         }
+
+        /** @brief TODO WRITEME */
         static Uint32 max_rgb(Uint32 first, Uint32 second) {
             return rgb(std::max(red(first), red(second)), std::max(green(first), green(second)),
                        std::max(blue(first), blue(second)));
@@ -250,9 +265,12 @@ class display {
             return map_screenshot_ ? map_screenshot_surf_ : screen_.getSurface();
         }
 
+        /** @brief TODO WRITEME */
         virtual bool in_game() const {
             return false;
         }
+
+        /** @brief TODO WRITEME */
         virtual bool in_editor() const {
             return false;
         }
@@ -265,19 +283,28 @@ class display {
         int w() const {
             return screen_.getx();
         } /**< width */
+
+        /** @brief TODO WRITEME */
         int h() const {
             return screen_.gety();
         } /**< height */
+
+        /** @brief TODO WRITEME */
         const SDL_Rect& minimap_area() const {
             return theme_.mini_map_location(screen_area());
         }
+
+        /** @brief TODO WRITEME */
         const SDL_Rect& palette_area() const {
             return theme_.palette_location(screen_area());
         }
+
+        /** @brief TODO WRITEME */
         const SDL_Rect& unit_image_area() const {
             return theme_.unit_image_location(screen_area());
         }
 
+        /** @brief TODO WRITEME */
         SDL_Rect screen_area() const {
             return create_rect(0, 0, w(), h());
         }
@@ -349,14 +376,20 @@ class display {
          */
         map_location minimap_location_on(int x, int y);
 
+        /** @brief TODO WRITEME */
         const map_location& selected_hex() const {
             return selectedHex_;
         }
+
+        /** @brief TODO WRITEME */
         const map_location& mouseover_hex() const {
             return mouseoverHex_;
         }
 
+        /** @brief TODO WRITEME */
         virtual void select_hex(map_location hex);
+
+        /** @brief TODO WRITEME */
         virtual void highlight_hex(map_location hex);
 
         /** Function to invalidate the game status displayed on the sidebar. */
@@ -470,9 +503,8 @@ class display {
         /** Clear the redraw observers */
         void clear_redraw_observers();
 
-        theme& get_theme() {
-            return theme_;
-        }
+        /** @brief TODO WRITEME */
+        theme& get_theme() { return theme_; }
 
         /**
          * Retrieves a pointer to a theme UI button.
@@ -485,17 +517,28 @@ class display {
          *       accomplish a specific task before the next screen refresh.
          */
         gui::button* find_action_button(const std::string& id);
+
+        /** @brief TODO WRITEME */
         gui::button* find_menu_button(const std::string& id);
+
+        /** @brief TODO WRITEME */
         gui::slider* find_slider(const std::string& id);
 
+        /** @brief TODO WRITEME */
         gui::button::TYPE string_to_button_type(std::string type);
+
+        /** @brief TODO WRITEME */
         void create_buttons();
+
+        /** @brief TODO WRITEME */
         void invalidate_theme() {
             panelsDrawn_ = false;
         }
 
+        /** @brief TODO WRITEME */
         void refresh_report(std::string const &report_name, const config * new_cfg = NULL);
 
+        /** @brief TODO WRITEME */
         void draw_minimap_units();
 
         /** Function to invalidate all tiles. */
@@ -504,6 +547,7 @@ class display {
         /** Function to invalidate a specific tile for redrawing. */
         bool invalidate(const map_location& loc);
 
+        /** @brief TODO WRITEME */
         bool invalidate(const std::set<map_location>& locs);
 
         /**
@@ -514,12 +558,15 @@ class display {
 
         /** invalidate all hexes under the rectangle rect (in screen coordinates) */
         bool invalidate_locations_in_rect(const SDL_Rect& rect);
+
+        /** @brief TODO WRITEME */
         bool invalidate_visible_locations_in_rect(const SDL_Rect& rect);
 
         /**
          * Function to invalidate animated terrains and units which may have changed.
          */
         void invalidate_animations();
+
         /**
          * helper function for invalidate_animations
          * returns a list of units to check for invalidation
@@ -532,9 +579,8 @@ class display {
          */
         void invalidate_animations_location(const map_location& loc);
 
-        const gamemap& get_map() const {
-            return *map_;
-        }
+        /** @brief TODO WRITEME */
+        const gamemap& get_map() const { return *map_; }
 
         /**
          * mouseover_hex_overlay_ require a prerendered surface
@@ -544,6 +590,7 @@ class display {
             mouseover_hex_overlay_ = image;
         }
 
+        /** @brief TODO WRITEME */
         void clear_mouseover_hex_overlay() {
             mouseover_hex_overlay_ = NULL;
         }
@@ -567,12 +614,11 @@ class display {
          */
         static void toggle_debug_foreground();
 
-        terrain_builder& get_builder() {
-            return *builder_;
-        }
-        ;
+        /** @brief TODO WRITEME */
+        terrain_builder& get_builder() { return *builder_; }
 
-        void flip();
+        /** @brief TODO WRITEME */
+        void flip() __attribute__((deprecated("FLip is deprecated for SDL2")));
 
         /** Copy the backbuffer to the framebuffer. */
         void update_display();
@@ -580,15 +626,18 @@ class display {
         /** Rebuild all dynamic terrain. */
         void rebuild_all();
 
+        /** @brief TODO WRITEME */
         const theme::action* action_pressed();
+
+        /** @brief TODO WRITEME */
         const theme::menu* menu_pressed();
 
         /**
-         * Finds the menu which has a given item in it,
-         * and enables or disables it.
+         * @brief Finds the menu which has a given item in it, and enables or disables it.
          */
         void enable_menu(const std::string& item, bool enable);
 
+        /** @brief TODO WRITEME */
         void set_diagnostic(const std::string& msg);
 
         /** Delay routines: use these not SDL_Delay (for --nogui). */
@@ -602,8 +651,10 @@ class display {
             turbo_ = turbo;
         }
 
+        /** @brief TODO WRITEME */
         double turbo_speed() const;
 
+        /** @brief TODO WRITEME */
         void set_turbo_speed(const double speed) {
             turbo_speed_ = speed;
         }
@@ -612,15 +663,24 @@ class display {
         void set_idle_anim(bool ison) {
             idle_anim_ = ison;
         }
+
+        /** @brief TODO WRITEME */
         bool idle_anim() const {
             return idle_anim_;
         }
+
+        /** @brief TODO WRITEME */
         void set_idle_anim_rate(int rate);
+
+        /** @brief TODO WRITEME */
         double idle_anim_rate() const {
             return idle_anim_rate_;
         }
 
+        /** @brief TODO WRITEME */
         void bounds_check_position();
+
+        /** @brief TODO WRITEME */
         void bounds_check_position(int& xpos, int& ypos);
 
         /**
@@ -639,12 +699,16 @@ class display {
          */
         bool set_zoom(int amount, bool absolute = false);
 
+        /** @brief TODO WRITEME */
         bool zoom_at_max() const;
+
+        /** @brief TODO WRITEME */
         bool zoom_at_min() const;
 
         /** Sets the zoom amount to the default. */
         void set_default_zoom();
 
+        /** @brief TODO WRITEME */
         bool view_locked() const {
             return view_locked_;
         }
@@ -653,10 +717,15 @@ class display {
         void set_view_locked(bool value) {
             view_locked_ = value;
         }
-        ;
 
+        /**
+         * @brief TODO WRITEME
+         */
         enum SCROLL_TYPE {
-            SCROLL, WARP, ONSCREEN, ONSCREEN_WARP
+            SCROLL,      //!< SCROLL
+            WARP,        //!< WARP
+            ONSCREEN,    //!< ONSCREEN
+            ONSCREEN_WARP//!< ONSCREEN_WARP
         };
 
         /**
@@ -690,6 +759,7 @@ class display {
                              bool only_if_possible = false,
                              double add_spacing = 0.0,
                              bool force = true);
+
         /** Scroll to fit as many locations on-screen as possible, starting with the first. */
         void scroll_to_tiles(const std::vector<map_location>& locs,
                              SCROLL_TYPE scroll_type = ONSCREEN,
@@ -706,6 +776,7 @@ class display {
             return scroll_event_;
         }
 
+        /** @brief TODO WRITEME */
         events::generic_event& complete_redraw_event() {
             return complete_redraw_event_;
         }
@@ -725,7 +796,10 @@ class display {
          */
         void draw(bool update = true, bool force = false);
 
+        /** @brief TODO WRITEME */
         map_labels& labels();
+
+        /** @brief TODO WRITEME */
         const map_labels& labels() const;
 
         /** Announce a message prominently. */
@@ -739,7 +813,6 @@ class display {
             minimap_ = NULL;
             redrawMinimap_ = true;
         }
-        ;
 
         /**
          * Schedule the minimap to be redrawn.
@@ -749,38 +822,35 @@ class display {
             redrawMinimap_ = true;
         }
 
+        /** @brief TODO WRITEME */
         virtual const time_of_day& get_time_of_day(const map_location& loc =
             map_location::null_location) const;
 
+        /** @brief TODO WRITEME */
         virtual bool has_time_area() const {
             return false;
         }
-        ;
 
+        /** @brief TODO WRITEME */
         void write(config& cfg) const;
-    private:
-        void read(const config& cfg);
 
-    public:
         /** Init the flag list and the team colors used by ~TC */
         void init_flags();
 
-    private:
-        /**
-         * Finds the start and end rows on the energy bar image.
-         *
-         * White pixels are substituted for the color of the energy.
-         */
-        const SDL_Rect& calculate_energy_bar(surface surf);
-
     protected:
-        //TODO sort
-        unit_map* units_;
+        enum TERRAIN_TYPE {
+            BACKGROUND,
+            FOREGROUND
+        };
 
+        // protected typedefs  ----------------------------------------------------------------
+        /** @todo WRITEME */
         typedef std::map<map_location, std::string> exclusive_unit_draw_requests_t;
+
         /// map of hexes where only one unit should be drawn, the one identified by the associated id string
         exclusive_unit_draw_requests_t exclusive_unit_draw_requests_;
 
+        // protected functions ----------------------------------------------------------------
         /** Clear the screen contents */
         void clear_screen();
 
@@ -789,16 +859,14 @@ class display {
          * Derived classes can use this to add extra actions before redrawing
          * invalidated hexes takes place. No action here by default.
          */
-        virtual void pre_draw() {
-        }
+        virtual void pre_draw() { }
 
         /**
          * Called at the very end of each draw() call.
          * Derived classes can use this to add extra actions after redrawing
          * invalidated hexes takes place. No action here by default.
          */
-        virtual void post_draw() {
-        }
+        virtual void post_draw() { }
 
         /**
          * Get the clipping rectangle for drawing.
@@ -835,9 +903,7 @@ class display {
          * Called near the end of a draw operation, derived classes can use this
          * to render a specific sidebar. Very similar to post_commit.
          */
-        virtual void draw_sidebar() {
-        }
-        ;
+        virtual void draw_sidebar() { }
 
         /**
          * Draws the border tile overlay.
@@ -851,160 +917,113 @@ class display {
          */
         virtual void draw_border(const map_location& loc, const int xpos, const int ypos);
 
+        /** @brief TODO WRITEME */
         void draw_minimap();
 
-        enum TERRAIN_TYPE {
-            BACKGROUND, FOREGROUND
-        };
-
+        /** @brief TODO WRITEME */
         std::vector<surface> get_terrain_images(const map_location &loc,
                                                 const std::string& timeid,
                                                 image::TYPE type,
                                                 TERRAIN_TYPE terrain_type);
 
+        /** @brief TODO WRITEME */
         std::vector<surface> get_fog_shroud_images(const map_location& loc,
                                                    image::TYPE image_type);
 
+        /** @brief TODO WRITEME */
         void draw_image_for_report(surface& img, SDL_Rect& rect);
 
+        /** @brief TODO WRITEME */
         void scroll_to_xy(int screenxpos, int screenypos, SCROLL_TYPE scroll_type, bool force =
             true);
 
+        /** @brief TODO WRITEME */
         void fill_images_list(const std::string& prefix, std::vector<std::string>& images);
 
+        /** @brief TODO WRITEME */
         const std::string& get_variant(const std::vector<std::string>& variants,
                                        const map_location &loc) const;
 
-        ui_window& screen_;
-        const gamemap* map_;
-        size_t currentTeam_;
-        const std::vector<team>* teams_;
-        const team *viewpoint_;
-        std::map<surface, SDL_Rect> energy_bar_rects_;
-        int xpos_, ypos_;
-        bool view_locked_;
-        theme theme_;
-        int zoom_;
-        static int last_zoom_;
-        boost::scoped_ptr<terrain_builder> builder_;
-        surface minimap_;
-        SDL_Rect minimap_location_;
-        bool redrawMinimap_;
-        bool redraw_background_;
-        bool invalidateAll_;
-        bool grid_;
-        int diagnostic_label_;
-        bool panelsDrawn_;
-        double turbo_speed_;
-        bool turbo_;
-        bool invalidateGameStatus_;
-        boost::scoped_ptr<map_labels> map_labels_;
-
-        /** Event raised when the map is being scrolled */
-        mutable events::generic_event scroll_event_;
-
-        /**
-         * notify observers that the screen has been redrawn completely
-         * atm this is used for replay_controller to add replay controls to the standard theme
-         */
-        events::generic_event complete_redraw_event_;
-
-        /**
-         * Holds the tick count for when the next drawing event is scheduled.
-         * Drawing shouldn't occur before this time.
-         */
-        int nextDraw_;
-
-        // Not set by the initializer:
-        std::map<std::string, SDL_Rect> reportRects_;
-        std::map<std::string, surface> reportSurfaces_;
-        std::map<std::string, config> reports_;
-        std::vector<gui::button> menu_buttons_, action_buttons_;
-        std::vector<gui::slider> sliders_;
-        std::set<map_location> invalidated_;
-        std::set<map_location> previous_invalidated_;
-        surface mouseover_hex_overlay_;
-        // If we're transitioning from one time of day to the next,
-        // then we will use these two masks on top of all hexes when we blit.
-        surface tod_hex_mask1, tod_hex_mask2;
-        std::vector<std::string> fog_images_;
-        std::vector<std::string> shroud_images_;
-
-        map_location selectedHex_;
-        map_location mouseoverHex_;
+        // protected variables ----------------------------------------------------------------
+        unit_map* units_;           /**< TODO WRITEME */
+        ui_window& screen_;         /**< TODO WRITEME */
+        const gamemap* map_;        /**< TODO WRITEME */
+        size_t currentTeam_;        /**< TODO WRITEME */
+        const std::vector<team>* teams_;    /**< TODO WRITEME */
+        const team *viewpoint_;     /**< TODO WRITEME */
+        std::map<surface, SDL_Rect> energy_bar_rects_;  /**< TODO WRITEME */
+        int xpos_, ypos_;           /**< TODO WRITEME */
+        bool view_locked_;          /**< TODO WRITEME */
+        theme theme_;               /**< TODO WRITEME */
+        int zoom_;                  /**< TODO WRITEME */
+        static int last_zoom_;      /**< TODO WRITEME */
+        boost::scoped_ptr<terrain_builder> builder_;    /**< TODO WRITEME */
+        surface minimap_;           /**< TODO WRITEME */
+        SDL_Rect minimap_location_; /**< TODO WRITEME */
+        bool redrawMinimap_;        /**< TODO WRITEME */
+        bool redraw_background_;    /**< TODO WRITEME */
+        bool invalidateAll_;        /**< TODO WRITEME */
+        bool grid_;                 /**< TODO WRITEME */
+        int diagnostic_label_;      /**< TODO WRITEME */
+        bool panelsDrawn_;          /**< TODO WRITEME */
+        double turbo_speed_;        /**< TODO WRITEME */
+        bool turbo_;                /**< TODO WRITEME */
+        bool invalidateGameStatus_; /**< TODO WRITEME */
+        boost::scoped_ptr<map_labels> map_labels_;      /**< TODO WRITEME */
+        mutable events::generic_event scroll_event_;    /**< Event raised when the map is
+                                                             being scrolled */
+        events::generic_event complete_redraw_event_;   /**< notify observers that the screen
+                                                             has been redrawn completely atm
+                                                             this is used for replay_controller
+                                                             to add replay controls to the
+                                                             standard theme */
+        int nextDraw_;  /**< Holds the tick count for when the next drawing event is scheduled.
+                             Drawing shouldn't occur before this time. */
+        std::map<std::string, SDL_Rect> reportRects_;   /**< Not set by the initializer */
+        std::map<std::string, surface> reportSurfaces_; /**< TODO WRITEME */
+        std::map<std::string, config> reports_;         /**< TODO WRITEME */
+        std::vector<gui::button> menu_buttons_;         /**< TODO WRITEME */
+        std::vector<gui::button> action_buttons_;       /**< TODO WRITEME */
+        std::vector<gui::slider> sliders_;              /**< TODO WRITEME */
+        std::set<map_location> invalidated_;            /**< TODO WRITEME */
+        std::set<map_location> previous_invalidated_;   /**< TODO WRITEME */
+        surface mouseover_hex_overlay_;                 /**< TODO WRITEME */
+        surface tod_hex_mask1, tod_hex_mask2;       /**< If we're transitioning from one time of
+                                                         day to the next, then we will use these
+                                                         two masks on top of all hexes when we
+                                                         blit. */
+        std::vector<std::string> fog_images_;       /**< TODO WRITEME */
+        std::vector<std::string> shroud_images_;    /**< TODO WRITEME */
+        map_location selectedHex_;      /**< TODO WRITEME */
+        map_location mouseoverHex_;     /**< TODO WRITEME */
         // Removed for SDL2
-        // CKey keys_;
-
-        /** Local cache for preferences::animate_map, since it is constantly queried. */
-        bool animate_map_;
-
-        /** Local cache for preferences "local_tod_lighting" */
-        bool local_tod_light_;
+        CKey keys_;
+        bool animate_map_;      /**< Local cache for preferences::animate_map, since it is constantly queried. */
+        bool local_tod_light_;  /**< Local cache for preferences "local_tod_lighting" */
 
     private:
+        /** @brief TODO WRITEME */
+        void read(const config& cfg);
 
-        // This surface must be freed by the caller
+        /**
+         * Finds the start and end rows on the energy bar image.
+         *
+         * White pixels are substituted for the color of the energy.
+         */
+        const SDL_Rect& calculate_energy_bar(surface surf);
+
+        /**
+         * @brief This surface must be freed by the caller
+         * TODO WRITEME explain this better
+         * @param loc
+         * @return
+         */
         surface get_flag(const map_location& loc);
 
         /** Animated flags for each team */
         std::vector<animated<image::locator> > flags_;
 
     public:
-        /**
-         * The layers to render something on. This value should never be stored
-         * it's the internal drawing order and adding removing and reordering
-         * the layers should be safe.
-         * If needed in WML use the name and map that to the enum value.
-         */
-        enum tdrawing_layer {
-                LAYER_TERRAIN_BG, /**<
-                 * Layer for the terrain drawn behind the
-                 * unit.
-                 */
-                LAYER_GRID_TOP, /**< Top half part of grid image */
-                LAYER_MOUSEOVER_OVERLAY, /**< Mouseover overlay used by editor*/
-                LAYER_FOOTSTEPS, /**< Footsteps showing path from unit to mouse */
-                LAYER_MOUSEOVER_TOP, /**< Top half of image following the mouse */
-                LAYER_UNIT_FIRST, /**< Reserve layers to be selected for WML. */
-                LAYER_UNIT_BG = LAYER_UNIT_FIRST + 10, /**< Used for the ellipse behind the unit. */
-                LAYER_UNIT_DEFAULT = LAYER_UNIT_FIRST + 40,/**<default layer for drawing units */
-                LAYER_TERRAIN_FG = LAYER_UNIT_FIRST + 50, /**<
-                 * Layer for the terrain drawn in front of
-                 * the unit.
-                 */
-                LAYER_GRID_BOTTOM, /**<
-                 * Used for the bottom half part of grid image.
-                 * Should be under moving units, to avoid masking south move.
-                 */
-                LAYER_UNIT_MOVE_DEFAULT = LAYER_UNIT_FIRST
-                    + 60/**<default layer for drawing moving units */,
-                LAYER_UNIT_FG = LAYER_UNIT_FIRST + 80, /**<
-                 * Used for the ellipse in front of the
-                 * unit.
-                 */
-                LAYER_UNIT_MISSILE_DEFAULT = LAYER_UNIT_FIRST + 90, /**< default layer for missile frames*/
-                LAYER_UNIT_LAST = LAYER_UNIT_FIRST + 100,
-                LAYER_REACHMAP, /**< "black stripes" on unreachable hexes. */
-                LAYER_MOUSEOVER_BOTTOM, /**< Bottom half of image following the mouse */
-                LAYER_FOG_SHROUD, /**< Fog and shroud. */
-                LAYER_ARROWS, /**< Arrows from the arrows framework. Used for planned moves display. */
-                LAYER_ACTIONS_NUMBERING, /**< Move numbering for the whiteboard. */
-                LAYER_SELECTED_HEX, /**< Image on the selected unit */
-                LAYER_ATTACK_INDICATOR, /**< Layer which holds the attack indicator. */
-                LAYER_UNIT_BAR, /**<
-                 * Unit bars and overlays are drawn on this
-                 * layer (for testing here).
-                 */
-                LAYER_MOVE_INFO, /**< Movement info (defense%, etc...). */
-                LAYER_LINGER_OVERLAY, /**< The overlay used for the linger mode. */
-                LAYER_BORDER, /**< The border of the map. */
-
-                LAYER_LAST_LAYER /**<
-             * Don't draw to this layer it's a dummy to
-             * size the vector.
-             */
-        };
-
         /**
          * Draw an image at a certain location.
          * x,y: pixel location on screen to draw the image
@@ -1018,7 +1037,7 @@ class display {
          */
         void render_image(int x,
                           int y,
-                          const display::tdrawing_layer drawing_layer,
+                          const tdrawing_layer drawing_layer,
                           const map_location& loc,
                           surface image,
                           bool hreverse = false,
@@ -1045,97 +1064,6 @@ class display {
 
         //TODO sort
         size_t activeTeam_;
-
-        /**
-         * In order to render a hex properly it needs to be rendered per row. On
-         * this row several layers need to be drawn at the same time. Mainly the
-         * unit and the background terrain. This is needed since both can spill
-         * in the next hex. The foreground terrain needs to be drawn before to
-         * avoid decapitation a unit.
-         *
-         * In other words:
-         * for every layer
-         *   for every row (starting from the top)
-         *     for every hex in the row
-         *       ...
-         *
-         * this is modified to:
-         * for every layer group
-         *   for every row (starting from the top)
-         *     for every layer in the group
-         *       for every hex in the row
-         *         ...
-         *
-         * * Surfaces are rendered per level in a map.
-         * * Per level the items are rendered per location these locations are
-         *   stored in the drawing order required for units.
-         * * every location has a vector with surfaces, each with its own screen
-         *   coordinate to render at.
-         * * every vector element has a vector with surfaces to render.
-         */
-        class drawing_buffer_key {
-            private:
-                unsigned int key_;
-
-                static const tdrawing_layer layer_groups[];
-                static const unsigned int max_layer_group;
-
-            public:
-                drawing_buffer_key(const map_location &loc, tdrawing_layer layer);
-
-                bool operator<(const drawing_buffer_key &rhs) const {
-                    return key_ < rhs.key_;
-                }
-        };
-
-        /** Helper structure for rendering the terrains. */
-        class tblit {
-            public:
-                tblit(const tdrawing_layer layer,
-                      const map_location& loc,
-                      const int x,
-                      const int y,
-                      const surface& surf,
-                      const SDL_Rect& clip) :
-                    x_(x), y_(y), surf_(1, surf), clip_(clip), key_(loc, layer) {
-                }
-
-                tblit(const tdrawing_layer layer,
-                      const map_location& loc,
-                      const int x,
-                      const int y,
-                      const std::vector<surface>& surf,
-                      const SDL_Rect& clip) :
-                    x_(x), y_(y), surf_(surf), clip_(clip), key_(loc, layer) {
-                }
-
-                int x() const {
-                    return x_;
-                }
-                int y() const {
-                    return y_;
-                }
-                const std::vector<surface> &surf() const {
-                    return surf_;
-                }
-                const SDL_Rect &clip() const {
-                    return clip_;
-                }
-
-                bool operator<(const tblit &rhs) const {
-                    return key_ < rhs.key_;
-                }
-
-            private:
-                int x_; /**< x screen coordinate to render at. */
-                int y_; /**< y screen coordinate to render at. */
-                std::vector<surface> surf_; /**< surface(s) to render. */
-                SDL_Rect clip_; /**<
-                 * The clipping area of the source if
-                 * omitted the entire source is used.
-                 */
-                drawing_buffer_key key_;
-        };
 
         typedef std::list<tblit> tdrawing_buffer;
         tdrawing_buffer drawing_buffer_;

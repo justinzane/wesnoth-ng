@@ -17,34 +17,35 @@
 #ifndef SDL_UTILS_INCLUDED
 #define SDL_UTILS_INCLUDED
 
-#include "scoped_resource.hpp"
-#include "util.hpp"
+#include "../scoped_resource.hpp"
+#include "../util.hpp"
 
-#include <SDL/SDL.h>
-#include <stdint.h>
-#include <cstdlib>
-#include <iosfwd>
+#include <stddef.h>
+#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_stdinc.h>
+
 #include <map>
+#include <ostream>
 #include <string>
 
 //older versions of SDL don't define the
 //mouse wheel macros, so define them ourselves
 //if necessary.
-#ifndef SDL_BUTTON_WHEELUP
-#define SDL_BUTTON_WHEELUP 4
-#endif
-
-#ifndef SDL_BUTTON_WHEELDOWN
-#define SDL_BUTTON_WHEELDOWN 5
-#endif
-
-#ifndef SDL_BUTTON_WHEELLEFT
-#define SDL_BUTTON_WHEELLEFT 6
-#endif
-
-#ifndef SDL_BUTTON_WHEELRIGHT
-#define SDL_BUTTON_WHEELRIGHT 7
-#endif
+//#ifndef SDL_BUTTON_WHEELUP
+//#define SDL_BUTTON_WHEELUP 4
+//#endif
+//
+//#ifndef SDL_BUTTON_WHEELDOWN
+//#define SDL_BUTTON_WHEELDOWN 5
+//#endif
+//
+//#ifndef SDL_BUTTON_WHEELLEFT
+//#define SDL_BUTTON_WHEELLEFT 6
+//#endif
+//
+//#ifndef SDL_BUTTON_WHEELRIGHT
+//#define SDL_BUTTON_WHEELRIGHT 7
+//#endif
 
 namespace {
 const SDL_Rect empty_rect = { 0, 0, 0, 0 };

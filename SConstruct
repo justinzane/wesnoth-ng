@@ -67,7 +67,7 @@ opts.AddVariables(
      int),
     BoolVariable('distcc',
                  'Use distcc',
-                 True),
+                 False),
     BoolVariable('ccache',
                  "Use ccache",
                  False),
@@ -109,7 +109,7 @@ opts.AddVariables(
     # Compiler/Linker Flags -------------------------------------------------------------------
     ('extra_flags_config',
      'Extra compiler and linker flags to use for configuration and all builds',
-     "-fno-show-column -fno-caret-diagnostics  -march=core-avx-i -lprofiler -ltcmalloc"),
+     "-march=core-avx-i -lprofiler -ltcmalloc"),
     ('extra_flags_base',
      'Extra compiler and linker flags to use for base builds',
      ""),

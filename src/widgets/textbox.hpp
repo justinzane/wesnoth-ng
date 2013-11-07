@@ -27,18 +27,24 @@
 #ifndef TEXTBOX_HPP_INCLUDED
 #define TEXTBOX_HPP_INCLUDED
 
-//#include "scrollarea.hpp"
+#include "scrollarea.hpp"
 
 #include "../gui/font.hpp"
 #include "../gui/sdl_utils.hpp"
 #include "../gui/video.hpp"
 #include "../serialization/string_utils.hpp"
 
-#include <stddef.h>
+//#include <stddef.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_stdinc.h>
 
+#include <algorithm>
+#include <atomic>
+#include <cstdbool>
+#include <cstdlib>
+#include <iterator>
 #include <string>
 #include <vector>
 
@@ -60,17 +66,20 @@ class textbox:
 
         /** @brief Returns the current textbox text. */
         inline const std::string get_text() const {
-            const std::string &ret = utils::wstring_to_string(text_);
-            return ret;
+            return "";
+            /// @todo FIXME
+//            const std::string &ret = utils::wstring_to_string(text_);
+//            return ret;
         }
 
         /** @brief Set the current textbox text. */
         inline void set_text(const std::string& text,
                              const SDL_Color& color = font::NORMAL_COLOR)
         {
-            text_ = (std::wstring)text;
+            /// @todo FIXME
+            // utils::string_to_wstring(text);
             if (text_.size() > max_size_) {
-                text_ = text_.resize(max_size_);
+                text_.resize(max_size_);
             }
             cursor_ = text_.size();
             text_pos_ = 0;
@@ -138,14 +147,15 @@ class textbox:
 
     private:
         Uint32 max_size_;       /**< Max length of the text contents. */
-        std::wstring text_;     /**< The text contents. */
+        wide_string text_;     /**< The text contents. */
         int cursor_;            /**< The cursor position ??? */
         int selstart_;          /**< Position of start of selection. */
         int selend_;            /**< Position of end of selection. */
         bool grabmouse_;        /**< Should mouse be grabbed. */
         int text_pos_;          /**< @todo WRITEME */
         int cursor_pos_;        /**< @todo WRITEME */
-        SDL_Point point_;       /**< @todo WRITEME */
+        std::vector<int> char_x_;       /**< @todo WRITEME */
+        std::vector<int> char_y_;       /**< @todo WRITEME */
         std::atomic<bool> editable_;    /**< Whether the text contents are editable. */
         bool show_cursor_;      /**< Whether the cursor is displayed. */
         int show_cursor_at_;    /**< @brief records the time the cursor was shown at last.
@@ -159,7 +169,7 @@ class textbox:
         double focused_alpha_;  /**< Opacity of focused text. */
         textbox* edit_target_;  /**< Pointer to textbox to be edited. */
 
-        virtual void handle_text_changed(const std::wstring&) {}
+        virtual void handle_text_changed(const wide_string&) {}
 
         void handle_event(const SDL_Event& event, bool was_forwarded);
 
@@ -174,7 +184,7 @@ class textbox:
 
         void update_text_cache(bool reset = false, const SDL_Color& color = font::NORMAL_COLOR);
 
-        surface add_text_line(const std::wstring& text,
+        surface add_text_line(const wide_string& text,
                               const SDL_Color& color = font::NORMAL_COLOR);
 
         inline bool is_selection() {
@@ -183,7 +193,7 @@ class textbox:
 
         inline void erase_selection() {
             if (!is_selection()) { return; }
-            std::wstring::iterator itor = text_.begin() + std::min(selstart_, selend_);
+            wide_string::iterator itor = text_.begin() + std::min(selstart_, selend_);
             text_.erase(itor, itor + abs(selend_ - selstart_));
             cursor_ = std::min(selstart_, selend_);
             selstart_ = selend_ = -1;

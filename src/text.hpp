@@ -12,6 +12,10 @@
    See the COPYING file for more details.
 */
 
+/**
+ * @note With SDL2, there is native UTF handling.
+ */
+
 #ifndef TEXT_HPP_INCLUDED
 #define TEXT_HPP_INCLUDED
 
@@ -84,35 +88,28 @@ public:
 	bool is_truncated() const;
 
 	/**
-	 * Inserts utf 8 text.
-	 *
+     * Inserts unicode text.
 	 * @param offset              The position to insert the text.
 	 * @param text                The utf-8 text to insert.
-	 *
 	 * @returns                   The number of characters inserted.
 	 */
 	unsigned insert_text(const unsigned offset, const std::string& text);
 
 	/**
-	 * Inserts a unicode char.
-	 *
+     * Inserts unicode text.
 	 * @param offset              The position to insert the char.
 	 * @param unicode             The character to insert.
-	 *
-	 * @returns                   True upon success, false otherwise.
+     * @returns                   The number of characters inserted.
 	 */
-	bool insert_unicode(const unsigned offset, const wchar_t unicode);
+	unsigned insert_text(const unsigned offset, const wchar_t unicode);
 
 	/**
 	 * Inserts unicode text.
-	 *
 	 * @param offset              The position to insert the text.
 	 * @param unicode             Vector with characters to insert.
-	 *
-	 * @returns                   The number of characters inserted.
+     * @returns                   The number of characters inserted.
 	 */
-	unsigned insert_unicode(
-		const unsigned offset, const std::vector<wchar_t>& unicode);
+	unsigned insert_text(const unsigned offset, const std::vector<wchar_t>& unicode);
 
 	/***** ***** ***** ***** Font flags ***** ***** ***** *****/
 

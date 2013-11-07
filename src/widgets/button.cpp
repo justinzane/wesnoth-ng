@@ -12,22 +12,36 @@
    See the COPYING file for more details.
 */
 
+#include "button.hpp"
+
+#include "../filesystem.hpp"
+#include "../game_config.hpp"
+#include "../gui/font.hpp"
+#include "../gui/sdl_utils.hpp"
+#include "../gui/sound.hpp"
+#include "../gui/video.hpp"
+#include "../image.hpp"
+#include "../log.hpp"
+#include "../marked-up_text.hpp"
+#include "../serialization/string_utils.hpp"
+#include "../wml_separators.hpp"
+//#include "global.hpp"
+
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_ttf.h>
+
+#include <algorithm>
+#include <cstdbool>
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <vector>
+
 #define GETTEXT_DOMAIN "wesnoth-lib"
-
-#include "global.hpp"
-
-#include "widgets/button.hpp"
-#include "game_config.hpp"
-#include "gui/font.hpp"
-#include "marked-up_text.hpp"
-#include "image.hpp"
-#include "log.hpp"
-#include "serialization/string_utils.hpp"
-#include "gui/sound.hpp"
-#include "gui/video.hpp"
-#include "wml_separators.hpp"
-
-#include "filesystem.hpp"
 
 static lg::log_domain log_display("display");
 #define ERR_DP LOG_STREAM(err, log_display)
@@ -213,7 +227,7 @@ void button::calculate_size()
 	}
 
 	if (type_ != TYPE_IMAGE){
-		textRect_ = font::draw_text(NULL, screen_area(), font_size,
+		textRect_ = font::draw_text(NULL, ui_window::get_window_rect(), font_size,
 		                            font::BUTTON_COLOR, label_, 0, 0);
 	}
 

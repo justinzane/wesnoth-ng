@@ -18,38 +18,68 @@
 
 #include "manager.hpp"
 
-#include "action.hpp"
+//#include "action.hpp"
+#include "arrow.hpp"
+//#include "attack.hpp"
 #include "highlighter.hpp"
-#include "board/mapbuilder.hpp"
+#include "mapbuilder.hpp"
 #include "move.hpp"
-#include "attack.hpp"
 #include "recall.hpp"
 #include "recruit.hpp"
-#include "side_actions.hpp"
+//#include "side_actions.hpp"
+#include "typedefs.hpp"
 #include "utility.hpp"
 
-#include "actions/create.hpp"
-#include "actions/undo.hpp"
-#include "arrow.hpp"
-#include "chat_events.hpp"
-#include "formula_string_utils.hpp"
-#include "game_preferences.hpp"
-#include "gettext.hpp"
-#include "gui/dialogs/simple_item_selector.hpp"
-#include "key.hpp"
-#include "network.hpp"
-#include "pathfind/pathfind.hpp"
-#include "play_controller.hpp"
-#include "resources.hpp"
-#include "rng.hpp"
-#include "team.hpp"
-#include "unit_display.hpp"
+#include "../actions/create.hpp"
+#include "../actions/undo.hpp"
+#include "../board/map_location.hpp"
+#include "../config.hpp"
+#include "../formula_string_utils.hpp"
+#include "../game_preferences.hpp"
+#include "../gettext.hpp"
+#include "../gui/dialogs/simple_item_selector.hpp"
+#include "../gui/display.hpp"
+#include "../gui/game_display.hpp"
+#include "../log.hpp"
+#include "../mouse_events.hpp"
+#include "../mouse_handler_base.hpp"
+#include "../network.hpp"
+#include "../pathfind/pathfind.hpp"
+#include "../play_controller.hpp"
+#include "../resources.hpp"
+#include "../rng.hpp"
+#include "../serialization/string_utils.hpp"
+#include "../team.hpp"
+#include "../tstring.hpp"
+#include "../unit_display.hpp"
+#include "../unit_map.hpp"
+//#include "chat_events.hpp"
+//#include "key.hpp"
 
-#include <boost/lexical_cast.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/arg.hpp>
+#include <boost/bind/bind.hpp>
+#include <boost/bind/bind_mf_cc.hpp>
+#include <boost/bind/placeholders.hpp>
+//#include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/multi_index/detail/rnd_node_iterator.hpp>
+#include <boost/ref.hpp>
+#include <boost/smart_ptr/scoped_ptr.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <stddef.h>
+#include <SDL2/SDL_pixels.h>
 
+#include <cassert>
+#include <cstdbool>
+#include <iterator>
+#include <map>
+#include <set>
 #include <sstream>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace wb {
 

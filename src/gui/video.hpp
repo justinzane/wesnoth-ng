@@ -37,6 +37,7 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_video.h>
 
 #include <atomic>
@@ -44,29 +45,51 @@
 #include <memory>
 #include <string>
 
-surface display_format_alpha(surface surf);
-surface get_video_surface();
-SDL_Rect screen_area();
-
-bool non_interactive();
-
-void update_rect(size_t x, size_t y, size_t w, size_t h);
-void update_rect(const SDL_Rect& rect);
-void update_whole_screen();
-
 /**
  * @brief TODO WRITEME
  */
 class ui_window:
-    // Why noncopyable?
-    private boost::noncopyable {
+    private boost::noncopyable
+{
     public:
         ui_window();
         ~ui_window();
 
-        //functions to get the dimensions of the current video-mode
-        int getx() const;
-        int gety() const;
+        /** @brief Returns window-width */
+        inline int getx() const {
+            int x,y;
+            SDL_GetWindowSize(ui_window_, &x, &y);
+            return x;
+        }
+
+        /** @brief Returns window-height) */
+        inline int gety() const {
+            int x,y;
+            SDL_GetWindowSize(ui_window_, &x, &y);
+            return y;
+        }
+
+        /** @brief Returns an SDL_Rect(0,0,window-width, window-height)
+         * @deprecated use get_window_rect instead */
+        __attribute__ ((deprecated)) inline SDL_Rect screen_area() const {
+            int w, h;
+            SDL_GetWindowSize(ui_window_, &w, &h);
+            SDL_Rect rect;
+            rect.x = 0; rect.y = 0;
+            rect.w = w; rect.h = h;
+            return rect;
+        }
+
+        /** @brief Returns an SDL_Rect(0,0,window-width, window-height) */
+        inline SDL_Rect get_window_rect() const {
+            int w, h;
+            SDL_GetWindowSize(ui_window_, &w, &h);
+            SDL_Rect rect;
+            rect.x = 0; rect.y = 0;
+            rect.w = w; rect.h = h;
+            return rect;
+        }
+
 
         //blits a surface with black as alpha
         void blit_surface(int x,
@@ -75,13 +98,18 @@ class ui_window:
                           SDL_Rect* srcrect = NULL,
                           SDL_Rect* clip_rect = NULL);
 
-        surface& getSurface();
+        ///@todo REMOVEME
+        void flip();
 
-        bool isFullScreen() const {
-            return (SDL_GetWindowFlags(ui_window_) && SDL_WINDOW_FULLSCREEN);
-        }
+        /// @todo REMOVEME
+        surface getSurface() __attribute__((deprecated("Use get_surface()")));
 
-        /** @brief TODO WTF? */
+        /** Get a ref to the main wesnoth surface. */
+        surface get_surface();
+
+        bool isFullScreen() const;
+
+        /** @brief TODO WRITEME */
         class quit: public tlua_jailbreak_exception {
             public:
                 quit() :
@@ -147,9 +175,54 @@ class ui_window:
         std::atomic<bool> resizes_locked_;
 };
 
+/**
+ * @brief Watchdog class that redraws the screen on window resize events. ???
+ */
 class resize_monitor:
     public events::pump_monitor {
         void process(events::pump_info &info);
 };
+
+/**
+ * @brief TODO WRITEME
+ * @param surf
+ * @return
+ */
+surface display_format_alpha(surface surf);
+
+/**
+ * @brief TODO WRITEME
+ * @return
+ */
+surface get_video_surface();
+
+
+/**
+ * @brief TODO WRITEME
+ * @return
+ */
+bool non_interactive();
+
+/**
+ * @brief TODO WRITEME
+ * @param rect
+ */
+void update_rect(const SDL_Rect& rect);
+
+/**
+ * @brief TODO WRITEME
+ */
+void update_rect(size_t x, size_t y, size_t w, size_t h) {
+    SDL_Rect rect;
+    rect.x = x; rect.y = y; rect.w = w; rect.h = h;
+    update_rect(rect);
+}
+
+
+/**
+ * @brief TODO WRITEME
+ */
+void update_whole_screen();
+
 
 #endif

@@ -17,24 +17,41 @@
  * @file
  */
 
-#include "composite/ai.hpp"
+#include "manager.hpp"
+
 #include "configuration.hpp"
 #include "contexts.hpp"
-#include "default/ai.hpp"
-#include "manager.hpp"
-#include "formula/ai.hpp"
+#include "interface.hpp"
 #include "registry.hpp"
+
+#include "composite/ai.hpp"
+#include "composite/component.hpp"
+#include "composite/engine.hpp"
+#include "default/ai.hpp"
+#include "default/contexts.hpp"
+#include "formula/ai.hpp"
+#include "lua/unit_advancements_aspect.hpp"
+
+#include "../game_config.hpp"
+#include "../game_errors.hpp"
 #include "../game_events/pump.hpp"
 #include "../log.hpp"
 #include "../serialization/string_utils.hpp"
-#include "composite/component.hpp"
+#include "../tstring.hpp"
+#include "../util.hpp"
 
 #include <boost/foreach.hpp>
+#include <SDL2/SDL_timer.h>
 
+#include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <iterator>
 #include <map>
+#include <set>
 #include <stack>
+#include <utility>
 #include <vector>
-#include "composite/engine.hpp"
 
 namespace ai {
 

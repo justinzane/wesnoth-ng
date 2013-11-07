@@ -25,12 +25,14 @@
 #include "gui/halo.hpp"
 #include "hotkeys.hpp"
 #include "language.hpp"
+#include "layer_bits.hpp"
 #include "log.hpp"
 #include "marked-up_text.hpp"
 #include "board/map.hpp"
 #include "board/map_label.hpp"
 #include "minimap.hpp"
 #include "reports.hpp"
+#include "tdrawing_layer.hpp"
 #include "text.hpp"
 #include "time_of_day.hpp"
 #include "gui/tooltips.hpp"
@@ -207,10 +209,8 @@ display::display(unit_map* units, ui_window& video, const gamemap* map, const st
 
 	read(level.child_or_empty("display"));
 
-	if(non_interactive()
-		&& (get_video_surface() != NULL
-		&& video.faked())) {
-		screen_.lock_updates(true);
+	if(non_interactive() && (get_video_surface() != NULL)) {
+		screen_.lock_updates();
 	}
 
 	fill_images_list(game_config::fog_prefix, fog_images_);
@@ -444,8 +444,8 @@ void display::draw_bar(const std::string& image, int xpos, int ypos,
 	SDL_Rect bot = create_rect(0, bar_loc.y + skip_rows, surf->w, 0);
 	bot.h = surf->w - bot.y;
 
-	drawing_buffer_add(LAYER_UNIT_BAR, loc, xpos, ypos, surf, top);
-	drawing_buffer_add(LAYER_UNIT_BAR, loc, xpos, ypos + top.h, surf, bot);
+	drawing_buffer_add(tdrawing_layer::LAYER_UNIT_BAR, loc, xpos, ypos, surf, top);
+	drawing_buffer_add(tdrawing_layer::LAYER_UNIT_BAR, loc, xpos, ypos + top.h, surf, bot);
 
 	size_t unfilled = static_cast<size_t>(height * (1.0 - filled));
 
@@ -454,7 +454,7 @@ void display::draw_bar(const std::string& image, int xpos, int ypos,
 		surface filled_surf = create_compatible_surface(bar_surf, bar_loc.w, height - unfilled);
 		SDL_Rect filled_area = create_rect(0, 0, bar_loc.w, height-unfilled);
 		sdl_fill_rect(filled_surf,&filled_area,SDL_MapRGBA(bar_surf->format,col.r,col.g,col.b, r_alpha));
-		drawing_buffer_add(LAYER_UNIT_BAR, loc, xpos + bar_loc.x, ypos + bar_loc.y + unfilled, filled_surf);
+		drawing_buffer_add(tdrawing_layer::LAYER_UNIT_BAR, loc, xpos + bar_loc.x, ypos + bar_loc.y + unfilled, filled_surf);
 	}
 }
 
@@ -1159,7 +1159,7 @@ void display::drawing_buffer_add(const tdrawing_layer layer,
 // public into the definition of tdrawing_layer
 //
 // The drawing is done per layer_group, the range per group is [low, high).
-const display::tdrawing_layer display::drawing_buffer_key::layer_groups[] = {
+const tdrawing_layer drawing_buffer_key::layer_groups[] = {
 	LAYER_TERRAIN_BG,
 	LAYER_UNIT_FIRST,
 	LAYER_UNIT_MOVE_DEFAULT,
@@ -1169,58 +1169,8 @@ const display::tdrawing_layer display::drawing_buffer_key::layer_groups[] = {
 };
 
 // no need to change this if layer_groups above is changed
-const unsigned int display::drawing_buffer_key::max_layer_group = sizeof(display::drawing_buffer_key::layer_groups) / sizeof(display::tdrawing_layer) - 2;
-
-enum {
-	// you may adjust the following when needed:
-
-	// maximum border. 3 should be safe even if a larger border is in use somewhere
-	MAX_BORDER           = 3,
-
-	// store x, y, and layer in one 32 bit integer
-	// 4 most significant bits == layer group   => 16
-	BITS_FOR_LAYER_GROUP = 4,
-
-	// 10 second most significant bits == y     => 1024
-	BITS_FOR_Y           = 10,
-
-	// 1 third most significant bit == x parity => 2
-	BITS_FOR_X_PARITY    = 1,
-
-	// 8 fourth most significant bits == layer   => 256
-	BITS_FOR_LAYER       = 8,
-
-	// 9 least significant bits == x / 2        => 512 (really 1024 for x)
-	BITS_FOR_X_OVER_2    = 9
-};
-
-inline display::drawing_buffer_key::drawing_buffer_key(const map_location &loc, tdrawing_layer layer)
-	: key_(0)
-{
-	// max_layer_group + 1 is the last valid entry in layer_groups, but it is always > layer
-	// thus the first --g is a given => start with max_layer_groups right away
-	unsigned int g = max_layer_group;
-	while (layer < layer_groups[g]) {
-		--g;
-	}
-
-	enum {
-		SHIFT_LAYER          = BITS_FOR_X_OVER_2,
-		SHIFT_X_PARITY       = BITS_FOR_LAYER + SHIFT_LAYER,
-		SHIFT_Y              = BITS_FOR_X_PARITY + SHIFT_X_PARITY,
-		SHIFT_LAYER_GROUP    = BITS_FOR_Y + SHIFT_Y
-	};
-	BOOST_STATIC_ASSERT(SHIFT_LAYER_GROUP + BITS_FOR_LAYER_GROUP == sizeof(key_) * 8);
-
-	// the parity of x must be more significant than the layer but less significant than y.
-	// Thus basically every row is split in two: First the row containing all the odd x
-	// then the row containing all the even x. Since thus the least significant bit of x is
-	// not required for x ordering anymore it can be shifted out to the right.
-	const unsigned int x_parity = static_cast<unsigned int>(loc.x) & 1;
-	key_  = (g << SHIFT_LAYER_GROUP) | (static_cast<unsigned int>(loc.y + MAX_BORDER) << SHIFT_Y);
-	key_ |= (x_parity << SHIFT_X_PARITY);
-	key_ |= (static_cast<unsigned int>(layer) << SHIFT_LAYER) | static_cast<unsigned int>(loc.x + MAX_BORDER) / 2;
-}
+const unsigned int drawing_buffer_key::max_layer_group =
+    sizeof(drawing_buffer_key::layer_groups) / sizeof(tdrawing_layer) - 2;
 
 void display::drawing_buffer_commit()
 {
@@ -1304,7 +1254,8 @@ void display::flip()
 	events::raise_volatile_draw_event();
 	cursor::draw(frameBuffer);
 
-	video().flip();
+	///@todo FIXME
+	//video().flip();
 
 	cursor::undraw(frameBuffer);
 	events::raise_volatile_undraw_event();
@@ -1492,7 +1443,7 @@ void display::draw_text_in_hex(const map_location& loc,
 	drawing_buffer_add(layer, loc, x, y, text_surf);
 }
 
-void display::render_image(int x, int y, const display::tdrawing_layer drawing_layer,
+void display::render_image(int x, int y, const tdrawing_layer drawing_layer,
 		const map_location& loc, surface image,
 		bool hreverse, bool greyscale, fixed_t alpha,
 		Uint32 blendto, double blend_ratio, double submerged, bool vreverse)
@@ -2349,7 +2300,7 @@ double display::turbo_speed() const
 		res = !res;
 	}
 
-	res |= screen_.faked();
+//	res |= screen_.faked();
 	if (res)
 		return turbo_speed_;
 	else
@@ -2539,7 +2490,7 @@ void display::draw_hex(const map_location& loc) {
 				image::get_image(grid_bottom, image::TOD_COLORED));
 		}
 		// village-control flags.
-		drawing_buffer_add(LAYER_TERRAIN_BG, loc, xpos, ypos, get_flag(loc));
+		drawing_buffer_add(tdrawing_layer::LAYER_TERRAIN_BG, loc, xpos, ypos, get_flag(loc));
 	}
 
 	if(!shrouded(loc)) {
@@ -2550,7 +2501,7 @@ void display::draw_hex(const map_location& loc) {
 					overlays.first->second.team_name.find((*teams_)[playing_team()].team_name()) != std::string::npos)
 					&& !(fogged(loc) && !overlays.first->second.visible_in_fog))
 			{
-				drawing_buffer_add(LAYER_TERRAIN_BG, loc, xpos, ypos,
+				drawing_buffer_add(tdrawing_layer::LAYER_TERRAIN_BG, loc, xpos, ypos,
 						image::get_image(overlays.first->second.image,image_type));
 			}
 		}
@@ -2560,17 +2511,17 @@ void display::draw_hex(const map_location& loc) {
 	// tod may differ from tod if hex is illuminated.
 	const std::string& tod_hex_mask = tod.image_mask;
 	if(tod_hex_mask1 != NULL || tod_hex_mask2 != NULL) {
-		drawing_buffer_add(LAYER_TERRAIN_FG, loc, xpos, ypos, tod_hex_mask1);
-		drawing_buffer_add(LAYER_TERRAIN_FG, loc, xpos, ypos, tod_hex_mask2);
+		drawing_buffer_add(tdrawing_layer::LAYER_TERRAIN_FG, loc, xpos, ypos, tod_hex_mask1);
+		drawing_buffer_add(tdrawing_layer::LAYER_TERRAIN_FG, loc, xpos, ypos, tod_hex_mask2);
 	} else if(!tod_hex_mask.empty()) {
-		drawing_buffer_add(LAYER_TERRAIN_FG, loc, xpos, ypos,
+		drawing_buffer_add(tdrawing_layer::LAYER_TERRAIN_FG, loc, xpos, ypos,
 			image::get_image(tod_hex_mask,image::SCALED_TO_HEX));
 	}
 
 	// Paint mouseover overlays
 	if(loc == mouseoverHex_ && (on_map || (in_editor() && get_map().on_board_with_border(loc)))
 			&& mouseover_hex_overlay_ != NULL) {
-		drawing_buffer_add(LAYER_MOUSEOVER_OVERLAY, loc, xpos, ypos, mouseover_hex_overlay_);
+		drawing_buffer_add(tdrawing_layer::LAYER_MOUSEOVER_OVERLAY, loc, xpos, ypos, mouseover_hex_overlay_);
 	}
 
 	// Paint arrows
@@ -2587,16 +2538,16 @@ void display::draw_hex(const map_location& loc) {
 		// We apply void also on off-map tiles
 		// to shroud the half-hexes too
 		const std::string& shroud_image = get_variant(shroud_images_, loc);
-		drawing_buffer_add(LAYER_FOG_SHROUD, loc, xpos, ypos,
+		drawing_buffer_add(tdrawing_layer::LAYER_FOG_SHROUD, loc, xpos, ypos,
 			image::get_image(shroud_image, image_type));
 	} else if(fogged(loc)) {
 		const std::string& fog_image = get_variant(fog_images_, loc);
-		drawing_buffer_add(LAYER_FOG_SHROUD, loc, xpos, ypos,
+		drawing_buffer_add(tdrawing_layer::LAYER_FOG_SHROUD, loc, xpos, ypos,
 			image::get_image(fog_image, image_type));
 	}
 
 	if(!shrouded(loc)) {
-		drawing_buffer_add(LAYER_FOG_SHROUD, loc, xpos, ypos, get_fog_shroud_images(loc, image_type));
+		drawing_buffer_add(tdrawing_layer::LAYER_FOG_SHROUD, loc, xpos, ypos, get_fog_shroud_images(loc, image_type));
 	}
 
 	if (on_map) {
@@ -2613,8 +2564,8 @@ void display::draw_hex(const map_location& loc) {
 			} else {
 				off_y -= text->h / 2;
 			}
-			drawing_buffer_add(LAYER_FOG_SHROUD, loc, off_x, off_y, bg);
-			drawing_buffer_add(LAYER_FOG_SHROUD, loc, off_x, off_y, text);
+			drawing_buffer_add(tdrawing_layer::LAYER_FOG_SHROUD, loc, off_x, off_y, bg);
+			drawing_buffer_add(tdrawing_layer::LAYER_FOG_SHROUD, loc, off_x, off_y, text);
 		}
 		if (draw_terrain_codes_ && (game_config::debug || !shrouded(loc))) {
 			int off_x = xpos + hex_size()/2;
@@ -2627,13 +2578,13 @@ void display::draw_hex(const map_location& loc) {
 			if (!draw_coordinates_) {
 				off_y -= text->h / 2;
 			}
-			drawing_buffer_add(LAYER_FOG_SHROUD, loc, off_x, off_y, bg);
-			drawing_buffer_add(LAYER_FOG_SHROUD, loc, off_x, off_y, text);
+			drawing_buffer_add(tdrawing_layer::LAYER_FOG_SHROUD, loc, off_x, off_y, bg);
+			drawing_buffer_add(tdrawing_layer::LAYER_FOG_SHROUD, loc, off_x, off_y, text);
 		}
 	}
 
 	if(debug_foreground) {
-		drawing_buffer_add(LAYER_UNIT_DEFAULT, loc, xpos, ypos,
+		drawing_buffer_add(tdrawing_layer::LAYER_UNIT_DEFAULT, loc, xpos, ypos,
 			image::get_image("terrain/foreground.png", image_type));
 	}
 

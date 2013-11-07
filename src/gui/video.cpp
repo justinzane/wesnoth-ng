@@ -33,7 +33,9 @@
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_video.h>
 
 #include <stddef.h>
 
@@ -52,14 +54,6 @@ static lg::log_domain log_display("display");
 namespace {
 bool fullScreen = false;
 int disallow_resize = 0;
-}
-
-void resize_monitor::process(events::pump_info &info) {
-    if (info.resize_dimensions.first  >= preferences::min_allowed_width() &&
-        info.resize_dimensions.second >= preferences::min_allowed_height() &&
-        disallow_resize == 0) {
-        preferences::set_resolution(info.resize_dimensions);
-    }
 }
 
 namespace {
@@ -198,74 +192,62 @@ static void clear_updates() {
     update_rects.clear();
 }
 
-namespace {
-
-surface frameBuffer = NULL;
-bool fake_interactive = false;
-}
+//namespace {
+//surface ui_surface_ = NULL;
+//bool fake_interactive = false;
+//}
 
 bool non_interactive() {
-    if (fake_interactive) return false;
-    return SDL_GetVideoSurface() == NULL;
+    return false;
+    /// @todo FIXME
+//    if (fake_interactive) return false;
+//    return SDL_GetVideoSurface() == NULL;
 }
 
 surface display_format_alpha(surface surf) {
-    if (SDL_GetVideoSurface() != NULL)
-        return SDL_DisplayFormatAlpha(surf);
-    else if (frameBuffer != NULL)
-        return SDL_ConvertSurface(surf, frameBuffer->format, 0);
-    else
-        return NULL;
-}
-
-surface get_video_surface() {
-    return frameBuffer;
-}
-
-SDL_Rect screen_area() {
-    return create_rect(0, 0, frameBuffer->w, frameBuffer->h);
-}
-
-void update_rect(size_t x, size_t y, size_t w, size_t h) {
-    update_rect(create_rect(x, y, w, h));
+    return surf;
+    /// @todo FIXME
+//    if (SDL_GetVideoSurface() != NULL)
+//        return SDL_DisplayFormatAlpha(surf);
+//    else if (ui_surface_ != NULL)
+//        return SDL_ConvertSurface(surf, ui_surface_->format, 0);
+//    else
+//        return NULL;
 }
 
 void update_rect(const SDL_Rect& rect_value) {
-    if (update_all) return;
+    if (update_all) { return; }
 
     SDL_Rect rect = rect_value;
 
-    surface const fb = SDL_GetVideoSurface();
-    if (fb != NULL) {
-        if (rect.x < 0) {
-            if (rect.x * -1 >= int(rect.w)) return;
+    if (rect.x < 0) {
+        if (rect.x * -1 >= int(rect.w)) return;
 
-            rect.w += rect.x;
-            rect.x = 0;
-        }
+        rect.w += rect.x;
+        rect.x = 0;
+    }
 
-        if (rect.y < 0) {
-            if (rect.y * -1 >= int(rect.h)) return;
+    if (rect.y < 0) {
+        if (rect.y * -1 >= int(rect.h)) return;
 
-            rect.h += rect.y;
-            rect.y = 0;
-        }
+        rect.h += rect.y;
+        rect.y = 0;
+    }
 
-        if (rect.x + rect.w > fb->w) {
-            rect.w = fb->w - rect.x;
-        }
+    if (rect.x + rect.w > ui_window::ui_surface_->w) {
+        rect.w = ui_window::ui_surface_->w - rect.x;
+    }
 
-        if (rect.y + rect.h > fb->h) {
-            rect.h = fb->h - rect.y;
-        }
+    if (rect.y + rect.h > ui_window::ui_surface_->h) {
+        rect.h = ui_window::ui_surface_->h - rect.y;
+    }
 
-        if (rect.x >= fb->w) {
-            return;
-        }
+    if (rect.x >= ui_window::ui_surface_->w) {
+        return;
+    }
 
-        if (rect.y >= fb->h) {
-            return;
-        }
+    if (rect.y >= ui_window::ui_surface_->h) {
+        return;
     }
 
     update_rects.push_back(rect);
@@ -279,10 +261,22 @@ ui_window::ui_window() :
     help_string_(0),
     updates_locked_(false),
     resizes_locked_(false) {
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) < 0) {
+    if (SDL_CreateWindowAndRenderer(800,    /// @todo get me from preferences
+                                    600,    /// @todo get me from preferences
+                                    (SDL_WINDOW_MAXIMIZED &
+                                     SDL_WINDOW_ALLOW_HIGHDPI &
+                                     SDL_WINDOW_RESIZABLE), /// @todo get me from preferences
+                                    &ui_window_,
+                                    &ui_renderer_) == -1) {
         ERR_DP<< "Could not initialize SDL_video: " << SDL_GetError() << "\n";
-        throw std::logic_error("Could not initialize SDL_video.");
+        throw std::logic_error("Could not initialize SDL_Window.");
     }
+    ui_surface_ = SDL_GetWindowSurface(ui_window_);
+    ui_texture_ = SDL_CreateTexture(ui_renderer_,
+                                    SDL_PIXELFORMAT_ARGB8888,
+                                    SDL_TEXTUREACCESS_STREAMING,
+                                    ui_surface_->w,
+                                    ui_surface_->h);
 }
 
 ui_window::~ui_window() {
@@ -299,18 +293,14 @@ void ui_window::blit_surface(int x, int y, surface surf, SDL_Rect* srcrect, SDL_
     sdl_blit(surf, srcrect, target, &dst);
 }
 
-int ui_window::getx() const {
-    return frameBuffer->w;
-}
-
-int ui_window::gety() const {
-    return frameBuffer->h;
+bool ui_window::isFullScreen() const {
+    return (SDL_GetWindowFlags(ui_window_) && SDL_WINDOW_FULLSCREEN);
 }
 
 void ui_window::flip() {
 //    if (update_all) {
 //        /// @todo need to change to textures
-//        //::SDL_Flip(frameBuffer);
+//        //::SDL_Flip(ui_surface_);
 ////	    SDL_UpdateTexture(sdlTexture, NULL, screen->pixels, screen->pitch);
 ////	    SDL_RenderClear(sdlRenderer);
 ////	    SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
@@ -318,15 +308,19 @@ void ui_window::flip() {
 //    } else if (update_rects.empty() == false) {
 //        calc_rects();
 //        if ( !update_rects.empty()) {
-//            SDL_UpdateRects(frameBuffer, update_rects.size(), &update_rects[0]);
+//            SDL_UpdateRects(ui_surface_, update_rects.size(), &update_rects[0]);
 //        }
 //    }
 //
 //    clear_updates();
 }
 
-surface& ui_window::getSurface() {
-    return frameBuffer;
+surface ui_window::getSurface() {
+    return surface(ui_surface_);
+}
+
+surface ui_window::get_surface() {
+    return surface(ui_surface_);
 }
 
 /// @todo reenable and fix these once SDL2 basically works.
@@ -371,3 +365,11 @@ surface& ui_window::getSurface() {
 //void ui_window::clear_all_help_strings() {
 //    clear_help_string(help_string_);
 //}
+
+void resize_monitor::process(events::pump_info &info) {
+    if (info.resize_dimensions.first  >= preferences::min_allowed_width() &&
+        info.resize_dimensions.second >= preferences::min_allowed_height() &&
+        disallow_resize == 0) {
+        preferences::set_resolution(info.resize_dimensions);
+    }
+}

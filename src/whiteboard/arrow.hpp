@@ -21,6 +21,7 @@
 #define ARROW_HPP_INCLUDED
 
 #include "../gui/display.hpp"
+#include "../gui/tdrawing_layer.hpp"
 
 typedef std::vector<map_location> arrow_path_t;
 
@@ -89,7 +90,7 @@ protected:
 	 */
 	virtual void update_symbols();
 
-	display::tdrawing_layer layer_;
+	tdrawing_layer layer_;
 
 	std::string color_;
 	/// represents the subdirectory that holds images for this arrow style

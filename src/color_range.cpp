@@ -21,11 +21,22 @@
 #include "color_range.hpp"
 
 #include "game_config.hpp"
-#include "board/map.hpp"
-#include "serialization/string_utils.hpp"
 #include "util.hpp"
 
+#include "board/map.hpp"
+#include "serialization/string_utils.hpp"
+
+#include <SDL2/SDL_stdinc.h>
+
+#include <cassert>
 #include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 std::map<Uint32, Uint32> recolor_range(const color_range& new_range,
                                        const std::vector<Uint32>& old_rgb) {

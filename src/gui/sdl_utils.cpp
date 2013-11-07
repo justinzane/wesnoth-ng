@@ -17,25 +17,33 @@
  *  Support-routines for the SDL-graphics-library.
  */
 
-#include "global.hpp"
+#include "sdl_utils.hpp"
 
-#include "gui/sdl_utils.hpp"
-#include "gui/video.hpp"
+#include "video.hpp"
 
-#include "floating_point_emulation.hpp"
-#include "neon.hpp"
+//#include "floating_point_emulation.hpp"
+//#include "global.hpp"
+//#include "neon.hpp"
 
-#include <opencv2/opencv.hpp>
+//#include <boost/math/constants/constants.hpp>
+//#include <math.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/types_c.h>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <boost/math/constants/constants.hpp>
-#include <math.h>
-#include <stdint.h>
+//#include <opencv2/opencv.hpp>
+//#include <stdint.h>
+#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_surface.h>
+
 #include <algorithm>
 #include <cassert>
+#include <cstdbool>
 #include <cstring>
 #include <iostream>
+#include <stdexcept>
+#include <utility>
 
 surface_lock::surface_lock(surface &surf) :
     surface_(surf), locked_(false) {
@@ -57,7 +65,7 @@ const_surface_lock::~const_surface_lock() {
 
 SDL_Color get_sdl_color (const Uint32 argb) {
     SDL_Color result;
-    result.unused = (0xff000000 & argb) >> 24;
+    result.a = (0xff000000 & argb) >> 24;
     result.r      = (0x00ff0000 & argb) >> 16;
     result.g      = (0x0000ff00 & argb) >>  8;
     result.b      = (0x000000ff & argb);
@@ -72,7 +80,7 @@ SDL_Color get_sdl_color(const unsigned char r,
     result.r = r;
     result.g = g;
     result.b = b;
-    result.unused = a;
+    result.a = a;
     return result;
 }
 
@@ -84,7 +92,7 @@ SDL_Color get_sdl_color(const int r,
     result.r = (r < 0) ? 0 : ((r > 255) ? 255 : (Uint8)r);
     result.g = (g < 0) ? 0 : ((g > 255) ? 255 : (Uint8)g);
     result.b = (b < 0) ? 0 : ((b > 255) ? 255 : (Uint8)b);
-    result.unused = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
+    result.a = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
     return result;
 }
 
@@ -96,7 +104,7 @@ SDL_Color get_sdl_color(const size_t r,
     result.r = (r > 255) ? 255 : (Uint8)r;
     result.g = (g > 255) ? 255 : (Uint8)g;
     result.b = (b > 255) ? 255 : (Uint8)b;
-    result.unused = (a > 255) ? 255 : (Uint8)a;
+    result.a = (a > 255) ? 255 : (Uint8)a;
     return result;
 }
 
@@ -108,7 +116,7 @@ SDL_Color get_sdl_color(const float r,
     result.r = (r < 0) ? 0 : ((r > 255) ? 255 : (Uint8)r);
     result.g = (g < 0) ? 0 : ((g > 255) ? 255 : (Uint8)g);
     result.b = (b < 0) ? 0 : ((b > 255) ? 255 : (Uint8)b);
-    result.unused = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
+    result.a = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
     return result;
 }
 
@@ -120,7 +128,7 @@ SDL_Color get_sdl_color(const double r,
     result.r = (r < 0) ? 0 : ((r > 255) ? 255 : (Uint8)r);
     result.g = (g < 0) ? 0 : ((g > 255) ? 255 : (Uint8)g);
     result.b = (b < 0) ? 0 : ((b > 255) ? 255 : (Uint8)b);
-    result.unused = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
+    result.a = (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a);
     return result;
 }
 
@@ -230,7 +238,7 @@ surface make_neutral_surface(const surface &surf) {
 
     surface const result = SDL_ConvertSurface(surf, &get_neutral_pixel_format(), SDL_SWSURFACE);
     if (result != NULL) {
-        SDL_SetAlpha(result, SDL_SRCALPHA, SDL_ALPHA_OPAQUE);
+        SDL_SetSurfaceAlphaMod(result, 255);
     }
 
     return result;
@@ -260,7 +268,7 @@ surface create_optimized_surface(const surface &surf) {
         return surf;
     }
 
-    SDL_SetAlpha(result, SDL_SRCALPHA | SDL_RLEACCEL, SDL_ALPHA_OPAQUE);
+    SDL_SetSurfaceAlphaMod(result, 255);
 
     return result;
 }
@@ -1274,10 +1282,11 @@ surface create_compatible_surface(const surface &surf, int width, int height) {
     surface s = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, surf->format->BitsPerPixel,
                                      surf->format->Rmask, surf->format->Gmask,
                                      surf->format->Bmask, surf->format->Amask);
-    if (surf->format->palette) {
-        SDL_SetPalette(s, SDL_LOGPAL, surf->format->palette->colors, 0,
-                       surf->format->palette->ncolors);
-    }
+    /// @note We are doing away with non ARGB8888 surfaces for SDL2
+//    if (surf->format->palette) {
+//        SDL_SetPalette(s, SDL_LOGPAL, surf->format->palette->colors, 0,
+//                       surf->format->palette->ncolors);
+//    }
     return s;
 }
 
@@ -1441,7 +1450,7 @@ void fill_rect_alpha(SDL_Rect &rect, Uint32 color, Uint8 alpha, surface &target)
 
     SDL_Rect r = { 0, 0, rect.w, rect.h };
     sdl_fill_rect(tmp, &r, color);
-    SDL_SetAlpha(tmp, SDL_SRCALPHA, alpha);
+    SDL_SetSurfaceAlphaMod(tmp, alpha);
     sdl_blit(tmp, NULL, target, &rect);
 }
 
@@ -1573,7 +1582,7 @@ SDL_Color inverse(const SDL_Color& color) {
     inverse.r = 255 - color.r;
     inverse.g = 255 - color.g;
     inverse.b = 255 - color.b;
-    inverse.unused = 0;
+    inverse.a = 0;
     return inverse;
 }
 
@@ -1597,14 +1606,16 @@ void surface_restorer::restore(SDL_Rect const &dst) const {
     SDL_Rect src = dst2;
     src.x -= rect_.x;
     src.y -= rect_.y;
-    sdl_blit(surface_, &src, target_->getSurface(), &dst2);
+    /// @todo FIXME
+//    sdl_blit(surface_, &src, target_->get_surface(), &dst2);
     update_rect(dst2);
 }
 
 void surface_restorer::restore() const {
     if (surface_.null()) return;
     SDL_Rect dst = rect_;
-    sdl_blit(surface_, NULL, target_->getSurface(), &dst);
+    /// @todo FIXME
+//    sdl_blit(surface_, NULL, target_->get_surface(), &dst);
     update_rect(rect_);
 }
 
@@ -1612,7 +1623,7 @@ void surface_restorer::update() {
     if (rect_.w == 0 || rect_.h == 0)
         surface_.assign(NULL);
     else
-        surface_.assign(::get_surface_portion(target_->getSurface(), rect_));
+        surface_.assign(::get_surface_portion(target_->get_surface(), rect_));
 }
 
 void surface_restorer::cancel() {
@@ -1652,7 +1663,7 @@ void draw_centered_on_background(surface surf,
                                  surface target) {
     clip_rect_setter clip_setter(target, &rect);
 
-    Uint32 col = SDL_MapRGBA(target->format, color.r, color.g, color.b, color.unused);
+    Uint32 col = SDL_MapRGBA(target->format, color.r, color.g, color.b, color.a);
     //TODO: only draw background outside the image
     SDL_Rect r = rect;
     sdl_fill_rect(target, &r, col);

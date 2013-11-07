@@ -12,8 +12,6 @@
    See the COPYING file for more details.
 */
 
-#define GETTEXT_DOMAIN "wesnoth-lib"
-
 #include "text.hpp"
 
 #include "gettext.hpp"
@@ -28,6 +26,8 @@
 
 #include <cassert>
 #include <cstring>
+
+#define GETTEXT_DOMAIN "wesnoth-lib"
 
 namespace font {
 
@@ -170,37 +170,35 @@ bool ttext::is_truncated() const
 	return (pango_layout_is_ellipsized(layout_) != 0);
 }
 
-unsigned ttext::insert_text(const unsigned offset, const std::string& text)
-{
-	if(text.empty()) {
-		return 0;
-	}
-
-	return insert_unicode(offset, utils::string_to_wstring(text));
+unsigned ttext::insert_text(const unsigned offset, const std::string& text) {
+    /// @todo FIXME
+	return 0;
 }
 
-bool ttext::insert_unicode(const unsigned offset, const wchar_t unicode)
-{
-	return (insert_unicode(offset, std::wstring(1, unicode)) == 1);
+unsigned ttext::insert_text(const unsigned offset, const wchar_t unicode){
+    /// @todo FIXME
+    return 0;
 }
-
-unsigned ttext::insert_unicode(const unsigned offset, const std::wstring& unicode)
-{
-	assert(offset <= length_);
-
-	if(length_ == maximum_length_) {
-		return 0;
-	}
-
-	const unsigned len = length_ + unicode.size() > maximum_length_
-		? maximum_length_ - length_  : unicode.size();
-
-	std::wstring tmp = utils::string_to_wstring(text_);
-	tmp.insert(tmp.begin() + offset, unicode.begin(), unicode.begin() + len);
-
-	set_text(utils::wstring_to_string(tmp), false);
-
-	return len;
+unsigned ttext::insert_text(const unsigned offset, const std::vector<wchar_t>& unicode) {
+    /// @todo FIXME
+//    if (offset > length_) {
+//        throw std::invalid_argument("Cannot insert with offset > length of existing text.");
+//    }
+//
+//	if(length_ == maximum_length_) {
+//	    throw std::invalid_argument("Cannot insert with length of existing text == max_length.");
+//	}
+//
+//	const unsigned len = length_ + unicode.size(); > maximum_length_
+//		? maximum_length_ - length_  : unicode.size();
+//
+//	std::wstring tmp = utils::string_to_wstring(text_);
+//	tmp.insert(tmp.begin() + offset, unicode.begin(), unicode.begin() + len);
+//
+//	set_text(utils::wstring_to_string(tmp), false);
+//
+//	return len;
+    return 0;
 }
 
 gui2::tpoint ttext::get_cursor_position(

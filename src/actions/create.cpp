@@ -23,26 +23,44 @@
 #include "undo.hpp"
 #include "vision.hpp"
 
+#include "../board/map.hpp"
 #include "../config.hpp"
-#include "../gui/game_display.hpp"
 #include "../game_events/pump.hpp"
 #include "../game_preferences.hpp"
 #include "../gamestatus.hpp"
 #include "../gettext.hpp"
+#include "../gui/game_display.hpp"
 #include "../log.hpp"
-#include "../map.hpp"
 #include "../pathfind/pathfind.hpp"
 #include "../random.hpp"
 #include "../replay.hpp"
 #include "../resources.hpp"
+#include "../serialization/string_utils.hpp"
 #include "../statistics.hpp"
 #include "../team.hpp"
 #include "../unit_display.hpp"
+#include "../unit_map.hpp"
+#include "../unit_types.hpp"
+#include "../util.hpp"
 #include "../variable.hpp"
 #include "../whiteboard/manager.hpp"
 
 #include <boost/foreach.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/and.hpp>
+#include <boost/mpl/aux_/preprocessed/gcc/or.hpp>
+//#include <boost/scoped_ptr.hpp>
+#include <boost/smart_ptr/scoped_ptr.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <stddef.h>
+
+#include <cassert>
+#include <cstdbool>
+#include <iostream>
+#include <iterator>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 static lg::log_domain log_engine("engine");
 #define DBG_NG LOG_STREAM(debug, log_engine)
