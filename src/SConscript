@@ -8,39 +8,11 @@ Import("*")
 
 for env in [test_env, client_env, env]:
     env.Append(CPPDEFINES = "$EXTRA_DEFINE")
-
-#color_range.cpp should be removed, but game_config depends on it.
-#game_config has very few things that are needed elsewhere, it should be
-#removed.  Requires moving path and version at least to other files.
-
-libwesnoth_core_sources = Split("""
-    color_range.cpp
-    config.cpp
-    gettext.cpp
-    hash.cpp
-    log.cpp
-    map.cpp
-    map_location.cpp
-    md5.cpp
-    network.cpp
-    thread.cpp
-    tstring.cpp
-    util.cpp
-    version.cpp
-    serialization/binary_or_text.cpp
-    serialization/parser.cpp
-    serialization/preprocessor.cpp
-    serialization/schema_validator.cpp
-    serialization/string_utils.cpp
-    serialization/tokenizer.cpp
-    serialization/validator.cpp
-    tools/schema/tag.cpp
-    """)
-
-libwesnoth_core_sources.extend(env.Object("network_worker.cpp", EXTRA_DEFINE = env['raw_sockets'] and "NETWORK_USE_RAW_SOCKETS" or None))
-
+    
 game_config_env = env.Clone()
+
 filesystem_env = env.Clone()
+
 if env["PLATFORM"] != "win32":
     game_config_env.Append(CPPDEFINES = "WESNOTH_PATH='\"$datadir\"'")
     if env['localedirname']:
@@ -60,101 +32,81 @@ if env['default_prefs_file']:
     if not os.path.isabs(env['default_prefs_file']):
         filesystem_env.Append(CPPDEFINES = "HAS_RELATIVE_DEFPREF")
 
-libwesnoth_core_sources.extend([
-    game_config_env.Object("game_config.cpp"),
-    filesystem_env.Object("filesystem.cpp")
-    ])
 
-libwesnoth_core = [env.Library("wesnoth_core", libwesnoth_core_sources)]
+# libwesnoth_log ------------------------------------------------------------------------------
+# @note Logging library. Separated 2013-11-08, justinzane
+libwesnoth_log_sources = ["log/log.cpp",]
+libwesnoth_log = env.Library("wesnoth_log", 
+                             libwesnoth_log_sources)
 
-libwesnoth_sources = Split("""
-    arrow.cpp
-    pathfind/astarsearch.cpp
-    builder.cpp
-    clipboard.cpp
-    construct_dialog.cpp
-    cursor.cpp
-    display.cpp
-    events.cpp
-    generic_event.cpp
-    hotkeys.cpp
-    image.cpp
-    image_modifications.cpp
-    joystick.cpp
-    game_end_exceptions.cpp
-    generators/cavegen.cpp
-    generators/map_create.cpp
-    generators/mapgen.cpp
-    generators/mapgen_dialog.cpp
-    generators/yamg/ya_mapgen.cpp
-    generators/yamg/yamg_hex.cpp
-    generators/yamg/yamg_hexheap.cpp
-    generators/yamg/yamg_params.cpp
-    key.cpp
-    language.cpp
-    loadscreen.cpp
-    map_label.cpp
-    marked-up_text.cpp
-    minimap.cpp
-    pathutils.cpp
-    preferences.cpp
-    preferences_display.cpp
-    race.cpp
-    random.cpp
-    reports.cpp
-    show_dialog.cpp
-    sound.cpp
-    soundsource.cpp
-    sound_music_track.cpp
-    terrain.cpp
-    terrain_translation.cpp
-    text.cpp
-    time_of_day.cpp
-    tooltips.cpp
-    video.cpp
-    theme.cpp
-    widgets/button.cpp
-    widgets/file_menu.cpp
-    widgets/label.cpp
-    widgets/menu.cpp
-    widgets/menu_style.cpp
-    widgets/progressbar.cpp
-    widgets/scrollarea.cpp
-    widgets/scrollbar.cpp
-    widgets/slider.cpp
-    widgets/textbox.cpp
-    widgets/widget.cpp
-    wml_exception.cpp
-    """)
-libwesnoth_sources.extend([
-    client_env.Object("font.cpp", EXTRA_DEFINE = client_env['fribidi'] and "HAVE_FRIBIDI" or None),
-    ])
+# libwesnoth_net ------------------------------------------------------------------------------
+# TODO Separate network IO code into src/net/ and make library for it. 2013-11-08, justinzane
+libwesnoth_net_sources = ["net/network.cpp",]
+libwesnoth_net_sources.extend(env.Object("net/network_worker.cpp", 
+                                         EXTRA_DEFINE = env['raw_sockets'] and 
+                                         "NETWORK_USE_RAW_SOCKETS" or 
+                                         None))
+libwesnoth_net = env.Library("wesnoth_net",
+                             libwesnoth_net_sources)
 
+# libwesnoth_serdes ---------------------------------------------------------------------------
+libwesnoth_serdes_sources = ["serdes/binary_or_text.cpp", "serdes/parser.cpp", 
+                           "serdes/preprocessor.cpp", "serdes/schema_validator.cpp", 
+                           "serdes/string_utils.cpp", "serdes/tokenizer.cpp", 
+                           "serdes/validator.cpp", ]
+libwesnoth_serdes = env.Library("wesnoth_serdes", libwesnoth_serdes_sources)
+
+# libwesnoth_core -----------------------------------------------------------------------------
+libwesnoth_core_sources = ["color_range.cpp", "config.cpp", "gettext.cpp", "hash.cpp", 
+                           "map.cpp", "map_location.cpp", "md5.cpp", 
+                           "thread.cpp", "tstring.cpp", "util.cpp", "version.cpp", 
+                           "tools/schema/tag.cpp",]
+libwesnoth_core_sources.extend([game_config_env.Object("game_config.cpp"),
+                                filesystem_env.Object("filesystem.cpp")])
+libwesnoth_core = env.Library("wesnoth_core", libwesnoth_core_sources)
+
+# libwesnoth ----------------------------------------------------------------------------------
+libwesnoth_sources = ["arrow.cpp", "pathfind/astarsearch.cpp", "builder.cpp", "clipboard.cpp", 
+                      "construct_dialog.cpp", "cursor.cpp", "display.cpp", "events.cpp", 
+                      "generic_event.cpp", "hotkeys.cpp", "image.cpp", 
+                      "image_modifications.cpp", "joystick.cpp", "game_end_exceptions.cpp", 
+                      "generators/cavegen.cpp", "generators/map_create.cpp", 
+                      "generators/mapgen.cpp", "generators/mapgen_dialog.cpp", 
+                      "generators/yamg/ya_mapgen.cpp", "generators/yamg/yamg_hex.cpp", 
+                      "generators/yamg/yamg_hexheap.cpp", "generators/yamg/yamg_params.cpp", 
+                      "key.cpp", "language.cpp", "loadscreen.cpp", "map_label.cpp", 
+                      "marked-up_text.cpp", "minimap.cpp", "pathutils.cpp", "preferences.cpp", 
+                      "preferences_display.cpp", "race.cpp", "random.cpp", "reports.cpp", 
+                      "show_dialog.cpp", "sound.cpp", "soundsource.cpp", 
+                      "sound_music_track.cpp", "terrain.cpp", "terrain_translation.cpp", 
+                      "text.cpp", "time_of_day.cpp", "tooltips.cpp", "video.cpp", "theme.cpp", 
+                      "widgets/button.cpp", "widgets/file_menu.cpp", "widgets/label.cpp", 
+                      "widgets/menu.cpp", "widgets/menu_style.cpp", "widgets/progressbar.cpp", 
+                      "widgets/scrollarea.cpp", "widgets/scrollbar.cpp", "widgets/slider.cpp", 
+                      "widgets/textbox.cpp", "widgets/widget.cpp", "wml_exception.cpp",]
+libwesnoth_sources.extend([client_env.Object("font.cpp", 
+                                             EXTRA_DEFINE = client_env['fribidi'] and 
+                                             "HAVE_FRIBIDI" or 
+                                             None),])
 libwesnoth = client_env.Library("wesnoth", libwesnoth_sources)
 
-libwesnothd_sources = Split("""
-    loadscreen_empty.cpp
-    tools/dummy_video.cpp
-    """)
-libwesnothd = env.Library("wesnothd", libwesnothd_sources)
+# libwesnoth_sdl ------------------------------------------------------------------------------
+libwesnoth_sdl_sources = ["sdl_utils.cpp", "tracer.cpp",]
+libwesnoth_sdl = client_env.Library("wesnoth_sdl",  libwesnoth_sdl_sources)
 
-libcampaignd_sources = Split("""
-    addon/validation.cpp
-    """)
-libcampaignd = env.Library("campaignd", libcampaignd_sources, OBJPREFIX = "campaignd_")
-
-libwesnoth_sdl_sources = Split("""
-    sdl_utils.cpp
-    tracer.cpp
-    """)
-libwesnoth_sdl = client_env.Library("wesnoth_sdl", libwesnoth_sdl_sources)
-
-libcutter_sources = Split("""
-    tools/exploder_utils.cpp
-    tools/exploder_cutter.cpp
-    """)
+# libcutter -----------------------------------------------------------------------------------
+libcutter_sources = ["tools/exploder_utils.cpp", "tools/exploder_cutter.cpp",]
 libcutter = client_env.Library("cutter", libcutter_sources)
 
+# libwesnothd ---------------------------------------------------------------------------------
+libwesnothd_sources = ["loadscreen_empty.cpp", "tools/dummy_video.cpp",]
+libwesnothd = env.Library("wesnothd", libwesnothd_sources)
+
+# libcampaignd --------------------------------------------------------------------------------
+libcampaignd_sources = ["addon/validation.cpp",]
+libcampaignd = env.Library("campaignd", libcampaignd_sources, OBJPREFIX = "campaignd_")
+
+# wesnoth -------------------------------------------------------------------------------------
 # Used by both 'wesnoth' and 'test' targets
 wesnoth_sources = Split("""
     about.cpp
@@ -251,12 +203,12 @@ wesnoth_sources = Split("""
     filechooser.cpp
     flg_manager.cpp
     floating_textbox.cpp
-    formula.cpp
-    formula_debugger.cpp
-    formula_debugger_fwd.cpp
-    formula_function.cpp
-    formula_string_utils.cpp
-    formula_tokenizer.cpp
+    formula/formula.cpp
+    formula/formula_debugger.cpp
+    formula/formula_debugger_fwd.cpp
+    formula/formula_function.cpp
+    formula/formula_string_utils.cpp
+    formula/formula_tokenizer.cpp
     game_config_manager.cpp
     game_controller.cpp
     game_display.cpp
@@ -482,15 +434,15 @@ wesnoth_sources = Split("""
     team.cpp
     terrain_filter.cpp
     tod_manager.cpp
-    unit.cpp
-    unit_abilities.cpp
-    unit_animation.cpp
-    unit_display.cpp
-    unit_frame.cpp
-    unit_helper.cpp
-    unit_id.cpp
-    unit_map.cpp
-    unit_types.cpp
+    unit/unit.cpp
+    unit/unit_abilities.cpp
+    unit/unit_animation.cpp
+    unit/unit_display.cpp
+    unit/unit_frame.cpp
+    unit/unit_helper.cpp
+    unit/unit_id.cpp
+    unit/unit_map.cpp
+    unit/unit_types.cpp
     variable.cpp
     variant.cpp
     whiteboard/action.cpp
@@ -509,20 +461,22 @@ wesnoth_sources = Split("""
     widgets/drop_target.cpp
     widgets/scrollpane.cpp
     """)
-
 if env["PLATFORM"] == "win32":
     wesnoth_sources.append("windows_tray_notification.cpp")
+wesnoth_sources.extend(client_env.Object("game_preferences_display.cpp", 
+                                         EXTRA_DEFINE = env["PLATFORM"] != "win32" and 
+                                         "WESNOTH_PREFIX='\"$prefix\"'" or 
+                                         None))
+wesnoth_sources.extend(client_env.Object("hotkey_preferences_display.cpp", 
+                                         EXTRA_DEFINE = env["PLATFORM"] != "win32" and 
+                                         "WESNOTH_PREFIX='\"$prefix\"'" or 
+                                         None))
 
-wesnoth_sources.extend(client_env.Object("game_preferences_display.cpp", EXTRA_DEFINE = env["PLATFORM"] != "win32" and "WESNOTH_PREFIX='\"$prefix\"'" or None))
-wesnoth_sources.extend(client_env.Object("hotkey_preferences_display.cpp", EXTRA_DEFINE = env["PLATFORM"] != "win32" and "WESNOTH_PREFIX='\"$prefix\"'" or None))
-
+# libwesnoth-extras ---------------------------------------------------------------------------
 libwesnoth_extras = client_env.Library("wesnoth_extras", wesnoth_sources)
-
 libwesnoth_extras.extend(SConscript("lua/SConscript"))
 
-#
-# Target declarations
-#
+# Target declarations -------------------------------------------------------------------------
 
 def error_action(target, source, env):
     from SCons.Errors import UserError
@@ -544,64 +498,96 @@ def WesnothProgram(env, target, source, can_build, **kw):
 for env in [test_env, client_env, env]:
     env.AddMethod(WesnothProgram)
 
-wesnoth_objects = ["game.cpp", libwesnoth_extras, libwesnoth_core, libwesnoth_sdl,
-                   libwesnoth, env["wesnoth_res"]]
+wesnoth_objects = ["game.cpp", 
+                   libwesnoth_extras, 
+                   libwesnoth_log,
+                   libwesnoth_net,
+                   libwesnoth_serdes,
+                   libwesnoth_core, 
+                   libwesnoth_sdl,
+                   libwesnoth, 
+                   env["wesnoth_res"]]
 if env["host"] in ["x86_64-nacl", "i686-nacl"]:
     wesnoth_objects += [SConscript("nacl/SConscript")]
 client_env.WesnothProgram("wesnoth", wesnoth_objects, have_client_prereqs)
 
-campaignd_sources = Split("""
-    server/input_stream.cpp
-    """)
+# campaignd -----------------------------------------------------------------------------------
+campaignd_sources = ["server/input_stream.cpp",]
+if env["PLATFORM"] == "win32": 
+    env["fifodir"] = ""
+campaignd_sources.extend(env.Object("campaign_server/campaign_server.cpp", 
+                                    EXTRA_DEFINE = env['fifodir'] and 
+                                    "FIFODIR='\"$fifodir\"'" or 
+                                    None))
+env.WesnothProgram("campaignd", 
+                   campaignd_sources + [libwesnoth_log,
+                                        libwesnoth_net,
+                                        libwesnoth_serdes,
+                                        libwesnoth_core, 
+                                        libwesnothd, 
+                                        libcampaignd], 
+                   have_server_prereqs)
 
-if env["PLATFORM"] == "win32": env["fifodir"] = ""
-campaignd_sources.extend(env.Object("campaign_server/campaign_server.cpp", EXTRA_DEFINE = env['fifodir'] and "FIFODIR='\"$fifodir\"'" or None))
+# wesnothd ------------------------------------------------------------------------------------
+wesnothd_sources = ["server/ban.cpp", "server/forum_user_handler.cpp", "server/game.cpp", 
+                    "server/input_stream.cpp", "server/metrics.cpp", "server/player.cpp", 
+                    "server/player_network.cpp", "server/proxy.cpp", "server/room.cpp", 
+                    "server/room_manager.cpp", "server/sample_user_handler.cpp", 
+                    "server/simple_wml.cpp", "server/user_handler.cpp",]
+wesnothd_sources.extend(env.Object("server/server.cpp", 
+                                   EXTRA_DEFINE = env['fifodir'] and 
+                                   "FIFODIR='\"$fifodir\"'" or 
+                                   None))
+env.WesnothProgram("wesnothd", 
+                   wesnothd_sources + [libwesnoth_log,
+                                       libwesnoth_net,
+                                       libwesnoth_serdes,
+                                       libwesnoth_core, 
+                                       libwesnothd], 
+                   have_server_prereqs)
 
-env.WesnothProgram("campaignd", campaignd_sources + [libwesnoth_core, libwesnothd, libcampaignd], have_server_prereqs)
+# cutter --------------------------------------------------------------------------------------
+cutter_sources = ["tools/cutter.cpp",]
+client_env.WesnothProgram("cutter", 
+                          cutter_sources + [libcutter, 
+                                            libwesnoth_log,
+                                            libwesnoth_serdes,
+                                            libwesnoth_core, 
+                                            libwesnoth_sdl, 
+                                            libwesnothd, 
+                                            libwesnoth], 
+                          have_client_prereqs, LIBS = ["$LIBS", "png"])
 
-wesnothd_sources = Split("""
-    server/ban.cpp
-    server/forum_user_handler.cpp
-    server/game.cpp
-    server/input_stream.cpp
-    server/metrics.cpp
-    server/player.cpp
-    server/player_network.cpp
-    server/proxy.cpp
-    server/room.cpp
-    server/room_manager.cpp
-    server/sample_user_handler.cpp
-    server/simple_wml.cpp
-    server/user_handler.cpp
-    """)
-wesnothd_sources.extend(env.Object("server/server.cpp", EXTRA_DEFINE = env['fifodir'] and "FIFODIR='\"$fifodir\"'" or None))
+# exploder ------------------------------------------------------------------------------------
+exploder_sources = ["tools/exploder.cpp", "tools/exploder_composer.cpp",]
+client_env.WesnothProgram("exploder", 
+                          exploder_sources + [libcutter, 
+                                              libwesnoth_log,
+                                              libwesnoth_serdes,
+                                              libwesnoth_core, 
+                                              libwesnoth_sdl, 
+                                              libwesnothd, 
+                                              libwesnoth], 
+                          have_client_prereqs, LIBS = ["$LIBS", "png"])
 
-env.WesnothProgram("wesnothd", wesnothd_sources + [libwesnoth_core, libwesnothd], have_server_prereqs)
+# schema_gen ----------------------------------------------------------------------------------
+schema_generator_sources = ["tools/schema/schema_generator.cpp", 
+                            "tools/schema/sourceparser.cpp",
+                            "tools/schema/error_container.cpp",]
+client_env.WesnothProgram("schema_generator", 
+                          schema_generator_sources + [libwesnoth_log, 
+                                                      libwesnoth_serdes,
+                                                      libwesnoth_core, 
+                                                      libwesnothd], 
+                          have_client_prereqs)
 
-cutter_sources = Split("""
-    tools/cutter.cpp
-    """)
-client_env.WesnothProgram("cutter", cutter_sources + [libcutter, libwesnoth_core, libwesnoth_sdl, libwesnothd, libwesnoth], have_client_prereqs, LIBS = ["$LIBS", "png"])
+# test_utils ----------------------------------------------------------------------------------
+test_utils_sources = ["tests/utils/game_config_manager.cpp", 
+                      "tests/utils/fake_event_source.cpp", 
+                      "tests/utils/fake_display.cpp",]
+libtest_utils = test_env.Library("test_utils", test_utils_sources)
 
-exploder_sources = Split("""
-    tools/exploder.cpp
-    tools/exploder_composer.cpp
-    """)
-client_env.WesnothProgram("exploder", exploder_sources + [libcutter, libwesnoth_core, libwesnoth_sdl, libwesnothd, libwesnoth], have_client_prereqs, LIBS = ["$LIBS", "png"])
-
-schema_generator_sources = Split("""
-    tools/schema/schema_generator.cpp
-    tools/schema/sourceparser.cpp
-    tools/schema/error_container.cpp
-    """)
-client_env.WesnothProgram("schema_generator", schema_generator_sources + [libwesnoth_core, libwesnothd], have_client_prereqs)
-
-test_utils_sources = Split("""
-    tests/utils/game_config_manager.cpp
-    tests/utils/fake_event_source.cpp
-    tests/utils/fake_display.cpp
-    """)
-
+# wesnothd ------------------------------------------------------------------------------------
 wesmage_sources = Split("""
     wesmage/wesmage.cpp
     wesmage/exit.cpp
@@ -613,10 +599,16 @@ wesmage_sources = Split("""
     tracer.cpp
     loadscreen_empty.cpp
     """)
-client_env.WesnothProgram("wesmage", wesmage_sources + [libwesnoth_core], have_client_prereqs, OBJPREFIX = "wesmage_", LIBS = ["$LIBS", "png"])
+client_env.WesnothProgram("wesmage", 
+                          wesmage_sources + [libwesnoth_log,
+                                             libwesnoth_serdes,
+                                             libwesnoth_core], 
+                          have_client_prereqs, 
+                          OBJPREFIX = "wesmage_", 
+                          LIBS = ["$LIBS", "png"])
 
-libtest_utils = test_env.Library("test_utils", test_utils_sources)
 
+# test ----------------------------------------------------------------------------------------
 test_sources = Split("""
     tests/floating_point_emulation.cpp
     tests/main.cpp
@@ -632,7 +624,7 @@ test_sources = Split("""
     tests/test_unit_map.cpp
     tests/test_util.cpp
     tests/test_sdl_utils.cpp
-    tests/test_serialization.cpp
+    tests/test_serdes.cpp
     tests/test_version.cpp
     tests/test_whiteboard_side_actions.cpp
     tests/gui/fire_event.cpp
@@ -644,20 +636,30 @@ test_sources = Split("""
     tests/utils/play_scenario.cpp
     """)
 test_sources.extend(test_env.Object("tests/test_config_cache.cpp"))
+test = test_env.WesnothProgram("test", test_sources +  [libwesnoth_log,
+                                                        libwesnoth_extras, 
+                                                        libwesnoth_serdes,
+                                                        libwesnoth_net,
+                                                        libwesnoth_core, 
+                                                        libwesnoth_sdl, 
+                                                        libwesnoth, 
+                                                        libwesnoth_extras, 
+                                                        libtest_utils], 
+                               have_test_prereqs)
 
-test = test_env.WesnothProgram("test", test_sources +  [libwesnoth_extras, libwesnoth_core, libwesnoth_sdl, libwesnoth, libwesnoth_extras, libtest_utils], have_test_prereqs)
+# create_images -------------------------------------------------------------------------------
+create_images_sources = ["tests/create_images.cpp", "tools/dummy_video.cpp", 
+                         "tools/exploder_utils.cpp", "sdl_utils.cpp", "tracer.cpp", 
+                         "loadscreen_empty.cpp", ]
+env.WesnothProgram("create_images", 
+                   create_images_sources + [libwesnoth_log, 
+                                            libwesnoth_serdes,
+                                            libwesnoth_core], 
+                   have_server_prereqs, 
+                   OBJPREFIX = "create_images_", 
+                   LIBS = ["$LIBS", "png"])
 
-create_images_sources = Split("""
-    tests/create_images.cpp
-    tools/dummy_video.cpp
-    tools/exploder_utils.cpp
-    sdl_utils.cpp
-    tracer.cpp
-    loadscreen_empty.cpp
-""")
-
-env.WesnothProgram("create_images", create_images_sources + [libwesnoth_core], have_server_prereqs, OBJPREFIX = "create_images_", LIBS = ["$LIBS", "png"])
-
+#-----------------------------------------------------------------------------------------------
 if env.get("have_autorevision"):
     game_config_env.Append(CPPDEFINES = 'LOAD_REVISION')
 
