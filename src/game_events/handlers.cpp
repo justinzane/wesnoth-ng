@@ -22,15 +22,17 @@
 #include "handlers.hpp"
 #include "pump.hpp"
 
-#include "../formula_string_utils.hpp"
+#include "../formula/formula_string_utils.hpp"
+#include "../formula/formula_string_utils.hpp"
 #include "../gamestatus.hpp"
 #include "../hotkeys.hpp"
-#include "../log.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
 #include "../play_controller.hpp"
 #include "../reports.hpp"
 #include "../resources.hpp"
 #include "../scripting/lua.hpp"
-#include "../serialization/string_utils.hpp"
+#include "../serdes/string_utils.hpp"
 #include "../soundsource.hpp"
 
 #include <boost/foreach.hpp>

@@ -18,7 +18,8 @@
 
 #include "aspect.hpp"
 #include "../manager.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 namespace ai {
 

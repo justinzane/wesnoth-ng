@@ -30,9 +30,11 @@
 #include "game_errors.hpp"
 #include "gui/auxiliary/event/handler.hpp"
 #include "gui/widgets/helper.hpp"
-#include "network.hpp"
+#include "net/network.hpp"
+#include "net/network.hpp"
 #include "config.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 
 #include "tests/utils/fake_display.hpp"
 #include "game_display.hpp"

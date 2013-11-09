@@ -26,7 +26,8 @@ class  team;
 class  vconfig;
 
 #include "../map_location.hpp"
-#include "../unit.hpp"
+#include "../unit/unit.hpp"
+#include "../unit/unit.hpp"
 
 
 class unit_creator {

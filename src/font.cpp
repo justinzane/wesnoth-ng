@@ -21,14 +21,15 @@
 #include "filesystem.hpp"
 #include "font.hpp"
 #include "game_config.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "marked-up_text.hpp"
 #include "text.hpp"
 #include "tooltips.hpp"
 #include "video.hpp"
-#include "serialization/parser.hpp"
-#include "serialization/preprocessor.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/parser.hpp"
+#include "serdes/preprocessor.hpp"
+#include "serdes/string_utils.hpp"
 
 #include <boost/foreach.hpp>
 

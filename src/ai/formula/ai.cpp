@@ -31,8 +31,10 @@
 
 #include "../../callable_objects.hpp"
 #include "../../game_display.hpp"
-#include "../../formula_debugger.hpp"
-#include "../../log.hpp"
+#include "../../formula/formula_debugger.hpp"
+#include "../../formula/formula_debugger.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../menu_events.hpp"
 #include "../../pathfind/teleport.hpp"
 #include "../../resources.hpp"

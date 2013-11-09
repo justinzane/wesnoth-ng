@@ -22,7 +22,8 @@
 #include "../configuration.hpp"
 #include "../manager.hpp"
 #include "../composite/ai.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 namespace ai {
 

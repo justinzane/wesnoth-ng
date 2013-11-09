@@ -23,7 +23,8 @@
 #include "key.hpp"
 #include "filesystem.hpp"
 #include "savegame.hpp"
-#include "unit_types.hpp"
+#include "unit/unit_types.hpp"
+#include "unit/unit_types.hpp"
 //
 
 #include "SDL.h"

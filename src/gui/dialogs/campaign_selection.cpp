@@ -31,7 +31,7 @@
 #include "gui/widgets/tree_view_node.hpp"
 #include "gui/widgets/window.hpp"
 #include "utils/foreach.tpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 #include <boost/bind.hpp>
 

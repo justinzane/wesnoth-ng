@@ -21,7 +21,8 @@
 #define AI_DEFAULT_CONTEXTS_HPP_INCLUDED
 
 #include "../contexts.hpp"
-#include "formula_callable.hpp"
+#include "formula/formula_callable.hpp"
+#include "formula/formula_callable.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)

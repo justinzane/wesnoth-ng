@@ -12,15 +12,15 @@
    See the COPYING file for more details.
 */
 
-#include "serialization/schema_validator.hpp"
+#include "serdes/schema_validator.hpp"
 
 std::string version = "0.2.0";
 
 #include <iostream>
 
 #include "filesystem.hpp"
-#include "serialization/parser.hpp"
-#include "serialization/preprocessor.hpp"
+#include "serdes/parser.hpp"
+#include "serdes/preprocessor.hpp"
 #include "config.hpp"
 #include "config_cache.hpp"
 

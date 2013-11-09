@@ -19,7 +19,8 @@ class config;
 class replay_network_sender;
 
 #include "generic_event.hpp"
-#include "network.hpp"
+#include "net/network.hpp"
+#include "net/network.hpp"
 #include "replay.hpp"
 
 class turn_info

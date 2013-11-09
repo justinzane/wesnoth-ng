@@ -14,8 +14,9 @@
 
 #include "desktop_util.hpp"
 
-#include "log.hpp"
-#include "serialization/string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "serdes/string_utils.hpp"
 
 #if defined(_X11) || defined(__APPLE__)
 

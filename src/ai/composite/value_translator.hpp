@@ -25,7 +25,7 @@
 #include "../manager.hpp"
 #include "../../terrain_filter.hpp"
 #include "../../util.hpp"
-#include "../../serialization/string_utils.hpp"
+#include "../../serdes/string_utils.hpp"
 #include "../../resources.hpp"
 #include "../lua/unit_advancements_aspect.hpp"
 

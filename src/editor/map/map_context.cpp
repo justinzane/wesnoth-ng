@@ -21,13 +21,14 @@
 #include "gettext.hpp"
 #include "map_exception.hpp"
 #include "map_label.hpp"
-#include "serialization/binary_or_text.hpp"
-#include "serialization/parser.hpp"
+#include "serdes/binary_or_text.hpp"
+#include "serdes/parser.hpp"
 #include "team.hpp"
 #include "wml_exception.hpp"
 
 
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 
 #include <boost/regex.hpp>
 #include <boost/foreach.hpp>

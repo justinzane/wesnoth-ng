@@ -19,8 +19,9 @@
 #include "font.hpp"
 #include "gettext.hpp"
 #include "hotkeys.hpp"
-#include "log.hpp"
-#include "serialization/string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "serdes/string_utils.hpp"
 #include "theme.hpp"
 #include "wml_exception.hpp"
 

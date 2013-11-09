@@ -21,9 +21,12 @@
 #include "stage_side_formulas.hpp"
 #include "ai.hpp"
 
-#include "../../formula.hpp"
-#include "../../formula_function.hpp"
-#include "../../log.hpp"
+#include "../../formula/formula.hpp"
+#include "../../formula/formula.hpp"
+#include "../../formula/formula_function.hpp"
+#include "../../formula/formula_function.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include <boost/lexical_cast.hpp>
 
 static lg::log_domain log_ai("ai/stage/side_formulas");

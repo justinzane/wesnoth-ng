@@ -21,13 +21,15 @@
 #include "game_preferences.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/simple_item_selector.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map_label.hpp"
 #include "replay.hpp"
 #include "resources.hpp"
 #include "rng.hpp"
 #include "whiteboard/manager.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 #include "play_controller.hpp"
 
 #include <boost/foreach.hpp>

@@ -32,10 +32,12 @@
 #include "gui/dialogs/transient_message.hpp"
 #include "gui/widgets/window.hpp"
 #include "hotkeys.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "marked-up_text.hpp"
 #include "wml_separators.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 
 #include <boost/foreach.hpp>
 

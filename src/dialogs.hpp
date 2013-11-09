@@ -24,7 +24,8 @@ class unit_type;
 
 #include "map_location.hpp"
 #include "construct_dialog.hpp"
-#include "network.hpp"
+#include "net/network.hpp"
+#include "net/network.hpp"
 #include "ai/lua/unit_advancements_aspect.hpp"
 
 namespace dialogs {

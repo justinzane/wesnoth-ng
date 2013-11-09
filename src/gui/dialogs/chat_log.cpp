@@ -31,7 +31,8 @@
 
 #include "../../game_preferences.hpp"
 #include "../../gamestatus.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../resources.hpp"
 #include "../../team.hpp"
 #include "../../replay.hpp"

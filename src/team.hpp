@@ -17,7 +17,8 @@
 #include "color_range.hpp"
 #include "game_config.hpp"
 #include "savegame_config.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit.hpp"
 
 class gamemap;
 

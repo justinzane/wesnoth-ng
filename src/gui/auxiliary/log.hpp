@@ -20,7 +20,8 @@
 #ifndef GUI_AUXILIARY_LOG_HPP_INCLUDED
 #define GUI_AUXILIARY_LOG_HPP_INCLUDED
 
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 namespace gui2 {
 

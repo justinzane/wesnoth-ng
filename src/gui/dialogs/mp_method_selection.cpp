@@ -27,7 +27,8 @@
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/text_box.hpp"
 #include "gui/widgets/toggle_button.hpp"
-#include "multiplayer.hpp"
+#include "mp/multiplayer.hpp"
+#include "mp/multiplayer.hpp"
 
 namespace gui2 {
 

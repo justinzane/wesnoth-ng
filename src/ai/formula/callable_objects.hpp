@@ -18,8 +18,10 @@
 #include "../game_info.hpp"
 #include "../../actions/attack.hpp"
 #include "../../callable_objects.hpp"
-#include "../../formula.hpp"
-#include "../../formula_callable.hpp"
+#include "../../formula/formula.hpp"
+#include "../../formula/formula.hpp"
+#include "../../formula/formula_callable.hpp"
+#include "../../formula/formula_callable.hpp"
 
 namespace ai {
 	class formula_ai;

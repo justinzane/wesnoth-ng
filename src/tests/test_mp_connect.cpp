@@ -18,8 +18,10 @@
 
 #include "game_config_manager.hpp"
 #include "game_display.hpp"
-#include "multiplayer_connect.hpp"
-#include "multiplayer_ui.hpp"
+#include "mp/multiplayer_connect.hpp"
+#include "mp/multiplayer_connect.hpp"
+#include "mp/multiplayer_ui.hpp"
+#include "mp/multiplayer_ui.hpp"
 
 #include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>

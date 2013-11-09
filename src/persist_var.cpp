@@ -16,8 +16,10 @@
 
 #include "ai/manager.hpp"
 #include "gamestatus.hpp"
-#include "log.hpp"
-#include "network.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "net/network.hpp"
+#include "net/network.hpp"
 #include "persist_context.hpp"
 #include "persist_manager.hpp"
 #include "persist_var.hpp"

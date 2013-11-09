@@ -32,7 +32,8 @@
 #include "gamestatus.hpp"
 #include "gettext.hpp"
 #include "intro.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "resources.hpp"
 #include "widgets/button.hpp"
 

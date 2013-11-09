@@ -18,7 +18,8 @@
  */
 #include "manager.hpp"
 #include "testing.hpp"
-#include "../log.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
 #include "../replay.hpp"
 #include "../util.hpp"
 #include "../resources.hpp"

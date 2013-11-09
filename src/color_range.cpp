@@ -22,7 +22,7 @@
 
 #include "game_config.hpp"
 #include "map.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 
 #include <iomanip>

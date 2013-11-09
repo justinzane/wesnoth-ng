@@ -18,7 +18,8 @@
 #include "dialogs.hpp"
 #include "display.hpp"
 #include "game_preferences.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "mouse_handler_base.hpp"
 
 #include <boost/foreach.hpp>

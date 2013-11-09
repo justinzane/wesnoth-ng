@@ -21,7 +21,8 @@
 #include "engine.hpp"
 #include "stage.hpp"
 #include "../contexts.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../resources.hpp"
 #include "../../tod_manager.hpp"
 #include <map>

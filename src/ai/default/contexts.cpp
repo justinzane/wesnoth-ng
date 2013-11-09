@@ -20,7 +20,8 @@
 
 #include "contexts.hpp"
 
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../map.hpp"
 #include "../../resources.hpp"
 #include "../../team.hpp"

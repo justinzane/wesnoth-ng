@@ -20,10 +20,11 @@
 #include "global.hpp"
 
 #include "cavegen.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map.hpp"
 #include "pathfind/pathfind.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 
 #include <boost/foreach.hpp>

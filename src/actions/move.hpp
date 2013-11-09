@@ -24,7 +24,8 @@ struct map_location;
 class  replay;
 class  unit;
 
-#include "../unit_map.hpp"
+#include "../unit/unit_map.hpp"
+#include "../unit/unit_map.hpp"
 
 #include <vector>
 

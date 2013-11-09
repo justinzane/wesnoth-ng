@@ -17,10 +17,11 @@
 #include "filesystem.hpp"
 #include "gettext.hpp"
 #include "language.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "preferences.hpp"
-#include "serialization/parser.hpp"
-#include "serialization/preprocessor.hpp"
+#include "serdes/parser.hpp"
+#include "serdes/preprocessor.hpp"
 
 #include <stdexcept>
 #include <clocale>

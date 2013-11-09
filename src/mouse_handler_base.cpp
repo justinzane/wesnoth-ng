@@ -17,7 +17,8 @@
 
 #include "cursor.hpp"
 #include "display.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "preferences.hpp"
 #include "tooltips.hpp"
 

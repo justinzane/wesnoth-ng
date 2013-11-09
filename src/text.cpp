@@ -21,7 +21,7 @@
 #include "gui/auxiliary/log.hpp"
 #include "gui/lib/types/point.hpp"
 #include "font.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "tstring.hpp"
 
 #include <boost/foreach.hpp>

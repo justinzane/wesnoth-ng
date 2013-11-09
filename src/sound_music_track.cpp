@@ -17,8 +17,9 @@
 
 #include "config.hpp"
 #include "filesystem.hpp"
-#include "log.hpp"
-#include "serialization/string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 #if !defined(_WIN32) && !defined(__APPLE__)
 #include "vorbis/vorbisfile.h"

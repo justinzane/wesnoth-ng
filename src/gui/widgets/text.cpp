@@ -18,7 +18,7 @@
 
 #include "clipboard.hpp"
 #include "gui/auxiliary/log.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 #include <boost/bind.hpp>
 

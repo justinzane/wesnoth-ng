@@ -18,12 +18,14 @@
 #include "addon/validation.hpp"
 #include "cursor.hpp"
 #include "display.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/message.hpp"
-#include "log.hpp"
-#include "serialization/parser.hpp"
-#include "serialization/string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "serdes/parser.hpp"
+#include "serdes/string_utils.hpp"
 
 #include "addon/client.hpp"
 

@@ -25,7 +25,8 @@
 #include "../lua/core.hpp"
 #include "../../scripting/lua.hpp"
 
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>

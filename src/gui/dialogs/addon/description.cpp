@@ -16,7 +16,8 @@
 
 #include "gui/dialogs/addon/description.hpp"
 
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 #include "gettext.hpp"
 #include "gui/widgets/settings.hpp"
 #include "language.hpp"

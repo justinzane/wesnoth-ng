@@ -19,13 +19,15 @@
 
 #include "gettext.hpp"
 #include "image.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map.hpp"
 #include "sdl_utils.hpp"
 
 #include "team.hpp"
 #include "wml_exception.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 
 static lg::log_domain log_display("display");
 #define DBG_DP LOG_STREAM(debug, log_display)

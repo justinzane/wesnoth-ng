@@ -18,7 +18,8 @@
 #include "floating_textbox.hpp"
 #include "game_display.hpp"
 #include "game_preferences.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "resources.hpp"
 
 #include <ctime>

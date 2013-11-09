@@ -57,10 +57,11 @@ BPath be_path;
 #include "filesystem.hpp"
 #include "game_config.hpp"
 #include "game_preferences.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "loadscreen.hpp"
 #include "scoped_resource.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "version.hpp"
 
 #include <boost/foreach.hpp>

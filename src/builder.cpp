@@ -20,9 +20,10 @@
 #include "builder.hpp"
 
 #include "loadscreen.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "image.hpp"
 
 #include <boost/foreach.hpp>

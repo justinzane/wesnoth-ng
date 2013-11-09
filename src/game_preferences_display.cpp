@@ -27,7 +27,8 @@
 #include "preferences_display.hpp"
 #include "wml_separators.hpp"
 #include "widgets/slider.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 
 #include <boost/foreach.hpp>
 

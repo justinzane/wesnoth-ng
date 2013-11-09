@@ -20,7 +20,8 @@
 #include "gettext.hpp"
 #include "gui/auxiliary/event/handler.hpp"
 #include "help.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "marked-up_text.hpp"
 
 

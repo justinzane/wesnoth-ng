@@ -21,7 +21,8 @@
 #include "gui/widgets/button.hpp"
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/window.hpp"
-#include "../../formula_debugger.hpp"
+#include "../../formula/formula_debugger.hpp"
+#include "../../formula/formula_debugger.hpp"
 #include "utils/foreach.tpp"
 
 #include <boost/bind.hpp>

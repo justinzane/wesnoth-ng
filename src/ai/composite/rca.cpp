@@ -20,7 +20,8 @@
 #include "ai.hpp"
 #include "engine.hpp"
 #include "rca.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 namespace ai {
 

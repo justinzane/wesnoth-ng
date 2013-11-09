@@ -24,7 +24,8 @@
 
 #include "simple_wml.hpp"
 
-#include "../log.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
 
 static lg::log_domain log_config("config");
 #define ERR_SWML LOG_STREAM(err, log_config)

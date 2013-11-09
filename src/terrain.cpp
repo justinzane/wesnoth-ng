@@ -15,8 +15,9 @@
 #include "global.hpp"
 
 #include "gettext.hpp"
-#include "log.hpp"
-#include "serialization/string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "serdes/string_utils.hpp"
 #include "terrain.hpp"
 #include "util.hpp"
 

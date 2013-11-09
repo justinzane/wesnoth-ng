@@ -24,7 +24,8 @@
 #include "../config.hpp"
 #include "../game_display.hpp"
 #include "../game_events/pump.hpp"
-#include "../log.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
 #include "../map.hpp"
 #include "../map_label.hpp"
 #include "../map_location.hpp"
@@ -32,7 +33,8 @@
 #include "../play_controller.hpp"
 #include "../resources.hpp"
 #include "../team.hpp"
-#include "../unit.hpp"
+#include "../unit/unit.hpp"
+#include "../unit/unit.hpp"
 
 #include <boost/foreach.hpp>
 

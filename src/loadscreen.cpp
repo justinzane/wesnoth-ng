@@ -19,7 +19,8 @@
 
 #include "loadscreen.hpp"
 
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "font.hpp"
 #include "marked-up_text.hpp"
 #include "gettext.hpp"

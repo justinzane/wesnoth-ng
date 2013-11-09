@@ -13,7 +13,8 @@
 */
 
 #include "unit_advancements_aspect.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "lua/lualib.h"
 #include "lua/lauxlib.h"
 #include <string>
@@ -24,7 +25,8 @@
 
 #include "global.hpp"
 
-#include "../../unit.hpp"
+#include "../../unit/unit.hpp"
+#include "../../unit/unit.hpp"
 #include "../../map.hpp"
 
 

@@ -21,7 +21,8 @@
 #ifndef WB_TYPEDEFS_HPP_
 #define WB_TYPEDEFS_HPP_
 
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 static lg::log_domain log_whiteboard("whiteboard");
 #define ERR_WB LOG_STREAM_INDENT(err, log_whiteboard)
 #define WRN_WB LOG_STREAM_INDENT(warn, log_whiteboard)

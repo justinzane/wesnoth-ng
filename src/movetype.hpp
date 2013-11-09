@@ -15,7 +15,7 @@
 #define MOVETYPE_H_INCLUDED
 
 #include "config.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 #include <boost/shared_ptr.hpp>
 

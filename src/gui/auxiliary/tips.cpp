@@ -19,7 +19,7 @@
 #include "config.hpp"
 #include "game_preferences.hpp"
 #include "utils/foreach.tpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 namespace gui2 {
 

@@ -13,11 +13,13 @@
 
 #include "pathfind/teleport.hpp"
 
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "team.hpp"
 #include "terrain_filter.hpp"
-#include "unit.hpp"
-#include "log.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "resources.hpp"
 
 #include <boost/foreach.hpp>

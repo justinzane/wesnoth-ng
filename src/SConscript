@@ -57,10 +57,9 @@ libwesnoth_serdes_sources = ["serdes/binary_or_text.cpp", "serdes/parser.cpp",
 libwesnoth_serdes = env.Library("wesnoth_serdes", libwesnoth_serdes_sources)
 
 # libwesnoth_core -----------------------------------------------------------------------------
-libwesnoth_core_sources = ["color_range.cpp", "config.cpp", "gettext.cpp", "hash.cpp", 
-                           "map.cpp", "map_location.cpp", "md5.cpp", 
-                           "thread.cpp", "tstring.cpp", "util.cpp", "version.cpp", 
-                           "tools/schema/tag.cpp",]
+libwesnoth_core_sources = ["color_range.cpp", "config.cpp", "gettext.cpp", "map.cpp", 
+                           "map_location.cpp", "thread.cpp", "tstring.cpp", "util.cpp", 
+                           "version.cpp", "tools/schema/tag.cpp",]
 libwesnoth_core_sources.extend([game_config_env.Object("game_config.cpp"),
                                 filesystem_env.Object("filesystem.cpp")])
 libwesnoth_core = env.Library("wesnoth_core", libwesnoth_core_sources)
@@ -389,20 +388,20 @@ wesnoth_sources = Split("""
     mouse_events.cpp
     mouse_handler_base.cpp
     movetype.cpp
-    mp_depcheck.cpp
-    mp_game_settings.cpp
-    mp_game_utils.cpp
-    mp_options.cpp
-    multiplayer.cpp
-    multiplayer_configure.cpp
-    multiplayer_connect.cpp
-    multiplayer_connect_engine.cpp
-    multiplayer_create.cpp
-    multiplayer_create_engine.cpp
-    multiplayer_lobby.cpp
-    multiplayer_ui.cpp
-    multiplayer_wait.cpp
-    network_asio.cpp
+    mp/mp_depcheck.cpp
+    mp/mp_game_settings.cpp
+    mp/mp_game_utils.cpp
+    mp/mp_options.cpp
+    mp/multiplayer.cpp
+    mp/multiplayer_configure.cpp
+    mp/multiplayer_connect.cpp
+    mp/multiplayer_connect_engine.cpp
+    mp/multiplayer_create.cpp
+    mp/multiplayer_create_engine.cpp
+    mp/multiplayer_lobby.cpp
+    mp/multiplayer_ui.cpp
+    mp/multiplayer_wait.cpp
+    net/network_asio.cpp
     pathfind/pathfind.cpp
     pathfind/teleport.cpp
     persist_context.cpp
@@ -410,7 +409,7 @@ wesnoth_sources = Split("""
     persist_var.cpp
     play_controller.cpp
     playcampaign.cpp
-    playmp_controller.cpp
+    mp/playmp_controller.cpp
     playsingle_controller.cpp
     playturn.cpp
     portrait.cpp

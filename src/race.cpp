@@ -21,7 +21,8 @@
 
 #include "race.hpp"
 
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "random.hpp"
 #include "simple_rng.hpp"
 

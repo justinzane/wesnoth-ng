@@ -33,12 +33,14 @@
 #include "gui/dialogs/transient_message.hpp"
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/window.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "marked-up_text.hpp"
-#include "serialization/parser.hpp"
+#include "serdes/parser.hpp"
 #include "version.hpp"
 #include "wml_separators.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 #include "addon/client.hpp"
 
 #include <boost/foreach.hpp>

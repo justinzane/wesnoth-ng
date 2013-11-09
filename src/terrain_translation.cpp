@@ -21,9 +21,10 @@
 
 #include "global.hpp"
 #include "gettext.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "terrain_translation.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 #include "wml_exception.hpp"
 

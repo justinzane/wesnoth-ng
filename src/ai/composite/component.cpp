@@ -21,7 +21,8 @@
 #include "engine.hpp"
 #include "property_handler.hpp"
 #include "../../config.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 #include "../formula/ai.hpp"
 

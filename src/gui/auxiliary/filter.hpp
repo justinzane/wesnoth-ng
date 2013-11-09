@@ -23,7 +23,7 @@
 #include "gui/widgets/text_box.hpp"
 #include "map_utils.hpp"
 #include "util.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 namespace gui2 {
 

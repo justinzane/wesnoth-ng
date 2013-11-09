@@ -14,9 +14,9 @@
 
 #include "exploder_cutter.hpp"
 #include "filesystem.hpp"
-#include "serialization/parser.hpp"
-#include "serialization/preprocessor.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/parser.hpp"
+#include "serdes/preprocessor.hpp"
+#include "serdes/string_utils.hpp"
 #include "SDL_image.h"
 
 #include <boost/foreach.hpp>

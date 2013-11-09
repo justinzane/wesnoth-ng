@@ -15,7 +15,8 @@
 #ifndef PERSIST_CONTEXT_H_INCLUDED
 #define PERSIST_CONTEXT_H_INCLUDED
 #include "config.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 static lg::log_domain log_persist("engine/persistence");
 
 #define LOG_PERSIST LOG_STREAM(info, log_persist)

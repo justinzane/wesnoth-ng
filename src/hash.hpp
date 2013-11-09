@@ -1,31 +1,60 @@
 /*
-   Copyright (C) 2008 - 2013 by Thomas Baumhauer <thomas.baumhauer@NOSPAMgmail.com>
-   Part of the Battle for Wesnoth Project http://www.wesnoth.org/
+ Copyright (C) 2008 - 2013 by Thomas Baumhauer <thomas.baumhauer@NOSPAMgmail.com>
+ Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY.
 
-   See the COPYING file for more details.
-*/
+ See the COPYING file for more details.
+ */
 
 #ifndef HASH_HPP_INCLUDED
 #define HASH_HPP_INCLUDED
 
+#include <gcrypt.h>
+#include <stdlib.h>
+#include <time.h>
 #include <string>
+
+/** @def GCRYPT_NO_DEPRECATED
+ *  @link http://www.gnupg.org/documentation/manuals/gcrypt/Header.html#Header */
+#ifndef GCRYPT_NO_DEPRECATED
+#define GCRYPT_NO_DEPRECATED
+#endif
 
 namespace util {
 
-unsigned char* md5(const std::string& input);
-int get_iteration_count(const std::string& hash);
-std::string get_salt(const std::string& hash);
-bool is_valid_hash(const std::string& hash);
-std::string encode_hash(unsigned char* input);
-std::string create_hash(const std::string& password, const std::string& salt, int iteration_count =10);
+/**
+ * Creates a random 16 byte salt.
+ * @return salt as a string
+ * @todo Use a better rng. 2013-11-08 justinzane
+ */
+inline std::string get_salt() {
+    srand(time(NULL));
+    char rnd_c[16];
+    for (int i = 0; i < 16; i++) {
+        rnd_c[i] = (rand() % 10);
+    }
+    return (std::string)rnd_c;
+}
 
-} // namespace util
+/**
+ * @brief Returns the hash digest for a string as a string.
+ * @note Currently using SHA1 as hash function.
+ */
+inline std::string get_hash(const std::string& text) {
+    std::string digest;
+    gcry_md_hash_buffer(GCRY_MD_SHA1,
+                        static_cast<void*>(&digest),
+                        static_cast<const void*>(&text),
+                        text.length());
+    return digest;
+};
+
+}  // namespace util
 
 #endif // HASH_HPP_INCLUDED

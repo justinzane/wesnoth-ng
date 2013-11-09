@@ -31,7 +31,7 @@
 #include "gui/widgets/toggle_button.hpp"
 #include "gui/widgets/window.hpp"
 #include "utils/foreach.tpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 #include <boost/bind.hpp>
 

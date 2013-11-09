@@ -15,7 +15,8 @@
 
 #include "../action/action_base.hpp"
 #include "editor_map.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 
 #include "../../display.hpp"
 #include "../../filesystem.hpp"

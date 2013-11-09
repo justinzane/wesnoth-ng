@@ -16,7 +16,8 @@
 
 #include <vector>
 
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "thread.hpp"
 
 

@@ -18,11 +18,12 @@
 #include "color_range.hpp"
 #include "config.hpp"
 #include "gettext.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "util.hpp"
 #include "version.hpp"
 #include "wesconfig.h"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #ifdef LOAD_REVISION
 #include "revision.h"
 #endif

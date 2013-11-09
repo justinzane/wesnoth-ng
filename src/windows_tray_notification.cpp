@@ -17,7 +17,7 @@
 #include <SDL_syswm.h>
 
 #include "gettext.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 NOTIFYICONDATA* windows_tray_notification::nid = NULL;
 bool windows_tray_notification::message_reset = false;

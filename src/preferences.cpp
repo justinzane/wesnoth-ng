@@ -24,11 +24,12 @@
 #include "config.hpp"
 #include "filesystem.hpp"
 #include "hotkeys.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "preferences.hpp"
 #include "sound.hpp"
 #include "video.hpp" // non_interactive()
-#include "serialization/parser.hpp"
+#include "serdes/parser.hpp"
 #include "util.hpp"
 
 #include <sys/stat.h> // for setting the permissions of the preferences file

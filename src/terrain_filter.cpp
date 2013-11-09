@@ -17,7 +17,8 @@
 #include "global.hpp"
 
 #include "config.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map.hpp"
 #include "resources.hpp"
 #include "side_filter.hpp"

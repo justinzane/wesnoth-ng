@@ -23,11 +23,13 @@
 
 #include "map.hpp"
 
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 #include "gettext.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map_exception.hpp"
-#include "serialization/parser.hpp"
+#include "serdes/parser.hpp"
 #include "util.hpp"
 #include "wml_exception.hpp"
 

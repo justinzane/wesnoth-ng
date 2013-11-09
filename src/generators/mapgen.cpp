@@ -21,7 +21,8 @@
 
 #include "gettext.hpp"
 #include "language.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map.hpp"
 #include "mapgen.hpp"
 #include "pathfind/pathfind.hpp"
@@ -29,7 +30,8 @@
 #include "race.hpp"
 #include "util.hpp"
 #include "wml_exception.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 #include "SDL.h"
 
 #include <boost/foreach.hpp>

@@ -19,12 +19,13 @@
 #include "gettext.hpp"
 #include "game_config.hpp"
 #include "game_display.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "marked-up_text.hpp"
 #include "show_dialog.hpp"
 #include "sha1.hpp"
-#include "serialization/binary_or_text.hpp"
-#include "serialization/parser.hpp"
+#include "serdes/binary_or_text.hpp"
+#include "serdes/parser.hpp"
 #include "version.hpp"
 
 #include <boost/foreach.hpp>

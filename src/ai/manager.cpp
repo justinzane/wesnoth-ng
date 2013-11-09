@@ -25,8 +25,9 @@
 #include "formula/ai.hpp"
 #include "registry.hpp"
 #include "../game_events/pump.hpp"
-#include "../log.hpp"
-#include "../serialization/string_utils.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
+#include "../serdes/string_utils.hpp"
 #include "composite/component.hpp"
 
 #include <boost/foreach.hpp>

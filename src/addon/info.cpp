@@ -18,8 +18,9 @@
 #include "game_config.hpp"
 #include "gettext.hpp"
 #include "image.hpp"
-#include "log.hpp"
-#include "serialization/string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "serdes/string_utils.hpp"
 
 #include <boost/foreach.hpp>
 

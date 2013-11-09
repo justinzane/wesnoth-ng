@@ -25,16 +25,19 @@
 #include "../../attack_prediction.hpp"
 #include "../../filesystem.hpp"
 #include "../../game_display.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../map_label.hpp"
 #include "../../menu_events.hpp"
 #include "../../pathfind/teleport.hpp"
 #include "../../replay.hpp"
 #include "../../resources.hpp"
 #include "../../terrain_filter.hpp"
-#include "../../unit.hpp"
+#include "../../unit/unit.hpp"
+#include "../../unit/unit.hpp"
 #include "../../pathfind/pathfind.hpp"
-#include "../../unit_types.hpp"
+#include "../../unit/unit_types.hpp"
+#include "../../unit/unit_types.hpp"
 
 #include <boost/foreach.hpp>
 

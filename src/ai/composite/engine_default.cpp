@@ -23,7 +23,8 @@
 #include "engine_default.hpp"
 #include "rca.hpp"
 #include "stage.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 namespace ai {
 

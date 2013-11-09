@@ -21,12 +21,14 @@
 
 #include "../manager.hpp"
 #include "../../actions/attack.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../map.hpp"
 #include "../../team.hpp"
 #include "../../tod_manager.hpp"
 #include "../../resources.hpp"
-#include "../../unit.hpp"
+#include "../../unit/unit.hpp"
+#include "../../unit/unit.hpp"
 #include "../../pathfind/pathfind.hpp"
 
 namespace ai {

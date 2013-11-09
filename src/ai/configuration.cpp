@@ -21,9 +21,10 @@
 #include "configuration.hpp"
 
 #include "../filesystem.hpp"
-#include "../log.hpp"
-#include "../serialization/parser.hpp"
-#include "../serialization/preprocessor.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
+#include "../serdes/parser.hpp"
+#include "../serdes/preprocessor.hpp"
 #include "../team.hpp"
 #include "wml_exception.hpp"
 

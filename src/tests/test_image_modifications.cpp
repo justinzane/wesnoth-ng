@@ -23,7 +23,8 @@
 #include "color_range.hpp"
 #include "image.hpp"
 #include "image_modifications.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "filesystem.hpp"
 
 using namespace image;

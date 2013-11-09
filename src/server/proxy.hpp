@@ -15,7 +15,8 @@
 #ifndef PROXY_HPP_INCLUDED
 #define PROXY_HPP_INCLUDED
 
-#include "network.hpp"
+#include "net/network.hpp"
+#include "net/network.hpp"
 #include "simple_wml.hpp"
 
 #include <string>

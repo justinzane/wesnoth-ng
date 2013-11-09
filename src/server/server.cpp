@@ -23,14 +23,17 @@
 
 #include "../config.hpp"
 #include "../game_config.hpp"
-#include "../log.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
 #include "../map.hpp" // gamemap::MAX_PLAYERS
-#include "../network.hpp"
+#include "../net/network.hpp"
+#include "../net/network.hpp"
 #include "../filesystem.hpp"
-#include "../multiplayer_error_codes.hpp"
-#include "../serialization/parser.hpp"
-#include "../serialization/preprocessor.hpp"
-#include "../serialization/string_utils.hpp"
+#include "../mp/multiplayer_error_codes.hpp"
+#include "../mp/multiplayer_error_codes.hpp"
+#include "../serdes/parser.hpp"
+#include "../serdes/preprocessor.hpp"
+#include "../serdes/string_utils.hpp"
 #include "../util.hpp"
 
 #include "game.hpp"

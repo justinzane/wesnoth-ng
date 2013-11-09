@@ -26,14 +26,17 @@
 
 #include "../gamestate_observer.hpp"
 
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../resources.hpp"
 #include "../lua/core.hpp"
 #include "../lua/lua_object.hpp"
 #include "../../scripting/lua.hpp"
 #include "../../util.hpp"
-#include "../../unit.hpp"
-#include "../../unit_map.hpp"
+#include "../../unit/unit.hpp"
+#include "../../unit/unit.hpp"
+#include "../../unit/unit_map.hpp"
+#include "../../unit/unit_map.hpp"
 
 
 namespace ai {

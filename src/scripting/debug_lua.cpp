@@ -18,7 +18,8 @@
 
 #include "debug_lua.hpp"
 
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 
 static lg::log_domain log_scripting_lua("scripting/lua");
 #define LOG_LUA LOG_STREAM(info, log_scripting_lua)

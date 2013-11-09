@@ -19,7 +19,8 @@
 
 #include "global.hpp"
 #include "asserts.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "resources.hpp"
 #include "storyscreen/part.hpp"
 
@@ -28,7 +29,7 @@
 #include "game_events/action_wml.hpp"
 #include "game_events/conditional_wml.hpp"
 #include "image.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 #include "variable.hpp"
 #include "video.hpp"

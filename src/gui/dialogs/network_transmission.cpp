@@ -16,7 +16,8 @@
 
 #include "gui/dialogs/network_transmission.hpp"
 
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 #include "gettext.hpp"
 #include "gui/auxiliary/find_widget.tpp"
 #include "gui/widgets/button.hpp"
@@ -24,8 +25,9 @@
 #include "gui/widgets/label.hpp"
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/window.hpp"
-#include "log.hpp"
-#include "serialization/string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "serdes/string_utils.hpp"
 
 namespace gui2 {
 

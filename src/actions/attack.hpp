@@ -28,7 +28,8 @@ class  team;
 class  unit;
 class  unit_map;
 
-#include "../unit_types.hpp"
+#include "../unit/unit_types.hpp"
+#include "../unit/unit_types.hpp"
 
 #include <vector>
 

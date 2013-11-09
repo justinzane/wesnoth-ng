@@ -20,7 +20,8 @@
 
 #include "display.hpp"
 #include "gettext.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map.hpp"
 #include "marked-up_text.hpp"
 #include "show_dialog.hpp"

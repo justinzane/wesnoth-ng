@@ -21,7 +21,8 @@
 
 #include "global.hpp"
 #include "asserts.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "storyscreen/part.hpp"
 #include "storyscreen/render.hpp"
 

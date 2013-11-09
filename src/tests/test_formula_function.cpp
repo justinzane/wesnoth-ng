@@ -16,7 +16,8 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "formula_function.hpp"
+#include "formula/formula_function.hpp"
+#include "formula/formula_function.hpp"
 
 #include <cmath>
 

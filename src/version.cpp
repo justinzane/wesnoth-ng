@@ -13,7 +13,7 @@
 */
 
 #include "version.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 
 #include <cassert>

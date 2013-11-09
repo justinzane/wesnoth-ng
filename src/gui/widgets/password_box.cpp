@@ -22,7 +22,7 @@
 #include "gui/auxiliary/window_builder/password_box.hpp"
 #include "gui/widgets/detail/register.tpp"
 #include "gui/widgets/settings.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 #include <boost/bind.hpp>
 

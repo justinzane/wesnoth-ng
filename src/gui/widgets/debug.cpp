@@ -28,7 +28,7 @@
 #endif
 #include "gui/widgets/scrollbar_container.hpp"
 #include "gui/widgets/window.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 
 #include <fstream>
 #include <iostream>

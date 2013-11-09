@@ -18,7 +18,8 @@
 
 #include "gettext.hpp"
 #include "gui/widgets/settings.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 
 namespace gui2 {
 

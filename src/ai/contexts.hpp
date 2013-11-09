@@ -27,7 +27,8 @@
 #include "lua/unit_advancements_aspect.hpp"
 
 
-//#include "../unit.hpp"
+//#include "../unit/unit.hpp"
+//#include "../unit/unit.hpp"
 
 #ifdef _MSC_VER
 #pragma warning(push)

@@ -19,7 +19,8 @@
 #include "gui/auxiliary/log.hpp"
 #include "gui/widgets/settings.hpp"
 
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 
 #include "SDL_ttf.h"
 

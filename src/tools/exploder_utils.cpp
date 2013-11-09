@@ -14,7 +14,7 @@
 
 #include "exploder_utils.hpp"
 #include "game_config.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include <png.h>
 #include <zlib.h>
 

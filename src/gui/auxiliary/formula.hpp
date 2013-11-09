@@ -15,11 +15,13 @@
 #ifndef GUI_WIDGETS_FORMULA_HPP_INCLUDED
 #define GUI_WIDGETS_FORMULA_HPP_INCLUDED
 
-#include "formula_callable.hpp"
-#include "../../formula.hpp"
+#include "formula/formula_callable.hpp"
+#include "formula/formula_callable.hpp"
+#include "../../formula/formula.hpp"
+#include "../../formula/formula.hpp"
 #include "gui/auxiliary/log.hpp"
 #include "gui/widgets/helper.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 #include "tstring.hpp"
 

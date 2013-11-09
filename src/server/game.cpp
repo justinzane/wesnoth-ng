@@ -16,12 +16,13 @@
 
 #include "../filesystem.hpp"
 #include "../game_config.hpp" // game_config::observer_team_name
-#include "../log.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
 #include "../map.hpp" // gamemap::MAX_PLAYERS
 
 #include "game.hpp"
 #include "player_network.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 
 #include <boost/bind.hpp>

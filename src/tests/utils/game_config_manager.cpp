@@ -25,7 +25,8 @@
 #include "hotkeys.hpp"
 #include "language.hpp"
 #include "playcampaign.hpp"
-#include "unit_types.hpp"
+#include "unit/unit_types.hpp"
+#include "unit/unit_types.hpp"
 
 #include "gui/widgets/helper.hpp"
 

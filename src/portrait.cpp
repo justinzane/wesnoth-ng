@@ -15,7 +15,8 @@
 #include "portrait.hpp"
 
 #include "config.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "util.hpp"
 #include "wml_exception.hpp"
 

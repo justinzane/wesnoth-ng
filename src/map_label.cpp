@@ -18,7 +18,8 @@
 #include "gamestatus.hpp"
 #include "map_label.hpp"
 #include "resources.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 
 #include <boost/foreach.hpp>
 

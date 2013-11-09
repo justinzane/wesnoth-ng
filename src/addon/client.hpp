@@ -18,7 +18,8 @@
 
 #include "gui/dialogs/network_transmission.hpp"
 #include <boost/noncopyable.hpp>
-#include "network_asio.hpp"
+#include "net/network_asio.hpp"
+#include "net/network_asio.hpp"
 
 struct addon_info;
 

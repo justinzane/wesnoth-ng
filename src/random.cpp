@@ -40,11 +40,13 @@
 #include "global.hpp"
 
 #include "config.hpp"
-#include "log.hpp"
-#include "network.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "net/network.hpp"
+#include "net/network.hpp"
 #include "random.hpp"
 #include "rng.hpp"
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "simple_rng.hpp"
 #include "util.hpp"
 

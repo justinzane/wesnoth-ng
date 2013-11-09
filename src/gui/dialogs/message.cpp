@@ -23,7 +23,8 @@
 #include "gui/widgets/label.hpp"
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/window.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "utils/foreach.tpp"
 
 namespace gui2 {

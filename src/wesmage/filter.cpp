@@ -14,7 +14,7 @@
 
 #include "wesmage/filter.hpp"
 
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include "wesmage/exit.hpp"
 
 #include <boost/bind.hpp>

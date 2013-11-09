@@ -22,7 +22,8 @@
 #include "../composite/ai.hpp"
 
 #include "../../game_display.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../map.hpp"
 #include "../../map_label.hpp"
 #include "../../replay.hpp"

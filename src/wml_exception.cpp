@@ -25,8 +25,10 @@
 #include "display.hpp"
 #include "gettext.hpp"
 #include "gui/dialogs/message.hpp"
-#include "formula_string_utils.hpp"
-#include "log.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 
 static lg::log_domain log_engine("engine");
 #define WRN_NG LOG_STREAM(warn, log_engine)

@@ -15,7 +15,8 @@
 #ifndef SERVER_ROOM_HPP_INCLUDED
 #define SERVER_ROOM_HPP_INCLUDED
 
-#include "../network.hpp"
+#include "../net/network.hpp"
+#include "../net/network.hpp"
 #include "player.hpp"
 #include "simple_wml.hpp"
 

@@ -16,7 +16,7 @@
 
 #include <vector>
 #include <string>
-#include "serialization/string_utils.hpp"
+#include "serdes/string_utils.hpp"
 #include <boost/test/auto_unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE( utils_join_test )

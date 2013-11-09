@@ -23,14 +23,18 @@
 #include "move.hpp"
 
 #include "../game_display.hpp"
-#include "../log.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
 #include "../play_controller.hpp"
 #include "../replay.hpp"
 #include "../resources.hpp"
 #include "../team.hpp"
-#include "../unit.hpp"
-#include "../unit_display.hpp"
-#include "../unit_map.hpp"
+#include "../unit/unit.hpp"
+#include "../unit/unit.hpp"
+#include "../unit/unit_display.hpp"
+#include "../unit/unit_display.hpp"
+#include "../unit/unit_map.hpp"
+#include "../unit/unit_map.hpp"
 #include "../whiteboard/manager.hpp"
 
 #include <boost/foreach.hpp>

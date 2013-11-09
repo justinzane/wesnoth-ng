@@ -16,7 +16,8 @@
 
 #include "addon/manager.hpp"
 #include "font.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "marked-up_text.hpp"
 
 static lg::log_domain log_addons_client("addons-client");

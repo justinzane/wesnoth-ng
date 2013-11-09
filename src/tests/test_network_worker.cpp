@@ -20,7 +20,8 @@
 #include "utils/auto_parameterized.hpp"
 #include "utils/predicate.hpp"
 
-#include "network_worker.hpp"
+#include "net/network_worker.hpp"
+#include "net/network_worker.hpp"
 #include "thread.hpp"
 #include "filesystem.hpp"
 

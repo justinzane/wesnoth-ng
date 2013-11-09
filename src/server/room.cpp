@@ -16,8 +16,9 @@
 #include "game.hpp"
 #include "player_network.hpp"
 #include "room.hpp"
-#include "../log.hpp"
-#include "serialization/string_utils.hpp"
+#include "../log/log.hpp"
+#include "../log/log.hpp"
+#include "serdes/string_utils.hpp"
 #include "util.hpp"
 
 static lg::log_domain log_server("server");

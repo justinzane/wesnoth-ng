@@ -30,14 +30,17 @@
 #include "gettext.hpp"
 #include "gui/dialogs/transient_message.hpp"
 #include "language.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map.hpp"
 #include "marked-up_text.hpp"
 #include "sound.hpp"
-#include "unit.hpp"
-#include "unit_helper.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_helper.hpp"
+#include "unit/unit_helper.hpp"
 #include "wml_separators.hpp"
-#include "serialization/parser.hpp"
+#include "serdes/parser.hpp"
 
 #include <boost/foreach.hpp>
 

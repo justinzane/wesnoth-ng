@@ -16,7 +16,8 @@
 
 #include "forum_user_handler.hpp"
 #include "../hash.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "config.hpp"
 
 #include <stdlib.h>

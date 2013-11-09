@@ -15,14 +15,18 @@
 #include "tod_manager.hpp"
 #include "wml_exception.hpp"
 #include "gettext.hpp"
-#include "formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
+#include "formula/formula_string_utils.hpp"
 #include "gamestatus.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "map.hpp"
 #include "play_controller.hpp"
 #include "resources.hpp"
-#include "unit.hpp"
-#include "unit_abilities.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit_abilities.hpp"
+#include "unit/unit_abilities.hpp"
 
 #include <boost/foreach.hpp>
 

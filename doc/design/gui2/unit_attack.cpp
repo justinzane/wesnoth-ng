@@ -6,7 +6,8 @@
 #include "gui/widgets/listbox.hpp"
 #include "gui/widgets/settings.hpp"
 #include "gui/widgets/window.hpp"
-#include "unit.hpp"
+#include "unit/unit.hpp"
+#include "unit/unit.hpp"
 
 namespace gui2 {
 

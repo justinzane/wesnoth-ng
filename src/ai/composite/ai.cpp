@@ -26,7 +26,8 @@
 #include "stage.hpp"
 #include "../manager.hpp"
 #include "../../actions/attack.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>

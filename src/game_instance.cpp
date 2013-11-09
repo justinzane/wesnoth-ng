@@ -14,7 +14,8 @@
 
 #include "game_instance.hpp"
 
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 
 #define LOG_GENERAL LOG_STREAM(info, lg::general)
 #define WRN_GENERAL LOG_STREAM(warn, lg::general)

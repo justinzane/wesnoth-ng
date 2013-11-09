@@ -17,13 +17,15 @@
 #include "global.hpp"
 
 #include "config.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "resources.hpp"
 #include "side_filter.hpp"
 #include "variable.hpp"
 #include "team.hpp"
-#include "serialization/string_utils.hpp"
-#include "network.hpp"
+#include "serdes/string_utils.hpp"
+#include "net/network.hpp"
+#include "net/network.hpp"
 
 #include <boost/foreach.hpp>
 

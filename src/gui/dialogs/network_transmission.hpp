@@ -17,7 +17,8 @@
 
 #include "gui/dialogs/dialog.hpp"
 #include "gui/widgets/control.hpp"
-#include "network_asio.hpp"
+#include "net/network_asio.hpp"
+#include "net/network_asio.hpp"
 #include <boost/optional.hpp>
 
 namespace gui2 {

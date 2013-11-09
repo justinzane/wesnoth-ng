@@ -23,7 +23,8 @@
 #include "gui/dialogs/message.hpp"
 #include "language.hpp"
 #include "loadscreen.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "resources.hpp"
 #include "scripting/lua.hpp"
 

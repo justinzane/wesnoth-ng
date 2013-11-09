@@ -25,7 +25,8 @@
 
 #include "tstring.hpp"
 #include "gettext.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include <boost/functional/hash.hpp>
 
 static lg::log_domain log_config("config");

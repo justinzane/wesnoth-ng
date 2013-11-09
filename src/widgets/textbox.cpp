@@ -18,7 +18,8 @@
 
 #include "widgets/textbox.hpp"
 #include "clipboard.hpp"
-#include "log.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
 #include "video.hpp"
 
 static lg::log_domain log_display("display");

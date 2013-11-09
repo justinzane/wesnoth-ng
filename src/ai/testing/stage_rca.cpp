@@ -24,7 +24,8 @@
 #include "../composite/engine.hpp"
 #include "../composite/property_handler.hpp"
 #include "../gamestate_observer.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>

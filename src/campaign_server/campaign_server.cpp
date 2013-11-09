@@ -20,11 +20,13 @@
  */
 
 #include "filesystem.hpp"
-#include "log.hpp"
-#include "network_worker.hpp"
-#include "serialization/binary_or_text.hpp"
-#include "serialization/parser.hpp"
-#include "serialization/string_utils.hpp"
+#include "log/log.hpp"
+#include "log/log.hpp"
+#include "net/network_worker.hpp"
+#include "net/network_worker.hpp"
+#include "serdes/binary_or_text.hpp"
+#include "serdes/parser.hpp"
+#include "serdes/string_utils.hpp"
 #include "game_config.hpp"
 #include "addon/validation.hpp"
 #include "version.hpp"

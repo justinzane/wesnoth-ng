@@ -25,7 +25,8 @@
 #include "../../actions/attack.hpp"
 #include "../../attack_prediction.hpp"
 #include "../../game_config.hpp"
-#include "../../log.hpp"
+#include "../../log/log.hpp"
+#include "../../log/log.hpp"
 #include "../../map.hpp"
 #include "../../team.hpp"
 
