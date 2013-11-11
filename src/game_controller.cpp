@@ -47,9 +47,10 @@
 #include "savegame.hpp"
 #include "scripting/lua.hpp"
 #include "statistics.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 #include "gui/dialogs/mp_host_game_prompt.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -320,7 +321,7 @@ bool game_controller::init_language()
 	language_def locale;
 	if(cmdline_opts_.language) {
 		std::vector<language_def> langs = get_languages();
-		BOOST_FOREACH(const language_def & def, langs) {
+		foreach_ng(const language_def & def, langs) {
 			if(def.localename == *cmdline_opts_.language) {
 				locale = def;
 				break;
@@ -530,7 +531,7 @@ bool game_controller::load_game()
 	}
 
 	if(state_.classification().campaign_type == "multiplayer") {
-		BOOST_FOREACH(config &side, state_.snapshot.child_range("side"))
+		foreach_ng(config &side, state_.snapshot.child_range("side"))
 		{
 			if (side["controller"] == "network")
 				side["controller"] = "human";
@@ -540,10 +541,10 @@ bool game_controller::load_game()
 	}
 
 	if (load.cancel_orders()) {
-		BOOST_FOREACH(config &side, state_.snapshot.child_range("side"))
+		foreach_ng(config &side, state_.snapshot.child_range("side"))
 		{
 			if (side["controller"] != "human") continue;
-			BOOST_FOREACH(config &unit, side.child_range("unit"))
+			foreach_ng(config &unit, side.child_range("unit"))
 			{
 				unit["goto_x"] = -999;
 				unit["goto_y"] = -999;
@@ -564,7 +565,7 @@ void game_controller::set_tutorial()
 
 void game_controller::mark_completed_campaigns(std::vector<config> &campaigns)
 {
-	BOOST_FOREACH(config &campaign, campaigns) {
+	foreach_ng(config &campaign, campaigns) {
 		campaign["completed"] = preferences::is_campaign_completed(campaign["id"]);
 	}
 }
@@ -575,7 +576,7 @@ bool game_controller::new_campaign()
 	state_.classification().campaign_type = "scenario";
 
 	std::vector<config> campaigns;
-	BOOST_FOREACH(const config& campaign,
+	foreach_ng(const config& campaign,
 		resources::config_manager->game_config().child_range("campaign")) {
 
 		if (campaign["type"] != "mp") {

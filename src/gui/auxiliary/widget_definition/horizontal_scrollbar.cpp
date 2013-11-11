@@ -17,7 +17,7 @@
 #include "gui/auxiliary/widget_definition/horizontal_scrollbar.hpp"
 
 #include "gui/auxiliary/log.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

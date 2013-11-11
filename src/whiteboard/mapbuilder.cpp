@@ -30,6 +30,7 @@
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace wb
@@ -55,13 +56,13 @@ mapbuilder::~mapbuilder()
 
 void mapbuilder::pre_build()
 {
-	BOOST_FOREACH(team& t, *resources::teams) {
+	foreach_ng(team& t, *resources::teams) {
 		//Reset spent gold to zero, it'll be recalculated during the map building
 		t.get_side_actions()->reset_gold_spent();
 	}
 
 	int current_side = resources::controller->current_side();
-	BOOST_FOREACH(unit& u, *resources::units) {
+	foreach_ng(unit& u, *resources::units) {
 		bool on_current_side = (u.side() == current_side);
 
 		//Remove any unit the current side cannot see to avoid their detection by planning
@@ -95,7 +96,7 @@ void mapbuilder::build_map()
 	bool end = false;
 	for(size_t turn=0; !end; ++turn) {
 		end = true;
-		BOOST_FOREACH(team &side, *resources::teams) {
+		foreach_ng(team &side, *resources::teams) {
 			side_actions &actions = *side.get_side_actions();
 			if(turn < actions.num_turns() && team_has_visible_plan(side)) {
 				end = false;

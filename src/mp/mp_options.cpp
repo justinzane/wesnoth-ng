@@ -22,6 +22,7 @@
 #include "gui/widgets/slider.hpp"
 #include "gui/widgets/text_box.hpp"
 #include "gui/widgets/toggle_button.hpp"
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
 

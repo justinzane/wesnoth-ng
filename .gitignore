@@ -73,3 +73,5 @@ Project.suo
 /schema_generator-ng
 /schema_validator-ng
 /wesmage-ng
+/deps
+/deps.py

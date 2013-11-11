@@ -24,6 +24,7 @@
 #include "log/log.hpp"
 #include "resources.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_arrows("arrows");
@@ -290,7 +291,7 @@ void arrow::invalidate_arrow_path(arrow_path_t const& path)
 {
 	if(!SCREEN) return;
 
-	BOOST_FOREACH(map_location const& loc, path)
+	foreach_ng(map_location const& loc, path)
 	{
 		SCREEN->invalidate(loc);
 	}

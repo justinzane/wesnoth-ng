@@ -27,6 +27,7 @@
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #define LOG_DP LOG_STREAM(info, display)
@@ -732,7 +733,7 @@ void unit_healing(unit &healed, const std::vector<unit *> &healers, int healing,
 	disp->display_unit_hex(healed_loc);
 	unit_animator animator;
 
-	BOOST_FOREACH(unit *h, healers) {
+	foreach_ng(unit *h, healers) {
 		h->set_facing(h->get_location().get_relative_dir(healed_loc));
 		animator.add_animation(h, "healing", h->get_location(),
 			healed_loc, healing);

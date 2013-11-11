@@ -25,7 +25,7 @@
 #include "gui/widgets/pane.hpp"
 #include "gui/widgets/viewport.hpp"
 #include "gui/widgets/settings.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

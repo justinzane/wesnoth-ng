@@ -40,6 +40,7 @@
 #include "../whiteboard/manager.hpp"
 #include "../variable.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <iomanip>
 #include <iostream>
@@ -163,21 +164,21 @@ namespace { // Support functions
 		unit_map::const_iterator unit2 = units->find(ev.loc2);
 		vconfig filters(handler.get_config());
 
-		BOOST_FOREACH(const vconfig &condition, filters.get_children("filter_condition"))
+		foreach_ng(const vconfig &condition, filters.get_children("filter_condition"))
 		{
 			if (!conditional_passed(condition)) {
 				return false;
 			}
 		}
 
-		BOOST_FOREACH(const vconfig &f, filters.get_children("filter_side"))
+		foreach_ng(const vconfig &f, filters.get_children("filter_side"))
 		{
 			side_filter ssf(f);
 			if ( !ssf.match(resources::controller->current_side()) )
 				return false;
 		}
 
-		BOOST_FOREACH(const vconfig &f, filters.get_children("filter"))
+		foreach_ng(const vconfig &f, filters.get_children("filter"))
 		{
 			if ( !ev.loc1.matches_unit_filter(unit1, f) ) {
 				return false;
@@ -190,7 +191,7 @@ namespace { // Support functions
 		{
 			const bool matches_unit = ev.loc1.matches_unit(unit1);
 			const config & attack = ev.data.child("first");
-			BOOST_FOREACH(const vconfig &f, special_filters)
+			foreach_ng(const vconfig &f, special_filters)
 			{
 				if ( f.empty() )
 					special_matches = true;
@@ -205,7 +206,7 @@ namespace { // Support functions
 			return false;
 		}
 
-		BOOST_FOREACH(const vconfig &f, filters.get_children("filter_second"))
+		foreach_ng(const vconfig &f, filters.get_children("filter_second"))
 		{
 			if ( !ev.loc2.matches_unit_filter(unit2, f) ) {
 				return false;
@@ -218,7 +219,7 @@ namespace { // Support functions
 		{
 			const bool matches_unit = ev.loc2.matches_unit(unit2);
 			const config & attack = ev.data.child("second");
-			BOOST_FOREACH(const vconfig &f, special_filters)
+			foreach_ng(const vconfig &f, special_filters)
 			{
 				if ( f.empty() )
 					special_matches = true;
@@ -469,7 +470,7 @@ bool pump()
 	}
 	if(!lg::debug.dont_log("event_handler")) {
 		std::stringstream ss;
-		BOOST_FOREACH(const queued_event& ev, events_queue) {
+		foreach_ng(const queued_event& ev, events_queue) {
 			ss << "name=" << ev.name << "; ";
 		}
 		DBG_EH << "processing queued events: " << ss.str() << "\n";

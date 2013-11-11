@@ -28,6 +28,7 @@
 #include "sdl_utils.hpp"
 #include "video.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <vector>
@@ -106,7 +107,7 @@ static void calc_rects()
 {
 	events.clear();
 
-	BOOST_FOREACH(SDL_Rect const &rect, update_rects) {
+	foreach_ng(SDL_Rect const &rect, update_rects) {
 		events.push_back(event(rect, true));
 		events.push_back(event(rect, false));
 	}
@@ -355,7 +356,7 @@ void CVideo::make_test_fake(const unsigned width,
 int CVideo::bppForMode( int x, int y, int flags)
 {
 	int test_values[3] = {getBpp(), 32, 16};
-	BOOST_FOREACH(int &bpp, test_values) {
+	foreach_ng(int &bpp, test_values) {
 		if(modePossible(x, y, bpp, flags) > 0) {
 			return bpp;
 		}

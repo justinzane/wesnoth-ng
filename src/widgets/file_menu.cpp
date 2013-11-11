@@ -18,7 +18,7 @@
 
 #include "filesystem.hpp"
 #include "marked-up_text.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "widgets/file_menu.hpp"
 
 

@@ -27,7 +27,7 @@
 #include "map.hpp"
 #include "map_exception.hpp"
 #include "utils/foreach.tpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 #include <iterator>
 

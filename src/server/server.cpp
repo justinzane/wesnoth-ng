@@ -55,6 +55,7 @@
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/utility.hpp>
 #include <algorithm>
@@ -558,15 +559,15 @@ void server::load_config() {
 	}
 
 	redirected_versions_.clear();
-	BOOST_FOREACH(const config &redirect, cfg_.child_range("redirect")) {
-		BOOST_FOREACH(const std::string &version, utils::split(redirect["version"])) {
+	foreach_ng(const config &redirect, cfg_.child_range("redirect")) {
+		foreach_ng(const std::string &version, utils::split(redirect["version"])) {
 			redirected_versions_[version] = redirect;
 		}
 	}
 
 	proxy_versions_.clear();
-	BOOST_FOREACH(const config &proxy, cfg_.child_range("proxy")) {
-		BOOST_FOREACH(const std::string &version, utils::split(proxy["version"])) {
+	foreach_ng(const config &proxy, cfg_.child_range("proxy")) {
+		foreach_ng(const std::string &version, utils::split(proxy["version"])) {
 			proxy_versions_[version] = proxy;
 		}
 	}
@@ -706,7 +707,7 @@ void server::run() {
 				simple_wml::document ping( strstr.str().c_str(),
 							   simple_wml::INIT_COMPRESSED );
 				simple_wml::string_span s = ping.output_compressed();
-				BOOST_FOREACH(network::connection sock, ghost_players_) {
+				foreach_ng(network::connection sock, ghost_players_) {
 					if (!lg::debug.dont_log(log_server)) {
 						wesnothd::player_map::const_iterator i = players_.find(sock);
 						if (i != players_.end()) {
@@ -722,7 +723,7 @@ void server::run() {
  				// Only a single thread should be accessing this
 				// Erase before we copy - speeds inserts
 				ghost_players_.clear();
-				BOOST_FOREACH(const wesnothd::player_map::value_type v, players_) {
+				foreach_ng(const wesnothd::player_map::value_type v, players_) {
 					ghost_players_.insert(v.first);
 				}
 				last_ping_ = now;

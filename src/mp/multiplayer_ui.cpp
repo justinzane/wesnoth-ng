@@ -30,10 +30,11 @@
 #include "mp/multiplayer_ui.hpp"
 #include "mp/multiplayer_ui.hpp"
 #include "sound.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -493,7 +494,7 @@ void ui::process_network_data(const config& data, const network::connection /*so
 		if (const config &ms = c.child("members")) {
 			std::stringstream ss;
 			ss << "Room " << c["room"].str() << " members: ";
-			BOOST_FOREACH(const config& m, ms.child_range("member")) {
+			foreach_ng(const config& m, ms.child_range("member")) {
 				ss << m["name"] << " ";
 			}
 			chat_.add_message(time(NULL), "server", ss.str());
@@ -502,7 +503,7 @@ void ui::process_network_data(const config& data, const network::connection /*so
 		if (const config &rs = c.child("rooms")) {
 			std::stringstream ss;
 			ss << "Rooms: ";
-			BOOST_FOREACH(const config& r, rs.child_range("room")) {
+			foreach_ng(const config& r, rs.child_range("room")) {
 				ss << r["name"].str() << "(" << r["size"].str() << ") ";
 			}
 			chat_.add_message(time(NULL), "server", ss.str());
@@ -600,7 +601,7 @@ void ui::gamelist_updated(bool silent)
 {
 	std::list<user_info> u_list;
 
-	BOOST_FOREACH(const config &user, gamelist_.child_range("user"))
+	foreach_ng(const config &user, gamelist_.child_range("user"))
 	{
 		user_info u_elem;
 		u_elem.name = user["name"].str();

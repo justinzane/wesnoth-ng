@@ -50,6 +50,7 @@ Growl_Delegate growl_obj;
 #include "windows_tray_notification.hpp"
 #endif
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_display("display");
@@ -247,7 +248,7 @@ void game_display::draw_invalidated()
 	halo::unrender(invalidated_);
 	display::draw_invalidated();
 
-	BOOST_FOREACH(unit* temp_unit, fake_units_) {
+	foreach_ng(unit* temp_unit, fake_units_) {
 		const map_location& loc = temp_unit->get_location();
 		exclusive_unit_draw_requests_t::iterator request = exclusive_unit_draw_requests_.find(loc);
 		if (invalidated_.find(loc) != invalidated_.end()
@@ -392,7 +393,7 @@ void game_display::draw_sidebar()
 
 		// We display the unit the mouse is over if it is over a unit,
 		// otherwise we display the unit that is selected.
-		BOOST_FOREACH(const std::string &name, reports::report_list()) {
+		foreach_ng(const std::string &name, reports::report_list()) {
 			refresh_report(name);
 		}
 		invalidateGameStatus_ = false;
@@ -567,7 +568,7 @@ void game_display::highlight_reach(const pathfind::paths &paths_list)
 void game_display::highlight_another_reach(const pathfind::paths &paths_list)
 {
 	// Fold endpoints of routes into reachability map.
-	BOOST_FOREACH(const pathfind::paths::step &dest, paths_list.destinations) {
+	foreach_ng(const pathfind::paths::step &dest, paths_list.destinations) {
 		reach_map_[dest.curr]++;
 	}
 	reach_map_changed_ = true;
@@ -663,7 +664,7 @@ void game_display::float_label(const map_location& loc, const std::string& text,
 
 std::vector<unit*> game_display::get_unit_list_for_invalidation() {
 	std::vector<unit*> unit_list = display::get_unit_list_for_invalidation();;
-	BOOST_FOREACH(unit *u, fake_units_) {
+	foreach_ng(unit *u, fake_units_) {
 		unit_list.push_back(u);
 	}
 	return unit_list;;
@@ -1200,7 +1201,7 @@ void game_display::prune_chat_messages(bool remove_all)
 		}
 	}
 
-	BOOST_FOREACH(const chat_message &cm, chat_messages_) {
+	foreach_ng(const chat_message &cm, chat_messages_) {
 		font::move_floating_label(cm.speaker_handle, 0, - movement);
 		font::move_floating_label(cm.handle, 0, - movement);
 	}

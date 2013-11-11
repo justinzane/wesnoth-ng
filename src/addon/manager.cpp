@@ -38,11 +38,12 @@
 #include "marked-up_text.hpp"
 #include "serdes/parser.hpp"
 #include "version.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "addon/client.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -348,11 +349,11 @@ static void unarchive_dir(const std::string& path, const config& cfg)
 
 	make_directory(dir);
 
-	BOOST_FOREACH(const config &d, cfg.child_range("dir")) {
+	foreach_ng(const config &d, cfg.child_range("dir")) {
 		unarchive_dir(dir, d);
 	}
 
-	BOOST_FOREACH(const config &f, cfg.child_range("file")) {
+	foreach_ng(const config &f, cfg.child_range("file")) {
 		unarchive_file(dir, f);
 	}
 }

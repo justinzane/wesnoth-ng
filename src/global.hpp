@@ -15,6 +15,23 @@
 #ifndef GLOBAL_HPP_INCLUDED
 #define GLOBAL_HPP_INCLUDED
 
+/**
+ * @def foreach_ng
+ * @brief This is simply a wrapper for Boost's BOOST_FOREACH since
+ * Eclipse CDT's parser has ungodly fits with the real thing.
+ * @link https://bugs.eclipse.org/bugs/show_bug.cgi?id=332278
+ * @note It would probably be ideal to replace these with c++11 for calls
+ * where possible.
+ * @date 2013-11-12 @author justinzane
+ */
+#ifdef __CDT_PARSER__
+    #define foreach_ng(a, b) for(a : b)
+#else
+    #define foreach_ng(a, b) BOOST_FOREACH(a, b)
+#endif
+
+
+
 #ifdef _MSC_VER
 
 #undef snprintf

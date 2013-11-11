@@ -15,6 +15,7 @@
 #include "persist_context.hpp"
 #include "persist_manager.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 persist_context &persist_manager::get_context(const std::string &ns)
@@ -35,7 +36,7 @@ persist_context &persist_manager::get_context(const std::string &ns)
 bool persist_manager::start_transaction() {
 	if (in_transaction_) return false;
 	bool result = true;
-	BOOST_FOREACH(context_map::reference ctx, contexts_){
+	foreach_ng(context_map::reference ctx, contexts_){
 		result &= ctx.second->start_transaction();
 	}
 	in_transaction_ = true;
@@ -45,7 +46,7 @@ bool persist_manager::start_transaction() {
 bool persist_manager::end_transaction() {
 	if (!in_transaction_) return false;
 	bool result = true;
-	BOOST_FOREACH(context_map::reference ctx, contexts_){
+	foreach_ng(context_map::reference ctx, contexts_){
 		result &= ctx.second->end_transaction();
 	}
 	in_transaction_ = !result;
@@ -55,7 +56,7 @@ bool persist_manager::end_transaction() {
 bool persist_manager::cancel_transaction() {
 	if (!in_transaction_) return false;
 	bool result = true;
-	BOOST_FOREACH(context_map::reference ctx, contexts_){
+	foreach_ng(context_map::reference ctx, contexts_){
 		result &= ctx.second->cancel_transaction();
 	}
 	in_transaction_ = false;

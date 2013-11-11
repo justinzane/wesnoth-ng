@@ -30,6 +30,7 @@
 #include "../serdes/string_utils.hpp"
 #include "composite/component.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <map>
@@ -87,7 +88,7 @@ void holder::init( side_number side )
 
 	if (this->ai_) {
 		ai_->on_create();
-		BOOST_FOREACH(config &mod_ai, cfg_.child_range("modify_ai")) {
+		foreach_ng(config &mod_ai, cfg_.child_range("modify_ai")) {
 			if (!mod_ai.has_attribute("side")) {
 				mod_ai["side"] = side;
 			}
@@ -147,8 +148,8 @@ void holder::modify_ai_config_old( const config::const_child_itors &ai_parameter
 		cfg_.merge_children_by_attribute("aspect","id");
 	} else {
 		// else run 'add_facet' command on each [aspect][facet]
-		BOOST_FOREACH(const config &cfg_a, cfg.child_range("aspect")) {
-			BOOST_FOREACH(const config &cfg_f, cfg_a.child_range("facet")) {
+		foreach_ng(const config &cfg_a, cfg.child_range("aspect")) {
+			foreach_ng(const config &cfg_f, cfg_a.child_range("facet")) {
 				readonly_context_->add_facet(cfg_a["id"],cfg_f);
 			}
 		}

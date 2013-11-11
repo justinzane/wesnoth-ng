@@ -31,7 +31,7 @@
 #include "map_exception.hpp"
 #include "serdes/parser.hpp"
 #include "util.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 static lg::log_domain log_config("config");
 #define ERR_CF LOG_STREAM(err, log_config)

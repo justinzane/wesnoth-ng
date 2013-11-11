@@ -24,6 +24,7 @@
 #include <SDL_image.h>
 
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <iostream>
@@ -129,7 +130,7 @@ main(int argc, char* argv[])
 		}
 	}
 
-	BOOST_FOREACH(const tcreator& creator, creators) {
+	foreach_ng(const tcreator& creator, creators) {
 		if(!make_directory(root + creator.first)) {
 			std::cerr << "";
 			return EXIT_FAILURE;
@@ -139,7 +140,7 @@ main(int argc, char* argv[])
 	try {
 		const surface base_image = create_image_base(root + "/base.png");
 
-		BOOST_FOREACH(const tcreator& creator, creators) {
+		foreach_ng(const tcreator& creator, creators) {
 			creator.second(base_image, root + creator.first);
 		}
 

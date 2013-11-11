@@ -28,6 +28,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace pathfind {
@@ -124,7 +125,7 @@ std::vector<component*> component::get_children(const std::string &type)
 std::vector<std::string> component::get_children_types()
 {
 	std::vector<std::string> types;
-	BOOST_FOREACH(property_handler_map::value_type &ph, property_handlers_) {
+	foreach_ng(property_handler_map::value_type &ph, property_handlers_) {
 		types.push_back(ph.first);
 	}
 	return types;
@@ -240,9 +241,9 @@ static void print_component(component *root, const std::string &type, std::strin
 
 	s << offset_str << type<<"["<<root->get_id() <<"] "<<root->get_engine()<<" "<<root->get_name()<< std::endl;
 
-	BOOST_FOREACH(std::string t, t_list) {
+	foreach_ng(std::string t, t_list) {
 		std::vector<component*> c_list = root->get_children(t);
-		BOOST_FOREACH(component *c, c_list) {
+		foreach_ng(component *c, c_list) {
 			print_component(c,t,s,offset+1);
 		}
 	}

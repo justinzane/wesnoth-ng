@@ -18,6 +18,7 @@
 */
 
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <map>
 
@@ -106,7 +107,7 @@ void terrain_analyze::describe_terrain() {
 }
 
 void terrain_analyze::get_village_terrain() {
-	BOOST_FOREACH(const map_location& loc, village_location_) {
+	foreach_ng(const map_location& loc, village_location_) {
 		map_location adj[6];
 		get_adjacent_tiles(loc,adj);
 
@@ -130,7 +131,7 @@ void terrain_analyze::add_village_battle(const map_location& village, const map_
 	std::string village_field = resources::game_map->get_terrain_string(village);
 	std::string adj_field = resources::game_map->get_terrain_string(adj);
 
-	BOOST_FOREACH(field_couple &couple, couple_field_list_) {
+	foreach_ng(field_couple &couple, couple_field_list_) {
 		if (compareFieldCouple(couple, village_field, adj_field)) {
 			couple.number++;
 			return;
@@ -182,7 +183,7 @@ void situation::evaluate() {
 
 	LOG_AI_AKI << "EVALUATION! unit: \n";
 
-	BOOST_FOREACH(const unit& unit, *resources::units) {
+	foreach_ng(const unit& unit, *resources::units) {
 		if (unit.side() == ai_team_) {
 			score_ += evaluate_unit();
 		}
@@ -201,11 +202,11 @@ void situation::describe() {
 	LOG_AI_AKI << "Describe situation!\n";
 	LOG_AI_AKI << "AI Side : " << ai_team_ << "; Current Side : " << current_team_side_ << "\n";
 	LOG_AI_AKI << "New unit";
-	BOOST_FOREACH(std::string unit, new_unit_) {
+	foreach_ng(std::string unit, new_unit_) {
 		LOG_AI_AKI << unit << "\n";
 	}
 	LOG_AI_AKI << "Enemy unit";
-	BOOST_FOREACH(std::string unit, enemy_new_unit_) {
+	foreach_ng(std::string unit, enemy_new_unit_) {
 		LOG_AI_AKI << unit << "\n";
 	}
 
@@ -224,14 +225,14 @@ double situation::evaluate_unit() {
 	temporary_unit_placer def_place(*resources::units, def_loc, defender);
 
 
-	BOOST_FOREACH(const unit& enn_unit, *resources::units) {
+	foreach_ng(const unit& enn_unit, *resources::units) {
 		if (getAITeam().is_enemy(enn_unit.side())) {
 			score += get_combat_score(current_team_side_, *type, *enn_unit.type());
 		}
 	}
 
 	// for the new enemy unit
-	BOOST_FOREACH(const std::string& enn_unit, enemy_new_unit_) {
+	foreach_ng(const std::string& enn_unit, enemy_new_unit_) {
 		if (enn_unit.empty()) {
 			const unit_type *enn_new_unit = unit_types.find(enn_unit);
 			score += get_combat_score(current_team_side_, *type, *enn_new_unit);
@@ -305,7 +306,7 @@ int situation::getSide() {
 }
 
 const team& situation::getAITeam() {
-	BOOST_FOREACH(const team& team, *resources::teams) {
+	foreach_ng(const team& team, *resources::teams) {
 		if (team.side() == ai_team_)
 			return team;
 	}
@@ -357,7 +358,7 @@ recruitment::recruitment(rca_context &context, const config &cfg)
   ally_(),
   enemy_()
 {
-	BOOST_FOREACH( team &t, *resources::teams) {
+	foreach_ng( team &t, *resources::teams) {
 		if (current_team().is_enemy(t.side())) {
 			enemy_.push_back(t);
 		} else if (!current_team().is_enemy(t.side())) {
@@ -375,7 +376,7 @@ double recruitment::evaluate()
 {
 	std::vector<unit_map::unit_iterator> leaders = resources::units->find_leaders(get_side());
 
-	BOOST_FOREACH(unit_map::unit_iterator &leader, leaders){
+	foreach_ng(unit_map::unit_iterator &leader, leaders){
 		if (leader == resources::units->end()) {
 			return BAD_SCORE;
 		}
@@ -451,7 +452,7 @@ situation recruitment::do_min_max(situation current) {
 
 	std::set<std::string> list = get_current_team_recruit(current.getSide()).recruits();
 
-	BOOST_FOREACH(std::string unit, list) {
+	foreach_ng(std::string unit, list) {
 		situation new_situation(do_min_max(get_next_situation(current, unit)));
 
 		if (new_situation.getScore() < best_situation.getScore())
@@ -463,7 +464,7 @@ situation recruitment::do_min_max(situation current) {
 }
 
 team recruitment::get_current_team_recruit(int side) {
-	BOOST_FOREACH( team &t, *resources::teams) {
+	foreach_ng( team &t, *resources::teams) {
 		if (t.side() == side)
 			return t;
 	}
@@ -479,7 +480,7 @@ void recruitment::execute()
 	//test.analyze();
 	LOG_AI_AKI << "Init: Depth : " << depth_ << "; Side : " << current_team().side() << "\n";
 
-	BOOST_FOREACH( team &t, enemy_) {
+	foreach_ng( team &t, enemy_) {
 		LOG_AI_AKI << t.side() << "\n";
 	}
 

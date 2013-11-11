@@ -33,6 +33,7 @@
 #include "../../terrain_filter.hpp"
 #include "../../tod_manager.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace ai {
@@ -87,7 +88,7 @@ void global_fallback_phase::execute()
 	LOG_AI << "start" << std::endl;
 	const int ticks = SDL_GetTicks();
 	double res_sum = 0;
-	BOOST_FOREACH( unit &u, *resources::units)
+	foreach_ng( unit &u, *resources::units)
 	{
 		if (u.side()!=get_side())
 		{

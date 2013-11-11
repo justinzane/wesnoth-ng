@@ -22,6 +22,7 @@
 #define AI_COMPOSITE_PROPERTY_HANDLER_HPP_INCLUDED
 
 #include <boost/function.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include "config.hpp"
@@ -133,7 +134,7 @@ public:
 	std::vector<component*> handle_get_children()
 	{
 		std::vector<component*> children;
-		BOOST_FOREACH(t_ptr v, values_) {
+		foreach_ng(t_ptr v, values_) {
 			children.push_back(&*v);
 		}
 		return children;
@@ -148,7 +149,7 @@ private:
 		t_ptr_vector values;
 		factory_(values,cfg);
 		int j=0;
-		BOOST_FOREACH(t_ptr b, values ){
+		foreach_ng(t_ptr b, values ){
 			values_.insert(values_.begin()+pos+j,b);
 			j++;
 		}
@@ -199,7 +200,7 @@ public:
 		//* is a special case - 'delete all facets'
 		if (child.id == "*") {
 			bool b = false;
-				BOOST_FOREACH(typename aspect_map::value_type a, aspects_) {
+				foreach_ng(typename aspect_map::value_type a, aspects_) {
 				       	b |= a.second->delete_all_facets();
 				}
 			return b;
@@ -211,7 +212,7 @@ public:
 	std::vector<component*> handle_get_children()
 	{
 		std::vector<component*> children;
-		BOOST_FOREACH(typename aspect_map::value_type a, aspects_) {
+		foreach_ng(typename aspect_map::value_type a, aspects_) {
 			children.push_back(&*a.second);
 		}
 		return children;

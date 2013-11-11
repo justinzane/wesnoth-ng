@@ -21,7 +21,7 @@
 #include "gui/auxiliary/log.hpp"
 #include "gui/widgets/slider.hpp"
 #include "utils/foreach.tpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

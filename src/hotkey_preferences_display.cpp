@@ -36,9 +36,10 @@
 #include "log/log.hpp"
 #include "log/log.hpp"
 #include "marked-up_text.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 
 #include <boost/assign/list_of.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -275,7 +276,7 @@ hotkey_preferences_dialog::hotkey_preferences_dialog(display& disp) :
 	const boost::ptr_vector<hotkey::hotkey_command>& list = hotkey::get_hotkey_commands();
 	
 	//for (size_t i = 0; list[i].id != hotkey::HOTKEY_NULL; ++i) {
-	BOOST_FOREACH(const hotkey::hotkey_command& command, list)
+	foreach_ng(const hotkey::hotkey_command& command, list)
 	{
 		if (command.hidden) 
 		{
@@ -351,7 +352,7 @@ void hotkey_preferences_dialog::set_hotkey_menu(bool keep_viewport) {
 
 	// Fill the menu rows
 	std::vector<std::string> menu_items;
-	BOOST_FOREACH(const std::string& command, *commands) {
+	foreach_ng(const std::string& command, *commands) {
 
 		const std::string& description = hotkey::get_description(command);
 		std::string truncated_description = description;

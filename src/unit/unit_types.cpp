@@ -35,6 +35,7 @@
 #include "unit/unit_animation.hpp"
 #include "unit/unit_animation.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -144,7 +145,7 @@ bool attack_type::matches_filter(const config& filter) const
 	bool matches = matches_simple_filter(*this, filter);
 
 	// Handle [and], [or], and [not] with in-order precedence
-	BOOST_FOREACH( const config::any_child &condition, filter.all_children_range() )
+	foreach_ng( const config::any_child &condition, filter.all_children_range() )
 	{
 		// Handle [and]
 		if ( condition.key == "and" )
@@ -212,7 +213,7 @@ bool attack_type::apply_modification(const config& cfg,std::string* description)
 		if (config &specials = cfg_.child("specials"))
 		{
 			config new_specials;
-			BOOST_FOREACH(const config::any_child &vp, specials.all_children_range()) {
+			foreach_ng(const config::any_child &vp, specials.all_children_range()) {
 				std::vector<std::string>::const_iterator found_id =
 					std::find(dsl.begin(), dsl.end(), vp.cfg["id"].str());
 				if (found_id == dsl.end()) {
@@ -230,7 +231,7 @@ bool attack_type::apply_modification(const config& cfg,std::string* description)
 			cfg_.clear_children("specials");
 		}
 		config &new_specials = cfg_.child_or_add("specials");
-		BOOST_FOREACH(const config::any_child &value, set_specials.all_children_range()) {
+		foreach_ng(const config::any_child &value, set_specials.all_children_range()) {
 			new_specials.add_child(value.key, value.cfg);
 		}
 	}
@@ -504,7 +505,7 @@ void unit_type::build_full(const movement_type_map &mv_types,
 		if ( cfg_["ignore_race_traits"].to_bool() ) {
 			possibleTraits_.clear();
 		} else {
-			BOOST_FOREACH(const config &t, race_->additional_traits())
+			foreach_ng(const config &t, race_->additional_traits())
 			{
 				if (alignment_ != NEUTRAL || t["id"] != "fearless")
 					possibleTraits_.add_child("trait", t);
@@ -516,7 +517,7 @@ void unit_type::build_full(const movement_type_map &mv_types,
 	}
 
 	// Insert any traits that are just for this unit type
-	BOOST_FOREACH(const config &trait, cfg_.child_range("trait"))
+	foreach_ng(const config &trait, cfg_.child_range("trait"))
 	{
 		possibleTraits_.add_child("trait", trait);
 	}
@@ -530,12 +531,12 @@ void unit_type::build_full(const movement_type_map &mv_types,
 
 	game_config::add_color_info(cfg_);
 
-	BOOST_FOREACH(const config &portrait, cfg_.child_range("portrait")) {
+	foreach_ng(const config &portrait, cfg_.child_range("portrait")) {
 		portraits_.push_back(tportrait(portrait));
 	}
 
 	// Propagate the build to the variations.
-	BOOST_FOREACH(variations_map::value_type & variation, variations_) {
+	foreach_ng(variations_map::value_type & variation, variations_) {
 		variation.second->build_full(mv_types, races, traits);
 	}
 
@@ -599,7 +600,7 @@ void unit_type::build_help_index(const movement_type_map &mv_types,
 
 	if (const config &abil_cfg = cfg_.child("abilities"))
 	{
-		BOOST_FOREACH(const config::any_child &ab, abil_cfg.all_children_range()) {
+		foreach_ng(const config::any_child &ab, abil_cfg.all_children_range()) {
 			const config::attribute_value &name = ab.cfg["name"];
 			if (!name.empty()) {
 				abilities_.push_back(name.t_str());
@@ -608,15 +609,15 @@ void unit_type::build_help_index(const movement_type_map &mv_types,
 		}
 	}
 
-	BOOST_FOREACH(const config &adv, cfg_.child_range("advancement"))
+	foreach_ng(const config &adv, cfg_.child_range("advancement"))
 	{
-		BOOST_FOREACH(const config &effect, adv.child_range("effect"))
+		foreach_ng(const config &effect, adv.child_range("effect"))
 		{
 			const config &abil_cfg = effect.child("abilities");
 			if (!abil_cfg || effect["apply_to"] != "new_ability") {
 				continue;
 			}
-			BOOST_FOREACH(const config::any_child &ab, abil_cfg.all_children_range()) {
+			foreach_ng(const config::any_child &ab, abil_cfg.all_children_range()) {
 				const config::attribute_value &name = ab.cfg["name"];
 				if (!name.empty()) {
 					adv_abilities_.push_back(name.t_str());
@@ -639,11 +640,11 @@ void unit_type::build_help_index(const movement_type_map &mv_types,
 	// Override parts of the movement type with what is in our config.
 	movement_type_.merge(cfg_);
 
-	BOOST_FOREACH(const config &t, traits)
+	foreach_ng(const config &t, traits)
 	{
 		possibleTraits_.add_child("trait", t);
 	}
-	BOOST_FOREACH(const config &var_cfg, cfg_.child_range("variation"))
+	foreach_ng(const config &var_cfg, cfg_.child_range("variation"))
 	{
 		const std::string& var_id = var_cfg["variation_id"].empty() ?
 				var_cfg["variation_name"] : var_cfg["variation_id"];
@@ -789,7 +790,7 @@ const std::vector<unit_animation>& unit_type::animations() const {
 std::vector<attack_type> unit_type::attacks() const
 {
 	std::vector<attack_type> res;
-	BOOST_FOREACH(const config &att, cfg_.child_range("attack")) {
+	foreach_ng(const config &att, cfg_.child_range("attack")) {
 		res.push_back(attack_type(att));
 	}
 
@@ -845,7 +846,7 @@ bool unit_type::has_ability_by_id(const std::string& ability) const
 {
 	if (const config &abil = cfg_.child("abilities"))
 	{
-		BOOST_FOREACH(const config::any_child &ab, abil.all_children_range()) {
+		foreach_ng(const config::any_child &ab, abil.all_children_range()) {
 			if (ab.cfg["id"] == ability)
 				return true;
 		}
@@ -860,7 +861,7 @@ std::vector<std::string> unit_type::get_ability_list() const
 	const config &abilities = cfg_.child("abilities");
 	if (!abilities) return res;
 
-	BOOST_FOREACH(const config::any_child &ab, abilities.all_children_range()) {
+	foreach_ng(const config::any_child &ab, abilities.all_children_range()) {
 		const std::string &id = ab.cfg["id"];
 		if (!id.empty())
 			res.push_back(id);
@@ -942,7 +943,7 @@ static void advancement_tree_internal(const std::string& id, std::set<std::strin
 	if (!ut)
 		return;
 
-	BOOST_FOREACH(const std::string& adv, ut->advances_to()) {
+	foreach_ng(const std::string& adv, ut->advances_to()) {
 		if (tree.insert(adv).second) {
 			// insertion succeed, expand the new type
 			advancement_tree_internal(adv, tree);
@@ -963,9 +964,9 @@ const std::vector<std::string> unit_type::advances_from() const
 	unit_types.build_all(unit_type::HELP_INDEXED);
 
 	std::vector<std::string> adv_from;
-	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &ut, unit_types.types())
+	foreach_ng(const unit_type_data::unit_type_map::value_type &ut, unit_types.types())
 	{
-		BOOST_FOREACH(const std::string& adv, ut.second.advances_to()) {
+		foreach_ng(const std::string& adv, ut.second.advances_to()) {
 			if (adv == id_)
 				adv_from.push_back(ut.second.id());
 		}
@@ -986,12 +987,12 @@ bool unit_type::musthave_status(const std::string& status_name) const
 	// status gets changed. In the unlikely event it gets changed
 	// multiple times, we want to try to do it in the same order
 	// that unit::apply_modifications does things.
-	BOOST_FOREACH(const config &mod, possible_traits())
+	foreach_ng(const config &mod, possible_traits())
 	{
 		if (mod["availability"] != "musthave")
 			continue;
 
-		BOOST_FOREACH(const config &effect, mod.child_range("effect"))
+		foreach_ng(const config &effect, mod.child_range("effect"))
 		{
 			// See if the effect only applies to
 			// certain unit types But don't worry
@@ -1038,7 +1039,7 @@ std::vector<std::string> unit_type::variations() const
 {
 	std::vector<std::string> retval;
 	retval.reserve(variations_.size());
-	BOOST_FOREACH(const variations_map::value_type &val, variations_) {
+	foreach_ng(const variations_map::value_type &val, variations_) {
 		retval.push_back(val.first);
 	}
 	return retval;
@@ -1063,7 +1064,7 @@ const config & unit_type::build_unit_cfg() const
 		"experience", "flies", "hide_help", "hitpoints", "id",
 		"ignore_race_traits", "inherit", "movement", "movement_type",
 		"name", "num_traits", "variation_id", "variation_name" };
-	BOOST_FOREACH(const char *attr, unit_type_attrs) {
+	foreach_ng(const char *attr, unit_type_attrs) {
 		unit_cfg_.remove_attribute(attr);
 	}
 
@@ -1087,7 +1088,7 @@ int unit_type::resistance_against(const std::string& damage_name, bool attacker)
 	int resistance = movement_type_.resistance_against(damage_name);
 	unit_ability_list resistance_abilities;
 	if (const config &abilities = cfg_.child("abilities")) {
-		BOOST_FOREACH(const config& cfg, abilities.child_range("resistance")) {
+		foreach_ng(const config& cfg, abilities.child_range("resistance")) {
 			if (!cfg["affect_self"].to_bool(true)) {
 				continue;
 			}
@@ -1154,7 +1155,7 @@ namespace { // Helpers for set_config()
 	{
 		std::stringstream ss;
 		ss << "[base_unit] recursion loop in [unit_type] ";
-		BOOST_FOREACH(const std::string &step, base_tree)
+		foreach_ng(const std::string &step, base_tree)
 			ss << step << "->";
 		ss << base_id;
 		ERR_CF << ss.str() << '\n';
@@ -1198,7 +1199,7 @@ namespace { // Helpers for set_config()
 		ut_cfg.clear_children("base_unit");
 
 		// Merge the base units, in order.
-		BOOST_FOREACH(const std::string & base_id, base_ids) {
+		foreach_ng(const std::string & base_id, base_ids) {
 			// Detect recursion so the WML author is made aware of an error.
 			if ( std::find(base_tree.begin(), base_tree.end(), base_id) != base_tree.end() )
 				throw_base_unit_recursion_error(base_tree, base_id);
@@ -1265,13 +1266,13 @@ void unit_type_data::set_config(config &cfg)
 	clear();
 	unit_cfg_ = &cfg;
 
-	BOOST_FOREACH(const config &mt, cfg.child_range("movetype"))
+	foreach_ng(const config &mt, cfg.child_range("movetype"))
 	{
 		movement_types_.insert(std::make_pair(mt["name"].str(), movetype(mt)));
 		loadscreen::increment_progress();
 	}
 
-	BOOST_FOREACH(const config &r, cfg.child_range("race"))
+	foreach_ng(const config &r, cfg.child_range("race"))
 	{
 		const unit_race race(r);
 		races_.insert(std::pair<std::string,unit_race>(race.id(),race));
@@ -1279,7 +1280,7 @@ void unit_type_data::set_config(config &cfg)
 	}
 
 	// Apply base units.
-	BOOST_FOREACH(config &ut, cfg.child_range("unit_type"))
+	foreach_ng(config &ut, cfg.child_range("unit_type"))
 	{
 		if ( ut.has_child("base_unit") ) {
 			// Derived units must specify a new id.
@@ -1294,7 +1295,7 @@ void unit_type_data::set_config(config &cfg)
 	}
 
 	// Handle inheritance and recording of unit types.
-	BOOST_FOREACH(config &ut, cfg.child_range("unit_type"))
+	foreach_ng(config &ut, cfg.child_range("unit_type"))
 	{
 		std::string id = ut["id"];
 		// Every type is required to have an id.
@@ -1363,7 +1364,7 @@ const unit_type *unit_type_data::find(const std::string& key, unit_type::BUILD_S
 
 void unit_type_data::check_types(const std::vector<std::string>& types) const
 {
-	BOOST_FOREACH(const std::string& type, types) {
+	foreach_ng(const std::string& type, types) {
 		if(!find(type)) throw game::game_error("unknown unit type: " + type);
 	}
 }
@@ -1418,7 +1419,7 @@ void unit_type_data::read_hide_help(const config& cfg)
 
 	std::vector<std::string> trees = utils::split(cfg["type_adv_tree"]);
 	hide_help_type_.back().insert(trees.begin(), trees.end());
-	BOOST_FOREACH(const std::string& t_id, trees) {
+	foreach_ng(const std::string& t_id, trees) {
 		unit_type_map::iterator ut = types_.find(t_id);
 		if (ut != types_.end()) {
 			std::set<std::string> adv_tree = ut->second.advancement_tree();
@@ -1449,7 +1450,7 @@ void unit_type_data::add_advancement(unit_type& to_unit) const
 {
     const config& cfg = to_unit.get_cfg();
 
-    BOOST_FOREACH(const config &af, cfg.child_range("advancefrom"))
+    foreach_ng(const config &af, cfg.child_range("advancefrom"))
     {
         const std::string &from = af["unit"];
         int xp = af["experience"];

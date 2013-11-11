@@ -27,6 +27,7 @@
 #include "resources.hpp"
 #include "savegame.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -442,7 +443,7 @@ void replay_controller::play_side(const unsigned int /*team_index*/, bool){
 		}
 
 		// This is necessary for replays in order to show possible movements.
-		BOOST_FOREACH(unit &u, units_) {
+		foreach_ng(unit &u, units_) {
 			if (u.side() == player_number_) {
 				u.new_turn();
 			}

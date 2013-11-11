@@ -35,10 +35,11 @@
 #include "log/log.hpp"
 #include "log/log.hpp"
 #include "marked-up_text.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace preferences {
@@ -88,7 +89,7 @@ bool detect_video_settings(CVideo& video, std::pair<int,int>& resolution, int& b
 	bpp = video.modePossible(resolution.first, resolution.second,
 		DefaultBPP, video_flags, true);
 
-	BOOST_FOREACH(const res_t &res, res_list)
+	foreach_ng(const res_t &res, res_list)
 	{
 		if (bpp != 0) break;
 		std::cerr << "Video mode " << resolution.first << 'x'

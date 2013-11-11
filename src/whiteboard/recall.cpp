@@ -31,6 +31,7 @@
 #include "unit/unit.hpp"
 #include "unit/unit.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace wb
@@ -70,7 +71,7 @@ recall::recall(config const& cfg, bool hidden)
 {
 	// Construct and validate temp_unit_
 	size_t underlying_id = cfg["temp_unit_"];
-	BOOST_FOREACH(unit const& recall_unit, resources::teams->at(team_index()).recall_list())
+	foreach_ng(unit const& recall_unit, resources::teams->at(team_index()).recall_list())
 	{
 		if(recall_unit.underlying_id()==underlying_id)
 		{

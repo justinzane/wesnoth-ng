@@ -39,6 +39,7 @@
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace wb
@@ -146,7 +147,7 @@ void highlighter::highlight()
 		if(!secondary_highlights_.empty()) {
 			//Highlight secondary highlights
 			highlight_secondary_visitor hs_visitor(*this);
-			BOOST_FOREACH(weak_action_ptr weak, secondary_highlights_) {
+			foreach_ng(weak_action_ptr weak, secondary_highlights_) {
 				if(action_ptr action = weak.lock()) {
 					action->accept(hs_visitor);
 				}
@@ -165,14 +166,14 @@ void highlighter::unhighlight()
 	}
 
 	//unhighlight secondary highlights
-	BOOST_FOREACH(weak_action_ptr weak, secondary_highlights_) {
+	foreach_ng(weak_action_ptr weak, secondary_highlights_) {
 		if(action_ptr action = weak.lock()) {
 			action->accept(uh_visitor);
 		}
 	}
 
 	//unhide other units if needed
-	BOOST_FOREACH(map_location hex, exclusive_display_hexes_) {
+	foreach_ng(map_location hex, exclusive_display_hexes_) {
 		resources::screen->remove_exclusive_draw(hex);
 	}
 	exclusive_display_hexes_.clear();

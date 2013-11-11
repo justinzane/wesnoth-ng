@@ -26,6 +26,7 @@
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -446,7 +447,7 @@ bool unit_map::has_unit(const unit * const u)
 {
 	assert(u);
 
-	BOOST_FOREACH(const unit_pod& item, ilist_) {
+	foreach_ng(const unit_pod& item, ilist_) {
 		if(item.unit == u) {
 			return true;
 		}

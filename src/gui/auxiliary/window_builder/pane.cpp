@@ -19,7 +19,7 @@
 #include "config.hpp"
 #include "gettext.hpp"
 #include "gui/widgets/pane.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

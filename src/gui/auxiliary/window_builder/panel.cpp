@@ -20,7 +20,7 @@
 #include "gettext.hpp"
 #include "gui/auxiliary/log.hpp"
 #include "gui/widgets/panel.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

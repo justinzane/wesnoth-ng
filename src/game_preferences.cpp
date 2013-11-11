@@ -31,8 +31,9 @@
 #include "unit/unit.hpp"
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -126,9 +127,9 @@ manager::manager() :
 				message = foobar
 			[/line]
 */
-		BOOST_FOREACH(const config::any_child &h, history.all_children_range())
+		foreach_ng(const config::any_child &h, history.all_children_range())
 		{
-			BOOST_FOREACH(const config &l, h.cfg.child_range("line")) {
+			foreach_ng(const config &l, h.cfg.child_range("line")) {
 				history_map[h.key].push_back(l["message"]);
 			}
 		}
@@ -156,10 +157,10 @@ manager::~manager()
 */
 	config history;
 	typedef std::pair<std::string, std::vector<std::string> > hack;
-	BOOST_FOREACH(const hack& history_id, history_map) {
+	foreach_ng(const hack& history_id, history_map) {
 
 		config history_id_cfg; // [history_id]
-		BOOST_FOREACH(const std::string& line, history_id.second) {
+		foreach_ng(const std::string& line, history_id.second) {
 			config cfg; // [line]
 
 			cfg["message"] = line;
@@ -191,7 +192,7 @@ void parse_admin_authentication(const std::string& sender, const std::string& me
 static void load_acquaintances() {
 	if(!acquaintances_initialized) {
 		acquaintances.clear();
-		BOOST_FOREACH(const config &acfg, preferences::get_prefs()->child_range("acquaintance")) {
+		foreach_ng(const config &acfg, preferences::get_prefs()->child_range("acquaintance")) {
 			acquaintance ac = acquaintance(acfg);
 			acquaintances[ac.get_nick()] = ac;
 		}
@@ -355,7 +356,7 @@ const std::vector<game_config::server_info>& server_list()
 		std::vector<game_config::server_info> &game_servers = game_config::server_list;
 		VALIDATE(!game_servers.empty(), _("No server has been defined."));
 		pref_servers.insert(pref_servers.begin(), game_servers.begin(), game_servers.end());
-		BOOST_FOREACH(const config &server, get_prefs()->child_range("server")) {
+		foreach_ng(const config &server, get_prefs()->child_range("server")) {
 			game_config::server_info sinf;
 			sinf.name = server["name"].str();
 			sinf.address = server["address"].str();
@@ -1040,8 +1041,8 @@ void encounter_start_units(unit_map& units){
 }
 
 void encounter_recallable_units(std::vector<team>& teams){
-	BOOST_FOREACH(const team& t, teams) {
-		BOOST_FOREACH(const unit& u, t.recall_list()) {
+	foreach_ng(const team& t, teams) {
+		foreach_ng(const unit& u, t.recall_list()) {
 			encountered_units_set.insert(u.type_id());
 		}
 	}

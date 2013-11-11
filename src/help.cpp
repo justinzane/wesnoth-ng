@@ -39,9 +39,10 @@
 #include "unit/unit.hpp"
 #include "unit/unit_helper.hpp"
 #include "unit/unit_helper.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "serdes/parser.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <queue>
@@ -797,7 +798,7 @@ void generate_contents()
 			// opening the help browser in the default manner.
 			config hidden_toplevel;
 			std::stringstream ss;
-			BOOST_FOREACH(const config &section, help_config->child_range("section"))
+			foreach_ng(const config &section, help_config->child_range("section"))
 			{
 				const std::string id = section["id"];
 				if (find_section(toplevel, id) == NULL) {
@@ -814,7 +815,7 @@ void generate_contents()
 			}
 			hidden_toplevel["sections"] = ss.str();
 			ss.str("");
-			BOOST_FOREACH(const config &topic, help_config->child_range("topic"))
+			foreach_ng(const config &topic, help_config->child_range("topic"))
 			{
 				const std::string id = topic["id"];
 				if (find_topic(toplevel, id) == NULL) {
@@ -865,7 +866,7 @@ bool section_is_referenced(const std::string &section_id, const config &cfg)
 		}
 	}
 
-	BOOST_FOREACH(const config &section, cfg.child_range("section"))
+	foreach_ng(const config &section, cfg.child_range("section"))
 	{
 		const std::vector<std::string> sections_refd
 			= utils::quoted_split(section["sections"]);
@@ -889,7 +890,7 @@ bool topic_is_referenced(const std::string &topic_id, const config &cfg)
 		}
 	}
 
-	BOOST_FOREACH(const config &section, cfg.child_range("section"))
+	foreach_ng(const config &section, cfg.child_range("section"))
 	{
 		const std::vector<std::string> topics_refd
 			= utils::quoted_split(section["topics"]);
@@ -1112,7 +1113,7 @@ std::vector<topic> generate_weapon_special_topics(const bool sort_generated)
 	std::map<t_string, std::string> special_description;
 	std::map<t_string, std::set<std::string, string_less> > special_units;
 
-	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
+	foreach_ng(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
 	{
 		const unit_type &type = i.second;
 		// Only show the weapon special if we find it on a unit that
@@ -1172,7 +1173,7 @@ std::vector<topic> generate_ability_topics(const bool sort_generated)
 	// should have a full description, if so, add this units abilities
 	// for display. We do not want to show abilities that the user has
 	// not encountered yet.
-	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
+	foreach_ng(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
 	{
 		const unit_type &type = i.second;
 		if (description_type(type) == FULL_DESCRIPTION) {
@@ -1234,7 +1235,7 @@ std::vector<topic> generate_faction_topics(const bool sort_generated)
 	const config& era = game_cfg->child("era");
 	if (era) {
 		std::vector<std::string> faction_links;
-		BOOST_FOREACH(const config &f, era.child_range("multiplayer_side")) {
+		foreach_ng(const config &f, era.child_range("multiplayer_side")) {
 			const std::string& id = f["id"];
 			if (id == "Random")
 				continue;
@@ -1250,7 +1251,7 @@ std::vector<topic> generate_faction_topics(const bool sort_generated)
 			text << "<header>text='" << _("Leaders:") << "'</header>" << "\n";
 			const std::vector<std::string> leaders =
 					make_unit_links_list( utils::split(f["leader"]), true );
-			BOOST_FOREACH(const std::string &link, leaders) {
+			foreach_ng(const std::string &link, leaders) {
 				text << link << "\n";
 			}
 
@@ -1259,7 +1260,7 @@ std::vector<topic> generate_faction_topics(const bool sort_generated)
 			text << "<header>text='" << _("Recruits:") << "'</header>" << "\n";
 			const std::vector<std::string> recruits =
 					make_unit_links_list( utils::split(f["recruit"]), true );
-			BOOST_FOREACH(const std::string &link, recruits) {
+			foreach_ng(const std::string &link, recruits) {
 				text << link << "\n";
 			}
 
@@ -1281,7 +1282,7 @@ std::vector<topic> generate_faction_topics(const bool sort_generated)
 		text << "<header>text='" << _("Factions:") << "'</header>" << "\n";
 
 		std::sort(faction_links.begin(), faction_links.end());
-		BOOST_FOREACH(const std::string &link, faction_links) {
+		foreach_ng(const std::string &link, faction_links) {
 			text << link << "\n";
 		}
 
@@ -1358,7 +1359,7 @@ public:
 					reverse ? type_.advances_from() : type_.advances_to();
 				bool first = true;
 
-				BOOST_FOREACH(const std::string &adv, adv_units)
+				foreach_ng(const std::string &adv, adv_units)
 				{
 					const unit_type *type = unit_types.find(adv, unit_type::HELP_INDEXED);
 					if (!type || type->hide_help()) continue;
@@ -1395,7 +1396,7 @@ public:
 					<< "' text='" << escape(parent->type_name()) << "'</ref>\n";
 		} else {
 			bool first = true;
-			BOOST_FOREACH(const std::string& base_id, utils::split(type_.get_cfg()["base_ids"])) {
+			foreach_ng(const std::string& base_id, utils::split(type_.get_cfg()["base_ids"])) {
 				if (first) {
 					ss << _("Base units: ");
 					first = false;
@@ -1408,7 +1409,7 @@ public:
 		}
 
 		bool first = true;
-		BOOST_FOREACH(const std::string &var_id, parent->variations()) {
+		foreach_ng(const std::string &var_id, parent->variations()) {
 			const unit_type &type = parent->get_variation(var_id);
 
 			if (first) {
@@ -1768,7 +1769,7 @@ std::string make_unit_link(const std::string& type_id)
 std::vector<std::string> make_unit_links_list(const std::vector<std::string>& type_id_list, bool ordered)
 {
 	std::vector<std::string> links_list;
-	BOOST_FOREACH(const std::string &type_id, type_id_list) {
+	foreach_ng(const std::string &type_id, type_id_list) {
 		std::string unit_link = make_unit_link(type_id);
 		if (!unit_link.empty())
 			links_list.push_back(unit_link);
@@ -1785,7 +1786,7 @@ void generate_races_sections(const config *help_cfg, section &sec, int level)
 	std::set<std::string, string_less> races;
 	std::set<std::string, string_less> visible_races;
 
-	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
+	foreach_ng(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
 	{
 		const unit_type &type = i.second;
 		UNIT_DESCRIPTION_TYPE desc_type = description_type(type);
@@ -1822,7 +1823,7 @@ void generate_races_sections(const config *help_cfg, section &sec, int level)
 
 void generate_unit_sections(const config* /*help_cfg*/, section& sec, int level, const bool /*sort_generated*/, const std::string& race)
 {
-	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types()) {
+	foreach_ng(const unit_type_data::unit_type_map::value_type &i, unit_types.types()) {
 		const unit_type &type = i.second;
 
 		if (type.race_id() != race)
@@ -1832,7 +1833,7 @@ void generate_unit_sections(const config* /*help_cfg*/, section& sec, int level,
 			continue;
 
 		section base_unit;
-		BOOST_FOREACH(const std::string &variation_id, type.variations()) {
+		foreach_ng(const std::string &variation_id, type.variations()) {
 			// TODO: Do we apply encountered stuff to variations?
 			const unit_type &var_type = type.get_variation(variation_id);
 			const std::string topic_name = var_type.type_name() + "\n" + var_type.variation_name();
@@ -1860,7 +1861,7 @@ std::vector<topic> generate_unit_topics(const bool sort_generated, const std::st
 	std::set<std::string, string_less> race_units;
 	std::set<std::string, string_less> race_topics;
 
-	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
+	foreach_ng(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
 	{
 		const unit_type &type = i.second;
 
@@ -1894,7 +1895,7 @@ std::vector<topic> generate_unit_topics(const bool sort_generated, const std::st
 		race_name = r->plural_name();
 		race_description = r->description();
 		// if (description.empty()) description =  _("No description Available");
-		BOOST_FOREACH(const config &additional_topic, r->additional_topics())
+		foreach_ng(const config &additional_topic, r->additional_topics())
 		  {
 		    std::string id = additional_topic["id"];
 		    std::string title = additional_topic["title"];

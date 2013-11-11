@@ -34,6 +34,7 @@
 #include "unit/unit.hpp"
 #include "unit/unit.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace wb {
@@ -66,7 +67,7 @@ unit const* find_backup_leader(unit const& leader)
 {
 	assert(leader.can_recruit());
 	assert(resources::game_map->is_keep(leader.get_location()));
-	BOOST_FOREACH(unit const& unit, *resources::units)
+	foreach_ng(unit const& unit, *resources::units)
 	{
 		if (unit.can_recruit() && unit.id() != leader.id())
 		{
@@ -82,7 +83,7 @@ unit* find_recruiter(size_t team_index, map_location const& hex)
 	if ( !resources::game_map->is_castle(hex) )
 		return NULL;
 
-	BOOST_FOREACH(unit& u, *resources::units)
+	foreach_ng(unit& u, *resources::units)
 		if(u.can_recruit()
 				&& u.side() == static_cast<int>(team_index+1)
 				&& can_recruit_on(u, hex))
@@ -124,7 +125,7 @@ int path_cost(std::vector<map_location> const& path, unit const& u)
 
 	int result = 0;
 	gamemap const& map = *resources::game_map;
-	BOOST_FOREACH(map_location const& loc, std::make_pair(path.begin()+1,path.end()))
+	foreach_ng(map_location const& loc, std::make_pair(path.begin()+1,path.end()))
 		result += u.movement_cost(map[loc]);
 	return result;
 }
@@ -149,7 +150,7 @@ void unghost_owner_unit(unit* unit)
 
 bool has_actions()
 {
-	BOOST_FOREACH(team& t, *resources::teams)
+	foreach_ng(team& t, *resources::teams)
 		if (!t.get_side_actions()->empty())
 			return true;
 
@@ -166,7 +167,7 @@ void for_each_action(boost::function<void(action_ptr)> function, team_filter tea
 	bool end = false;
 	for(size_t turn=0; !end; ++turn) {
 		end = true;
-		BOOST_FOREACH(team &side, *resources::teams) {
+		foreach_ng(team &side, *resources::teams) {
 			side_actions &actions = *side.get_side_actions();
 			if(turn < actions.num_turns() && team_filter(side)) {
 				std::for_each(actions.turn_begin(turn), actions.turn_end(turn), function);
@@ -181,7 +182,7 @@ action_ptr find_action_at(map_location hex, team_filter team_filter)
 	action_ptr result;
 	size_t result_turn = std::numeric_limits<size_t>::max();
 
-	BOOST_FOREACH(team &side, *resources::teams) {
+	foreach_ng(team &side, *resources::teams) {
 		side_actions &actions = *side.get_side_actions();
 		if(team_filter(side)) {
 			side_actions::iterator chall = actions.find_first_action_at(hex);

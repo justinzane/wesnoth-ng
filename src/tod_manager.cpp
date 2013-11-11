@@ -13,7 +13,7 @@
  */
 
 #include "tod_manager.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 #include "gettext.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
@@ -28,6 +28,7 @@
 #include "unit/unit_abilities.hpp"
 #include "unit/unit_abilities.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -214,7 +215,7 @@ void tod_manager::replace_schedule(const std::vector<time_of_day>& schedule)
 std::vector<std::string> tod_manager::get_area_ids() const
 {
 	std::vector<std::string> areas;
-	BOOST_FOREACH(const area_time_of_day& area, areas_) {
+	foreach_ng(const area_time_of_day& area, areas_) {
 		areas.push_back(area.id);
 	}
 	return areas;
@@ -328,7 +329,7 @@ void tod_manager::set_turn(const int num, const bool increase_limit_if_needed)
 void tod_manager::set_new_current_times(const int new_current_turn_number)
 {
 	currentTime_ = calculate_current_time(times_.size(), new_current_turn_number, currentTime_);
-	BOOST_FOREACH(area_time_of_day& area, areas_) {
+	foreach_ng(area_time_of_day& area, areas_) {
 		area.currentTime = calculate_current_time(
 			area.times.size(),
 			new_current_turn_number,

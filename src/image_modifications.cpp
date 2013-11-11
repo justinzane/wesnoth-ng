@@ -22,6 +22,7 @@
 #include "log/log.hpp"
 #include "serdes/string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <map>
@@ -138,7 +139,7 @@ modification_queue modification::decode(const std::string& encoded_mods)
 {
 	modification_queue mods;
 
-	BOOST_FOREACH(const std::string& encoded_mod,
+	foreach_ng(const std::string& encoded_mod,
 		utils::parenthetical_split(encoded_mods, '~')) {
 		modification* mod = decode_modification(encoded_mod);
 

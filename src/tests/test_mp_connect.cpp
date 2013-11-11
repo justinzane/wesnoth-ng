@@ -23,6 +23,7 @@
 #include "mp/multiplayer_ui.hpp"
 #include "mp/multiplayer_ui.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
 

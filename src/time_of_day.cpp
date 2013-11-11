@@ -18,6 +18,7 @@
 #include "time_of_day.hpp"
 #include "gettext.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 std::ostream &operator<<(std::ostream &s, const tod_color& c){
@@ -63,7 +64,7 @@ void time_of_day::write(config& cfg) const
 
 void time_of_day::parse_times(const config& cfg, std::vector<time_of_day>& normal_times)
 {
-	BOOST_FOREACH(const config &t, cfg.child_range("time")) {
+	foreach_ng(const config &t, cfg.child_range("time")) {
 		normal_times.push_back(time_of_day(t));
 	}
 

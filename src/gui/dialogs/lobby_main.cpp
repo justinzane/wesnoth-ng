@@ -52,6 +52,7 @@
 #include "sound.hpp"
 
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_network("network");

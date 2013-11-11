@@ -25,7 +25,7 @@
 #include "sdl_utils.hpp"
 
 #include "team.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 

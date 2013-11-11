@@ -24,6 +24,7 @@
 
 #include "../../unit/unit_types.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace editor {
@@ -34,7 +35,7 @@ std::string unit_palette::get_help_string() {
 
 void unit_palette::setup(const config& /*cfg*/)
 {
-	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
+	foreach_ng(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
 	{
 		item_map_.insert(std::pair<std::string, unit_type>(i.second.id(), i.second));
 		group_map_[i.second.race_id()].push_back(i.second.id());
@@ -50,7 +51,7 @@ void unit_palette::setup(const config& /*cfg*/)
 		}
 	}
 
-	BOOST_FOREACH(const race_map::value_type &i, unit_types.races())
+	foreach_ng(const race_map::value_type &i, unit_types.races())
 	{
 		config cfg;
 		cfg["id"] = i.second.id();

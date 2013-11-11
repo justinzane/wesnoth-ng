@@ -27,7 +27,7 @@
 #include "log/log.hpp"
 #include "map.hpp"
 #include "map_exception.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 #include <iterator>
 

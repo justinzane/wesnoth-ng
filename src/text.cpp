@@ -24,6 +24,7 @@
 #include "serdes/string_utils.hpp"
 #include "tstring.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <cassert>
@@ -67,7 +68,7 @@ const unsigned ttext::STYLE_UNDERLINE = TTF_STYLE_UNDERLINE;
 std::string escape_text(const std::string& text)
 {
 	std::string result;
-	BOOST_FOREACH(const char c, text) {
+	foreach_ng(const char c, text) {
 		switch(c) {
 			case '&':  result += "&amp;";  break;
 			case '<':  result += "&lt;";   break;
@@ -715,7 +716,7 @@ bool ttext::set_markup(const std::string& text)
 	 * with the escaped version.
 	 */
 	std::string semi_escaped;
-	BOOST_FOREACH(const char c, text) {
+	foreach_ng(const char c, text) {
 		if(c == '&') {
 			semi_escaped += "&amp;";
 		} else {

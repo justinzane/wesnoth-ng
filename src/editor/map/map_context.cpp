@@ -24,13 +24,14 @@
 #include "serdes/binary_or_text.hpp"
 #include "serdes/parser.hpp"
 #include "team.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
 #include <boost/regex.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 
@@ -146,18 +147,18 @@ map_context::map_context(const config& game_config, const std::string& filename,
 	labels_.read(level);
 
 	tod_manager_.reset(new tod_manager(level));
-	BOOST_FOREACH(const config &t, level.child_range("time_area")) {
+	foreach_ng(const config &t, level.child_range("time_area")) {
 		tod_manager_->add_time_area(t);
 	}
 
-	BOOST_FOREACH(const config& music, level.child_range("music")) {
+	foreach_ng(const config& music, level.child_range("music")) {
 		music_tracks_.insert(std::pair<std::string, sound::music_track>(music["name"], sound::music_track(music)));
 	}
 
 	resources::teams = &teams_;
 
 	int i = 1;
-	BOOST_FOREACH(config &side, level.child_range("side"))
+	foreach_ng(config &side, level.child_range("side"))
 	{
 		//TODO clean up.
 		//state_.build_team(side, "", teams_, level, *this
@@ -169,7 +170,7 @@ map_context::map_context(const config& game_config, const std::string& filename,
 		t.build(side, map_);
 
 		teams_.push_back(t);
-		BOOST_FOREACH(const config &a_unit, side.child_range("unit")) {
+		foreach_ng(const config &a_unit, side.child_range("unit")) {
 			map_location loc(a_unit, NULL);
 			units_.add(loc,
 					unit(a_unit, true, &state_) );
@@ -226,7 +227,7 @@ void map_context::draw_terrain(const t_translation::t_terrain & terrain,
 	t_translation::t_terrain full_terrain = one_layer_only ? terrain :
 		map_.get_terrain_info(terrain).terrain_with_default_base();
 
-	BOOST_FOREACH(const map_location& loc, locs) {
+	foreach_ng(const map_location& loc, locs) {
 		draw_terrain_actual(full_terrain, loc, one_layer_only);
 	}
 }
@@ -287,7 +288,7 @@ bool map_context::save()
 	config wml_data = tod_manager_->to_config();
 	labels_.write(wml_data);
 
-	BOOST_FOREACH(const music_map::value_type& track, music_tracks_) {
+	foreach_ng(const music_map::value_type& track, music_tracks_) {
 		track.second.write(wml_data, true);
 	}
 
@@ -507,7 +508,7 @@ void map_context::trim_stack(action_stack& stack)
 
 void map_context::clear_stack(action_stack& stack)
 {
-	BOOST_FOREACH(editor_action* a, stack) {
+	foreach_ng(editor_action* a, stack) {
 		delete a;
 	}
 	stack.clear();

@@ -34,6 +34,7 @@
 #include "util.hpp"
 #include "version.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <stdexcept>
@@ -66,7 +67,7 @@ static std::string get_filename(const std::string& file_code){
 	int n = 0;
 	s >> std::hex >> n;
 
-	BOOST_FOREACH(const t_file_number_map::value_type& p, file_number_map){
+	foreach_ng(const t_file_number_map::value_type& p, file_number_map){
 		if(p.second == n)
 			return p.first;
 	}
@@ -144,7 +145,7 @@ void preproc_define::write(config_writer& writer, const std::string& name) const
 	writer.write_key_val("linenum", lexical_cast<std::string>(linenum));
 	writer.write_key_val("location", get_location(location));
 
-	BOOST_FOREACH(const std::string &arg, arguments)
+	foreach_ng(const std::string &arg, arguments)
 		write_argument(writer, arg);
 
 	writer.close_child(key);
@@ -162,7 +163,7 @@ void preproc_define::read(const config& cfg)
 	linenum = cfg["linenum"];
 	location = cfg["location"].str();
 
-	BOOST_FOREACH(const config &arg, cfg.child_range("argument"))
+	foreach_ng(const config &arg, cfg.child_range("argument"))
 		read_argument(arg);
 }
 
@@ -1170,14 +1171,14 @@ void preprocess_resource(const std::string& res_name, preproc_map *defines_map,
 		get_files_in_dir(res_name, &files, &dirs, ENTIRE_FILE_PATH, SKIP_MEDIA_DIR, DO_REORDER);
 
 		// subdirectories
-		BOOST_FOREACH(const std::string& dir, dirs)
+		foreach_ng(const std::string& dir, dirs)
 		{
 			LOG_PREPROC << "processing sub-dir: " << dir << '\n';
 			preprocess_resource(dir, defines_map, write_cfg, write_plain_cfg, target_directory);
 		}
 
 		// files in current directory
-		BOOST_FOREACH(const std::string& file, files)
+		foreach_ng(const std::string& file, files)
 		{
 			preprocess_resource(file, defines_map, write_cfg, write_plain_cfg, target_directory);
 		}

@@ -40,10 +40,11 @@
 #include "replay.hpp"
 #include "resources.hpp"
 #include "rng.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "whiteboard/manager.hpp"
 
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -1050,7 +1051,7 @@ std::set<map_location> mouse_handler::get_adj_enemies(const map_location& loc, i
 
 	map_location adj[6];
 	get_adjacent_tiles(loc, adj);
-	BOOST_FOREACH(const map_location &aloc, adj) {
+	foreach_ng(const map_location &aloc, adj) {
 		unit_map::const_iterator i = find_unit(aloc);
 		if (i != units_.end() && uteam.is_enemy(i->side()))
 			res.insert(aloc);
@@ -1077,7 +1078,7 @@ void mouse_handler::show_attack_options(const unit_map::const_iterator &u)
 	// Check each adjacent hex.
 	map_location adj[6];
 	get_adjacent_tiles(u->get_location(), adj);
-	BOOST_FOREACH(const map_location &loc, adj)
+	foreach_ng(const map_location &loc, adj)
 	{
 		// No attack option shown if no visible unit present.
 		// (Visible to current team, not necessarily the unit's team.)

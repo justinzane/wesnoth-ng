@@ -54,6 +54,7 @@
 #include "unit/unit_id.hpp"
 
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_network("network");
@@ -643,7 +644,7 @@ static void enter_lobby_mode(game_display& disp, const config& game_config, game
     while (true) {
         const config &cfg = game_config.child("lobby_music");
         if (cfg) {
-            BOOST_FOREACH(const config &i, cfg.child_range("music")) {
+            foreach_ng(const config &i, cfg.child_range("music")) {
                 sound::play_music_config(i);
             }
             sound::commit_music_changes();

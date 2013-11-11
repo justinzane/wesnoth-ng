@@ -47,6 +47,7 @@
 #include "whiteboard/manager.hpp"
 #include "util.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -340,7 +341,7 @@ LEVEL_RESULT playsingle_controller::play_scenario(
 	LOG_NG << "in playsingle_controller::play_scenario()...\n";
 
 	// Start music.
-	BOOST_FOREACH(const config &m, level_.child_range("music")) {
+	foreach_ng(const config &m, level_.child_range("music")) {
 		sound::play_music_config(m);
 	}
 	sound::commit_music_changes();
@@ -352,7 +353,7 @@ LEVEL_RESULT playsingle_controller::play_scenario(
 
 	// Read sound sources
 	assert(soundsources_manager_ != NULL);
-	BOOST_FOREACH(const config &s, level_.child_range("sound_source")) {
+	foreach_ng(const config &s, level_.child_range("sound_source")) {
 		soundsource::sourcespec spec(s);
 		soundsources_manager_->add(spec);
 	}

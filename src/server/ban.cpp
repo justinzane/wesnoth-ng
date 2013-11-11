@@ -23,6 +23,7 @@
 
 #include "ban.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
 
@@ -268,7 +269,7 @@ static lg::log_domain log_server("server");
 		scoped_istream ban_file = istream_file(filename_);
 		read_gz(cfg, *ban_file);
 
-		BOOST_FOREACH(const config &b, cfg.child_range("ban"))
+		foreach_ng(const config &b, cfg.child_range("ban"))
 		{
 			try {
 				banned_ptr new_ban(new banned(b));
@@ -284,7 +285,7 @@ static lg::log_domain log_server("server");
 		// load deleted too
 		if (const config &cfg_del = cfg.child("deleted"))
 		{
-			BOOST_FOREACH(const config &b, cfg_del.child_range("ban"))
+			foreach_ng(const config &b, cfg_del.child_range("ban"))
 			{
 				try {
 					banned_ptr new_ban(new banned(b));
@@ -688,7 +689,7 @@ static lg::log_domain log_server("server");
 	void ban_manager::load_config(const config& cfg)
 	{
 		ban_times_.clear();
-		BOOST_FOREACH(const config &bt, cfg.child_range("ban_time")) {
+		foreach_ng(const config &bt, cfg.child_range("ban_time")) {
 			time_t duration = 0;
 			if (parse_time(bt["time"], &duration)) {
 				ban_times_.insert(default_ban_times::value_type(bt["name"], duration));

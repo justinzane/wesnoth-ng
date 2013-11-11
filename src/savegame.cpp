@@ -47,6 +47,7 @@
 #include "unit/unit_id.hpp"
 #include "version.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -395,7 +396,7 @@ bool save_info_less_time::operator() (const save_info& a, const save_info& b) co
 }
 
 static std::istream* find_save_file(const std::string &name, const std::string &alt_name, const std::vector<std::string> &suffixes) {
-	BOOST_FOREACH(const std::string &suf, suffixes) {
+	foreach_ng(const std::string &suf, suffixes) {
 		std::istream *file_stream = istream_file(get_saves_dir() + "/" + name + suf);
 		if (file_stream->fail()) {
 			delete file_stream;
@@ -552,7 +553,7 @@ void loadgame::show_difficulty_dialog()
 	const config::const_child_itors &campaigns = game_config_.child_range("campaign");
 	std::vector<std::string> difficulty_descriptions;
 	std::vector<std::string> difficulties;
-	BOOST_FOREACH(const config &campaign, campaigns)
+	foreach_ng(const config &campaign, campaigns)
 	{
 		if (campaign["id"] == cfg_summary["campaign"]) {
 			difficulty_descriptions = utils::split(campaign["difficulty_descriptions"], ';');

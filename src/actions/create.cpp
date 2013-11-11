@@ -43,6 +43,7 @@
 #include "../variable.hpp"
 #include "../whiteboard/manager.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -137,7 +138,7 @@ map_location unit_creator::find_location(const config &cfg, const unit* pass_che
 	placements.push_back("map");
 	placements.push_back("recall");
 
-	BOOST_FOREACH(std::string place, placements) {
+	foreach_ng(std::string place, placements) {
 		map_location loc;
 		bool pass((place == "leader_passable") || (place == "map_passable"));
 
@@ -408,7 +409,7 @@ namespace { // Helpers for get_recalls()
 		const std::vector<unit>& recall_list = leader_team.recall_list();
 		const std::string& save_id = leader_team.save_id();
 
-		BOOST_FOREACH(const unit& recall_unit, recall_list)
+		foreach_ng(const unit& recall_unit, recall_list)
 		{
 			// Do not add a unit twice.
 			size_t underlying_id = recall_unit.underlying_id();
@@ -488,7 +489,7 @@ const std::vector<const unit*> get_recalls(int side, const map_location &recall_
 	{
 		// Return the full recall list.
 		const std::vector<unit>& recall_list = (*resources::teams)[side-1].recall_list();
-		BOOST_FOREACH(const unit &recall, recall_list)
+		foreach_ng(const unit &recall, recall_list)
 		{
 			result.push_back(&recall);
 		}

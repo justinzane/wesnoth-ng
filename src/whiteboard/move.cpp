@@ -38,6 +38,7 @@
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace wb {
@@ -109,10 +110,10 @@ move::move(config const& cfg, bool hidden)
 	if(!route_cfg)
 		throw action::ctor_err("move: Invalid route_");
 	route_->move_cost = route_cfg["move_cost"];
-	BOOST_FOREACH(config const& loc_cfg, route_cfg.child_range("step")) {
+	foreach_ng(config const& loc_cfg, route_cfg.child_range("step")) {
 		route_->steps.push_back(map_location(loc_cfg["x"],loc_cfg["y"]));
 	}
-	BOOST_FOREACH(config const& mark_cfg, route_cfg.child_range("mark")) {
+	foreach_ng(config const& mark_cfg, route_cfg.child_range("mark")) {
 		route_->marks[map_location(mark_cfg["x"],mark_cfg["y"])]
 				= pathfind::marked_route::mark(mark_cfg["turns"],mark_cfg["zoc"],mark_cfg["capture"],mark_cfg["invisible"]);
 	}
@@ -492,7 +493,7 @@ config move::to_config() const
 	//Serialize route_
 	config route_cfg;
 	route_cfg["move_cost"]=route_->move_cost;
-	BOOST_FOREACH(map_location const& loc, route_->steps)
+	foreach_ng(map_location const& loc, route_->steps)
 	{
 		config loc_cfg;
 		loc_cfg["x"]=loc.x;
@@ -500,7 +501,7 @@ config move::to_config() const
 		route_cfg.add_child("step",loc_cfg);
 	}
 	typedef std::pair<map_location,pathfind::marked_route::mark> pair_loc_mark;
-	BOOST_FOREACH(pair_loc_mark const& item, route_->marks)
+	foreach_ng(pair_loc_mark const& item, route_->marks)
 	{
 		config mark_cfg;
 		mark_cfg["x"]=item.first.x;

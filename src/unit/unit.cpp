@@ -45,6 +45,7 @@
 #include "play_controller.hpp"
 
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_unit("unit");
@@ -296,7 +297,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 			filter_recall_ = filter_recall.get_config();
 
 		const vconfig::child_list& events = vcfg->get_children("event");
-		BOOST_FOREACH(const vconfig& e, events) {
+		foreach_ng(const vconfig& e, events) {
 			events_.add_child("event", e.get_config());
 		}
 	}
@@ -304,7 +305,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 	{
 		filter_recall_ = cfg.child_or_empty("filter_recall");
 
-		BOOST_FOREACH(const config& unit_event, cfg.child_range("event")) {
+		foreach_ng(const config& unit_event, cfg.child_range("event")) {
 			events_.add_child("event", unit_event);
 		}
 	}
@@ -383,7 +384,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 			formula_vars_ = new game_logic::map_formula_callable;
 
 			variant var;
-			BOOST_FOREACH(const config::attribute &i, ai_vars.attribute_range()) {
+			foreach_ng(const config::attribute &i, ai_vars.attribute_range()) {
 				var.serialize_from_string(i.second);
 				formula_vars_->add(i.first, var);
 			}
@@ -417,7 +418,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 
 	if (const config &status_flags = cfg.child("status"))
 	{
-		BOOST_FOREACH(const config::attribute &st, status_flags.attribute_range()) {
+		foreach_ng(const config::attribute &st, status_flags.attribute_range()) {
 			if (st.second.to_bool()) {
 				set_state(st.first, true);
 			}
@@ -428,7 +429,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 	}
 
 	// Remove animations from private cfg, they're not needed there now
-	BOOST_FOREACH(const std::string& tag_name, unit_animation::all_tag_names()) {
+	foreach_ng(const std::string& tag_name, unit_animation::all_tag_names()) {
 		cfg_.clear_children(tag_name);
 	}
 
@@ -493,7 +494,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 		"parent_type",
 		// Useless attributes created when saving units to WML:
 		"flag_rgb", "language_name" };
-	BOOST_FOREACH(const char *attr, internalized_attrs) {
+	foreach_ng(const char *attr, internalized_attrs) {
 		input_cfg.remove_attribute(attr);
 		cfg_.remove_attribute(attr);
 	}
@@ -501,11 +502,11 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 	static char const *raw_attrs[] = { "description", "halo",
 		"profile", "small_profile", "upkeep", "usage", "ellipse",
 		"image", "image_icon", "random_traits", "generate_name" };
-	BOOST_FOREACH(const char *attr, raw_attrs) {
+	foreach_ng(const char *attr, raw_attrs) {
 		input_cfg.remove_attribute(attr);
 	}
 
-	BOOST_FOREACH(const config::attribute &attr, input_cfg.attribute_range()) {
+	foreach_ng(const config::attribute &attr, input_cfg.attribute_range()) {
 		if (attr.first == "do_not_list") continue;
 		WRN_UT << "Unknown attribute '" << attr.first << "' discarded.\n";
 	}
@@ -678,12 +679,12 @@ void unit::generate_traits(bool musthaveonly)
 	config::const_child_itors current_traits = modifications_.child_range("trait");
 	std::vector<config> candidate_traits;
 
-	BOOST_FOREACH(const config &t, u_type.possible_traits())
+	foreach_ng(const config &t, u_type.possible_traits())
 	{
 		// Skip the trait if the unit already has it.
 		const std::string &tid = t["id"];
 		bool already = false;
-		BOOST_FOREACH(const config &mod, current_traits)
+		foreach_ng(const config &mod, current_traits)
 		{
 			if (mod["id"] == tid) {
 				already = true;
@@ -730,7 +731,7 @@ std::vector<std::string> unit::get_traits_list() const
 {
 	std::vector<std::string> res;
 
-	BOOST_FOREACH(const config &mod, modifications_.child_range("trait"))
+	foreach_ng(const config &mod, modifications_.child_range("trait"))
 	{
 			std::string const &id = mod["id"];
 			if (!id.empty())
@@ -768,7 +769,7 @@ void unit::advance_to(const config &old_cfg, const unit_type &u_type,
 	config new_cfg;
 	static char const *persistent_attrs[] = { "upkeep", "ellipse",
 		"image", "image_icon", "usage", "random_traits", "generate_name" };
-	BOOST_FOREACH(const char *attr, persistent_attrs) {
+	foreach_ng(const char *attr, persistent_attrs) {
 		if (const config::attribute_value *v = old_cfg.get(attr)) {
 			new_cfg[attr] = *v;
 		}
@@ -970,7 +971,7 @@ void unit::set_recruits(const std::vector<std::string>& recruits)
 const std::vector<std::string> unit::advances_to_translated() const
 {
 	std::vector<std::string> result;
-	BOOST_FOREACH(std::string adv_type_id, advances_to_)
+	foreach_ng(std::string adv_type_id, advances_to_)
 	{
 		const unit_type *adv_type = unit_types.find(adv_type_id);
 		if ( adv_type )
@@ -1116,7 +1117,7 @@ void unit::heal(int amount)
 const std::map<std::string,std::string> unit::get_states() const
 {
 	std::map<std::string, std::string> all_states;
-	BOOST_FOREACH(std::string const &s, states_) {
+	foreach_ng(std::string const &s, states_) {
 		all_states[s] = "yes";
 	}
 	for (std::map<std::string, state_t>::const_iterator i = known_boolean_state_names_.begin(),
@@ -1207,7 +1208,7 @@ bool unit::has_ability_by_id(const std::string& ability) const
 {
 	if (const config &abil = cfg_.child("abilities"))
 	{
-		BOOST_FOREACH(const config::any_child &ab, abil.all_children_range()) {
+		foreach_ng(const config::any_child &ab, abil.all_children_range()) {
 			if (ab.cfg["id"] == ability)
 				return true;
 		}
@@ -1402,7 +1403,7 @@ bool unit::internal_matches_filter(const vconfig& cfg, const map_location& loc, 
 			// If this unit is a variation itself then search in the base unit's variations.
 			const unit_type* const type = this_var.empty() ? type_ : unit_types.find(type_->base_id());
 
-			BOOST_FOREACH(const std::string& variation_id, variation_types) {
+			foreach_ng(const std::string& variation_id, variation_types) {
 				if (type->has_variation(variation_id)) {
 					match = true;
 					break;
@@ -2246,7 +2247,7 @@ std::map<std::string,std::string> unit::advancement_icons() const
 	{
 		std::ostringstream tooltip;
 		const std::string &image = game_config::images::level;
-		BOOST_FOREACH(const std::string &s, advances_to())
+		foreach_ng(const std::string &s, advances_to())
 		{
 			if (!s.empty())
 				tooltip << s << '\n';
@@ -2254,7 +2255,7 @@ std::map<std::string,std::string> unit::advancement_icons() const
 		temp[image] = tooltip.str();
 	}
 
-	BOOST_FOREACH(const config &adv, get_modification_advances())
+	foreach_ng(const config &adv, get_modification_advances())
 	{
 		const std::string &image = adv["image"];
 		if (image.empty()) continue;
@@ -2272,7 +2273,7 @@ std::vector<std::pair<std::string,std::string> > unit::amla_icons() const
 	std::vector<std::pair<std::string,std::string> > temp;
 	std::pair<std::string,std::string> icon; //<image,tooltip>
 
-	BOOST_FOREACH(const config &adv, get_modification_advances())
+	foreach_ng(const config &adv, get_modification_advances())
 	{
 		icon.first = adv["icon"].str();
 		icon.second = adv["description"].str();
@@ -2289,7 +2290,7 @@ std::vector<std::pair<std::string,std::string> > unit::amla_icons() const
 std::vector<config> unit::get_modification_advances() const
 {
 	std::vector<config> res;
-	BOOST_FOREACH(const config &adv, modification_advancements())
+	foreach_ng(const config &adv, modification_advancements())
 	{
 		if (adv["strict_amla"].to_bool() && !advances_to_.empty())
 			continue;
@@ -2307,7 +2308,7 @@ std::vector<config> unit::get_modification_advances() const
 		std::unique_copy(temp.begin(), temp.end(), std::back_inserter(uniq));
 
 		bool requirements_done = true;
-		BOOST_FOREACH(const std::string &s, uniq)
+		foreach_ng(const std::string &s, uniq)
 		{
 			int required_num = std::count(temp.begin(), temp.end(), s);
 			int mod_num = modification_count("advance", s);
@@ -2326,7 +2327,7 @@ std::vector<config> unit::get_modification_advances() const
 size_t unit::modification_count(const std::string& mod_type, const std::string& id) const
 {
 	size_t res = 0;
-	BOOST_FOREACH(const config &item, modifications_.child_range(mod_type)) {
+	foreach_ng(const config &item, modifications_.child_range(mod_type)) {
 		if (item["id"] == id) {
 			++res;
 		}
@@ -2351,7 +2352,7 @@ void unit::add_modification(const std::string& mod_type, const config& mod, bool
 	bool set_poisoned = false; // Tracks if the poisoned state was set after the type or variation was changed.
 	config last_effect;
 	std::vector<t_string> effects_description;
-	BOOST_FOREACH(const config &effect, mod.child_range("effect"))
+	foreach_ng(const config &effect, mod.child_range("effect"))
 	{
 		// Apply SUF.
 		if (const config &afilter = effect.child("filter"))
@@ -2559,7 +2560,7 @@ void unit::add_modification(const std::string& mod_type, const config& mod, bool
 					config &ab = cfg_.child_or_add("abilities");
 					if (const config &ab_effect = effect.child("abilities")) {
 						config to_append;
-						BOOST_FOREACH(const config::any_child &ab, ab_effect.all_children_range()) {
+						foreach_ng(const config::any_child &ab, ab_effect.all_children_range()) {
 							if(!has_ability_by_id(ab.cfg["id"])) {
 								to_append.add_child(ab.key, ab.cfg);
 							}
@@ -2568,7 +2569,7 @@ void unit::add_modification(const std::string& mod_type, const config& mod, bool
 					}
 				} else if (apply_to == "remove_ability") {
 					if (const config &ab_effect = effect.child("abilities")) {
-						BOOST_FOREACH(const config::any_child &ab, ab_effect.all_children_range()) {
+						foreach_ng(const config::any_child &ab, ab_effect.all_children_range()) {
 							remove_ability_by_id(ab.cfg["id"]);
 						}
 					}
@@ -2781,7 +2782,7 @@ void unit::apply_modifications()
 
 	for(size_t i = 0; i != NumModificationTypes; ++i) {
 		const std::string& mod = ModificationTypes[i];
-		BOOST_FOREACH(const config &m, modifications_.child_range(mod)) {
+		foreach_ng(const config &m, modifications_.child_range(mod)) {
 			log_scope("add mod");
 			add_modification(ModificationTypes[i], m, true);
 		}
@@ -2816,7 +2817,7 @@ bool unit::invisible(const map_location& loc, bool see_all) const
 	bool is_inv = get_ability_bool(hides,loc);
 	if(is_inv){
 		const std::vector<team>& teams = *resources::teams;
-		BOOST_FOREACH(const unit &u, *resources::units)
+		foreach_ng(const unit &u, *resources::units)
 		{
 			const map_location &u_loc = u.get_location();
 			if (teams[side_-1].is_enemy(u.side()) && !u.incapacitated() && tiles_adjacent(loc, u_loc)) {
@@ -2960,7 +2961,7 @@ std::vector<unit>::iterator erase_if_matches_id(
 int side_units(int side)
 {
 	int res = 0;
-	BOOST_FOREACH(const unit &u, *resources::units) {
+	foreach_ng(const unit &u, *resources::units) {
 		if (u.side() == side) ++res;
 	}
 	return res;
@@ -2969,7 +2970,7 @@ int side_units(int side)
 int side_units_cost(int side)
 {
 	int res = 0;
-	BOOST_FOREACH(const unit &u, *resources::units) {
+	foreach_ng(const unit &u, *resources::units) {
 		if (u.side() == side) res += u.cost();
 	}
 	return res;
@@ -2978,7 +2979,7 @@ int side_units_cost(int side)
 int side_upkeep(int side)
 {
 	int res = 0;
-	BOOST_FOREACH(const unit &u, *resources::units) {
+	foreach_ng(const unit &u, *resources::units) {
 		if (u.side() == side) res += u.upkeep();
 	}
 	return res;
@@ -3141,7 +3142,7 @@ const std::string& unit::effect_image_mods() const{
 const tportrait* unit::portrait(
 		const unsigned size, const tportrait::tside side) const
 {
-	BOOST_FOREACH(const tportrait& portrait, type().portraits() ) {
+	foreach_ng(const tportrait& portrait, type().portraits() ) {
 		if(portrait.size == size
 				&& (side ==  portrait.side || portrait.side == tportrait::BOTH)) {
 
@@ -3219,20 +3220,20 @@ std::string get_checksum(const unit& u) {
 		  "number",
 		  ""};
 
-	BOOST_FOREACH(const config &att, unit_config.child_range("attack"))
+	foreach_ng(const config &att, unit_config.child_range("attack"))
 	{
 		config& child = wcfg.add_child("attack");
 		for (int i = 0; !attack_keys[i].empty(); ++i) {
 			child[attack_keys[i]] = att[attack_keys[i]];
 		}
-		BOOST_FOREACH(const config &spec, att.child_range("specials")) {
+		foreach_ng(const config &spec, att.child_range("specials")) {
 			config& child_spec = child.add_child("specials", spec);
 			child_spec.recursive_clear_value("description");
 		}
 
 	}
 
-	BOOST_FOREACH(const config &abi, unit_config.child_range("abilities"))
+	foreach_ng(const config &abi, unit_config.child_range("abilities"))
 	{
 		config& child = wcfg.add_child("abilities", abi);
 		child.recursive_clear_value("description");
@@ -3241,7 +3242,7 @@ std::string get_checksum(const unit& u) {
 		child.recursive_clear_value("name_inactive");
 	}
 
-	BOOST_FOREACH(const config &trait, unit_config.child_range("trait"))
+	foreach_ng(const config &trait, unit_config.child_range("trait"))
 	{
 		config& child = wcfg.add_child("trait", trait);
 		child.recursive_clear_value("description");
@@ -3254,7 +3255,7 @@ std::string get_checksum(const unit& u) {
 
 	for (int i = 0; !child_keys[i].empty(); ++i)
 	{
-		BOOST_FOREACH(const config &c, unit_config.child_range(child_keys[i])) {
+		foreach_ng(const config &c, unit_config.child_range(child_keys[i])) {
 			wcfg.add_child(child_keys[i], c);
 		}
 	}

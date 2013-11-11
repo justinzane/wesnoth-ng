@@ -18,7 +18,7 @@
  */
 
 #include "leader_scroll_dialog.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "map.hpp"
 
 //#include "construct_dialog.hpp"

@@ -28,6 +28,7 @@
 #include "serdes/parser.hpp"
 #include "version.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
@@ -111,7 +112,7 @@ namespace game_config {
 		config_writer writer(*stream, gzip, game_config::cache_compression_level);
 
 		// write all defines to stream
-		BOOST_FOREACH(const preproc_map::value_type &define, defines_map) {
+		foreach_ng(const preproc_map::value_type &define, defines_map) {
 			define.second.write(writer, define.first);
 		}
 	}
@@ -263,7 +264,7 @@ namespace game_config {
 
 		// use static preproc_define::read_pair(config) to make a object
 		// and pass that object config_cache_transaction::insert_to_active method
-		BOOST_FOREACH(const config::any_child &value, cfg.all_children_range()) {
+		foreach_ng(const config::any_child &value, cfg.all_children_range()) {
 			config_cache_transaction::instance().insert_to_active(
 				preproc_define::read_pair(value.cfg));
 		}
@@ -272,7 +273,7 @@ namespace game_config {
 	void config_cache::read_defines_queue()
 	{
 		const config_cache_transaction::filenames& files = config_cache_transaction::instance().get_define_files();
-		BOOST_FOREACH(const std::string &path, files) {
+		foreach_ng(const std::string &path, files) {
 			read_defines_file(path);
 		}
 	}
@@ -395,7 +396,7 @@ namespace game_config {
 					std::insert_iterator<preproc_map>(temp,temp.begin()),
 					&compare_define);
 
-			BOOST_FOREACH(const preproc_map::value_type &def, temp) {
+			foreach_ng(const preproc_map::value_type &def, temp) {
 				insert_to_active(def);
 			}
 

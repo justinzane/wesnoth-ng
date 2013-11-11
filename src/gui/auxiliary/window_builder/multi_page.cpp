@@ -22,7 +22,7 @@
 #include "gui/auxiliary/widget_definition/multi_page.hpp"
 #include "gui/widgets/multi_page.hpp"
 #include "utils/foreach.tpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

@@ -26,6 +26,7 @@
 #include "unit/unit.hpp"
 #include "util.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -60,7 +61,7 @@ scenario_stats::scenario_stats(const config& cfg) :
 	team_stats(),
 	scenario_name(cfg["scenario"])
 {
-	BOOST_FOREACH(const config &team, cfg.child_range("team")) {
+	foreach_ng(const config &team, cfg.child_range("team")) {
 		team_stats[team["save_id"]] = stats(team);
 	}
 }
@@ -120,7 +121,7 @@ static void write_str_int_map(config_writer &out, const stats::str_int_map& m)
 static stats::str_int_map read_str_int_map(const config& cfg)
 {
 	stats::str_int_map m;
-	BOOST_FOREACH(const config::attribute &i, cfg.attribute_range()) {
+	foreach_ng(const config::attribute &i, cfg.attribute_range()) {
 		m[i.first] = i.second;
 	}
 
@@ -152,7 +153,7 @@ static void write_battle_result_map(config_writer &out, const stats::battle_resu
 static stats::battle_result_map read_battle_result_map(const config& cfg)
 {
 	stats::battle_result_map m;
-	BOOST_FOREACH(const config &i, cfg.child_range("sequence"))
+	foreach_ng(const config &i, cfg.child_range("sequence"))
 	{
 		config item = i;
 		int key = item["_num"];
@@ -597,7 +598,7 @@ void read_stats(const config& cfg)
 	fresh_stats();
 	mid_scenario = cfg["mid_scenario"].to_bool();
 
-	BOOST_FOREACH(const config &s, cfg.child_range("scenario")) {
+	foreach_ng(const config &s, cfg.child_range("scenario")) {
 		master_stats.push_back(scenario_stats(s));
 	}
 }

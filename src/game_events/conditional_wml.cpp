@@ -37,6 +37,7 @@
 #include "../util.hpp"
 #include "../variable.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 
@@ -63,7 +64,7 @@ namespace { // Support functions
 			std::vector<std::pair<int,int> > counts = (*u).has_attribute("count")
 				? utils::parse_ranges((*u)["count"]) : default_counts;
 			int match_count = 0;
-			BOOST_FOREACH(const unit &i, *resources::units)
+			foreach_ng(const unit &i, *resources::units)
 			{
 				if ( i.hitpoints() > 0  &&  i.matches_filter(*u) ) {
 					++match_count;
@@ -118,7 +119,7 @@ namespace { // Support functions
 		const vconfig::child_list& variables = cond.get_children("variable");
 		backwards_compat = backwards_compat && variables.empty();
 
-		BOOST_FOREACH(const vconfig &values, variables)
+		foreach_ng(const vconfig &values, variables)
 		{
 			const std::string name = values["name"];
 			config::attribute_value value = resources::gamedata->get_variable_const(name);

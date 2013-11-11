@@ -35,6 +35,7 @@
 #include "../serdes/string_utils.hpp"
 #include "../soundsource.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <iostream>
 
@@ -100,7 +101,7 @@ namespace { // Types
 	                 const std::vector<event_handler>& handlers,
 	                 const std::string& msg)
 	{
-		BOOST_FOREACH(const event_handler& h, handlers){
+		foreach_ng(const event_handler& h, handlers){
 			const config& cfg = h.get_config();
 			ss << "name=" << cfg["name"] << ", with id=" << cfg["id"] << "; ";
 		}
@@ -115,7 +116,7 @@ namespace { // Types
 		std::stringstream ss;
 		log_handler(ss, active_, "active");
 		log_handler(ss, insert_buffer_, "insert buffered");
-		BOOST_FOREACH(const std::string& h, remove_buffer_){
+		foreach_ng(const std::string& h, remove_buffer_){
 			ss << "id=" << h << "; ";
 		}
 		DBG_EH << "remove buffered handlers are now " << ss.str() << "\n";
@@ -138,7 +139,7 @@ namespace { // Types
 		else {
 			std::string id = cfg["id"];
 			if(!id.empty()) {
-				BOOST_FOREACH( event_handler const & eh, active_ ) {
+				foreach_ng( event_handler const & eh, active_ ) {
 					config const & temp_config(eh.get_config());
 					if(id == temp_config["id"]) {
 						DBG_EH << "ignoring event handler for name=" << cfg["name"] <<
@@ -210,12 +211,12 @@ namespace { // Types
 			return;
 
 		// Commit any event removals
-		BOOST_FOREACH( std::string const & i, remove_buffer_ ){
+		foreach_ng( std::string const & i, remove_buffer_ ){
 			remove_event_handler(i); }
 		remove_buffer_.clear();
 
 		// Commit any spawned events-within-events
-		BOOST_FOREACH( event_handler const & i, insert_buffer_ ){
+		foreach_ng( event_handler const & i, insert_buffer_ ){
 			add_event_handler(i.get_config(), i.is_menu_item()); }
 		insert_buffer_.clear();
 
@@ -272,7 +273,7 @@ void commit_wmi_commands()
 		(*wcc.second)["first_time_only"] = false;
 
 		if ( !item.command().empty() ) {
-			BOOST_FOREACH(event_handler& hand, event_handlers) {
+			foreach_ng(event_handler& hand, event_handlers) {
 				if ( hand.is_menu_item() && hand.matches_name(event_name) ) {
 					LOG_NG << "changing command for " << event_name << " to:\n" << *wcc.second;
 					hand = event_handler(*wcc.second, true);
@@ -338,10 +339,10 @@ void remove_event_handler(const std::string & id)
 
 manager::manager(const config& cfg)
 {
-	BOOST_FOREACH(const config &ev, cfg.child_range("event")) {
+	foreach_ng(const config &ev, cfg.child_range("event")) {
 		add_event_handler(ev);
 	}
-	BOOST_FOREACH(const std::string &id, utils::split(cfg["unit_wml_ids"])) {
+	foreach_ng(const std::string &id, utils::split(cfg["unit_wml_ids"])) {
 		unit_wml_ids.insert(id);
 	}
 
@@ -496,7 +497,7 @@ void add_events(const config::const_child_itors &cfgs, const std::string& type)
 		if(std::find(unit_wml_ids.begin(),unit_wml_ids.end(),type) != unit_wml_ids.end()) return;
 		unit_wml_ids.insert(type);
 	}
-	BOOST_FOREACH(const config &new_ev, cfgs) {
+	foreach_ng(const config &new_ev, cfgs) {
 		if(type.empty() && new_ev["id"].empty())
 		{
 			WRN_NG << "attempt to add an [event] with empty id=, ignoring \n";
@@ -508,7 +509,7 @@ void add_events(const config::const_child_itors &cfgs, const std::string& type)
 
 void write_events(config& cfg)
 {
-	BOOST_FOREACH(const event_handler &eh, event_handlers) {
+	foreach_ng(const event_handler &eh, event_handlers) {
 		if ( eh.disabled() || eh.is_menu_item() ) {
 			continue;
 		}

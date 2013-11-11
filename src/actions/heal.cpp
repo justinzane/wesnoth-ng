@@ -36,6 +36,7 @@
 #include "../unit/unit_map.hpp"
 #include "../unit/unit_map.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <list>
 #include <vector>
@@ -282,7 +283,7 @@ void calculate_healing(int side, bool update_display)
 	std::list<heal_unit> unit_list;
 
 	// We look for all allied units, then we see if our healer is near them.
-	BOOST_FOREACH(unit &patient, *resources::units) {
+	foreach_ng(unit &patient, *resources::units) {
 
 		if ( patient.get_state("unhealable") || patient.incapacitated() ) {
 			if ( patient.side() == side )

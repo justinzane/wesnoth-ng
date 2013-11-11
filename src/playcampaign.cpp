@@ -44,10 +44,11 @@
 #include "resources.hpp"
 #include "savegame.hpp"
 #include "sound.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #define LOG_G LOG_STREAM(info, lg::general)
@@ -67,7 +68,7 @@ static void team_init(config& level, game_state& gamestate){
 	carryover_info sides(gamestate.carryover_sides);
 
 	sides.transfer_to(level);
-	BOOST_FOREACH(config& side_cfg, level.child_range("side")){
+	foreach_ng(config& side_cfg, level.child_range("side")){
 		sides.transfer_all_to(side_cfg);
 	}
 
@@ -101,7 +102,7 @@ static void store_carryover(game_state& gamestate, playsingle_controller& playco
 
 	std::vector<team> teams = playcontroller.get_teams_const();
 	int persistent_teams = 0;
-	BOOST_FOREACH(const team &t, teams) {
+	foreach_ng(const team &t, teams) {
 		if (t.persistent()){
 			++persistent_teams;
 		}
@@ -120,7 +121,7 @@ static void store_carryover(game_state& gamestate, playsingle_controller& playco
 				finishing_bonus_per_turn * turns_left : 0;
 
 
-		BOOST_FOREACH(const team &t, teams)
+		foreach_ng(const team &t, teams)
 		{
 			if (!t.persistent()){
 				continue;
@@ -408,7 +409,7 @@ LEVEL_RESULT play_game(game_display& disp, game_state& gamestate,
 				scenario = &starting_pos;
 			}
 
-			BOOST_FOREACH(config &side, starting_pos.child_range("side"))
+			foreach_ng(config &side, starting_pos.child_range("side"))
 			{
 				if (side["current_player"] == preferences::login()) {
 					side["controller"] = "human";

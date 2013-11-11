@@ -37,6 +37,7 @@
 #include "resources.hpp"
 #include "widgets/button.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -141,7 +142,7 @@ STORY_RESULT controller::show(START_POSITION startpos)
 	// caching the scaled backgrounds can take over a decent amount of memory.
 #ifndef LOW_MEM
 	std::vector< render_pointer_type > uis_;
-	BOOST_FOREACH(part_pointer_type p, parts_) {
+	foreach_ng(part_pointer_type p, parts_) {
 		ASSERT_LOG( p != NULL, "Ouch: hit NULL storyscreen part in collection" );
 		render_pointer_type const rpt(new part_ui(*p, disp_, next_button, back_button, play_button));
 		uis_.push_back(rpt);

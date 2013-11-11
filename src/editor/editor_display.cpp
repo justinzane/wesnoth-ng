@@ -17,6 +17,7 @@
 #include "builder.hpp"
 #include "reports.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace editor {

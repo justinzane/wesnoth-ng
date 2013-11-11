@@ -25,11 +25,12 @@
 #include "gui/dialogs/transient_message.hpp"
 #include "lobby_preferences.hpp"
 #include "preferences_display.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "widgets/slider.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace preferences {
@@ -1088,7 +1089,7 @@ const config* preferences_dialog::get_advanced_pref() const
 void preferences_dialog::set_advanced_menu()
 {
 	std::vector<std::string> advanced_items;
-	BOOST_FOREACH(const config &adv, adv_preferences_cfg_)
+	foreach_ng(const config &adv, adv_preferences_cfg_)
 	{
 		std::ostringstream str;
 		std::string field = preferences::get(adv["field"]);
@@ -1113,7 +1114,7 @@ void preferences_dialog::sort_advanced_preferences()
 {
 	adv_preferences_cfg_.clear();
 
-	BOOST_FOREACH(const config& adv, game_cfg_.child_range("advanced_preference")) {
+	foreach_ng(const config& adv, game_cfg_.child_range("advanced_preference")) {
 		adv_preferences_cfg_.push_back(adv);
 	}
 

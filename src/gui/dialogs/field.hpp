@@ -29,7 +29,7 @@
 #include "gui/widgets/selectable.hpp"
 #include "gui/widgets/text_box.hpp"
 #include "gui/widgets/window.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 #include <boost/static_assert.hpp>
 

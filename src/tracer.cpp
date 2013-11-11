@@ -14,6 +14,7 @@
 
 #include "tracer.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <iomanip>
@@ -35,7 +36,7 @@ ttracer::tprint::~tprint()
 
 	typedef std::pair<std::pair<int, std::string>, int> thack;
 	size_t maximum_length = 0;
-	BOOST_FOREACH(const thack& counter, tracer->counters) {
+	foreach_ng(const thack& counter, tracer->counters) {
 		maximum_length = std::max(
 				  maximum_length
 				, counter.first.second.length());
@@ -45,7 +46,7 @@ ttracer::tprint::~tprint()
 			  std::ios_base::left
 			, std::ios_base::adjustfield);
 
-	BOOST_FOREACH(const thack& counter, tracer->counters) {
+	foreach_ng(const thack& counter, tracer->counters) {
 		std::cerr << "Marker: "
 				<< std::left
 				<< std::setw(maximum_length) << counter.first.second

@@ -25,6 +25,7 @@
 #include "../../unit/unit.hpp"
 #include "../../unit/unit.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 #include <iomanip>
@@ -70,7 +71,7 @@ struct data {
 		: leader(leader), ratio_score(1.0), recruit_count(0), in_danger(false) { }
 	double get_score_sum() const {
 		double sum = 0.0;
-		BOOST_FOREACH(const score_map::value_type& entry, scores) {
+		foreach_ng(const score_map::value_type& entry, scores) {
 			sum += entry.second;
 		}
 		return sum;
@@ -81,7 +82,7 @@ struct data {
 			return scores;
 		}
 		score_map normalized;
-		BOOST_FOREACH(const score_map::value_type& entry, scores) {
+		foreach_ng(const score_map::value_type& entry, scores) {
 			normalized[entry.first] = entry.second / sum;
 		}
 		return normalized;
@@ -92,7 +93,7 @@ struct data {
 		s << "For leader: " << leader->name() << "\n";
 		s << "ratio_score: " << ratio_score << "\n";
 		s << "recruit_count: " << recruit_count << "\n\n";
-		BOOST_FOREACH(const score_map::value_type& entry, scores) {
+		foreach_ng(const score_map::value_type& entry, scores) {
 			s << std::setw(20) << entry.first <<
 					" score: " << std::setw(7) << entry.second << "\n";
 		}

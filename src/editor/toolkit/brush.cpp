@@ -18,6 +18,7 @@
 
 #include "pathutils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace editor {
@@ -74,11 +75,11 @@ brush::brush(const config& cfg)
 	if (radius > 0) {
 		std::vector<map_location> in_radius;
 		get_tiles_in_radius(map_location(0, 0), radius, in_radius);
-		BOOST_FOREACH(map_location& loc, in_radius) {
+		foreach_ng(map_location& loc, in_radius) {
 			add_relative_location(loc.x, loc.y);
 		}
 	}
-	BOOST_FOREACH(const config &relative, cfg.child_range("relative"))
+	foreach_ng(const config &relative, cfg.child_range("relative"))
 	{
 		int x = relative["x"];
 		int y = relative["y"];
@@ -97,7 +98,7 @@ void brush::add_relative_location(int relative_x, int relative_y)
 std::set<map_location> brush::project(const map_location& hotspot) const
 {
 	std::set<map_location> result;
-	BOOST_FOREACH(const map_location& relative, relative_tiles_) {
+	foreach_ng(const map_location& relative, relative_tiles_) {
 		result.insert(relative.vector_sum(hotspot));
 	}
 	return result;

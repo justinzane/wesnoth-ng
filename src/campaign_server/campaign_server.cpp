@@ -35,6 +35,7 @@
 
 #include <csignal>
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/exception/get_error_info.hpp>
@@ -206,7 +207,7 @@ namespace {
 
 	void find_translations(const config& cfg, config& campaign)
 	{
-		BOOST_FOREACH(const config &dir, cfg.child_range("dir"))
+		foreach_ng(const config &dir, cfg.child_range("dir"))
 		{
 			if (dir["name"] == "LC_MESSAGES") {
 				config &language = campaign.add_child("translation");
@@ -253,7 +254,7 @@ namespace {
 			LOG_CS << "Encoding all stored addons. Number of addons: "
 				<< std::distance(camps.first, camps.second) << '\n';
 
-			BOOST_FOREACH(const config &cm, camps)
+			foreach_ng(const config &cm, camps)
 			{
 				LOG_CS << "Encoding " << cm["name"] << '\n';
 				std::string filename = cm["filename"], newfilename = filename + ".new";
@@ -356,7 +357,7 @@ namespace {
 						} catch(bad_lexical_cast) {}
 
 						std::string name = req["name"], lang = req["language"];
-						BOOST_FOREACH(const config &i, campaigns().child_range("campaign"))
+						foreach_ng(const config &i, campaigns().child_range("campaign"))
 						{
 							if (!name.empty() && name != i["name"]) continue;
 							std::string tm = i["timestamp"];
@@ -364,7 +365,7 @@ namespace {
 							if (after_flag && (tm.empty() || lexical_cast_default<time_t>(tm, 0) <= after)) continue;
 							if (!lang.empty()) {
 								bool found = false;
-								BOOST_FOREACH(const config &j, i.child_range("translation")) {
+								foreach_ng(const config &j, i.child_range("translation")) {
 									if (j["language"] == lang) {
 										found = true;
 										break;
@@ -375,7 +376,7 @@ namespace {
 							campaign_list.add_child("campaign", i);
 						}
 
-						BOOST_FOREACH(config &j, campaign_list.child_range("campaign")) {
+						foreach_ng(config &j, campaign_list.child_range("campaign")) {
 							j["passphrase"] = t_string();
 							j["upload_ip"] = t_string();
 							j["email"] = t_string();
@@ -426,7 +427,7 @@ namespace {
 						std::string lc_name(name.size(), ' ');
 						std::transform(name.begin(), name.end(), lc_name.begin(), tolower);
 						config *campaign = NULL;
-						BOOST_FOREACH(config &c, campaigns().child_range("campaign")) {
+						foreach_ng(config &c, campaigns().child_range("campaign")) {
 							if (utils::lowercase(c["name"]) == lc_name) {
 								campaign = &c;
 								break;

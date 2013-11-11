@@ -40,11 +40,12 @@
 #include "filesystem.hpp"
 #include "log/log.hpp"
 #include "log/log.hpp"
-#include "wml_exception.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_exception.hpp"
+#include "serdes/wml_separators.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -115,7 +116,7 @@ create::create(game_display& disp, const config& cfg, game_state& state,
 
 	std::vector<std::string> combo_level_names;
 
-	BOOST_FOREACH(level_type_info type_info, all_level_types) {
+	foreach_ng(level_type_info type_info, all_level_types) {
 		if (!engine_.get_levels_by_type(type_info.first).empty()) {
 			available_level_types_.push_back(type_info.first);
 			combo_level_names.push_back(type_info.second);
@@ -140,7 +141,7 @@ create::create(game_display& disp, const config& cfg, game_state& state,
 
 	// Set level selection according to the preferences, if possible.
 	size_t type_index = 0;
-	BOOST_FOREACH(level::TYPE type, available_level_types_) {
+	foreach_ng(level::TYPE type, available_level_types_) {
 		if (preferences::level_type() == type) {
 			break;
 		}
@@ -171,7 +172,7 @@ create::create(game_display& disp, const config& cfg, game_state& state,
 		preferences::era());
 	eras_menu_.move_selection((era_new_selection != -1) ? era_new_selection : 0);
 
-	BOOST_FOREACH(const config& mod, cfg.child_range("modification")) {
+	foreach_ng(const config& mod, cfg.child_range("modification")) {
 		available_mods_.add_child("modification", mod);
 	}
 

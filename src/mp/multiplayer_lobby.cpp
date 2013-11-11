@@ -32,10 +32,11 @@
 #include "mp/playmp_controller.hpp"
 #include "mp/playmp_controller.hpp"
 #include "sound.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -443,7 +444,7 @@ void gamebrowser::set_game_items(const config& cfg, const config& game_config)
 
 	games_.clear();
 
-	BOOST_FOREACH(const config &game, cfg.child("gamelist").child_range("game"))
+	foreach_ng(const config &game, cfg.child("gamelist").child_range("game"))
 	{
 		bool verified = true;
 		games_.push_back(game_item());
@@ -523,7 +524,7 @@ void gamebrowser::set_game_items(const config& cfg, const config& game_config)
 					if (map_hashes_ && !games_.back().reloaded) {
 						std::string hash = game["hash"];
 						bool hash_found = false;
-						BOOST_FOREACH(const config::attribute& i,
+						foreach_ng(const config::attribute& i,
 							map_hashes_.attribute_range()) {
 
 							if (i.first == game["mp_scenario"] &&
@@ -707,7 +708,7 @@ bool gamebrowser::game_matches_filter(const game_item& i, const config& cfg) {
 
     if(preferences::fi_friends_in_game()) {
         bool found_friend = false;
-        BOOST_FOREACH(const config &user, cfg.child_range("user")) {
+        foreach_ng(const config &user, cfg.child_range("user")) {
             if(preferences::is_friend(user["name"]) && user["game_id"] == i.id) {
                 found_friend = true;
                 break;
@@ -718,7 +719,7 @@ bool gamebrowser::game_matches_filter(const game_item& i, const config& cfg) {
 
     if(!preferences::fi_text().empty()) {
         bool found_match = true;
-        BOOST_FOREACH(const std::string& search_string, utils::split(preferences::fi_text(), ' ', utils::STRIP_SPACES)) {
+        foreach_ng(const std::string& search_string, utils::split(preferences::fi_text(), ' ', utils::STRIP_SPACES)) {
             if(std::search(i.map_info.begin(), i.map_info.end(), search_string.begin(), search_string.end(), chars_equal_insensitive) == i.map_info.end() &&
                     std::search(i.name.begin(), i.name.end(), search_string.begin(), search_string.end(), chars_equal_insensitive) == i.name.end()) {
                 found_match = false;

@@ -31,9 +31,10 @@
 #include "preferences_display.hpp"
 #include "theme.hpp"
 #include "wesconfig.h"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 
 #include <map>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -560,7 +561,7 @@ void manager::init()
 	known_hotkeys = known_hotkeys_temp;
 
 	size_t i = 0;
-	BOOST_FOREACH(hotkey_command_temp& cmd, hotkey_list_)
+	foreach_ng(hotkey_command_temp& cmd, hotkey_list_)
 	{
 		known_hotkeys.push_back( new hotkey_command(cmd.id, cmd.command, t_string(cmd.description, "wesnoth-lib"), cmd.hidden, cmd.scope, t_string(cmd.tooltip, "wesnoth-lib")));
 		command_map_[cmd.command] = i;
@@ -591,7 +592,7 @@ scope_changer::~scope_changer()
 
 void clear_hotkeys(const std::string& command)
 {
-	BOOST_FOREACH(hotkey::hotkey_item& item, hotkeys_) {
+	foreach_ng(hotkey::hotkey_item& item, hotkeys_) {
 		if (item.get_command() == command) {
 			item.clear(); }
 	}
@@ -600,7 +601,7 @@ void clear_hotkeys(const std::string& command)
 void load_hotkeys(const config& cfg, bool set_as_default)
 {
 	hotkeys_.clear();
-	BOOST_FOREACH(const config &hk, cfg.child_range("hotkey")) {
+	foreach_ng(const config &hk, cfg.child_range("hotkey")) {
 		hotkeys_.push_back(hotkey_item(hk));
 	}
 
@@ -683,7 +684,7 @@ hotkey_command& hotkey_command::null_command()
 
 hotkey_command& hotkey_command::get_command_by_command(hotkey::HOTKEY_COMMAND command)
 {
-	BOOST_FOREACH(hotkey_command& cmd, known_hotkeys)
+	foreach_ng(hotkey_command& cmd, known_hotkeys)
 	{
 		if(cmd.id == command)
 			return cmd;
@@ -705,7 +706,7 @@ bool has_hotkey_command(const std::string& id)
 
 bool has_hotkey_item(const std::string& command)
 {
-	BOOST_FOREACH(hotkey_item& item, hotkeys_)
+	foreach_ng(hotkey_item& item, hotkeys_)
 	{
 		if(item.get_command() == command)
 			return true;
@@ -781,7 +782,7 @@ HOTKEY_COMMAND get_id(const std::string& command)
 std::string get_names(HOTKEY_COMMAND id) {
 
 	std::vector<std::string> names;
-	BOOST_FOREACH(const hotkey::hotkey_item& item, hotkeys_) {
+	foreach_ng(const hotkey::hotkey_item& item, hotkeys_) {
 		if (item.get_id() == id && (!item.null()) ) {
 			names.push_back(item.get_name());
 		}
@@ -793,7 +794,7 @@ std::string get_names(HOTKEY_COMMAND id) {
 std::string get_names(std::string id) {
 
 	std::vector<std::string> names;
-	BOOST_FOREACH(const hotkey::hotkey_item& item, hotkeys_) {
+	foreach_ng(const hotkey::hotkey_item& item, hotkeys_) {
 		if (item.get_command() == id && (!item.null()) ) {
 			names.push_back(item.get_name());
 		}
@@ -1383,12 +1384,12 @@ void execute_command(display& disp, hotkey_command& command, command_executor* e
 
 void command_executor::set_button_state(display& disp) {
 
-	BOOST_FOREACH(const theme::action& action, disp.get_theme().actions()) {
+	foreach_ng(const theme::action& action, disp.get_theme().actions()) {
 
 		gui::button* button = disp.find_action_button(action.get_id());
 		bool enabled = false;
 		int i = 0;
-		BOOST_FOREACH(const std::string& command, action.items()) {
+		foreach_ng(const std::string& command, action.items()) {
 
 			hotkey::hotkey_command& command_obj = hotkey::get_hotkey_command(command);
 			std::string tooltip = action.tooltip(i);

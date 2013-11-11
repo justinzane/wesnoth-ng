@@ -21,7 +21,7 @@
 #include "gui/auxiliary/log.hpp"
 #include "gui/auxiliary/window_builder/helper.hpp"
 #include "gui/widgets/toggle_panel.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

@@ -31,6 +31,7 @@
 #include "unit/unit_id.hpp"
 #include "unit/unit_id.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -238,8 +239,8 @@ void level_to_gamestate(config& level, game_state& state)
 			state.replay_start().child_range("side");
 		config::const_child_itors level_sides = level.child_range("side");
 
-		BOOST_FOREACH(config& side, saved_sides) {
-			BOOST_FOREACH(const config& lside, level_sides) {
+		foreach_ng(config& side, saved_sides) {
+			foreach_ng(const config& lside, level_sides) {
 				if (side["side"] == lside["side"] &&
 						(side["current_player"] != lside["current_player"] ||
 						 side["controller"] != lside["controller"])) {

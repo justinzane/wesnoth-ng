@@ -74,7 +74,7 @@
 #ifdef ENUM_ENABLE_STREAM_OPERATORS_IMPLEMENTATION
 
 #include "gettext.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_enum.hpp>

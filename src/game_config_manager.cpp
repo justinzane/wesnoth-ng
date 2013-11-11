@@ -28,6 +28,7 @@
 #include "resources.hpp"
 #include "scripting/lua.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -149,7 +150,7 @@ void game_config_manager::load_game_config(FORCE_RELOAD_CONFIG force_reload,
 
 				game_config_.clear_children("scenario");
 
-				BOOST_FOREACH(config& cfg, scenarios) {
+				foreach_ng(config& cfg, scenarios) {
 					cfg["campaign_id"] = campaign_id;
 					game_config_.add_child("multiplayer", cfg);
 				}
@@ -198,7 +199,7 @@ void game_config_manager::load_addons_cfg()
 	std::stringstream user_error_log;
 
 	// Append the $user_campaign_dir/*.cfg files to addons_to_load.
-	BOOST_FOREACH(const std::string& uc, user_files) {
+	foreach_ng(const std::string& uc, user_files) {
 		const std::string file = uc;
 		const int size_minus_extension = file.size() - 4;
 		if(file.substr(size_minus_extension, file.size()) == ".cfg") {
@@ -239,7 +240,7 @@ void game_config_manager::load_addons_cfg()
 	}
 
 	// Append the $user_campaign_dir/*/_main.cfg files to addons_to_load.
-	BOOST_FOREACH(const std::string& uc, user_dirs) {
+	foreach_ng(const std::string& uc, user_dirs) {
 		const std::string main_cfg = uc + "/_main.cfg";
 		if(file_exists(main_cfg)) {
 			addons_to_load.push_back(main_cfg);
@@ -247,7 +248,7 @@ void game_config_manager::load_addons_cfg()
 	}
 
 	// Load the addons.
-	BOOST_FOREACH(const std::string& uc, addons_to_load) {
+	foreach_ng(const std::string& uc, addons_to_load) {
 		const std::string toplevel = uc;
 		try {
 			config umc_cfg;
@@ -271,7 +272,7 @@ void game_config_manager::load_addons_cfg()
 		msg << _n("The following add-on had errors and could not be loaded:",
 			"The following add-ons had errors and could not be loaded:",
 				error_addons.size());
-		BOOST_FOREACH(const std::string& error_addon, error_addons) {
+		foreach_ng(const std::string& error_addon, error_addons) {
 			msg << "\n" << error_addon;
 		}
 
@@ -284,7 +285,7 @@ void game_config_manager::load_addons_cfg()
 void game_config_manager::set_multiplayer_hashes()
 {
 	config& hashes = game_config_.add_child("multiplayer_hashes");
-	BOOST_FOREACH(const config &ch, game_config_.child_range("multiplayer")) {
+	foreach_ng(const config &ch, game_config_.child_range("multiplayer")) {
 		hashes[ch["id"]] = ch.hash();
 	}
 }
@@ -336,7 +337,7 @@ void game_config_manager::load_game_config_for_game(
 
 	typedef boost::shared_ptr<game_config::scoped_preproc_define> define;
 	std::deque<define> extra_defines;
-	BOOST_FOREACH(const std::string& extra_define,
+	foreach_ng(const std::string& extra_define,
 		classification.campaign_xtra_defines) {
 		define new_define
 			(new game_config::scoped_preproc_define(extra_define));
@@ -350,7 +351,7 @@ void game_config_manager::load_game_config_for_game(
 		cache_.clear_defines();
 
 		std::deque<define> previous_defines;
-		BOOST_FOREACH(const preproc_map::value_type& preproc, old_defines_map_) {
+		foreach_ng(const preproc_map::value_type& preproc, old_defines_map_) {
 			define new_define
 				(new game_config::scoped_preproc_define(preproc.first));
 			previous_defines.push_back(new_define);

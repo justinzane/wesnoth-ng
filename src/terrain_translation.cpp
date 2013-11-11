@@ -26,7 +26,7 @@
 #include "terrain_translation.hpp"
 #include "serdes/string_utils.hpp"
 #include "util.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 
 #define ERR_G LOG_STREAM(err, lg::general)

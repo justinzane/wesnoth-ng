@@ -22,6 +22,7 @@
 #include "log/log.hpp"
 #include "mouse_handler_base.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_display("display");
@@ -142,7 +143,7 @@ bool controller_base::handle_scroll(CKey& key, int mousex, int mousey, int mouse
 	int dx = 0, dy = 0;
 	int scroll_threshold = (preferences::mouse_scroll_enabled())
 		? preferences::mouse_scroll_threshold() : 0;
-	BOOST_FOREACH(const theme::menu& m, get_display().get_theme().menus()) {
+	foreach_ng(const theme::menu& m, get_display().get_theme().menus()) {
 		if (point_in_rect(mousex, mousey, m.get_location())) {
 			scroll_threshold = 0;
 		}
@@ -296,7 +297,7 @@ void controller_base::execute_action(const std::vector<std::string>& items_arg, 
 {
 
 	std::vector<std::string> items;
-	BOOST_FOREACH(const std::string& item, items_arg) {
+	foreach_ng(const std::string& item, items_arg) {
 
 		hotkey::hotkey_command& command = hotkey::get_hotkey_command(item);
 		if(can_execute_command(command))

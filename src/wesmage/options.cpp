@@ -17,6 +17,7 @@
 #include "wesmage/exit.hpp"
 #include "wesmage/filter.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <cassert>
@@ -96,7 +97,7 @@ operator<<(
 		, const tfilter_description& fd)
 {
 	print_option(stream, fd.name, fd.description);
-	BOOST_FOREACH(const tfilter_description::tparameter& p, fd.parameters) {
+	foreach_ng(const tfilter_description::tparameter& p, fd.parameters) {
 		print_option(
 				  stream
 				, " * " + p.name + " (" + p.type + ")"
@@ -137,7 +138,7 @@ print_help(const int exit_status)
 "\n"
 "The following filters are currently implemented:\n"
 ;
-	BOOST_FOREACH(const tfilter_description& filter, filter_list()) {
+	foreach_ng(const tfilter_description& filter, filter_list()) {
 		std::cout << filter;
 	}
 

@@ -32,11 +32,12 @@
 #include "filesystem.hpp"
 #include "log/log.hpp"
 #include "log/log.hpp"
-#include "wml_exception.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_exception.hpp"
+#include "serdes/wml_separators.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -184,7 +185,7 @@ configure::configure(game_display& disp, const config &cfg, chat& c, config& gam
 	// The starting points for campaign.
 	std::vector<std::string> entry_point_titles;
 
-	BOOST_FOREACH(const config& scenario,
+	foreach_ng(const config& scenario,
 		game_config().child_range("multiplayer")) {
 
 		if (!scenario["campaign_id"].empty() &&

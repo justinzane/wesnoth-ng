@@ -19,6 +19,7 @@
 
 #include "tooltips.hpp"
 #include "editor/action/mouse/mouse_action.hpp"
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace editor {
@@ -144,7 +145,7 @@ void palette_manager::draw_contents()
 handler_vector palette_manager::handler_members()
 {
 	//handler_vector h;
-//	BOOST_FOREACH(gui::widget& b, active_palette().get_widgets()) {
+//	foreach_ng(gui::widget& b, active_palette().get_widgets()) {
 //		h.push_back(&b);
 //	}
 	//return h;

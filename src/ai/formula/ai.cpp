@@ -42,6 +42,7 @@
 #include "../../tod_manager.hpp"
 #include "../../pathfind/pathfind.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_formula_ai("ai/engine/fai");
@@ -550,7 +551,7 @@ template<typename Container>
 variant villages_from_set(const Container& villages,
 				          const std::set<map_location>* exclude=NULL) {
 	std::vector<variant> vars;
-	BOOST_FOREACH(const map_location& loc, villages) {
+	foreach_ng(const map_location& loc, villages) {
 		if(exclude && exclude->count(loc)) {
 			continue;
 		}
@@ -623,7 +624,7 @@ variant formula_ai::get_value(const std::string& key) const
 	{
 		const std::vector<std::string> &rp = get_recruitment_pattern();
 		std::vector<variant> vars;
-		BOOST_FOREACH(const std::string &i, rp) {
+		foreach_ng(const std::string &i, rp) {
 			vars.push_back(variant(i));
 		}
 		return variant(&vars);
@@ -757,7 +758,7 @@ variant formula_ai::get_value(const std::string& key) const
 			std::vector<variant> v;
 			tmp.push_back( v );
 		}
-		BOOST_FOREACH(const unit &u, units) {
+		foreach_ng(const unit &u, units) {
 			tmp[u.side() - 1].push_back(variant(new unit_callable(u)));
 		}
 		for( size_t i = 0; i<tmp.size(); ++i)
@@ -930,7 +931,7 @@ void formula_ai::on_create(){
 	//make sure we don't run out of refcount
 	vars_.add_ref();
 
-	BOOST_FOREACH(const config &func, cfg_.child_range("function"))
+	foreach_ng(const config &func, cfg_.child_range("function"))
 	{
 		const t_string &name = func["name"];
 		const t_string &inputs = func["inputs"];
@@ -953,7 +954,7 @@ void formula_ai::on_create(){
 	if (const config &ai_vars = cfg_.child("vars"))
 	{
 		variant var;
-		BOOST_FOREACH(const config::attribute &i, ai_vars.attribute_range()) {
+		foreach_ng(const config::attribute &i, ai_vars.attribute_range()) {
 			var.serialize_from_string(i.second);
 			vars_.add(i.first, var);
 		}

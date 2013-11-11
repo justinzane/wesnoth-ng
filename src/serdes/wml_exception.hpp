@@ -1,16 +1,16 @@
 /*
-   Copyright (C) 2007 - 2013 by Mark de Wever <koraq@xs4all.nl>
-   Part of the Battle for Wesnoth Project http://www.wesnoth.org/
+ Copyright (C) 2007 - 2013 by Mark de Wever <koraq@xs4all.nl>
+ Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY.
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY.
 
-   See the COPYING file for more details.
-*/
+ See the COPYING file for more details.
+ */
 
 /**
  * @file
@@ -35,15 +35,15 @@ class display;
  *  @param message      The translatable message to show at the user.
  */
 #ifdef _MSC_VER
- #if _MSC_VER < 1300
-  #define __FUNCTION__ "(Unspecified)"
- #endif
+#if _MSC_VER < 1300
+#define __FUNCTION__ "(Unspecified)"
+#endif
 #endif
 
 #ifndef __func__
- #ifdef __FUNCTION__
-  #define __func__ __FUNCTION__
- #endif
+#ifdef __FUNCTION__
+#define __func__ __FUNCTION__
+#endif
 #endif
 
 #define VALIDATE(cond, message)                                           \
@@ -95,46 +95,42 @@ class display;
  *  @param function     The function in which the test failed.
  *  @param message      The translated message to show the user.
  */
-void wml_exception(
-		  const char* cond
-		, const char* file
-		, int line
-		, const char *function
-		, const std::string& message
-		, const std::string& dev_message = "");
+void wml_exception(const char* cond,
+                   const char* file,
+                   int line,
+                   const char *function,
+                   const std::string& message,
+                   const std::string& dev_message = "");
 
 /** Helper class, don't construct this directly. */
-struct twml_exception
-	: public tlua_jailbreak_exception
-{
-	twml_exception(const std::string& user_msg, const std::string& dev_msg)
-		: user_message(user_msg)
-		, dev_message(dev_msg)
-	{
-	}
+struct twml_exception: public tlua_jailbreak_exception {
+        twml_exception(const std::string& user_msg, const std::string& dev_msg) :
+            user_message(user_msg), dev_message(dev_msg) {
+        }
 
-	~twml_exception() throw() {}
+        ~twml_exception() throw () {
+        }
 
-	/**
-	 *  The message for the user explaining what went wrong. This message can
-	 *  be translated so the user gets a explanation in his/her native tongue.
-	 */
-	std::string user_message;
+        /**
+         *  The message for the user explaining what went wrong. This message can
+         *  be translated so the user gets a explanation in his/her native tongue.
+         */
+        std::string user_message;
 
-	/**
-	 *  The message for developers telling which problem was triggered, this
-	 *  shouldn't be translated. It's hard for a dev to parse errors in
-	 *  foreign tongues.
-	 */
-	std::string dev_message;
+        /**
+         *  The message for developers telling which problem was triggered, this
+         *  shouldn't be translated. It's hard for a dev to parse errors in
+         *  foreign tongues.
+         */
+        std::string dev_message;
 
-	/**
-	 * Shows the error in a dialog.
-	 *  @param disp         The display object to show the message on.
-	 */
-	void show(display &disp);
-private:
-	IMPLEMENT_LUA_JAILBREAK_EXCEPTION(twml_exception)
+        /**
+         * Shows the error in a dialog.
+         *  @param disp         The display object to show the message on.
+         */
+        void show(display &disp);
+    private:
+        IMPLEMENT_LUA_JAILBREAK_EXCEPTION(twml_exception)
 };
 
 /**
@@ -152,11 +148,10 @@ private:
  *
  * @returns                       The error message.
  */
-std::string missing_mandatory_wml_key(
-		  const std::string& section
-		, const std::string& key
-		, const std::string& primary_key = ""
-		, const std::string& primary_value = "");
+std::string missing_mandatory_wml_key(const std::string& section,
+                                      const std::string& key,
+                                      const std::string& primary_key = "",
+                                      const std::string& primary_value = "");
 /**
  * Returns a standard warning message for using a deprecated wml key.
  *
@@ -166,9 +161,8 @@ std::string missing_mandatory_wml_key(
  *
  * @returns                       The warning message.
  */
-std::string deprecate_wml_key_warning(
-		  const std::string& key
-		, const std::string& removal_version);
+std::string deprecate_wml_key_warning(const std::string& key,
+                                      const std::string& removal_version);
 
 /**
  * Returns a standard warning message for using a deprecated renamed wml key.
@@ -180,10 +174,9 @@ std::string deprecate_wml_key_warning(
  *
  * @returns                       The warning message.
  */
-std::string deprecated_renamed_wml_key_warning(
-		  const std::string& deprecated_key
-		, const std::string& key
-		, const std::string& removal_version);
+std::string deprecated_renamed_wml_key_warning(const std::string& deprecated_key,
+                                               const std::string& key,
+                                               const std::string& removal_version);
 
 /**
  * Returns a config attribute, using either the old name or the new one.
@@ -204,11 +197,10 @@ std::string deprecated_renamed_wml_key_warning(
  *
  * @returns                       The attribute found as described above.
  */
-const config::attribute_value& get_renamed_config_attribute(
-		  const config& cfg
-		, const std::string& deprecated_key
-		, const std::string& key
-		, const std::string& removal_version);
+const config::attribute_value& get_renamed_config_attribute(const config& cfg,
+                                                            const std::string& deprecated_key,
+                                                            const std::string& key,
+                                                            const std::string& removal_version);
 
 #endif
 

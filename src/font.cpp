@@ -31,6 +31,7 @@
 #include "serdes/preprocessor.hpp"
 #include "serdes/string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <list>
@@ -356,10 +357,10 @@ void manager::init() const
 #endif
 
 #if CAIRO_HAS_WIN32_FONT
-	BOOST_FOREACH(const std::string& path, get_binary_paths("fonts")) {
+	foreach_ng(const std::string& path, get_binary_paths("fonts")) {
 		std::vector<std::string> files;
 		get_files_in_dir(path, &files, NULL, ENTIRE_FILE_PATH);
-		BOOST_FOREACH(const std::string& file, files)
+		foreach_ng(const std::string& file, files)
 			if(file.substr(file.length() - 4) == ".ttf" || file.substr(file.length() - 4) == ".ttc")
 				AddFontResourceA(file.c_str());
 	}
@@ -373,10 +374,10 @@ void manager::deinit() const
 #endif
 
 #if CAIRO_HAS_WIN32_FONT
-	BOOST_FOREACH(const std::string& path, get_binary_paths("fonts")) {
+	foreach_ng(const std::string& path, get_binary_paths("fonts")) {
 		std::vector<std::string> files;
 		get_files_in_dir(path, &files, NULL, ENTIRE_FILE_PATH);
-		BOOST_FOREACH(const std::string& file, files)
+		foreach_ng(const std::string& file, files)
 			if(file.substr(file.length() - 4) == ".ttf" || file.substr(file.length() - 4) == ".ttc")
 				RemoveFontResourceA(file.c_str());
 	}
@@ -426,7 +427,7 @@ static void set_font_list(const std::vector<subset_descriptor>& fontlist)
 		const subset_id subset = font_names.size();
 		font_names.push_back(itor->name);
 
-		BOOST_FOREACH(const subset_descriptor::range &cp_range, itor->present_codepoints) {
+		foreach_ng(const subset_descriptor::range &cp_range, itor->present_codepoints) {
 			char_blocks.insert(cp_range.first, cp_range.second, subset);
 		}
 	}
@@ -583,7 +584,7 @@ void text_surface::measure() const
 	w_ = 0;
 	h_ = 0;
 
-	BOOST_FOREACH(text_chunk const &chunk, chunks_)
+	foreach_ng(text_chunk const &chunk, chunks_)
 	{
 		TTF_Font* ttfont = get_font(font_id(chunk.subset, font_size_));
 		if(ttfont == NULL)
@@ -629,7 +630,7 @@ std::vector<surface> const &text_surface::get_surfaces() const
 	if(width() > max_text_line_width)
 		return surfs_;
 
-	BOOST_FOREACH(text_chunk const &chunk, chunks_)
+	foreach_ng(text_chunk const &chunk, chunks_)
 	{
 		TTF_Font* ttfont = get_font(font_id(chunk.subset, font_size_));
 		if (ttfont == NULL)
@@ -1262,7 +1263,7 @@ bool load_font_config()
 		return false;
 
 	std::set<std::string> known_fonts;
-	BOOST_FOREACH(const config &font, fonts_config.child_range("font")) {
+	foreach_ng(const config &font, fonts_config.child_range("font")) {
 		known_fonts.insert(font["name"]);
 	}
 

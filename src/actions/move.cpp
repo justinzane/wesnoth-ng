@@ -43,6 +43,7 @@
 #include "../unit/unit.hpp"
 #include "../whiteboard/manager.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <deque>
 #include <map>
@@ -578,7 +579,7 @@ namespace { // Private helpers for move_unit()
 			reveal_ambusher(blocked_loc_, false);
 
 		// Reveal ambushers.
-		BOOST_FOREACH(const map_location & reveal, ambushers_) {
+		foreach_ng(const map_location & reveal, ambushers_) {
 			reveal_ambusher(reveal, true);
 		}
 
@@ -836,7 +837,7 @@ namespace { // Private helpers for move_unit()
 	 */
 	std::string unit_mover::read_ambush_string(const unit & ambusher)
 	{
-		BOOST_FOREACH( const unit_ability &hide, ambusher.get_abilities("hides") )
+		foreach_ng( const unit_ability &hide, ambusher.get_abilities("hides") )
 		{
 			const std::string & ambush_string = (*hide.first)["alert"].str();
 			if ( !ambush_string.empty() )

@@ -22,6 +22,7 @@
 #include "resources.hpp"
 #include "video.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace {
@@ -172,7 +173,7 @@ void process(int mousex, int mousey)
 
 bool click(int mousex, int mousey)
 {
-	BOOST_FOREACH(tooltip tip, tips) {
+	foreach_ng(tooltip tip, tips) {
 		if(!tip.action.empty() && point_in_rect(mousex, mousey, tip.rect)) {
 			display* disp = resources::screen;
 			help::show_help(*disp, tip.action);

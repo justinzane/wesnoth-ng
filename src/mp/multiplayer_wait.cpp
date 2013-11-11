@@ -28,11 +28,12 @@
 #include "mp/multiplayer_wait.hpp"
 #include "mp/multiplayer_wait.hpp"
 #include "statistics.hpp"
-#include "wml_exception.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_exception.hpp"
+#include "serdes/wml_separators.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_network("network");
@@ -256,7 +257,7 @@ void wait::join_game(bool observe)
 		//available side.
 		const config *side_choice = NULL;
 		int side_num = -1, nb_sides = 0;
-		BOOST_FOREACH(const config &sd, level_.child_range("side"))
+		foreach_ng(const config &sd, level_.child_range("side"))
 		{
 			if (sd["controller"] == "reserved" && sd["current_player"] == preferences::login())
 			{
@@ -306,7 +307,7 @@ void wait::join_game(bool observe)
 				color = game_config::color_info(color_str).index() - 1;
 
 			std::vector<const config*> era_factions;
-			BOOST_FOREACH(const config &side, possible_sides) {
+			foreach_ng(const config &side, possible_sides) {
 				era_factions.push_back(&side);
 			}
 
@@ -319,7 +320,7 @@ void wait::join_game(bool observe)
 				saved_game, color);
 
 			std::vector<std::string> choices;
-			BOOST_FOREACH(const config *s, flg.choosable_factions())
+			foreach_ng(const config *s, flg.choosable_factions())
 			{
 				const config &side = *s;
 				const std::string &name = side["name"];
@@ -467,7 +468,7 @@ void wait::generate_menu()
 	std::vector<std::string> details;
 	std::vector<std::string> playerlist;
 
-	BOOST_FOREACH(const config &sd, level_.child_range("side"))
+	foreach_ng(const config &sd, level_.child_range("side"))
 	{
 		if (!sd["allow_player"].to_bool(true)) {
 			continue;
@@ -482,7 +483,7 @@ void wait::generate_menu()
 		// Hack: if there is a unit which can recruit, use it as a
 		// leader. Necessary to display leader information when loading
 		// saves.
-		BOOST_FOREACH(const config &side_unit, sd.child_range("unit"))
+		foreach_ng(const config &side_unit, sd.child_range("unit"))
 		{
 			if (side_unit["canrecruit"].to_bool()) {
 				leader_type = side_unit["type"].str();

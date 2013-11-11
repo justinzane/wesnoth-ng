@@ -22,7 +22,7 @@
 #include "gui/auxiliary/widget_definition/scrollbar_panel.hpp"
 #include "gui/auxiliary/window_builder/helper.hpp"
 #include "gui/widgets/scrollbar_panel.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

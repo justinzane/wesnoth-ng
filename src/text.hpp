@@ -16,12 +16,9 @@
 #define TEXT_HPP_INCLUDED
 
 #include "sdl_utils.hpp"
-
 #include <boost/noncopyable.hpp>
-
 #include <pango/pango.h>
 #include <pango/pangocairo.h>
-
 #include <string>
 
 struct language_def;

@@ -5,10 +5,7 @@ def CheckCPlusPlus(context, gcc_version = None):
     message = "Checking whether C++ compiler works "
     test_program = """
     #include <iostream>
-    int main()
-    {
-    std::cout << "Hello, world\\n";
-    }
+    int main() { std::cout << "Hello, world\\n";}
     """
     if gcc_version and "gcc" in context.env["TOOLS"]:
         message += "(g++ version >= %s required)" % gcc_version
@@ -28,7 +25,8 @@ def CheckCPlusPlus(context, gcc_version = None):
         \n""" % version_num
     message += "... "
     context.Message(message)
-    if context.TryBuild(context.env.Program, test_program, ".cpp") == 1 and context.lastTarget.get_contents() != "":
+    if (context.TryBuild(context.env.Program, test_program, ".cpp") == 1 and 
+        context.lastTarget.get_contents() != ""):
         context.Result("yes")
         return True
     else:

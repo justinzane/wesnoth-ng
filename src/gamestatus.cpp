@@ -43,7 +43,7 @@
 #include "unit/unit_id.hpp"
 #include "unit/unit_id.hpp"
 #include "wesconfig.h"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "map.hpp"
@@ -54,6 +54,7 @@
 #include "map_label.hpp"
 
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #ifndef _MSC_VER
@@ -326,7 +327,7 @@ void wmi_container::init_handlers() const
 	int wmi_count = 0;
 
 	// Loop through each menu item.
-	BOOST_FOREACH( const wml_menu_item & wmi, *this ) {
+	foreach_ng( const wml_menu_item & wmi, *this ) {
 		// If this menu item has a [command], add a handler for it.
 		const config & wmi_command = wmi.command();
 		if ( !wmi_command.empty() ) {
@@ -364,7 +365,7 @@ void wmi_container::to_config(config& cfg)
 void wmi_container::set_menu_items(const config& cfg)
 {
 	clear_wmi();
-	BOOST_FOREACH(const config &item, cfg.child_range("menu_item"))
+	foreach_ng(const config &item, cfg.child_range("menu_item"))
 	{
 		if(!item.has_attribute("id")){ continue; }
 
@@ -388,7 +389,7 @@ carryover::carryover(const config& side)
 		, recall_list_()
 		, save_id_(side["save_id"])
 {
-	BOOST_FOREACH(const config& u, side.child_range("unit")){
+	foreach_ng(const config& u, side.child_range("unit")){
 		recall_list_.push_back(u);
 	}
 }
@@ -403,7 +404,7 @@ carryover::carryover(const team& t, const int gold, const bool add)
 		, recall_list_()
 		, save_id_(t.save_id())
 {
-	BOOST_FOREACH(const unit& u, t.recall_list()) {
+	foreach_ng(const unit& u, t.recall_list()) {
 		recall_list_.push_back(config());
 		u.write(recall_list_.back());
 	}
@@ -437,7 +438,7 @@ void carryover::transfer_all_recruits_to(config& side_cfg){
 }
 
 void carryover::transfer_all_recalls_to(config& side_cfg){
-	BOOST_FOREACH(const config & u_cfg, recall_list_) {
+	foreach_ng(const config & u_cfg, recall_list_) {
 		side_cfg.add_child("unit", u_cfg);
 	}
 	recall_list_.clear();
@@ -460,7 +461,7 @@ void carryover::update_carryover(const team& t, const int gold, const bool add){
 	current_player_ = t.current_player();
 	name_ = t.name();
 	previous_recruits_.insert(t.recruits().begin(), t.recruits().end());
-	BOOST_FOREACH(const unit& u, t.recall_list()) {
+	foreach_ng(const unit& u, t.recall_list()) {
 		recall_list_.push_back(config());
 		u.write(recall_list_.back());
 	}
@@ -473,7 +474,7 @@ void carryover::initialize_team(config& side_cfg){
 const std::string carryover::to_string(){
 	std::string side = "";
 	side.append("Side " + save_id_ + ": gold " + str_cast<int>(gold_) + " recruits " + get_recruits(false) + " units ");
-	BOOST_FOREACH(const config & u_cfg, recall_list_) {
+	foreach_ng(const config & u_cfg, recall_list_) {
 		side.append(u_cfg["name"].str() + ", ");
 	}
 	return side;
@@ -488,7 +489,7 @@ void carryover::to_config(config& cfg){
 	side["current_player"] = current_player_;
 	side["name"] = name_;
 	side["previous_recruits"] = get_recruits(false);
-	BOOST_FOREACH(const config & u_cfg, recall_list_)
+	foreach_ng(const config & u_cfg, recall_list_)
 		side.add_child("unit", u_cfg);
 }
 
@@ -502,7 +503,7 @@ carryover_info::carryover_info(const config& cfg)
 	, next_scenario_(cfg["next_scenario"])
 {
 	end_level_.read(cfg.child_or_empty("end_level_data"));
-	BOOST_FOREACH(const config& side, cfg.child_range("side")){
+	foreach_ng(const config& side, cfg.child_range("side")){
 		this->carryover_sides_.push_back(carryover(side));
 	}
 
@@ -533,7 +534,7 @@ const end_level_data& carryover_info::get_end_level() const{
 }
 
 void carryover_info::transfer_from(const team& t, int carryover_gold){
-	BOOST_FOREACH(carryover& side, carryover_sides_){
+	foreach_ng(carryover& side, carryover_sides_){
 		if(side.get_save_id() == t.save_id()){
 			side.update_carryover(t, carryover_gold, end_level_.carryover_add);
 			return;
@@ -547,7 +548,7 @@ void carryover_info::transfer_all_to(config& side_cfg){
 	if(side_cfg["save_id"].empty()){
 		side_cfg["save_id"] = side_cfg["id"];
 	}
-	BOOST_FOREACH(carryover& side, carryover_sides_){
+	foreach_ng(carryover& side, carryover_sides_){
 		if(side.get_save_id() == side_cfg["save_id"]){
 			side.transfer_all_gold_to(side_cfg);
 			side.transfer_all_recalls_to(side_cfg);
@@ -600,7 +601,7 @@ const config carryover_info::to_config() {
 	cfg["difficulty"] = difficulty_;
 	cfg["next_scenario"] = next_scenario_;
 
-	BOOST_FOREACH(carryover& c, carryover_sides_){
+	foreach_ng(carryover& c, carryover_sides_){
 		c.to_config(cfg);
 	}
 	config& end_level = cfg.add_child("end_level_data");
@@ -617,7 +618,7 @@ const config carryover_info::to_config() {
 }
 
 carryover* carryover_info::get_side(std::string save_id){
-	BOOST_FOREACH(carryover& side, carryover_sides_){
+	foreach_ng(carryover& side, carryover_sides_){
 		if(side.get_save_id() == save_id){
 			return &side;
 		}
@@ -789,7 +790,7 @@ protected:
 		// can be recruited for the player, add them.
 		if (!side_cfg_) return;
 		if (const config::attribute_value *v = side_cfg_.get("previous_recruits")) {
-			BOOST_FOREACH(const std::string &rec, utils::split(*v)) {
+			foreach_ng(const std::string &rec, utils::split(*v)) {
 				DBG_NG_TC << "adding previous recruit: " << rec << '\n';
 				t_->add_recruit(rec);
 			}
@@ -875,7 +876,7 @@ protected:
 			} else
 				handle_leader(side_cfg_);
 		}
-		BOOST_FOREACH(const config &l, side_cfg_.child_range("leader")) {
+		foreach_ng(const config &l, side_cfg_.child_range("leader")) {
 			handle_leader(l);
 		}
 	}
@@ -891,13 +892,13 @@ protected:
 			//for create-or-recall semantics to work: for each unit with non-empty
 			//id, unconditionally put OTHER, later, units with same id directly to
 			//recall list, not including them in unit_configs_
-			BOOST_FOREACH(const config &u, (*player_cfg_).child_range("unit")) {
+			foreach_ng(const config &u, (*player_cfg_).child_range("unit")) {
 				handle_unit(u,"player_cfg");
 			}
 
 		} else {
 			//units in [side]
-			BOOST_FOREACH(const config &su, side_cfg_.child_range("unit")) {
+			foreach_ng(const config &su, side_cfg_.child_range("unit")) {
 				handle_unit(su, "side_cfg");
 			}
 		}
@@ -916,7 +917,7 @@ protected:
 			.allow_rename_side(true)
 			.allow_show(false);
 
-		BOOST_FOREACH(const config *u, unit_configs_) {
+		foreach_ng(const config *u, unit_configs_) {
 			uc.add_unit(*u);
 		}
 
@@ -1263,7 +1264,7 @@ void convert_old_saves(config& cfg){
 		//copy rng and menu items from toplevel to new carryover_sides
 		carryover["random_seed"] = cfg["random_seed"];
 		carryover["random_calls"] = cfg["random_calls"];
-		BOOST_FOREACH(const config& menu_item, cfg.child_range("menu_item")){
+		foreach_ng(const config& menu_item, cfg.child_range("menu_item")){
 			carryover.add_child("menu_item", menu_item);
 		}
 		carryover["difficulty"] = cfg["difficulty"];
@@ -1274,28 +1275,28 @@ void convert_old_saves(config& cfg){
 
 		//copy sides from either snapshot or replay_start to new carryover_sides
 		if(!snapshot.empty()){
-			BOOST_FOREACH(const config& side, snapshot.child_range("side")){
+			foreach_ng(const config& side, snapshot.child_range("side")){
 				carryover.add_child("side", side);
 			}
 			//for compatibility with old savegames that use player instead of side
-			BOOST_FOREACH(const config& side, snapshot.child_range("player")){
+			foreach_ng(const config& side, snapshot.child_range("player")){
 				carryover.add_child("side", side);
 			}
 			//save the sides from replay_start in carryover_sides_start
-			BOOST_FOREACH(const config& side, replay_start.child_range("side")){
+			foreach_ng(const config& side, replay_start.child_range("side")){
 				carryover_start.add_child("side", side);
 			}
 			//for compatibility with old savegames that use player instead of side
-			BOOST_FOREACH(const config& side, replay_start.child_range("player")){
+			foreach_ng(const config& side, replay_start.child_range("player")){
 				carryover_start.add_child("side", side);
 			}
 		} else if (!replay_start.empty()){
-			BOOST_FOREACH(const config& side, replay_start.child_range("side")){
+			foreach_ng(const config& side, replay_start.child_range("side")){
 				carryover.add_child("side", side);
 				carryover_start.add_child("side", side);
 			}
 			//for compatibility with old savegames that use player instead of side
-			BOOST_FOREACH(const config& side, replay_start.child_range("player")){
+			foreach_ng(const config& side, replay_start.child_range("player")){
 				carryover.add_child("side", side);
 				carryover_start.add_child("side", side);
 			}
@@ -1425,7 +1426,7 @@ void extract_summary_from_config(config& cfg_save, config& cfg_summary)
 	std::string leader;
 	std::string leader_image;
 
-	//BOOST_FOREACH(const config &p, cfg_save.child_range("player"))
+	//foreach_ng(const config &p, cfg_save.child_range("player"))
 	//{
 	//	if (p["canrecruit"].to_bool(false))) {
 	//		leader = p["save_id"];
@@ -1438,7 +1439,7 @@ void extract_summary_from_config(config& cfg_save, config& cfg_summary)
 	//{
 		if (const config &snapshot = *(has_snapshot ? &cfg_snapshot : &cfg_replay_start))
 		{
-			BOOST_FOREACH(const config &side, snapshot.child_range("side"))
+			foreach_ng(const config &side, snapshot.child_range("side"))
 			{
 				if (side["controller"] != "human") {
 					continue;
@@ -1455,7 +1456,7 @@ void extract_summary_from_config(config& cfg_save, config& cfg_summary)
 						break;
 				}
 
-				BOOST_FOREACH(const config &u, side.child_range("unit"))
+				foreach_ng(const config &u, side.child_range("unit"))
 				{
 					if (u["canrecruit"].to_bool()) {
 						leader = u["id"].str();

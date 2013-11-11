@@ -47,15 +47,16 @@
 #include "unit/unit_helper.hpp"
 #include "unit/unit_types.hpp"
 #include "unit/unit_types.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "widgets/progressbar.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "gui/dialogs/game_save.hpp"
 #include "gui/dialogs/transient_message.hpp"
 #include "ai/lua/unit_advancements_aspect.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 //#ifdef _WIN32
@@ -172,7 +173,7 @@ int advance_unit_dialog(const map_location &loc)
 	}
 
 	bool always_display = false;
-	BOOST_FOREACH(const config &mod, u->get_modification_advances())
+	foreach_ng(const config &mod, u->get_modification_advances())
 	{
 		if (mod["always_display"].to_bool()) always_display = true;
 		sample_units.push_back(::get_amla_unit(*u, mod));
@@ -521,7 +522,7 @@ int recall_dialog(display& disp, std::vector< const unit* >& units, int side, co
 	options.push_back(heading.str());
 	options_to_filter.push_back(options.back());
 
-	BOOST_FOREACH(const unit* u, units)
+	foreach_ng(const unit* u, units)
 	{
 		std::stringstream option, option_to_filter;
 		std::string name = u->name();
@@ -558,7 +559,7 @@ int recall_dialog(display& disp, std::vector< const unit* >& units, int side, co
 		option_to_filter << u->type_name() << " " << name << " " << u->level();
 
 		option << COLUMN_SEPARATOR;
-		BOOST_FOREACH(const t_string& trait, u->trait_names()) {
+		foreach_ng(const t_string& trait, u->trait_names()) {
 			option << trait << '\n';
 			option_to_filter << " " << trait;
 		}
@@ -1371,7 +1372,7 @@ const unit_types_preview_pane::details unit_types_preview_pane::get_details() co
 	det.race = t->race()->name(t->genders().front());
 
 	//FIXME: This probably must be move into a unit_type function
-	BOOST_FOREACH(const config &tr, t->possible_traits())
+	foreach_ng(const config &tr, t->possible_traits())
 	{
 		if (tr["availability"] != "musthave") continue;
 
@@ -1402,7 +1403,7 @@ const unit_types_preview_pane::details unit_types_preview_pane::get_details() co
 	// Check if AMLA color is needed
 	// FIXME: not sure if it's fully accurate (but not very important for unit_type)
 	// xp_color also need a simpler function for doing this
-	BOOST_FOREACH(const config &adv, t->modification_advancements())
+	foreach_ng(const config &adv, t->modification_advancements())
 	{
 		if (!adv["strict_amla"].to_bool() || !t->can_advance()) {
 			det.xp_color = "<170,0,255>"; // from unit::xp_color()

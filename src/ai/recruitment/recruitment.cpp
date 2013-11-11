@@ -41,8 +41,9 @@
 #include "../../unit/unit_types.hpp"
 #include "../../util.hpp"
 #include "../../variable.hpp"
-#include "../../wml_exception.hpp"
+#include "../../serdes/wml_exception.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <math.h>
@@ -169,7 +170,7 @@ double recruitment::evaluate() {
 	const unit_map& units = *resources::units;
 	const std::vector<unit_map::const_iterator> leaders = units.find_leaders(get_side());
 
-	BOOST_FOREACH(const unit_map::const_iterator& leader, leaders) {
+	foreach_ng(const unit_map::const_iterator& leader, leaders) {
 		if (leader == resources::units->end()) {
 			return BAD_SCORE;
 		}
@@ -207,7 +208,7 @@ void recruitment::execute() {
 
 	std::set<std::string> global_recruits;
 
-	BOOST_FOREACH(const unit_map::const_iterator& leader, leaders) {
+	foreach_ng(const unit_map::const_iterator& leader, leaders) {
 		const map_location& keep = leader->get_location();
 		if (!resources::game_map->is_keep(keep)) {
 			LOG_AI_RECRUITMENT << "Leader " << leader->name() << " is not on keep. \n";
@@ -228,7 +229,7 @@ void recruitment::execute() {
 		data data(leader);
 
 		// Add team recruits.
-		BOOST_FOREACH(const std::string& recruit, current_team().recruits()) {
+		foreach_ng(const std::string& recruit, current_team().recruits()) {
 			if (!unit_types.find(recruit)) {
 				lg::wml_error << "Unit-type \"" << recruit << "\" doesn't exist.\n";
 			}
@@ -238,7 +239,7 @@ void recruitment::execute() {
 		}
 
 		// Add extra recruits.
-		BOOST_FOREACH(const std::string& recruit, leader->recruits()) {
+		foreach_ng(const std::string& recruit, leader->recruits()) {
 			if (!unit_types.find(recruit)) {
 				lg::wml_error << "Unit-type \"" << recruit << "\" doesn't exist.\n";
 			}
@@ -250,7 +251,7 @@ void recruitment::execute() {
 		// Add recalls.
 		// Recalls are treated as recruits. While recruiting
 		// we'll check if we can do a recall instead of a recruitment.
-		BOOST_FOREACH(const unit& recall, current_team().recall_list()) {
+		foreach_ng(const unit& recall, current_team().recall_list()) {
 			// Check if this leader is allowed to recall this unit.
 			vconfig filter = vconfig(leader->recall_filter());
 			if (!recall.matches_filter(filter, map_location::null_location)) {
@@ -295,7 +296,7 @@ void recruitment::execute() {
 		show_important_hexes();
 	}
 
-	BOOST_FOREACH(const map_location& hex, important_hexes_) {
+	foreach_ng(const map_location& hex, important_hexes_) {
 		++important_terrain_[map[hex]];
 	}
 
@@ -310,7 +311,7 @@ void recruitment::execute() {
 	do_combat_analysis(&leader_data);
 
 	LOG_AI_RECRUITMENT << "Scores before extra treatments:\n";
-	BOOST_FOREACH(const data& data, leader_data) {
+	foreach_ng(const data& data, leader_data) {
 		LOG_AI_RECRUITMENT << "\n" << data.to_string();
 	}
 
@@ -319,7 +320,7 @@ void recruitment::execute() {
 	handle_recruitment_more(&leader_data);
 
 	LOG_AI_RECRUITMENT << "Scores after extra treatments:\n";
-	BOOST_FOREACH(const data& data, leader_data) {
+	foreach_ng(const data& data, leader_data) {
 		LOG_AI_RECRUITMENT << "\n" << data.to_string();
 	}
 
@@ -472,7 +473,7 @@ const std::string* recruitment::get_appropriate_recall(const std::string& type,
 		const data& leader_data) const {
 	const std::string* best_recall_id = NULL;
 	double best_recall_value = -1;
-	BOOST_FOREACH(const unit& recall_unit, current_team().recall_list()) {
+	foreach_ng(const unit& recall_unit, current_team().recall_list()) {
 		if (type != recall_unit.type_id()) {
 			continue;
 		}
@@ -484,7 +485,7 @@ const std::string* recruitment::get_appropriate_recall(const std::string& type,
 		}
 		double average_cost_of_advanced_unit = 0;
 		int counter = 0;
-		BOOST_FOREACH(const std::string& advancement, recall_unit.advances_to()) {
+		foreach_ng(const std::string& advancement, recall_unit.advances_to()) {
 			const unit_type* advancement_type = unit_types.find(advancement);
 			if (!advancement_type) {
 				continue;
@@ -522,7 +523,7 @@ data* recruitment::get_best_leader_from_ratio_scores(std::vector<data>& leader_d
 	// Find things for normalization.
 	int total_recruit_count = 0;
 	double ratio_score_sum = 0.0;
-	BOOST_FOREACH(const data& data, leader_data) {
+	foreach_ng(const data& data, leader_data) {
 		ratio_score_sum += data.ratio_score;
 		total_recruit_count += data.recruit_count;
 	}
@@ -534,7 +535,7 @@ data* recruitment::get_best_leader_from_ratio_scores(std::vector<data>& leader_d
 	// Find which leader should recruit according to ratio_scores.
 	data* best_leader_data = NULL;
 	double biggest_difference = -99999.;
-	BOOST_FOREACH(data& data, leader_data) {
+	foreach_ng(data& data, leader_data) {
 		if (!leader_matches_job(data, job)) {
 			continue;
 		}
@@ -563,7 +564,7 @@ const std::string recruitment::get_best_recruit_from_scores(const data& leader_d
 	}
 	std::string best_recruit = "";
 	double biggest_difference = -99999.;
-	BOOST_FOREACH(const score_map::value_type& i, leader_data.get_normalized_scores()) {
+	foreach_ng(const score_map::value_type& i, leader_data.get_normalized_scores()) {
 		const std::string& unit = i.first;
 		const double score = i.second;
 
@@ -638,7 +639,7 @@ void recruitment::compare_cost_maps_and_update_important_hexes(
 	}  // for
 	double threshold = (biggest_border_movecost - smallest_border_movecost) *
 			MAP_BORDER_WIDTH + smallest_border_movecost;
-	BOOST_FOREACH(const border_cost_map::value_type& candidate, important_hexes_candidates) {
+	foreach_ng(const border_cost_map::value_type& candidate, important_hexes_candidates) {
 		if (candidate.second < threshold) {
 			important_hexes_.insert(candidate.first);
 		}
@@ -657,7 +658,7 @@ double recruitment::get_average_defense(const std::string& u_type) const {
 	}
 	long summed_defense = 0;
 	int total_terrains = 0;
-	BOOST_FOREACH(const terrain_count_map::value_type& entry, important_terrain_) {
+	foreach_ng(const terrain_count_map::value_type& entry, important_terrain_) {
 		const t_translation::t_terrain& terrain = entry.first;
 		int count = entry.second;
 		int defense = 100 - u_info->movement_type().defense_modifier(terrain);
@@ -684,7 +685,7 @@ const  pathfind::full_cost_map recruitment::get_cost_map_of_side(int side) const
 
 	// First add all existing units to cost_map.
 	unsigned int unit_count = 0;
-	BOOST_FOREACH(const unit& unit, units) {
+	foreach_ng(const unit& unit, units) {
 		if (unit.side() != side || unit.can_recruit() ||
 				unit.incapacitated() || unit.total_movement() <= 0) {
 			continue;
@@ -696,14 +697,14 @@ const  pathfind::full_cost_map recruitment::get_cost_map_of_side(int side) const
 	// If this side has not so many units yet, add unit_types with the leaders position as origin.
 	if (unit_count < UNIT_THRESHOLD) {
 		std::vector<unit_map::const_iterator> leaders = units.find_leaders(side);
-		BOOST_FOREACH(const unit_map::const_iterator& leader, leaders) {
+		foreach_ng(const unit_map::const_iterator& leader, leaders) {
 			// First add team-recruits (it's fine when (team-)recruits are added multiple times).
-			BOOST_FOREACH(const std::string& recruit, team.recruits()) {
+			foreach_ng(const std::string& recruit, team.recruits()) {
 				cost_map.add_unit(leader->get_location(), unit_types.find(recruit), side);
 			}
 
 			// Next add extra-recruits.
-			BOOST_FOREACH(const std::string& recruit, leader->recruits()) {
+			foreach_ng(const std::string& recruit, leader->recruits()) {
 				cost_map.add_unit(leader->get_location(), unit_types.find(recruit), side);
 			}
 		}
@@ -720,7 +721,7 @@ void recruitment::show_important_hexes() const {
 		return;
 	}
 	resources::screen->labels().clear_all();
-	BOOST_FOREACH(const map_location& loc, important_hexes_) {
+	foreach_ng(const map_location& loc, important_hexes_) {
 		// Little hack: use map_location north from loc and make 2 linebreaks to center the "X".
 		resources::screen->labels().set_label(loc.get_direction(map_location::NORTH), "\n\nX");
 	}
@@ -733,7 +734,7 @@ void recruitment::show_important_hexes() const {
 void recruitment::update_average_lawful_bonus() {
 	int sum = 0;
 	int counter = 0;
-	BOOST_FOREACH(const time_of_day& time, resources::tod_manager->times()) {
+	foreach_ng(const time_of_day& time, resources::tod_manager->times()) {
 		sum += time.lawful_bonus;
 		++counter;
 	}
@@ -756,7 +757,7 @@ void recruitment::update_average_local_cost() {
 			map_location loc(x, y);
 			int summed_cost = 0;
 			int count = 0;
-			BOOST_FOREACH(const std::string& recruit, team.recruits()){
+			foreach_ng(const std::string& recruit, team.recruits()){
 				const unit_type* const unit_type = unit_types.find(recruit);
 				if (!unit_type) {
 					continue;
@@ -788,7 +789,7 @@ void recruitment::update_important_hexes() {
 	// Mark battle areas as important
 	// This are locations where one of my units is adjacent
 	// to a enemies unit.
-	BOOST_FOREACH(const unit& unit, units) {
+	foreach_ng(const unit& unit, units) {
 		if (unit.side() != get_side()) {
 			continue;
 		}
@@ -811,7 +812,7 @@ void recruitment::update_important_hexes() {
 	// The important hexes are those where my value on the cost map is
 	// similar to a enemies one.
 	const pathfind::full_cost_map my_cost_map = get_cost_map_of_side(get_side());
-	BOOST_FOREACH(const team& team, *resources::teams) {
+	foreach_ng(const team& team, *resources::teams) {
 		if (current_team().is_enemy(team.side())) {
 			const pathfind::full_cost_map enemy_cost_map = get_cost_map_of_side(team.side());
 
@@ -824,21 +825,21 @@ void recruitment::update_important_hexes() {
 	// important villages first and add them and their surroundings
 	// to important_hexes_ in a second step.
 	std::vector<map_location> important_villages;
-	BOOST_FOREACH(const map_location& village, map.villages()) {
+	foreach_ng(const map_location& village, map.villages()) {
 		std::vector<map_location> surrounding;
 		get_tiles_in_radius(village, MAP_VILLAGE_NEARNESS_THRESHOLD, surrounding);
-		BOOST_FOREACH(const map_location& hex, surrounding) {
+		foreach_ng(const map_location& hex, surrounding) {
 			if (important_hexes_.find(hex) != important_hexes_.end()) {
 				important_villages.push_back(village);
 				break;
 			}
 		}
 	}
-	BOOST_FOREACH(const map_location& village, important_villages) {
+	foreach_ng(const map_location& village, important_villages) {
 		important_hexes_.insert(village);
 		std::vector<map_location> surrounding;
 		get_tiles_in_radius(village, MAP_VILLAGE_SURROUNDING, surrounding);
-		BOOST_FOREACH(const map_location& hex, surrounding) {
+		foreach_ng(const map_location& hex, surrounding) {
 			// only add hex if one of our units can reach the hex
 			if (map.on_board(hex) && my_cost_map.get_cost_at(hex.x, hex.y) != -1) {
 				important_hexes_.insert(hex);
@@ -925,7 +926,7 @@ void recruitment::do_combat_analysis(std::vector<data>* leader_data) {
 	// Collect all enemy units (and their hp) we want to take into account in enemy_units.
 	typedef std::vector<std::pair<std::string, int> > unit_hp_vector;
 	unit_hp_vector enemy_units;
-	BOOST_FOREACH(const unit& unit, units) {
+	foreach_ng(const unit& unit, units) {
 		if (!current_team().is_enemy(unit.side()) || unit.incapacitated()) {
 			continue;
 		}
@@ -933,7 +934,7 @@ void recruitment::do_combat_analysis(std::vector<data>* leader_data) {
 	}
 	if (enemy_units.size() < UNIT_THRESHOLD) {
 		// Use also enemies recruitment lists and insert units into enemy_units.
-		BOOST_FOREACH(const team& team, *resources::teams) {
+		foreach_ng(const team& team, *resources::teams) {
 			if (!current_team().is_enemy(team.side())) {
 				continue;
 			}
@@ -942,11 +943,11 @@ void recruitment::do_combat_analysis(std::vector<data>* leader_data) {
 			possible_recruits.insert(team.recruits().begin(), team.recruits().end());
 			// Add extra recruits.
 			const std::vector<unit_map::const_iterator> leaders = units.find_leaders(team.side());
-			BOOST_FOREACH(unit_map::const_iterator leader, leaders) {
+			foreach_ng(unit_map::const_iterator leader, leaders) {
 				possible_recruits.insert(leader->recruits().begin(), leader->recruits().end());
 			}
 			// Insert set in enemy_units.
-			BOOST_FOREACH(const std::string& possible_recruit, possible_recruits) {
+			foreach_ng(const std::string& possible_recruit, possible_recruits) {
 				const unit_type* recruit_type = unit_types.find(possible_recruit);
 				if (recruit_type) {
 					int hp = recruit_type->hitpoints();
@@ -956,17 +957,17 @@ void recruitment::do_combat_analysis(std::vector<data>* leader_data) {
 		}
 	}
 
-	BOOST_FOREACH(data& leader, *leader_data) {
+	foreach_ng(data& leader, *leader_data) {
 		if (leader.recruits.empty()) {
 			continue;
 		}
 		typedef std::map<std::string, double> simple_score_map;
 		simple_score_map temp_scores;
 
-		BOOST_FOREACH(const unit_hp_vector::value_type& entry, enemy_units) {
+		foreach_ng(const unit_hp_vector::value_type& entry, enemy_units) {
 			const std::string& enemy_unit = entry.first;
 			int enemy_unit_hp = entry.second;
-			BOOST_FOREACH(const std::string& recruit, leader.recruits) {
+			foreach_ng(const std::string& recruit, leader.recruits) {
 				double score = compare_unit_types(recruit, enemy_unit);
 				score *= enemy_unit_hp;
 				score = pow(score, COMBAT_SCORE_POWER);
@@ -980,7 +981,7 @@ void recruitment::do_combat_analysis(std::vector<data>* leader_data) {
 		// Find things for normalization.
 		double max = -99999.;
 		double sum = 0;
-		BOOST_FOREACH(const simple_score_map::value_type& entry, temp_scores) {
+		foreach_ng(const simple_score_map::value_type& entry, temp_scores) {
 			double score = entry.second;
 			if (score > max) {
 				max = score;
@@ -1004,7 +1005,7 @@ void recruitment::do_combat_analysis(std::vector<data>* leader_data) {
 			new_0 -= 0.000001;
 		}
 
-		BOOST_FOREACH(const simple_score_map::value_type& entry, temp_scores) {
+		foreach_ng(const simple_score_map::value_type& entry, temp_scores) {
 			const std::string& recruit = entry.first;
 			double score = entry.second;
 
@@ -1030,7 +1031,7 @@ const double* recruitment::get_cached_combat_value(const std::string& a, const s
 	double best_distance = 999;
 	const double* best_value = NULL;
 	const std::set<cached_combat_value>& cache = combat_cache_[a][b];
-	BOOST_FOREACH(const cached_combat_value& entry, cache) {
+	foreach_ng(const cached_combat_value& entry, cache) {
 		double distance_a = std::abs(entry.a_defense - a_defense);
 		double distance_b = std::abs(entry.b_defense - b_defense);
 		if (distance_a <= COMBAT_CACHE_TOLERANCY && distance_b <= COMBAT_CACHE_TOLERANCY) {
@@ -1125,10 +1126,10 @@ void recruitment::simulate_attack(
 	boost::shared_ptr<attack_simulation> best_att_attack;
 
 	// Let attacker choose weapon
-	BOOST_FOREACH(const attack_type& att_weapon, attacker_weapons) {
+	foreach_ng(const attack_type& att_weapon, attacker_weapons) {
 		boost::shared_ptr<attack_simulation> best_def_response;
 		// Let defender choose weapon
-		BOOST_FOREACH(const attack_type& def_weapon, defender_weapons) {
+		foreach_ng(const attack_type& def_weapon, defender_weapons) {
 			if (att_weapon.range() != def_weapon.range()) {
 				continue;
 			}
@@ -1169,7 +1170,7 @@ config* recruitment::get_most_important_job() {
 	config* most_important_job = NULL;
 	int most_important_importance = -1;
 	int biggest_number = -1;
-	BOOST_FOREACH(config& job, recruitment_instructions_.child_range("recruit")) {
+	foreach_ng(config& job, recruitment_instructions_.child_range("recruit")) {
 		if (job.empty()) {
 			continue;
 		}
@@ -1183,7 +1184,7 @@ config* recruitment::get_most_important_job() {
 			// If the total flag is set we have to subtract
 			// all existing units which matches the type.
 			update_own_units_count();
-			BOOST_FOREACH(const count_map::value_type& entry, own_units_count_) {
+			foreach_ng(const count_map::value_type& entry, own_units_count_) {
 				const std::string& unit_type = entry.first;
 				const int count = entry.second;
 				if (recruit_matches_job(unit_type, &job)) {
@@ -1230,7 +1231,7 @@ const std::string recruitment::get_random_pattern_type_if_exists(const data& lea
 		// Iteration through all elements.
 		while (job_types_it != job_types.end()) {
 			bool type_ok = false;
-			BOOST_FOREACH(const std::string& recruit, leader_data.recruits) {
+			foreach_ng(const std::string& recruit, leader_data.recruits) {
 				if (recruit_matches_type(recruit, *job_types_it) && limit_ok(recruit)) {
 					type_ok = true;
 					break;
@@ -1290,7 +1291,7 @@ bool recruitment::leader_matches_job(const data& leader_data, const config* job)
 	// First we make sure that this leader can recruit
 	// at least one unit-type specified in the job.
 	bool is_ok = false;
-	BOOST_FOREACH(const std::string& recruit, leader_data.recruits) {
+	foreach_ng(const std::string& recruit, leader_data.recruits) {
 		if (recruit_matches_job(recruit, job) && limit_ok(recruit)) {
 			is_ok = true;
 			break;
@@ -1317,13 +1318,13 @@ bool recruitment::limit_ok(const std::string& recruit) const {
 	// retrieve the aspect again. So the [limit]s can be altered during a turn.
 	const config aspect = get_recruitment_instructions();
 
-	BOOST_FOREACH(const config& limit, aspect.child_range("limit")) {
+	foreach_ng(const config& limit, aspect.child_range("limit")) {
 		std::vector<std::string> types = utils::split(limit["type"]);
 		// First check if the recruit matches one of the types.
 		if (recruit_matches_types(recruit, types)) {
 			// Count all own existing units which matches the type.
 			int count = 0;
-			BOOST_FOREACH(const count_map::value_type& entry, own_units_count_) {
+			foreach_ng(const count_map::value_type& entry, own_units_count_) {
 				const std::string& unit = entry.first;
 				int number = entry.second;
 				if (recruit_matches_types(unit, types)) {
@@ -1385,7 +1386,7 @@ bool recruitment::recruit_matches_types(const std::string& recruit,
 	if (types.empty()) {
 		return true;
 	}
-	BOOST_FOREACH(const std::string& type, types) {
+	foreach_ng(const std::string& type, types) {
 		if (recruit_matches_type(recruit, type)) {
 			return true;
 		}
@@ -1446,7 +1447,7 @@ double recruitment::get_estimated_unit_gain() const {
 double recruitment::get_estimated_village_gain() const {
 	const gamemap& map = *resources::game_map;
 	int neutral_villages = 0;
-	BOOST_FOREACH(const map_location& village, map.villages()) {
+	foreach_ng(const map_location& village, map.villages()) {
 		if (village_owner(village) == -1) {
 			++neutral_villages;
 		}
@@ -1463,7 +1464,7 @@ double recruitment::get_unit_ratio() const {
 	double own_total_value = 0.;
 	double team_total_value = 0.;
 	double enemy_total_value = 0.;
-	BOOST_FOREACH(const unit& unit, units) {
+	foreach_ng(const unit& unit, units) {
 		if (unit.incapacitated() || unit.total_movement() <= 0 || unit.can_recruit()) {
 			continue;
 		}
@@ -1478,7 +1479,7 @@ double recruitment::get_unit_ratio() const {
 		}
 	}
 	int allies_count = 0;
-	BOOST_FOREACH(const team& team, *resources::teams) {
+	foreach_ng(const team& team, *resources::teams) {
 		if (!current_team().is_enemy(team.side())) {
 			++allies_count;
 		}
@@ -1544,8 +1545,8 @@ void recruitment::do_randomness(std::vector<data>* leader_data) const {
 	if (!leader_data) {
 		return;
 	}
-	BOOST_FOREACH(data& data, *leader_data) {
-		BOOST_FOREACH(score_map::value_type& entry, data.scores) {
+	foreach_ng(data& data, *leader_data) {
+		foreach_ng(score_map::value_type& entry, data.scores) {
 			double& score = entry.second;
 			score += (static_cast<double>(rand()) / RAND_MAX) * get_recruitment_randomness();
 		}
@@ -1564,7 +1565,7 @@ void recruitment::do_similarity_penalty(std::vector<data>* leader_data) const {
 	if (!leader_data) {
 		return;
 	}
-	BOOST_FOREACH(data& data, *leader_data) {
+	foreach_ng(data& data, *leader_data) {
 		// First we count how many similarities each recruit have to other ones (in a map).
 		// Some examples:
 		// If unit A and unit B have nothing to do with each other, they have similarity = 0.
@@ -1573,13 +1574,13 @@ void recruitment::do_similarity_penalty(std::vector<data>* leader_data) const {
 		// If A advances to B or C, A have similarity = 2. B and C have similarity = 1.
 		typedef std::map<std::string, int> similarity_map;
 		similarity_map similarities;
-		BOOST_FOREACH(const score_map::value_type& entry, data.scores) {
+		foreach_ng(const score_map::value_type& entry, data.scores) {
 			const std::string& recruit = entry.first;
 			const unit_type* recruit_type = unit_types.find(recruit);
 			if (!recruit_type) {
 				continue;
 			}
-			BOOST_FOREACH(const std::string& advanced_type, recruit_type->advancement_tree()){
+			foreach_ng(const std::string& advanced_type, recruit_type->advancement_tree()){
 				if (data.scores.count(advanced_type) != 0) {
 					++similarities[recruit];
 					++similarities[advanced_type];
@@ -1587,7 +1588,7 @@ void recruitment::do_similarity_penalty(std::vector<data>* leader_data) const {
 			}
 		}
 		// Now we divide each score by similarity + 1.
-		BOOST_FOREACH(score_map::value_type& entry, data.scores) {
+		foreach_ng(score_map::value_type& entry, data.scores) {
 			const std::string& recruit = entry.first;
 			double& score = entry.second;
 			score /= (similarities[recruit] + 1);
@@ -1607,7 +1608,7 @@ int recruitment::get_cheapest_unit_cost_for_leader(const unit_map::const_iterato
 	int cheapest_cost = 999999;
 
 	// team recruits
-	BOOST_FOREACH(const std::string& recruit, current_team().recruits()) {
+	foreach_ng(const std::string& recruit, current_team().recruits()) {
 		const unit_type* const info = unit_types.find(recruit);
 		if (!info) {
 			continue;
@@ -1617,7 +1618,7 @@ int recruitment::get_cheapest_unit_cost_for_leader(const unit_map::const_iterato
 		}
 	}
 	// extra recruits
-	BOOST_FOREACH(const std::string& recruit, leader->recruits()) {
+	foreach_ng(const std::string& recruit, leader->recruits()) {
 		const unit_type* const info = unit_types.find(recruit);
 		if (!info) {
 			continue;
@@ -1643,9 +1644,9 @@ void recruitment::handle_recruitment_more(std::vector<data>* leader_data) const 
 		return;
 	}
 	const std::vector<std::string> aspect = get_recruitment_more();
-	BOOST_FOREACH(const std::string& type, aspect) {
-		BOOST_FOREACH(data& data, *leader_data) {
-			BOOST_FOREACH(score_map::value_type& entry, data.scores) {
+	foreach_ng(const std::string& type, aspect) {
+		foreach_ng(data& data, *leader_data) {
+			foreach_ng(score_map::value_type& entry, data.scores) {
 				const std::string& recruit = entry.first;
 				double& score = entry.second;
 				if (recruit_matches_type(recruit, type)) {
@@ -1667,7 +1668,7 @@ bool recruitment::is_enemy_in_radius(const map_location& loc, int radius) const 
 	if (surrounding.empty()) {
 		return false;
 	}
-	BOOST_FOREACH(const map_location& loc, surrounding) {
+	foreach_ng(const map_location& loc, surrounding) {
 		const unit_map::const_iterator& enemy_it = units.find(loc);
 		if(enemy_it == units.end()) {
 			continue;
@@ -1689,7 +1690,7 @@ void recruitment::update_own_units_count() {
 	own_units_count_.clear();
 	total_own_units_ = 0;
 	const unit_map& units = *resources::units;
-	BOOST_FOREACH(const unit& unit, units) {
+	foreach_ng(const unit& unit, units) {
 		if (unit.side() != get_side() || unit.can_recruit() ||
 				unit.incapacitated() || unit.total_movement() <= 0) {
 			continue;
@@ -1711,7 +1712,7 @@ void recruitment::update_scouts_wanted() {
 	int neutral_villages = 0;
 	// We recruit the initial allocation of scouts
 	// based on how many neutral villages there are.
-	BOOST_FOREACH(const map_location& village, resources::game_map->villages()) {
+	foreach_ng(const map_location& village, resources::game_map->villages()) {
 		if (village_owner(village) == -1) {
 			++neutral_villages;
 		}
@@ -1731,7 +1732,7 @@ void recruitment::update_scouts_wanted() {
 	}
 
 	// Subtract already recruited scouts.
-	BOOST_FOREACH(const count_map::value_type& entry, own_units_count_) {
+	foreach_ng(const count_map::value_type& entry, own_units_count_) {
 		const std::string& unit_type = entry.first;
 		const int count = entry.second;
 		if (recruit_matches_type(unit_type, "scout")) {

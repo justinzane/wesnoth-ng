@@ -50,6 +50,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <sstream>
@@ -275,7 +276,7 @@ bool manager::allow_leader_to_move(unit const& leader) const
 	}
 
 	//Look for planned recruits that depend on this leader
-	BOOST_FOREACH(action_const_ptr action, *viewer_actions())
+	foreach_ng(action_const_ptr action, *viewer_actions())
 	{
 		recruit_const_ptr recruit = boost::dynamic_pointer_cast<class recruit const>(action);
 		recall_const_ptr recall = boost::dynamic_pointer_cast<class recall const>(action);
@@ -343,7 +344,7 @@ void manager::post_delete_action(action_ptr action)
 
 static void hide_all_plans()
 {
-	BOOST_FOREACH(team& t, *resources::teams)
+	foreach_ng(team& t, *resources::teams)
 		t.get_side_actions()->hide();
 }
 
@@ -355,7 +356,7 @@ void manager::update_plan_hiding(size_t team_index)
 		hide_all_plans();
 	else //< normal circumstance
 	{
-		BOOST_FOREACH(team& t, *resources::teams)
+		foreach_ng(team& t, *resources::teams)
 		{
 			//make sure only appropriate teams are hidden
 			if(!t.is_network_human())
@@ -516,7 +517,7 @@ void manager::pre_draw()
 		for_each_action(boost::ref(move_finder));
 		units_owning_moves_ = move_finder.get_units_owning_moves();
 
-		BOOST_FOREACH(size_t unit_id, units_owning_moves_) {
+		foreach_ng(size_t unit_id, units_owning_moves_) {
 			unit_map::iterator unit_iter = resources::units->find(unit_id);
 			assert(unit_iter.valid());
 			ghost_owner_unit(&*unit_iter);
@@ -526,7 +527,7 @@ void manager::pre_draw()
 
 void manager::post_draw()
 {
-	BOOST_FOREACH(size_t unit_id, units_owning_moves_)
+	foreach_ng(size_t unit_id, units_owning_moves_)
 	{
 		unit_map::iterator unit_iter = resources::units->find(unit_id);
 		if (unit_iter.valid()) {
@@ -551,7 +552,7 @@ void manager::draw_hex(const map_location& hex)
 
 		//Info about the action numbers to be displayed on screen.
 		side_actions::numbers_t numbers;
-		BOOST_FOREACH(team& t, *resources::teams)
+		foreach_ng(team& t, *resources::teams)
 		{
 			side_actions& sa = *t.get_side_actions();
 			if(!sa.hidden())
@@ -626,7 +627,7 @@ void manager::process_network_data(config const& cfg)
 		LOG_WB << "Received wb data (" << count << ").\n";
 
 		team& team_from = resources::teams->at(wb_cfg["side"]-1);
-		BOOST_FOREACH(side_actions::net_cmd const& cmd, wb_cfg.child_range("net_cmd"))
+		foreach_ng(side_actions::net_cmd const& cmd, wb_cfg.child_range("net_cmd"))
 			team_from.get_side_actions()->execute_net_cmd(cmd);
 	}
 }
@@ -740,7 +741,7 @@ void manager::create_temp_move()
 void manager::erase_temp_move()
 {
 	move_arrows_.clear();
-	BOOST_FOREACH(fake_unit_ptr const& tmp, fake_units_) {
+	foreach_ng(fake_unit_ptr const& tmp, fake_units_) {
 		if(tmp) {
 			tmp->invalidate(tmp->get_location());
 		}
@@ -1098,7 +1099,7 @@ void manager::options_dlg()
 	options.push_back(_("HIDE ALL allies’ plans"));
 
 	//populate list of networked allies
-	BOOST_FOREACH(team &t, *resources::teams)
+	foreach_ng(team &t, *resources::teams)
 	{
 		//Exclude enemies, AIs, and local players
 		if(t.is_enemy(v_side) || !t.is_network())
@@ -1124,11 +1125,11 @@ void manager::options_dlg()
 	switch(selection)
 	{
 	case 0:
-		BOOST_FOREACH(team* t, allies)
+		foreach_ng(team* t, allies)
 			team_plans_hidden_[t->side()-1]=false;
 		break;
 	case 1:
-		BOOST_FOREACH(team* t, allies)
+		foreach_ng(team* t, allies)
 			team_plans_hidden_[t->side()-1]=true;
 		break;
 	default:

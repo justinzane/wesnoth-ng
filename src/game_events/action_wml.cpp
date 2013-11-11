@@ -56,10 +56,11 @@
 #include "../unit/unit_display.hpp"
 #include "../unit/unit_helper.hpp"
 #include "../unit/unit_helper.hpp"
-#include "../wml_exception.hpp"
+#include "../serdes/wml_exception.hpp"
 
 #include "../utils/foreach.tpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/scoped_array.hpp>
@@ -476,7 +477,7 @@ namespace { // Support functions
 		t_filter.get_locations(locs, true);
 
 		// Loop through sides.
-		BOOST_FOREACH(const int &side_num, sides)
+		foreach_ng(const int &side_num, sides)
 		{
 			team &t = (*resources::teams)[side_num-1];
 			if ( !clear )
@@ -491,7 +492,7 @@ namespace { // Support functions
 				t.add_fog_override(locs);
 			else
 				// Simply clear fog from the locations.
-				BOOST_FOREACH(const map_location &hex, locs)
+				foreach_ng(const map_location &hex, locs)
 					t.clear_fog(hex);
 		}
 
@@ -511,12 +512,12 @@ namespace { // Support functions
 		const terrain_filter filter(cfg, *resources::units);
 		filter.get_locations(locs, true);
 
-		BOOST_FOREACH(const int &side_num, sides)
+		foreach_ng(const int &side_num, sides)
 		{
 			index = side_num - 1;
 			team &t = (*resources::teams)[index];
 
-			BOOST_FOREACH(map_location const &loc, locs)
+			foreach_ng(map_location const &loc, locs)
 			{
 				if (remove) {
 					t.clear_shroud(loc);
@@ -576,7 +577,7 @@ void change_terrain(const map_location &loc, const t_translation::t_terrain &t,
 	game_map->set_terrain(loc, new_t);
 	context::screen_needs_rebuild(true);
 
-	BOOST_FOREACH(const t_translation::t_terrain &ut, game_map->underlying_union_terrain(loc)) {
+	foreach_ng(const t_translation::t_terrain &ut, game_map->underlying_union_terrain(loc)) {
 		preferences::encountered_terrains().insert(ut);
 	}
 }
@@ -671,7 +672,7 @@ WML_HANDLER_FUNCTION(clear_global_variable,/**/,pcfg)
 WML_HANDLER_FUNCTION(clear_menu_item, /*event_info*/, cfg)
 {
 	const std::string ids = cfg["id"].str();
-	BOOST_FOREACH(const std::string& id, utils::split(ids, ',', utils::STRIP_SPACES)) {
+	foreach_ng(const std::string& id, utils::split(ids, ',', utils::STRIP_SPACES)) {
 		if(id.empty()) {
 			WRN_NG << "[clear_menu_item] has been given an empty id=, ignoring\n";
 			continue;
@@ -811,7 +812,7 @@ WML_HANDLER_FUNCTION(heal_unit, event_info, cfg)
 	const vconfig & healers_filter = cfg.child("filter_second");
 	std::vector<unit*> healers;
 	if (!healers_filter.null()) {
-		BOOST_FOREACH(unit& u, *units) {
+		foreach_ng(unit& u, *units) {
 			if ( u.matches_filter(healers_filter) && u.has_ability_type("heals") ) {
 				healers.push_back(&u);
 			}
@@ -905,13 +906,13 @@ WML_HANDLER_FUNCTION(kill, event_info, cfg)
 
 	//Find all the dead units first, because firing events ruins unit_map iteration
 	std::vector<unit *> dead_men_walking;
-	BOOST_FOREACH(unit & u, *resources::units){
+	foreach_ng(unit & u, *resources::units){
 		if ( u.matches_filter(cfg) ) {
 			dead_men_walking.push_back(&u);
 		}
 	}
 
-	BOOST_FOREACH(unit * un, dead_men_walking) {
+	foreach_ng(unit * un, dead_men_walking) {
 		map_location loc(un->get_location());
 		bool fire_event = false;
 		entity_location death_loc(*un);
@@ -1133,7 +1134,7 @@ WML_HANDLER_FUNCTION(message, event_info, cfg)
 			return;
 		}
 
-		BOOST_FOREACH(const vconfig &cmd, option_events[option_chosen]) {
+		foreach_ng(const vconfig &cmd, option_events[option_chosen]) {
 			handle_event_commands(event_info, cmd);
 		}
 	}
@@ -1162,7 +1163,7 @@ WML_HANDLER_FUNCTION(modify_ai, /*event_info*/, cfg)
 		side_filter ssf(cfg);
 		sides = ssf.get_teams();
 	}
-	BOOST_FOREACH(const int &side_num, sides)
+	foreach_ng(const int &side_num, sides)
 	{
 		ai::manager::modify_active_ai_for_side(side_num,cfg.get_parsed_config());
 	}
@@ -1187,7 +1188,7 @@ WML_HANDLER_FUNCTION(modify_side, /*event_info*/, cfg)
 	std::vector<int> sides = get_sides_vector(cfg);
 	size_t team_index;
 
-	BOOST_FOREACH(const int &side_num, sides)
+	foreach_ng(const int &side_num, sides)
 	{
 		team_index = side_num - 1;
 		LOG_NG << "modifying side: " << side_num << "\n";
@@ -1373,7 +1374,7 @@ WML_HANDLER_FUNCTION(move_units_fake, /*event_info*/, cfg)
 
 	size_t longest_path = 0;
 
-	BOOST_FOREACH(const vconfig& config, unit_cfgs) {
+	foreach_ng(const vconfig& config, unit_cfgs) {
 		const std::vector<std::string> xvals = utils::split(config["x"]);
 		const std::vector<std::string> yvals = utils::split(config["y"]);
 		int skip_steps = config["skip_steps"];
@@ -1432,7 +1433,7 @@ WML_HANDLER_FUNCTION(object, event_info, cfg)
 
 	map_location loc;
 	if(!filter.null()) {
-		BOOST_FOREACH(const unit &u, *resources::units) {
+		foreach_ng(const unit &u, *resources::units) {
 			if ( u.matches_filter(filter) ) {
 				loc = u.get_location();
 				break;
@@ -1486,7 +1487,7 @@ WML_HANDLER_FUNCTION(object, event_info, cfg)
 		}
 	}
 
-	BOOST_FOREACH(const vconfig &cmd, cfg.get_children(command_type)) {
+	foreach_ng(const vconfig &cmd, cfg.get_children(command_type)) {
 		handle_event_commands(event_info, cmd);
 	}
 }
@@ -1571,7 +1572,7 @@ WML_HANDLER_FUNCTION(recall, /*event_info*/, cfg)
 				const map_location cfg_loc = cfg_to_loc(cfg);
 
 				/// @todo fendrin: comment this monster
-				BOOST_FOREACH(unit_map::const_unit_iterator leader, leaders) {
+				foreach_ng(unit_map::const_unit_iterator leader, leaders) {
 					DBG_NG << "...considering " + leader->id() + " as the recalling leader...\n";
 					map_location loc = cfg_loc;
 					if ( (leader_filter.null() || leader->matches_filter(leader_filter))  &&
@@ -1625,7 +1626,7 @@ WML_HANDLER_FUNCTION(redraw, /*event_info*/, cfg)
 
 	if (clear_shroud_bool) {
 		side_filter filter(cfg);
-		BOOST_FOREACH(const int side, filter.get_teams()){
+		foreach_ng(const int side, filter.get_teams()){
 			actions::clear_shroud(side);
 		}
 		screen.recalculate_minimap();
@@ -1766,7 +1767,7 @@ WML_HANDLER_FUNCTION(role, /*event_info*/, cfg)
 			item["type"] = *ti;
 		}
 		unit_map::iterator itor;
-		BOOST_FOREACH(unit &u, *resources::units) {
+		foreach_ng(unit &u, *resources::units) {
 			if ( u.matches_filter(filter) ) {
 				u.set_role(cfg["role"]);
 				found = true;
@@ -1779,7 +1780,7 @@ WML_HANDLER_FUNCTION(role, /*event_info*/, cfg)
 		std::set<std::string> player_ids;
 		std::vector<std::string> sides = utils::split(cfg["side"]);
 		const bool has_any_sides = !sides.empty();
-		BOOST_FOREACH(std::string const& side_str, sides) {
+		foreach_ng(std::string const& side_str, sides) {
 			size_t side_num = lexical_cast_default<size_t>(side_str,0);
 			if(side_num > 0 && side_num <= resources::teams->size()) {
 				player_ids.insert((resources::teams->begin() + (side_num - 1))->save_id());
@@ -2082,7 +2083,7 @@ WML_HANDLER_FUNCTION(set_variable, /*event_info*/, cfg)
 
 		variable_info vi(array_name, true, variable_info::TYPE_ARRAY);
 		bool first = true;
-		BOOST_FOREACH(const config &cfg, vi.as_array())
+		foreach_ng(const config &cfg, vi.as_array())
 		{
 			std::string current_string = cfg[key_name];
 			if (remove_empty && current_string.empty()) continue;
@@ -2208,7 +2209,7 @@ WML_HANDLER_FUNCTION(set_variables, /*event_info*/, cfg)
 				dest.vars->merge_with(data);
 			}
 		} else if(mode == "insert" || dest.explicit_index) {
-			BOOST_FOREACH(const config &child, data.child_range(dest.key))
+			foreach_ng(const config &child, data.child_range(dest.key))
 			{
 				dest.vars->add_child_at(dest.key, child, dest.index++);
 			}
@@ -2349,7 +2350,7 @@ WML_HANDLER_FUNCTION(time_area, /*event_info*/, cfg)
 	if(remove) {
 		const std::vector<std::string> id_list =
 			utils::split(ids, ',', utils::STRIP_SPACES | utils::REMOVE_EMPTY);
-		BOOST_FOREACH(const std::string& id, id_list) {
+		foreach_ng(const std::string& id, id_list) {
 			resources::tod_manager->remove_time_area(id);
 			LOG_NG << "event WML removed time_area '" << id << "'\n";
 		}
@@ -2376,7 +2377,7 @@ WML_HANDLER_FUNCTION(tunnel, /*event_info*/, cfg)
 	const bool remove = cfg["remove"].to_bool(false);
 	if (remove) {
 		const std::vector<std::string> ids = utils::split(cfg["id"]);
-		BOOST_FOREACH(const std::string &id, ids) {
+		foreach_ng(const std::string &id, ids) {
 			resources::tunnels->remove(id);
 		}
 	} else if (cfg.get_children("source").empty() ||

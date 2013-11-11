@@ -28,6 +28,7 @@
 #include "revision.h"
 #endif
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -284,7 +285,7 @@ namespace game_config
 		}
 
 		server_list.clear();
-		BOOST_FOREACH(const config &server, v.child_range("server"))
+		foreach_ng(const config &server, v.child_range("server"))
 		{
 			server_info sinf;
 			sinf.name = server["name"].str();
@@ -295,7 +296,7 @@ namespace game_config
 
 	void add_color_info(const config &v)
 	{
-		BOOST_FOREACH(const config &teamC, v.child_range("color_range"))
+		foreach_ng(const config &teamC, v.child_range("color_range"))
 		{
 			const config::attribute_value *a1 = teamC.get("id"),
 				*a2 = teamC.get("rgb");
@@ -329,9 +330,9 @@ namespace game_config
 			DBG_NG << str.str() << '\n';
 		}
 
-		BOOST_FOREACH(const config &cp, v.child_range("color_palette"))
+		foreach_ng(const config &cp, v.child_range("color_palette"))
 		{
-			BOOST_FOREACH(const config::attribute &rgb, cp.attribute_range())
+			foreach_ng(const config::attribute &rgb, cp.attribute_range())
 			{
 				std::vector<Uint32> temp;
 				if(!string2rgb(rgb.second, temp)) {

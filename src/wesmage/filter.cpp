@@ -18,6 +18,7 @@
 #include "wesmage/exit.hpp"
 
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/function.hpp>
 
@@ -242,7 +243,7 @@ filter_list()
 {
 	std::vector<tfilter_description> result;
 	typedef std::pair<std::string, tfilter> thack;
-	BOOST_FOREACH(const thack& filter, filters) {
+	foreach_ng(const thack& filter, filters) {
 		result.push_back(filter.second.description);
 	}
 	return result;

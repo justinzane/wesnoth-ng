@@ -23,6 +23,7 @@
 
 #include "map.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 

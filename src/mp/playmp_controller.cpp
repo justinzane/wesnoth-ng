@@ -32,6 +32,7 @@
 #include "formula/formula_string_utils.hpp"
 #include "whiteboard/manager.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -288,7 +289,7 @@ void playmp_controller::linger()
 	// stay stuck in linger state when the *next* scenario is over.
 	gamestate_.classification().completion = "running";
 	// End all unit moves
-	BOOST_FOREACH(unit &u, units_) {
+	foreach_ng(unit &u, units_) {
 		u.set_user_end_turn(true);
 	}
 	//current_team().set_countdown_time(0);

@@ -28,6 +28,7 @@
 #include "mp/mp_game_utils.hpp"
 #include "tod_manager.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_config("config");
@@ -106,7 +107,7 @@ connect_engine::connect_engine(game_display& disp, game_state& state,
 	std::vector<std::string> original_team_names;
 	std::string team_prefix(std::string(_("Team")) + " ");
 	int side_count = 1;
-	BOOST_FOREACH(config& side, sides) {
+	foreach_ng(config& side, sides) {
 		const std::string side_str = lexical_cast<std::string>(side_count);
 		config::attribute_value& team_name = side["team_name"];
 		config::attribute_value& user_team_name =
@@ -162,7 +163,7 @@ connect_engine::connect_engine(game_display& disp, game_state& state,
 	}
 
 	// Selected era's factions.
-	BOOST_FOREACH(const config& era,
+	foreach_ng(const config& era,
 		level_.child("era").child_range("multiplayer_side")) {
 
 		era_factions_.push_back(&era);
@@ -170,7 +171,7 @@ connect_engine::connect_engine(game_display& disp, game_state& state,
 
 	// Create side engines.
 	int index = 0;
-	BOOST_FOREACH(const config &s, sides) {
+	foreach_ng(const config &s, sides) {
 		side_engine_ptr new_side_engine(new side_engine(s, *this, index));
 		side_engines_.push_back(new_side_engine);
 
@@ -256,7 +257,7 @@ void connect_engine::import_user(const config& data, const bool observer,
 	}
 
 	// Check if user has a side(s) reserved for him.
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		if (side->current_player() == username && side->player_id().empty()) {
 			side->place_user(data);
 
@@ -268,7 +269,7 @@ void connect_engine::import_user(const config& data, const bool observer,
 		// If no sides were assigned for a user,
 		// take a first available side.
 		if (!side_assigned) {
-			BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+			foreach_ng(side_engine_ptr side, side_engines_) {
 				if (side->available_for_user(username) ||
 					side->controller() == CNTR_LOCAL) {
 					side->place_user(data);
@@ -282,9 +283,9 @@ void connect_engine::import_user(const config& data, const bool observer,
 
 	// Check if user has taken any sides, which should get control
 	// over any other sides.
-	BOOST_FOREACH(side_engine_ptr user_side, side_engines_) {
+	foreach_ng(side_engine_ptr user_side, side_engines_) {
 		if (user_side->player_id() == username) {
-			BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+			foreach_ng(side_engine_ptr side, side_engines_) {
 				if (!side->current_player().empty() &&
 					side->player_id().empty() &&
 					side->current_player() == user_side->cfg()["side"]) {
@@ -298,7 +299,7 @@ void connect_engine::import_user(const config& data, const bool observer,
 
 bool connect_engine::sides_available() const
 {
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		if (side->available_for_user()) {
 			return true;
 		}
@@ -313,7 +314,7 @@ void connect_engine::update_level()
 
 	level_.clear_children("side");
 
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		level_.add_child("side", side->new_config());
 	}
 }
@@ -343,7 +344,7 @@ bool connect_engine::can_start_game() const
 	}
 
 	// First check if all sides are ready to start the game.
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		if (!side->ready_for_start()) {
 			const int side_num = side->index() + 1;
 			DBG_MP << "not all sides are ready, side " <<
@@ -361,7 +362,7 @@ bool connect_engine::can_start_game() const
 	 * creative in what is used in multiplayer [1] so use a simpler test now.
 	 * [1] http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=568029
 	 */
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		if (side->controller() != CNTR_EMPTY && side->allow_player()) {
 			return true;
 		}
@@ -376,7 +377,7 @@ void connect_engine::start_game(LOAD_USERS load_users)
 
     // Resolves the "random faction", "random gender" and "random message"
     // Must be done before shuffle sides, or some cases will cause errors
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		side->resolve_random();
 	}
 
@@ -387,7 +388,7 @@ void connect_engine::start_game(LOAD_USERS load_users)
 
 		// Only playable sides should be shuffled.
 		std::vector<int> playable_sides;
-		BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+		foreach_ng(side_engine_ptr side, side_engines_) {
 			if (side->allow_player()) {
 				playable_sides.push_back(side->index());
 			}
@@ -438,12 +439,12 @@ void connect_engine::start_game_commandline(
 	typedef boost::tuple<unsigned int, std::string> mp_option;
 
 	unsigned num = 0;
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		num++;
 
 		// Set the faction, if commandline option is given.
 		if (cmdline_opts.multiplayer_side) {
-			BOOST_FOREACH(const mp_option& option,
+			foreach_ng(const mp_option& option,
 				*cmdline_opts.multiplayer_side) {
 
 				if (option.get<0>() == num) {
@@ -457,7 +458,7 @@ void connect_engine::start_game_commandline(
 
 		// Set the controller, if commandline option is given.
 		if (cmdline_opts.multiplayer_controller) {
-			BOOST_FOREACH(const mp_option& option,
+			foreach_ng(const mp_option& option,
 				*cmdline_opts.multiplayer_controller) {
 
 				if (option.get<0>() == num) {
@@ -473,7 +474,7 @@ void connect_engine::start_game_commandline(
 		// then override if commandline option was given.
 		side->set_ai_algorithm("ai_default_rca");
 		if (cmdline_opts.multiplayer_algorithm) {
-			BOOST_FOREACH(const mp_option& option,
+			foreach_ng(const mp_option& option,
 				*cmdline_opts.multiplayer_algorithm) {
 
 				if (option.get<0>() == num) {
@@ -499,10 +500,10 @@ void connect_engine::start_game_commandline(
 		level_["turns"] = *cmdline_opts.multiplayer_turns;
 	}
 
-	BOOST_FOREACH(config &side, level_.child_range("side"))
+	foreach_ng(config &side, level_.child_range("side"))
 	{
 		if (cmdline_opts.multiplayer_ai_config) {
-			BOOST_FOREACH(const mp_option& option,
+			foreach_ng(const mp_option& option,
 				*cmdline_opts.multiplayer_ai_config) {
 
 				if (option.get<0>() == side["side"].to_unsigned()) {
@@ -527,7 +528,7 @@ void connect_engine::start_game_commandline(
 			mp_parameter;
 
 		if (cmdline_opts.multiplayer_parm) {
-			BOOST_FOREACH(const mp_parameter& parameter,
+			foreach_ng(const mp_parameter& parameter,
 				*cmdline_opts.multiplayer_parm) {
 
 				if (parameter.get<0>() == side["side"].to_unsigned()) {
@@ -619,7 +620,7 @@ std::pair<bool, bool> connect_engine::process_network_data(const config& data,
 				// This side is already taken.
 				// Try to reassing the player to a different position.
 				side_taken = 0;
-				BOOST_FOREACH(side_engine_ptr s, side_engines_) {
+				foreach_ng(side_engine_ptr s, side_engines_) {
 					if (s->available_for_user()) {
 						break;
 					}
@@ -715,7 +716,7 @@ void connect_engine::process_network_connection(const network::connection sock)
 int connect_engine::find_user_side_index_by_id(const std::string& id) const
 {
 	size_t i = 0;
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		if (side->player_id() == id) {
 			break;
 		}
@@ -747,7 +748,7 @@ void connect_engine::save_reserved_sides_information()
 	// N.B. This information is needed only for a host player.
 	std::map<std::string, std::string> side_users =
 		utils::map_split(level_.child_or_empty("multiplayer")["side_users"]);
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		const std::string& save_id = side->save_id();
 		const std::string& player_id = side->player_id();
 		if (!save_id.empty() && !player_id.empty()) {
@@ -765,7 +766,7 @@ void connect_engine::load_previous_sides_users(LOAD_USERS load_users)
 
 	std::map<std::string, std::string> side_users =
 		utils::map_split(level_.child("multiplayer")["side_users"]);
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		const std::string& save_id = side->save_id();
 		if (side_users.find(save_id) != side_users.end()) {
 			side->set_current_player(side_users[save_id]);
@@ -782,7 +783,7 @@ void connect_engine::load_previous_sides_users(LOAD_USERS load_users)
 
 void connect_engine::update_side_controller_options()
 {
-	BOOST_FOREACH(side_engine_ptr side, side_engines_) {
+	foreach_ng(side_engine_ptr side, side_engines_) {
 		side->update_controller_options();
 	}
 }
@@ -840,7 +841,7 @@ side_engine::side_engine(const config& cfg, connect_engine& parent_engine,
 
 	// Initialize team and color.
 	unsigned team_name_index = 0;
-	BOOST_FOREACH(const std::string& name, parent_.team_names_) {
+	foreach_ng(const std::string& name, parent_.team_names_) {
 		if (name == cfg["team_name"]) {
 			break;
 		}
@@ -960,7 +961,7 @@ config side_engine::new_config() const
 		// and gender values for it.
 		config* leader = &res;
 		if (flg_.default_leader_cfg() != NULL) {
-			BOOST_FOREACH(config& side_unit, res.child_range("unit")) {
+			foreach_ng(config& side_unit, res.child_range("unit")) {
 				if (*flg_.default_leader_cfg() == side_unit) {
 					leader = &side_unit;
 					if (flg_.current_leader() != (*leader)["type"]) {
@@ -1014,7 +1015,7 @@ config side_engine::new_config() const
 	if (parent_.params_.use_map_settings && !parent_.params_.saved_game) {
 		config trimmed = cfg_;
 
-		BOOST_FOREACH(const std::string& attribute, attributes_to_trim) {
+		foreach_ng(const std::string& attribute, attributes_to_trim) {
 			trimmed.remove_attribute(attribute);
 		}
 
@@ -1165,7 +1166,7 @@ void side_engine::update_controller_options()
 
 	// Connected users.
 	add_controller_option(CNTR_LAST, _("--give--"), "human");
-	BOOST_FOREACH(const std::string& user, parent_.connected_users_) {
+	foreach_ng(const std::string& user, parent_.connected_users_) {
 		add_controller_option(parent_.default_controller_, user, "human");
 	}
 
@@ -1175,7 +1176,7 @@ void side_engine::update_controller_options()
 void side_engine::update_current_controller_index()
 {
 	int i = 0;
-	BOOST_FOREACH(const controller_option& option, controller_options_) {
+	foreach_ng(const controller_option& option, controller_options_) {
 		if (option.first == controller_) {
 			current_controller_index_ = i;
 

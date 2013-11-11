@@ -26,8 +26,9 @@
 #include "../serdes/parser.hpp"
 #include "../serdes/preprocessor.hpp"
 #include "../team.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <vector>
@@ -99,7 +100,7 @@ void configuration::init(const config &game_config)
 	}
 
 
-	BOOST_FOREACH(const config &ai_configuration, ais.child_range("ai")) {
+	foreach_ng(const config &ai_configuration, ais.child_range("ai")) {
 		const std::string &id = ai_configuration["id"];
 		if (id.empty()){
 
@@ -124,7 +125,7 @@ void configuration::init(const config &game_config)
 namespace {
 void extract_ai_configurations(std::map<std::string, description> &storage, const config &input)
 {
-	BOOST_FOREACH(const config &ai_configuration, input.child_range("ai")) {
+	foreach_ng(const config &ai_configuration, input.child_range("ai")) {
 		const std::string &id = ai_configuration["id"];
 		if (id.empty()){
 
@@ -156,7 +157,7 @@ void configuration::add_era_ai_from_config(const config &era)
 void configuration::add_mod_ai_from_config(config::const_child_itors mods)
 {
 	mod_ai_configurations_.clear();
-	BOOST_FOREACH(const config &mod, mods) {
+	foreach_ng(const config &mod, mods) {
 		extract_ai_configurations(mod_ai_configurations_, mod);
 	}
 }
@@ -227,7 +228,7 @@ bool configuration::upgrade_aspect_config_from_1_07_02_to_1_07_03(side_number si
 	config aspect_config;
 	aspect_config["id"] = id;
 
-	BOOST_FOREACH(const config &aiparam, cfg.child_range("ai")) {
+	foreach_ng(const config &aiparam, cfg.child_range("ai")) {
 		const config &_aspect = aiparam.find_child("aspect","id",id);
 		if (_aspect) {
 			aspect_config.append(_aspect);
@@ -247,7 +248,7 @@ bool configuration::upgrade_aspect_config_from_1_07_02_to_1_07_03(side_number si
 		if (aspect_was_attribute) {
 			facet_config["value"] = aiparam[id];
 		} else {
-			BOOST_FOREACH(const config &value, aiparam.child_range(id)) {
+			foreach_ng(const config &value, aiparam.child_range(id)) {
 				facet_config.add_child("value",value);
 			}
 		}
@@ -274,7 +275,7 @@ bool configuration::parse_side_config(side_number side, const config& original_c
 
 	//leave only the [ai] children
 	cfg = config();
-	BOOST_FOREACH(const config &aiparam, original_cfg.child_range("ai")) {
+	foreach_ng(const config &aiparam, original_cfg.child_range("ai")) {
 		cfg.add_child("ai",aiparam);
 	}
 
@@ -296,7 +297,7 @@ bool configuration::parse_side_config(side_number side, const config& original_c
 
 	//find version
 	int version = 10600;
-	BOOST_FOREACH(const config &aiparam, cfg.child_range("ai")) {
+	foreach_ng(const config &aiparam, cfg.child_range("ai")) {
 		if (const config::attribute_value *a = aiparam.get("version")){
 			int v = a->to_int(version);
 			if (version<v) {
@@ -322,7 +323,7 @@ bool configuration::parse_side_config(side_number side, const config& original_c
 	config parsed_cfg = config();
 
 	LOG_AI_CONFIGURATION << "side "<< side <<": merging AI configurations"<< std::endl;
-	BOOST_FOREACH(const config &aiparam, cfg.child_range("ai")) {
+	foreach_ng(const config &aiparam, cfg.child_range("ai")) {
 		parsed_cfg.append(aiparam);
 	}
 
@@ -334,7 +335,7 @@ bool configuration::parse_side_config(side_number side, const config& original_c
 	parsed_cfg.merge_children_by_attribute("aspect","id");
 
 	LOG_AI_CONFIGURATION << "side "<< side <<": removing duplicate [default] tags from aspects"<< std::endl;
-	BOOST_FOREACH(config &aspect_cfg, parsed_cfg.child_range("aspect")) {
+	foreach_ng(config &aspect_cfg, parsed_cfg.child_range("aspect")) {
 		if (!aspect_cfg.child("default")) {
 			WRN_AI_CONFIGURATION << "side "<< side <<": aspect with id=["<<aspect_cfg["id"]<<"] lacks default config facet!" <<std::endl;
 			continue;
@@ -373,7 +374,7 @@ bool configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side
 	if (cfg["ai_algorithm"]=="idle_ai") {
 		is_idle_ai = true;
 	} else {
-		BOOST_FOREACH(config &aiparam, cfg.child_range("ai")) {
+		foreach_ng(config &aiparam, cfg.child_range("ai")) {
 			if (aiparam["ai_algorithm"]=="idle_ai") {
 				is_idle_ai = true;
 				break;
@@ -392,8 +393,8 @@ bool configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side
 
 	config fallback_stage_cfg_ai;
 
-	BOOST_FOREACH(config &aiparam, cfg.child_range("ai")) {
-		BOOST_FOREACH(const well_known_aspect &wka, well_known_aspects) {
+	foreach_ng(config &aiparam, cfg.child_range("ai")) {
+		foreach_ng(const well_known_aspect &wka, well_known_aspects) {
 			if (wka.was_an_attribute_) {
 				aiparam.remove_attribute(wka.name_);
 			} else {
@@ -402,7 +403,7 @@ bool configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side
 		}
 
 
-		BOOST_FOREACH(const config &aitarget, aiparam.child_range("target")) {
+		foreach_ng(const config &aitarget, aiparam.child_range("target")) {
 			lg::wml_error << deprecate_wml_key_warning("target", "1.12.0") << "\n";
 			config aigoal;
 			transfer_turns_and_time_of_day_data(aiparam,aigoal);
@@ -421,7 +422,7 @@ bool configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side
 		aiparam.clear_children("target");
 
 
-		BOOST_FOREACH(config &ai_protect_unit, aiparam.child_range("protect_unit")) {
+		foreach_ng(config &ai_protect_unit, aiparam.child_range("protect_unit")) {
 			lg::wml_error << deprecate_wml_key_warning("protect_unit", "1.12.0") << "\n";
 			transfer_turns_and_time_of_day_data(aiparam,ai_protect_unit);
 			upgrade_protect_goal_config_from_1_07_02_to_1_07_03(side,ai_protect_unit,parsed_cfg,true);
@@ -429,7 +430,7 @@ bool configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side
 		aiparam.clear_children("protect_unit");
 
 
-		BOOST_FOREACH(config &ai_protect_location, aiparam.child_range("protect_location")) {
+		foreach_ng(config &ai_protect_location, aiparam.child_range("protect_location")) {
 			lg::wml_error << deprecate_wml_key_warning("protect_location", "1.12.0") << "\n";
 			transfer_turns_and_time_of_day_data(aiparam,ai_protect_location);
 			upgrade_protect_goal_config_from_1_07_02_to_1_07_03(side,ai_protect_location,parsed_cfg,false);
@@ -457,7 +458,7 @@ bool configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side
 			fallback_stage_cfg_ai.append(aiparam);
 		} else {
 			// Move [goal]s to root of the config, adding turns and time_of_day.
-			BOOST_FOREACH(const config &aigoal, aiparam.child_range("goal")) {
+			foreach_ng(const config &aigoal, aiparam.child_range("goal")) {
 				config updated_goal_config = aigoal;
 				transfer_turns_and_time_of_day_data(aiparam, updated_goal_config);
 				parsed_cfg.add_child("goal", updated_goal_config);
@@ -467,19 +468,19 @@ bool configuration::upgrade_side_config_from_1_07_02_to_1_07_03(side_number side
 	fallback_stage_cfg_ai.clear_children("aspect");
 
 	//move [stage]s to root of the config
-	BOOST_FOREACH(const config &aistage, fallback_stage_cfg_ai.child_range("stage")) {
+	foreach_ng(const config &aistage, fallback_stage_cfg_ai.child_range("stage")) {
 		parsed_cfg.add_child("stage",aistage);
 	}
 	fallback_stage_cfg_ai.clear_children("stage");
 
 	//move [goal]s to root of the config
-	BOOST_FOREACH(const config &aigoal, fallback_stage_cfg_ai.child_range("goal")) {
+	foreach_ng(const config &aigoal, fallback_stage_cfg_ai.child_range("goal")) {
 		parsed_cfg.add_child("goal",aigoal);
 	}
 	fallback_stage_cfg_ai.clear_children("goal");
 
 	//move [modify_ai]'s to root of the config
-	BOOST_FOREACH(const config &aimodifyai, fallback_stage_cfg_ai.child_range("modify_ai")) {
+	foreach_ng(const config &aimodifyai, fallback_stage_cfg_ai.child_range("modify_ai")) {
 		parsed_cfg.add_child("modify_ai",aimodifyai);
 	}
 	fallback_stage_cfg_ai.clear_children("modify_ai");
@@ -496,12 +497,12 @@ void configuration::upgrade_aspect_configs_from_1_07_02_to_1_07_03(side_number s
 {
 	config cfg;
 
-	BOOST_FOREACH(const config &aiparam, ai_parameters) {
+	foreach_ng(const config &aiparam, ai_parameters) {
 		cfg.add_child("ai",aiparam);
 	}
 
 	DBG_AI_CONFIGURATION << "side "<< side <<": upgrading aspects from syntax of 1.7.2 to 1.7.3, old-style config is:" << std::endl << cfg << std::endl;
-	BOOST_FOREACH(const well_known_aspect &wka, well_known_aspects) {
+	foreach_ng(const well_known_aspect &wka, well_known_aspects) {
 		upgrade_aspect_config_from_1_07_02_to_1_07_03(side, cfg,parsed_cfg,wka.name_,wka.was_an_attribute_);
 	}
 }

@@ -40,6 +40,7 @@
 #include "map.hpp"
 #include "resources.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace wb
@@ -288,7 +289,7 @@ void side_actions::get_numbers(const map_location& hex, numbers_t& result)
 					main_number = index;
 				}
 
-				BOOST_FOREACH(weak_action_ptr action, hlighter->get_secondary_highlights()) {
+				foreach_ng(weak_action_ptr action, hlighter->get_secondary_highlights()) {
 					if(action.lock() == *it) {
 						secondary_numbers.insert(index);
 					}
@@ -375,7 +376,7 @@ void side_actions::hide()
 
 	hidden_ = true;
 
-	BOOST_FOREACH(action_ptr act, *this) {
+	foreach_ng(action_ptr act, *this) {
 		act->hide();
 	}
 }
@@ -387,7 +388,7 @@ void side_actions::show()
 
 	hidden_ = false;
 
-	BOOST_FOREACH(action_ptr act, *this) {
+	foreach_ng(action_ptr act, *this) {
 		act->show();
 	}
 }
@@ -786,7 +787,7 @@ void side_actions::execute_net_cmd(net_cmd const& cmd)
 	} else if(type=="refresh") {
 		LOG_WB << "Command received: refresh\n";
 		clear();
-		BOOST_FOREACH(net_cmd const& sub_cmd, cmd.child_range("net_cmd"))
+		foreach_ng(net_cmd const& sub_cmd, cmd.child_range("net_cmd"))
 			execute_net_cmd(sub_cmd);
 	} else {
 		ERR_WB << "side_actions::execute_network_command(): received invalid type!\n";
@@ -861,7 +862,7 @@ void side_actions::raw_turn_shift()
 {
 	//find units who still have plans for turn 0 (i.e. were too lazy to finish their jobs)
 	std::set<unit const*> lazy_units;
-	BOOST_FOREACH(action_ptr const& act, iter_turn(0)) {
+	foreach_ng(action_ptr const& act, iter_turn(0)) {
 		unit const* u = act->get_unit();
 		if(u) {
 			lazy_units.insert(u);

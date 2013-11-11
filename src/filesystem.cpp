@@ -64,6 +64,7 @@ BPath be_path;
 #include "serdes/string_utils.hpp"
 #include "version.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_filesystem("filesystem");
@@ -1022,7 +1023,7 @@ void binary_paths_manager::set_paths(const config& cfg)
 	cleanup();
 	init_binary_paths();
 
-	BOOST_FOREACH(const config &bp, cfg.child_range("binary_path"))
+	foreach_ng(const config &bp, cfg.child_range("binary_path"))
 	{
 		std::string path = bp["path"].str();
 		if (path.find("..") != std::string::npos) {
@@ -1069,7 +1070,7 @@ const std::vector<std::string>& get_binary_paths(const std::string& type)
 
 	init_binary_paths();
 
-	BOOST_FOREACH(const std::string &path, binary_paths)
+	foreach_ng(const std::string &path, binary_paths)
 	{
 		res.push_back(get_user_data_dir() + "/" + path + type + "/");
 
@@ -1110,7 +1111,7 @@ std::string get_binary_file_location(const std::string& type, const std::string&
 		return std::string();
 	}
 
-	BOOST_FOREACH(const std::string &path, get_binary_paths(type))
+	foreach_ng(const std::string &path, get_binary_paths(type))
 	{
 		const std::string file = path + filename;
 		DBG_FS << "  checking '" << path << "'\n";
@@ -1138,7 +1139,7 @@ std::string get_binary_dir_location(const std::string &type, const std::string &
 		return std::string();
 	}
 
-	BOOST_FOREACH(const std::string &path, get_binary_paths(type))
+	foreach_ng(const std::string &path, get_binary_paths(type))
 	{
 		const std::string file = path + filename;
 		DBG_FS << "  checking '" << path << "'\n";
@@ -1321,7 +1322,7 @@ std::string normalize_path(const std::string &p1)
 	p4 << drive;
 #endif
 
-	BOOST_FOREACH(const std::string &s, components)
+	foreach_ng(const std::string &s, components)
 	{
 		p4 << '/' << s;
 	}

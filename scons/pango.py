@@ -5,12 +5,16 @@ from os import environ
 from SCons.Util import AppendPath
 
 def CheckPango(context, backend, require_version = None):
-    context.Message("Checking for Pango with " + backend + " backend... ")
     env = context.env
-    gtkdir = env.get("gtkdir", os.environ.get("GTK_BASEPATH"))
+    context.Message("Checking for Pango with " + backend + " backend... ")
+    gtkdir = env.get("gtkdir", 
+                     os.environ.get("GTK_BASEPATH"))
+    
     if gtkdir:
-        environ["PATH"] = AppendPath(environ["PATH"], join(gtkdir, "bin"))
-        environ["PKG_CONFIG_PATH"] = AppendPath(environ.get("PKG_CONFIG_PATH", ""), join(gtkdir, "lib/pkgconfig"))
+        environ["PATH"] = AppendPath(environ["PATH"], 
+                                     join(gtkdir, "bin"))
+        environ["PKG_CONFIG_PATH"] = AppendPath(environ.get("PKG_CONFIG_PATH", ""), 
+                                                join(gtkdir, "lib/pkgconfig"))
         if sys.platform != "win32":
             env["PKGCONFIG_FLAGS"] = "--define-variable=prefix=" + gtkdir
 

@@ -23,6 +23,7 @@
 #include "../../log/log.hpp"
 #include "../../resources.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_formula_ai("ai/engine/fai");
@@ -34,7 +35,7 @@ namespace game_logic {
 void candidate_action_manager::load_config(const config& cfg, ai::formula_ai* ai, function_symbol_table* function_table)
 {
 	// register candidate actions
-	BOOST_FOREACH(const config &rc_action, cfg.child_range("register_candidate_action"))
+	foreach_ng(const config &rc_action, cfg.child_range("register_candidate_action"))
 	{
 		candidate_action_ptr new_ca = load_candidate_action_from_config(rc_action,ai,function_table);
 
@@ -69,7 +70,7 @@ bool candidate_action_manager::evaluate_candidate_actions(ai::formula_ai* ai, un
 {
 	evaluated_candidate_actions_.clear();
 
-	BOOST_FOREACH(candidate_action_ptr cm, candidate_actions_)
+	foreach_ng(candidate_action_ptr cm, candidate_actions_)
 	{
 		cm->evaluate(ai, units);
 		evaluated_candidate_actions_.insert(cm);
@@ -118,7 +119,7 @@ candidate_action_with_filters::candidate_action_with_filters(
 	const config & filter_params = cfg.child("filter");
 
 	if( filter_params ) {
-		BOOST_FOREACH( const config::attribute filter_param, filter_params.attribute_range() )
+		foreach_ng( const config::attribute filter_param, filter_params.attribute_range() )
 		{
 			game_logic::const_formula_ptr filter_formula(
 					new game_logic::formula(filter_param.second, function_table));

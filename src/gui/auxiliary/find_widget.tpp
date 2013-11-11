@@ -18,7 +18,7 @@
 #include "gui/widgets/helper.hpp"
 #include "gui/widgets/widget.hpp"
 #include "utils/const_clone.tpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

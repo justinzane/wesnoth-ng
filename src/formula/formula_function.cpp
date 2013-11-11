@@ -24,6 +24,7 @@
 #include "log/log.hpp"
 #include "log/log.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/math/constants/constants.hpp>
 using namespace boost::math::constants;
@@ -48,7 +49,7 @@ std::string function_expression::str() const
 	s << get_name();
 	s << '(';
 	bool first_arg = true;
-	BOOST_FOREACH(expression_ptr a , args()) {
+	foreach_ng(expression_ptr a , args()) {
 		if (!first_arg) {
 			s << ',';
 		} else {
@@ -453,7 +454,7 @@ private:
 
 				std::string result;
 
-				BOOST_FOREACH(expression_ptr arg, args()) {
+				foreach_ng(expression_ptr arg, args()) {
 						result += arg->evaluate(variables, fdb).string_cast();
 				}
 

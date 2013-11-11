@@ -25,9 +25,10 @@
 #include "generators/map_create.hpp"
 #include "map_exception.hpp"
 #include "minimap.hpp"
-#include "wml_separators.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_separators.hpp"
+#include "serdes/wml_exception.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <sstream>
 
@@ -154,7 +155,7 @@ void scenario::set_sides()
 		}
 
 		num_players_ = 0;
-		BOOST_FOREACH(const config &scenario, data_.child_range("side")) {
+		foreach_ng(const config &scenario, data_.child_range("side")) {
 			if (scenario["allow_player"].to_bool(true)) {
 				++num_players_;
 			}
@@ -407,7 +408,7 @@ std::vector<std::string> create_engine::levels_menu_item_names() const
 {
 	std::vector<std::string> menu_names;
 
-	BOOST_FOREACH(level_ptr level, get_levels_by_type(current_level_type_)) {
+	foreach_ng(level_ptr level, get_levels_by_type(current_level_type_)) {
 		menu_names.push_back(level->name() + HELP_STRING_SEPARATOR +
 			level->name());
 	}
@@ -420,7 +421,7 @@ std::vector<std::string> create_engine::extras_menu_item_names(
 {
 	std::vector<std::string> names;
 
-	BOOST_FOREACH(extras_metadata_ptr extra,
+	foreach_ng(extras_metadata_ptr extra,
 		get_const_extras_by_type(extra_type)) {
 		names.push_back(extra->name);
 	}
@@ -516,7 +517,7 @@ void create_engine::generator_user_config(display& disp)
 int create_engine::find_level_by_id(const std::string& id) const
 {
 	int i = 0;
-	BOOST_FOREACH(user_map_ptr user_map, user_maps_) {
+	foreach_ng(user_map_ptr user_map, user_maps_) {
 		if (user_map->id() == id) {
 			return i;
 		}
@@ -524,7 +525,7 @@ int create_engine::find_level_by_id(const std::string& id) const
 	}
 
 	i = 0;
-	BOOST_FOREACH(random_map_ptr random_map, random_maps_) {
+	foreach_ng(random_map_ptr random_map, random_maps_) {
 		if (random_map->id() == id) {
 			return i;
 		}
@@ -532,7 +533,7 @@ int create_engine::find_level_by_id(const std::string& id) const
 	}
 
 	i = 0;
-	BOOST_FOREACH(scenario_ptr scenario, scenarios_) {
+	foreach_ng(scenario_ptr scenario, scenarios_) {
 		if (scenario->id() == id) {
 			return i;
 		}
@@ -540,7 +541,7 @@ int create_engine::find_level_by_id(const std::string& id) const
 	}
 
 	i = 0;
-	BOOST_FOREACH(campaign_ptr campaign, campaigns_) {
+	foreach_ng(campaign_ptr campaign, campaigns_) {
 		if (campaign->id() == id) {
 			return i;
 		}
@@ -548,7 +549,7 @@ int create_engine::find_level_by_id(const std::string& id) const
 	}
 
 	i = 0;
-	BOOST_FOREACH(campaign_ptr sp_campaign, sp_campaigns_) {
+	foreach_ng(campaign_ptr sp_campaign, sp_campaigns_) {
 		if (sp_campaign->id() == id) {
 			return i;
 		}
@@ -562,7 +563,7 @@ int create_engine::find_extra_by_id(const MP_EXTRA extra_type,
 	const std::string& id) const
 {
 	int i = 0;
-	BOOST_FOREACH(extras_metadata_ptr extra,
+	foreach_ng(extras_metadata_ptr extra,
 		get_const_extras_by_type(extra_type)) {
 		if (extra->id == id) {
 			return i;
@@ -651,7 +652,7 @@ void create_engine::init_all_levels()
 	}
 
 	// Stand-alone scenarios.
-	BOOST_FOREACH(const config &data,
+	foreach_ng(const config &data,
 		resources::config_manager->game_config().child_range("multiplayer"))
 	{
 		if (!data["map_generation"].empty()) {
@@ -664,7 +665,7 @@ void create_engine::init_all_levels()
 	}
 
 	// Campaigns.
-	BOOST_FOREACH(const config &data,
+	foreach_ng(const config &data,
 		resources::config_manager->game_config().child_range("campaign"))
 	{
 		const std::string& type = data["type"];
@@ -684,7 +685,7 @@ void create_engine::init_extras(const MP_EXTRA extra_type)
 	std::vector<extras_metadata_ptr>& extras = get_extras_by_type(extra_type);
 	const std::string extra_name = (extra_type == ERA) ? "era" : "modification";
 
-	BOOST_FOREACH(const config &extra,
+	foreach_ng(const config &extra,
 		resources::config_manager->game_config().child_range(extra_name)) {
 
 		extras_metadata_ptr new_extras_metadata(new extras_metadata());
@@ -702,27 +703,27 @@ std::vector<create_engine::level_ptr>
 	std::vector<level_ptr> levels;
 	switch (type) {
 	case level::SCENARIO:
-		BOOST_FOREACH(level_ptr level, scenarios_) {
+		foreach_ng(level_ptr level, scenarios_) {
 			levels.push_back(level);
 		}
 		break;
 	case level::USER_MAP:
-		BOOST_FOREACH(level_ptr level, user_maps_) {
+		foreach_ng(level_ptr level, user_maps_) {
 			levels.push_back(level);
 		}
 		break;
 	case level::RANDOM_MAP:
-		BOOST_FOREACH(level_ptr level, random_maps_) {
+		foreach_ng(level_ptr level, random_maps_) {
 			levels.push_back(level);
 		}
 		break;
 	case level::CAMPAIGN:
-		BOOST_FOREACH(level_ptr level, campaigns_) {
+		foreach_ng(level_ptr level, campaigns_) {
 			levels.push_back(level);
 		}
 		break;
 	case level::SP_CAMPAIGN:
-		BOOST_FOREACH(level_ptr level, sp_campaigns_) {
+		foreach_ng(level_ptr level, sp_campaigns_) {
 			levels.push_back(level);
 		}
 		break;

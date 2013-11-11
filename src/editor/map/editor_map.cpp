@@ -23,8 +23,9 @@
 #include "../../gettext.hpp"
 #include "../../map_exception.hpp"
 #include "../../map_label.hpp"
-#include "../../wml_exception.hpp"
+#include "../../serdes/wml_exception.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace editor {
@@ -111,7 +112,7 @@ void editor_map::sanity_check()
 			++errors;
 		}
 	}
-	BOOST_FOREACH(const map_location& loc, selection_) {
+	foreach_ng(const map_location& loc, selection_) {
 		if (!on_board_with_border(loc)) {
 			ERR_ED << "Off-map tile in selection: " << loc << "\n";
 		}
@@ -171,7 +172,7 @@ bool editor_map::add_to_selection(const map_location& loc)
 bool editor_map::set_selection(const std::set<map_location>& area)
 {
 	clear_selection();
-	BOOST_FOREACH(const map_location& loc, area) {
+	foreach_ng(const map_location& loc, area) {
 		if (!add_to_selection(loc))
 			return false;
 	}

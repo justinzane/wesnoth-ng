@@ -28,6 +28,7 @@
 #include "unit/unit_abilities.hpp"
 #include "unit/unit_abilities.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -111,7 +112,7 @@ bool unit::get_ability_bool(const std::string& tag_name, const map_location& loc
 {
 	if (const config &abilities = cfg_.child("abilities"))
 	{
-		BOOST_FOREACH(const config &i, abilities.child_range(tag_name)) {
+		foreach_ng(const config &i, abilities.child_range(tag_name)) {
 			if (ability_active(tag_name, i, loc) &&
 			    ability_affects_self(tag_name, i, loc))
 				return true;
@@ -135,7 +136,7 @@ bool unit::get_ability_bool(const std::string& tag_name, const map_location& loc
 		const config &adj_abilities = it->cfg_.child("abilities");
 		if (!adj_abilities)
 			continue;
-		BOOST_FOREACH(const config &j, adj_abilities.child_range(tag_name)) {
+		foreach_ng(const config &j, adj_abilities.child_range(tag_name)) {
 			if (affects_side(j, teams_manager::get_teams(), side(), it->side()) &&
 			    it->ability_active(tag_name, j, adjacent[i]) &&
 			    ability_affects_adjacent(tag_name,  j, i, loc))
@@ -152,7 +153,7 @@ unit_ability_list unit::get_abilities(const std::string& tag_name, const map_loc
 
 	if (const config &abilities = cfg_.child("abilities"))
 	{
-		BOOST_FOREACH(const config &i, abilities.child_range(tag_name)) {
+		foreach_ng(const config &i, abilities.child_range(tag_name)) {
 			if (ability_active(tag_name, i, loc) &&
 			    ability_affects_self(tag_name, i, loc))
 				res.push_back(unit_ability(&i, loc));
@@ -176,7 +177,7 @@ unit_ability_list unit::get_abilities(const std::string& tag_name, const map_loc
 		const config &adj_abilities = it->cfg_.child("abilities");
 		if (!adj_abilities)
 			continue;
-		BOOST_FOREACH(const config &j, adj_abilities.child_range(tag_name)) {
+		foreach_ng(const config &j, adj_abilities.child_range(tag_name)) {
 			if (affects_side(j, teams_manager::get_teams(), side(), it->side()) &&
 			    it->ability_active(tag_name, j, adjacent[i]) &&
 			    ability_affects_adjacent(tag_name, j, i, loc))
@@ -194,7 +195,7 @@ std::vector<std::string> unit::get_ability_list() const
 
 	const config &abilities = cfg_.child("abilities");
 	if (!abilities) return res;
-	BOOST_FOREACH(const config::any_child &ab, abilities.all_children_range()) {
+	foreach_ng(const config::any_child &ab, abilities.all_children_range()) {
 		std::string const &id = ab.cfg["id"];
 		if (!id.empty())
 			res.push_back(id);
@@ -250,7 +251,7 @@ std::vector<boost::tuple<t_string,t_string,t_string> > unit::ability_tooltips(st
 	const config &abilities = cfg_.child("abilities");
 	if (!abilities) return res;
 
-	BOOST_FOREACH(const config::any_child &ab, abilities.all_children_range())
+	foreach_ng(const config::any_child &ab, abilities.all_children_range())
 	{
 		if ( !active_list || ability_active(ab.key, ab.cfg, loc_) )
 		{
@@ -305,9 +306,9 @@ bool unit::ability_active(const std::string& ability,const config& cfg,const map
 	get_adjacent_tiles(loc,adjacent);
 	const unit_map& units = *resources::units;
 
-	BOOST_FOREACH(const config &i, cfg.child_range("filter_adjacent"))
+	foreach_ng(const config &i, cfg.child_range("filter_adjacent"))
 	{
-		BOOST_FOREACH(const std::string &j, utils::split(i["adjacent"]))
+		foreach_ng(const std::string &j, utils::split(i["adjacent"]))
 		{
 			map_location::DIRECTION index =
 				map_location::parse_direction(j);
@@ -321,9 +322,9 @@ bool unit::ability_active(const std::string& ability,const config& cfg,const map
 		}
 	}
 
-	BOOST_FOREACH(const config &i, cfg.child_range("filter_adjacent_location"))
+	foreach_ng(const config &i, cfg.child_range("filter_adjacent_location"))
 	{
-		BOOST_FOREACH(const std::string &j, utils::split(i["adjacent"]))
+		foreach_ng(const std::string &j, utils::split(i["adjacent"]))
 		{
 			map_location::DIRECTION index = map_location::parse_direction(j);
 			if (index == map_location::NDIRECTIONS) {
@@ -349,7 +350,7 @@ bool unit::ability_affects_adjacent(const std::string& ability, const config& cf
 
 	assert(dir >=0 && dir <= 5);
 	static const std::string adjacent_names[6] = {"n","ne","se","s","sw","nw"};
-	BOOST_FOREACH(const config &i, cfg.child_range("affect_adjacent"))
+	foreach_ng(const config &i, cfg.child_range("affect_adjacent"))
 	{
 		std::vector<std::string> dirs = utils::split(i["adjacent"]);
 		if(std::find(dirs.begin(),dirs.end(),adjacent_names[dir]) != dirs.end()) {
@@ -397,7 +398,7 @@ std::pair<int,map_location> unit_ability_list::highest(const std::string& key, i
 	int abs_max = 0;
 	int flat = 0;
 	int stack = 0;
-	BOOST_FOREACH(unit_ability const &p, cfgs_)
+	foreach_ng(unit_ability const &p, cfgs_)
 	{
 		int value = (*p.first)[key].to_int(def);
 		if ((*p.first)["cumulative"].to_bool()) {
@@ -428,7 +429,7 @@ std::pair<int,map_location> unit_ability_list::lowest(const std::string& key, in
 	int abs_max = 0;
 	int flat = 0;
 	int stack = 0;
-	BOOST_FOREACH(unit_ability const &p, cfgs_)
+	foreach_ng(unit_ability const &p, cfgs_)
 	{
 		int value = (*p.first)[key].to_int(def);
 		if ((*p.first)["cumulative"].to_bool()) {
@@ -490,7 +491,7 @@ namespace {
 	 */
 	bool get_special_children(std::vector<const config*>& result, const config& parent,
 	                           const std::string& id, bool just_peeking=false) {
-		BOOST_FOREACH(const config::any_child &sp, parent.all_children_range())
+		foreach_ng(const config::any_child &sp, parent.all_children_range())
 		{
 			if (sp.key == id || sp.cfg["id"] == id) {
 				if(just_peeking) {
@@ -557,7 +558,7 @@ unit_ability_list attack_type::get_specials(const std::string& special) const
 	unit_ability_list res;
 	if (const config &specials = cfg_.child("specials"))
 	{
-		BOOST_FOREACH(const config &i, specials.child_range(special)) {
+		foreach_ng(const config &i, specials.child_range(special)) {
 			if ( special_active(i, AFFECT_SELF) )
 				res.push_back(unit_ability(&i, self_loc_));
 		}
@@ -565,7 +566,7 @@ unit_ability_list attack_type::get_specials(const std::string& special) const
 	if (!other_attack_) return res;
 	if (const config &specials = other_attack_->cfg_.child("specials"))
 	{
-		BOOST_FOREACH(const config &i, specials.child_range(special)) {
+		foreach_ng(const config &i, specials.child_range(special)) {
 			if ( other_attack_->special_active(i, AFFECT_OTHER) )
 				res.push_back(unit_ability(&i, other_loc_));
 		}
@@ -593,7 +594,7 @@ std::vector<std::pair<t_string, t_string> > attack_type::special_tooltips(
 	const config &specials = cfg_.child("specials");
 	if (!specials) return res;
 
-	BOOST_FOREACH(const config::any_child &sp, specials.all_children_range())
+	foreach_ng(const config::any_child &sp, specials.all_children_range())
 	{
 		if ( !active_list || special_active(sp.cfg, AFFECT_EITHER) ) {
 			const t_string &name = sp.cfg["name"];
@@ -629,7 +630,7 @@ std::string attack_type::weapon_specials(bool only_active, bool is_backstab) con
 	const config &specials = cfg_.child("specials");
 	if (!specials) return res;
 
-	BOOST_FOREACH(const config::any_child &sp, specials.all_children_range())
+	foreach_ng(const config::any_child &sp, specials.all_children_range())
 	{
 		if ( only_active  &&  !special_active(sp.cfg, AFFECT_EITHER, is_backstab) )
 			continue;
@@ -875,9 +876,9 @@ bool attack_type::special_active(const config& special, AFFECTS whom,
 	get_adjacent_tiles(self_loc_, adjacent);
 
 	// Filter the adjacent units.
-	BOOST_FOREACH(const config &i, special.child_range("filter_adjacent"))
+	foreach_ng(const config &i, special.child_range("filter_adjacent"))
 	{
-		BOOST_FOREACH(const std::string &j, utils::split(i["adjacent"]))
+		foreach_ng(const std::string &j, utils::split(i["adjacent"]))
 		{
 			map_location::DIRECTION index =
 				map_location::parse_direction(j);
@@ -891,9 +892,9 @@ bool attack_type::special_active(const config& special, AFFECTS whom,
 	}
 
 	// Filter the adjacent locations.
-	BOOST_FOREACH(const config &i, special.child_range("filter_adjacent_location"))
+	foreach_ng(const config &i, special.child_range("filter_adjacent_location"))
 	{
-		BOOST_FOREACH(const std::string &j, utils::split(i["adjacent"]))
+		foreach_ng(const std::string &j, utils::split(i["adjacent"]))
 		{
 			map_location::DIRECTION index =
 				map_location::parse_direction(j);

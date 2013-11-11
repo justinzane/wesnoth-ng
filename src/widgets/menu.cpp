@@ -25,7 +25,7 @@
 #include "marked-up_text.hpp"
 #include "sound.hpp"
 #include "video.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 
 #include <numeric>
 

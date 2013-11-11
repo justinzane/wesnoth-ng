@@ -36,6 +36,7 @@
 #include "../unit/unit.hpp"
 #include "../unit/unit.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -62,7 +63,7 @@ static void create_jamming_map(std::map<map_location, int> & jamming,
 			continue;
 
 		pathfind::jamming_path jam_path(u, u.get_location());
-		BOOST_FOREACH(const pathfind::paths::step& st, jam_path.destinations) {
+		foreach_ng(const pathfind::paths::step& st, jam_path.destinations) {
 			if ( jamming[st.curr] < st.move_left )
 				jamming[st.curr] = st.move_left;
 		}
@@ -727,7 +728,7 @@ void recalculate_fog(int side)
 	resources::screen->invalidate_all();
 
 	shroud_clearer clearer;
-	BOOST_FOREACH(const unit &u, *resources::units)
+	foreach_ng(const unit &u, *resources::units)
 	{
 		if ( u.side() == side )
 			clearer.clear_unit(u.get_location(), u, tm, &visible_locs);
@@ -763,7 +764,7 @@ bool clear_shroud(int side, bool reset_fog, bool fire_events)
 	bool result = false;
 
 	shroud_clearer clearer;
-	BOOST_FOREACH(const unit &u, *resources::units)
+	foreach_ng(const unit &u, *resources::units)
 	{
 		if ( u.side() == side )
 			result |= clearer.clear_unit(u.get_location(), u, tm);

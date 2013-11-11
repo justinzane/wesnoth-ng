@@ -34,6 +34,7 @@
 
 #include "utils/const_clone.tpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace gui2 {
@@ -57,7 +58,7 @@ struct tgrid_implementation
 			const tpoint& coordinate, const bool must_be_active)
 	{
 		typedef typename utils::tconst_clone<tgrid::tchild, W>::type hack;
-		BOOST_FOREACH(hack& child, grid.children_) {
+		foreach_ng(hack& child, grid.children_) {
 
 			W* widget = child.widget();
 			if(!widget) {
@@ -92,7 +93,7 @@ struct tgrid_implementation
 		}
 
 		typedef typename utils::tconst_clone<tgrid::tchild, W>::type hack;
-		BOOST_FOREACH(hack& child, grid.children_) {
+		foreach_ng(hack& child, grid.children_) {
 
 			widget = child.widget();
 			if(!widget) {

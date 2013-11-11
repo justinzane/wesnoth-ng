@@ -34,11 +34,12 @@
 #include "gui/dialogs/transient_message.hpp"
 #include "gui/widgets/window.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include "terrain_translation.hpp"
 
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 
 namespace {
 static std::vector<std::string> saved_windows_;
@@ -112,7 +113,7 @@ bool context_manager::is_active_transitions_hotkey(const std::string& item) {
 
 size_t context_manager::modified_maps(std::string& message) {
 	std::vector<std::string> modified;
-	BOOST_FOREACH(map_context* mc, map_contexts_) {
+	foreach_ng(map_context* mc, map_contexts_) {
 		if (mc->modified()) {
 			if (!mc->get_filename().empty()) {
 				modified.push_back(mc->get_filename());
@@ -121,7 +122,7 @@ size_t context_manager::modified_maps(std::string& message) {
 			}
 		}
 	}
-	BOOST_FOREACH(std::string& str, modified) {
+	foreach_ng(std::string& str, modified) {
 		message += "\n" + str;
 	}
 	return modified.size();
@@ -146,10 +147,10 @@ context_manager::context_manager(editor_display& gui, const config& game_config)
 
 context_manager::~context_manager()
 {
-	BOOST_FOREACH(map_generator* m, map_generators_) {
+	foreach_ng(map_generator* m, map_generators_) {
 		delete m;
 	}
-	BOOST_FOREACH(map_context* mc, map_contexts_) {
+	foreach_ng(map_context* mc, map_contexts_) {
 		delete mc;
 	}
 }
@@ -274,7 +275,7 @@ void context_manager::expand_time_menu(std::vector<std::string>& items)
 
 			tod_manager* tod_m = get_map_context().get_time_manager();
 
-			BOOST_FOREACH(const time_of_day& time, tod_m->times()) {
+			foreach_ng(const time_of_day& time, tod_m->times()) {
 
 				//for (size_t mci = 0; mci < tod_m->times().size(); ++mci) {
 				//const time_of_day& time = tod_m->times()[mci];
@@ -362,7 +363,7 @@ void context_manager::refresh_after_action(bool drag_part)
 				get_map_context().set_needs_terrain_rebuild(false);
 				gui_.invalidate_all();
 			} else {
-				BOOST_FOREACH(const map_location& loc, changed_locs) {
+				foreach_ng(const map_location& loc, changed_locs) {
 					gui_.rebuild_terrain(loc);
 				}
 				gui_.invalidate(changed_locs);
@@ -473,7 +474,7 @@ void context_manager::save_map_as_dialog()
 
 void context_manager::init_map_generators(const config& game_config)
 {
-	BOOST_FOREACH(const config &i, game_config.child_range("multiplayer")) {
+	foreach_ng(const config &i, game_config.child_range("multiplayer")) {
 
 		if (!i["map_generation"].empty()) {
 
@@ -546,7 +547,7 @@ void context_manager::create_default_context()
 		map_context* mc = new map_context(editor_map(game_config_, 44, 33, default_terrain), gui_);
 		add_map_context(mc);
 	} else {
-		BOOST_FOREACH(const std::string& filename, saved_windows_) {
+		foreach_ng(const std::string& filename, saved_windows_) {
 			map_context* mc = new map_context(game_config_, filename, gui_);
 			add_map_context(mc);
 		}

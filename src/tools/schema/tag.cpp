@@ -21,6 +21,7 @@
 
 #include "config.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace schema_validation{
@@ -82,15 +83,15 @@ class_tag::class_tag(const config & cfg)
 		if (cfg.has_attribute("super")){
 			super_ = cfg["super"].str();
 		}
-		BOOST_FOREACH(const config &child, cfg.child_range("tag")) {
+		foreach_ng(const config &child, cfg.child_range("tag")) {
 			class_tag child_tag (child);
 			add_tag(child_tag);
 		}
-		BOOST_FOREACH(const config &child, cfg.child_range("key")) {
+		foreach_ng(const config &child, cfg.child_range("key")) {
 			class_key child_key (child);
 			add_key(child_key);
 		}
-		BOOST_FOREACH(const config &link, cfg.child_range("link")) {
+		foreach_ng(const config &link, cfg.child_range("link")) {
 			std::string link_name = link["name"].str();
 			add_link(link_name);
 		}

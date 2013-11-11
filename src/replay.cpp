@@ -42,6 +42,7 @@
 #include "statistics.hpp"
 #include "whiteboard/manager.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_replay("replay");
@@ -69,7 +70,7 @@ static void verify(const unit_map& units, const config& cfg) {
 			   << nunits << " according to data source. " << units.size() << " locally\n";
 
 		std::set<map_location> locs;
-		BOOST_FOREACH(const config &u, cfg.child_range("unit"))
+		foreach_ng(const config &u, cfg.child_range("unit"))
 		{
 			const map_location loc(u, resources::gamedata);
 			locs.insert(loc);
@@ -90,7 +91,7 @@ static void verify(const unit_map& units, const config& cfg) {
 		errbuf.clear();
 	}
 
-	BOOST_FOREACH(const config &un, cfg.child_range("unit"))
+	foreach_ng(const config &un, cfg.child_range("unit"))
 	{
 		const map_location loc(un, resources::gamedata);
 		const unit_map::const_iterator u = units.find(loc);
@@ -638,7 +639,7 @@ void replay::undo()
 			const map_location &src = steps.front();
 			const map_location &dst = early_stop.valid() ? early_stop : steps.back();
 
-			BOOST_FOREACH(const async_cmd &ac, async_cmds)
+			foreach_ng(const async_cmd &ac, async_cmds)
 			{
 				if (config &async_child = ac.cfg->child("rename")) {
 					map_location aloc(async_child, resources::gamedata);
@@ -655,7 +656,7 @@ void replay::undo()
 			// A unit is being un-recruited or un-recalled.
 			// Remove unsynced commands that would act on that unit.
 			map_location src(*chld, resources::gamedata);
-			BOOST_FOREACH(const async_cmd &ac, async_cmds)
+			foreach_ng(const async_cmd &ac, async_cmds)
 			{
 				if (config &async_child = ac.cfg->child("rename"))
 				{
@@ -759,7 +760,7 @@ bool replay::empty()
 
 void replay::add_config(const config& cfg, MARK_SENT mark)
 {
-	BOOST_FOREACH(const config &cmd, cfg.child_range("command"))
+	foreach_ng(const config &cmd, cfg.child_range("command"))
 	{
 		config &cfg = cfg_.add_child("command", cmd);
 		if (cfg.child("speak"))
@@ -840,7 +841,7 @@ static void check_checksums(const config &cfg)
 	if(! game_config::mp_debug) {
 		return;
 	}
-	BOOST_FOREACH(const config &ch, cfg.child_range("checksum"))
+	foreach_ng(const config &ch, cfg.child_range("checksum"))
 	{
 		map_location loc(ch, resources::gamedata);
 		unit_map::const_iterator u = resources::units->find(loc);
@@ -1279,7 +1280,7 @@ bool do_replay_handle(int side_num, const std::string &do_untill)
 		}
 		else if (const config &child = cfg->child("fire_event"))
 		{
-			BOOST_FOREACH(const config &v, child.child_range("set_variable")) {
+			foreach_ng(const config &v, child.child_range("set_variable")) {
 				resources::gamedata->set_variable(v["name"], v["value"]);
 			}
 			const std::string &event = child["raise"];

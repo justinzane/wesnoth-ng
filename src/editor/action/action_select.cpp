@@ -21,6 +21,7 @@
 #include "editor/action/action_select.hpp"
 #include "editor/map/map_context.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace editor {
@@ -32,7 +33,7 @@ editor_action_select* editor_action_select::clone() const
 
 void editor_action_select::extend(const editor_map& /*map*/, const std::set<map_location>& locs)
 {
-	BOOST_FOREACH(const map_location& loc, locs) {
+	foreach_ng(const map_location& loc, locs) {
 		LOG_ED << "Extending by " << loc << "\n";
 		area_.insert(loc);
 	}
@@ -41,7 +42,7 @@ void editor_action_select::extend(const editor_map& /*map*/, const std::set<map_
 editor_action* editor_action_select::perform(map_context& mc) const
 {
 	std::set<map_location> undo_locs;
-	BOOST_FOREACH(const map_location& loc, area_) {
+	foreach_ng(const map_location& loc, area_) {
 		undo_locs.insert(loc);
 		mc.add_changed_location(loc);
 	}
@@ -51,7 +52,7 @@ editor_action* editor_action_select::perform(map_context& mc) const
 
 void editor_action_select::perform_without_undo(map_context& mc) const
 {
-	BOOST_FOREACH(const map_location& loc, area_) {
+	foreach_ng(const map_location& loc, area_) {
 
 		if (!mc.get_map().in_selection(loc))
 			mc.get_map().add_to_selection(loc);

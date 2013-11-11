@@ -18,7 +18,7 @@
 
 #include "gui/widgets/window.hpp"
 #include "utils/foreach.tpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

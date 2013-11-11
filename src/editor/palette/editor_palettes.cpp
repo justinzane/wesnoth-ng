@@ -23,8 +23,9 @@
 
 #include "editor/action/mouse/mouse_action.hpp"
 
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace editor {
@@ -33,7 +34,7 @@ template<class Item>
 handler_vector editor_palette<Item>::handler_members()
 {
 	handler_vector h;
-	BOOST_FOREACH(gui::widget& b, buttons_) {
+	foreach_ng(gui::widget& b, buttons_) {
 		h.push_back(&b);
 	}
 	return h;
@@ -159,7 +160,7 @@ void editor_palette<Item>::set_group(const std::string& id)
 	assert(!id.empty());
 
 	bool found = false;
-	BOOST_FOREACH(const item_group& group, groups_) {
+	foreach_ng(const item_group& group, groups_) {
 		if (group.id == id) {
 			found = true;
 			gui::button* palette_menu_button = gui_.find_menu_button("menu-editor-terrain");

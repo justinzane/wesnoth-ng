@@ -64,13 +64,14 @@
 #include "statistics_dialog.hpp"
 #include "unit/unit_display.hpp"
 #include "unit/unit_display.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "scripting/lua.hpp"
 #include "whiteboard/manager.hpp"
 #include "widgets/combo.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -670,7 +671,7 @@ void menu_handler::recall(int side_num, const map_location &last_hex)
 
 
 	DBG_WB <<"menu_handler::recall: Contents of wb-modified recall list:\n";
-	BOOST_FOREACH(const unit* unit, recall_list_team)
+	foreach_ng(const unit* unit, recall_list_team)
 	{
 		DBG_WB << unit->name() << " [" << unit->id() <<"]\n";
 	}
@@ -972,7 +973,7 @@ namespace { // Helpers for create_unit()
 									_("Type");
 		options.push_back(heading);
 
-		BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
+		foreach_ng(const unit_type_data::unit_type_map::value_type &i, unit_types.types())
 		{
 			std::stringstream row;
 
@@ -1532,7 +1533,7 @@ class map_command_handler
 		std::vector<std::string> get_commands_list() const
 		{
 			std::vector<std::string> res;
-			BOOST_FOREACH(typename command_map::value_type i, command_map_) {
+			foreach_ng(typename command_map::value_type i, command_map_) {
 				res.push_back(i.first);
 			}
 			return res;
@@ -1624,7 +1625,7 @@ class map_command_handler
 			}
 			std::stringstream ss;
 			bool show_unavail = show_unavailable_ || get_arg(1) == "all";
-			BOOST_FOREACH(typename command_map::value_type i, command_map_) {
+			foreach_ng(typename command_map::value_type i, command_map_) {
 				if (show_unavail || is_enabled(i.second)) {
 					ss << i.first;
 					//if (!i.second.usage.empty()) {
@@ -1709,7 +1710,7 @@ class map_command_handler
 		{
 			std::vector<std::string> aliases;
 			typedef command_alias_map::value_type p;
-			BOOST_FOREACH(p i, command_alias_map_) {
+			foreach_ng(p i, command_alias_map_) {
 				if (i.second == cmd) {
 					aliases.push_back(i.first);
 				}
@@ -2123,7 +2124,7 @@ class console_handler : public map_command_handler<console_handler>, private cha
 
 			if (const config &alias_list = preferences::get_alias())
 			{
-				BOOST_FOREACH(const config::attribute &a, alias_list.attribute_range()) {
+				foreach_ng(const config::attribute &a, alias_list.attribute_range()) {
 					register_alias(a.second, a.first);
 				}
 			}
@@ -2732,7 +2733,7 @@ void console_handler::do_layers() {
 	tile->rebuild_cache(tod_id, &tile_logs);
 
 	int order = 1;
-	BOOST_FOREACH(const terrain_builder::tile::log_details det, tile_logs) {
+	foreach_ng(const terrain_builder::tile::log_details det, tile_logs) {
 		const terrain_builder::tile::rule_image_rand& ri = *det.first;
 		const terrain_builder::rule_image_variant& variant = *det.second;
 
@@ -2848,7 +2849,7 @@ void console_handler::do_next_level()
 void console_handler::do_choose_level() {
 	std::vector<std::string> options;
 	int next = 0, nb = 0;
-	BOOST_FOREACH(const config &sc, menu_handler_.game_config_.child_range("scenario"))
+	foreach_ng(const config &sc, menu_handler_.game_config_.child_range("scenario"))
 	{
 		const std::string &id = sc["id"];
 		options.push_back(id);
@@ -2859,7 +2860,7 @@ void console_handler::do_choose_level() {
 	// find scenarios of multiplayer campaigns
 	// (assumes that scenarios are ordered properly in the game_config)
 	std::string& scenario = menu_handler_.gamestate_.mp_settings().mp_scenario;
-	BOOST_FOREACH(const config &mp, menu_handler_.game_config_.child_range("multiplayer"))
+	foreach_ng(const config &mp, menu_handler_.game_config_.child_range("multiplayer"))
 	{
 		if (mp["id"] == scenario)
 		{
@@ -3088,7 +3089,7 @@ void console_handler::do_unbuff() {
 	}
 }*/
 void console_handler::do_discover() {
-	BOOST_FOREACH(const unit_type_data::unit_type_map::value_type &i, unit_types.types()) {
+	foreach_ng(const unit_type_data::unit_type_map::value_type &i, unit_types.types()) {
 		preferences::encountered_units().insert(i.second.id());
 	}
 }

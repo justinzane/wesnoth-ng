@@ -39,6 +39,7 @@
 #include "../../unit/unit_types.hpp"
 #include "../../unit/unit_types.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_formula_ai("ai/engine/fai");
@@ -359,7 +360,7 @@ private:
 				if( scores[current_side][i] > 98 )
 					continue;
 
-				BOOST_FOREACH( int side , enemies) {
+				foreach_ng( int side , enemies) {
 					int diff = scores[current_side][i] - scores[side][i];
 					if ( diff > enemy_tollerancy) {
 						valid = false;
@@ -369,7 +370,7 @@ private:
 				}
 
 				if( valid ) {
-					BOOST_FOREACH( int side , allies) {
+					foreach_ng( int side , allies) {
 						if ( scores[current_side][i] - scores[side][i] > ally_tollerancy ) {
 							valid = false;
 							break;
@@ -565,7 +566,7 @@ private:
                     visited_locs.erase(starting_loc);
 
                 std::vector<variant> res;
-                BOOST_FOREACH( const map_location& ml, visited_locs) {
+                foreach_ng( const map_location& ml, visited_locs) {
                     res.push_back( variant(new location_callable( ml ) ) );
                 }
 
@@ -952,7 +953,7 @@ private:
 		ai::attack_analysis* analysis = convert_variant<ai::attack_analysis>(attack);
 		//unit_map units_with_moves(*resources::units);
 		//typedef std::pair<map_location, map_location> mv;
-		//BOOST_FOREACH(const mv &m, analysis->movements) {
+		//foreach_ng(const mv &m, analysis->movements) {
 		//	units_with_moves.move(m.first, m.second);
 		//}
 
@@ -1728,7 +1729,7 @@ private:
 
 		std::vector<attack_type> attacks = attacker.attacks();
 
-		BOOST_FOREACH(const attack_type &attack, attacks) {
+		foreach_ng(const attack_type &attack, attacks) {
 			const int dmg = round_damage(attack.damage(), defender.damage_from(attack), 100) * attack.num_attacks();
 			if (attack.range() == "melee") {
 				highest_melee_damage = std::max(highest_melee_damage, dmg);

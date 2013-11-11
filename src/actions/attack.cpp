@@ -47,8 +47,9 @@
 #include "../unit/unit_map.hpp"
 #include "../unit/unit_map.hpp"
 #include "../whiteboard/manager.hpp"
-#include "../wml_exception.hpp"
+#include "../serdes/wml_exception.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");

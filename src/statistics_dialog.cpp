@@ -18,7 +18,7 @@
 #include "statistics_dialog.hpp"
 #include "unit/unit_types.hpp"
 #include "unit/unit_types.hpp"
-#include "wml_separators.hpp"
+#include "serdes/wml_separators.hpp"
 #include "game_display.hpp"
 
 

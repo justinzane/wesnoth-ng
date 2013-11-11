@@ -34,7 +34,7 @@
 #include "gui/dialogs/message.hpp"
 #include "gui/dialogs/transient_message.hpp"
 #include "gui/widgets/window.hpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 #include "dialogs.hpp"
 
@@ -49,6 +49,7 @@
 #include "halo.hpp"
 
 #include <boost/bind.hpp>
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 namespace {
@@ -109,7 +110,7 @@ void editor_controller::init_gui()
 
 void editor_controller::init_tods(const config& game_config)
 {
-	BOOST_FOREACH(const config &schedule, game_config.child_range("editor_times")) {
+	foreach_ng(const config &schedule, game_config.child_range("editor_times")) {
 
 		const std::string& schedule_id = schedule["id"];
 		const std::string& schedule_name = schedule["name"];
@@ -129,7 +130,7 @@ void editor_controller::init_tods(const config& game_config)
 			continue;
 		}
 
-		BOOST_FOREACH(const config &time, schedule.child_range("time")) {
+		foreach_ng(const config &time, schedule.child_range("time")) {
 			times->second.second.push_back(time_of_day(time));
 		}
 
@@ -146,8 +147,8 @@ void editor_controller::init_music(const config& game_config)
 	if (!game_config.has_child(tag_name))
 		ERR_ED << "No editor music defined\n";
 	else {
-		BOOST_FOREACH(const config& editor_music, game_config.child_range(tag_name)) {
-			BOOST_FOREACH(const config& music, editor_music.child_range("music")) {
+		foreach_ng(const config& editor_music, game_config.child_range(tag_name)) {
+			foreach_ng(const config& music, editor_music.child_range("music")) {
 				music_tracks_.push_back(sound::music_track(music));
 			}
 		}
@@ -887,7 +888,7 @@ void editor_controller::show_menu(const std::vector<std::string>& items_arg, int
 	if (!items.empty() && items.front() == "editor-playlist") {
 		active_menu_ = editor::MUSIC;
 		items.erase(items.begin());
-		BOOST_FOREACH(const sound::music_track& track, music_tracks_) {
+		foreach_ng(const sound::music_track& track, music_tracks_) {
 			items.push_back(track.title().empty() ? track.id() : track.title());
 		}
 	}

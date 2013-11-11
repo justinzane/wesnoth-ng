@@ -27,6 +27,7 @@
 #include "game_preferences.hpp"
 #include "whiteboard/side_actions.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -338,7 +339,7 @@ void team::build(const config &cfg, const gamemap& map, int gold)
 	// Was it correct?
 
 	// Load in the villages the side controls at the start
-	BOOST_FOREACH(const config &v, cfg.child_range("village"))
+	foreach_ng(const config &v, cfg.child_range("village"))
 	{
 		map_location loc(v, resources::gamedata);
 		if (map.is_village(loc)) {
@@ -421,7 +422,7 @@ int team::minimum_recruit_price() const
 		return info_.minimum_recruit_price;
 	}else{
 		int min = 20;
-		BOOST_FOREACH(std::string recruit, info_.can_recruit){
+		foreach_ng(std::string recruit, info_.can_recruit){
 			const unit_type *ut = unit_types.find(recruit);
 			if(!ut)
 				continue;
@@ -651,7 +652,7 @@ bool is_observer()
 		return true;
 	}
 
-	BOOST_FOREACH(const team &t, *teams) {
+	foreach_ng(const team &t, *teams) {
 		if (t.is_human() || t.is_human_ai())
 			return false;
 	}
@@ -741,7 +742,7 @@ bool team::shroud_map::shared_value(const std::vector<const shroud_map*>& maps, 
 		return true;
 
 	// A tile is uncovered if it is uncovered on any shared map.
-	BOOST_FOREACH(const shroud_map * const shared_map, maps) {
+	foreach_ng(const shroud_map * const shared_map, maps) {
 		if ( shared_map->enabled_  &&  !shared_map->value(x,y) )
 			return false;
 	}

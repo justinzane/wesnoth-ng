@@ -27,6 +27,7 @@
 #include "unit/unit_types.hpp" // for attack_type
 #include "unit/unit_types.hpp" // for attack_type
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 
@@ -170,12 +171,12 @@ bool movetype::terrain_info::data::config_has_changes(const config & new_values,
                                                       bool overwrite) const
 {
 	if ( overwrite ) {
-		BOOST_FOREACH( const config::attribute & a, new_values.attribute_range() )
+		foreach_ng( const config::attribute & a, new_values.attribute_range() )
 			if ( a.second != cfg_[a.first] )
 				return true;
 	}
 	else {
-		BOOST_FOREACH( const config::attribute & a, new_values.attribute_range() )
+		foreach_ng( const config::attribute & a, new_values.attribute_range() )
 			if ( a.second.to_int() != 0 )
 				return true;
 	}
@@ -201,7 +202,7 @@ void movetype::terrain_info::data::merge(const config & new_values, bool overwri
 		// change "merge_attributes" to "merge_with".)
 		cfg_.merge_attributes(new_values);
 	else {
-		BOOST_FOREACH( const config::attribute & a, new_values.attribute_range() ) {
+		foreach_ng( const config::attribute & a, new_values.attribute_range() ) {
 			config::attribute_value & dest = cfg_[a.first];
 			int old = dest.to_int(params_.max_value);
 
@@ -627,7 +628,7 @@ utils::string_map movetype::resistances::damage_table() const
 {
 	utils::string_map result;
 
-	BOOST_FOREACH( const config::attribute & attrb, cfg_.attribute_range() )
+	foreach_ng( const config::attribute & attrb, cfg_.attribute_range() )
 		result[attrb.first] = attrb.second;
 
 	return result;
@@ -664,7 +665,7 @@ void movetype::resistances::merge(const config & new_data, bool overwrite)
 		// change "merge_attributes" to "merge_with".)
 		cfg_.merge_attributes(new_data);
 	else
-		BOOST_FOREACH( const config::attribute & a, new_data.attribute_range() ) {
+		foreach_ng( const config::attribute & a, new_data.attribute_range() ) {
 			config::attribute_value & dest = cfg_[a.first];
 			dest = std::max(0, dest.to_int(100) + a.second.to_int(0));
 		}
@@ -738,19 +739,19 @@ movetype::movetype(const movetype & that) :
  */
 void movetype::merge(const config & new_cfg, bool overwrite)
 {
-	BOOST_FOREACH( const config & child, new_cfg.child_range("movement_costs") )
+	foreach_ng( const config & child, new_cfg.child_range("movement_costs") )
 		movement_.merge(child, overwrite);
 
-	BOOST_FOREACH( const config & child, new_cfg.child_range("vision_costs") )
+	foreach_ng( const config & child, new_cfg.child_range("vision_costs") )
 		vision_.merge(child, overwrite);
 
-	BOOST_FOREACH( const config & child, new_cfg.child_range("jamming_costs") )
+	foreach_ng( const config & child, new_cfg.child_range("jamming_costs") )
 		jamming_.merge(child, overwrite);
 
-	BOOST_FOREACH( const config & child, new_cfg.child_range("defense") )
+	foreach_ng( const config & child, new_cfg.child_range("defense") )
 		defense_.merge(child, overwrite);
 
-	BOOST_FOREACH( const config & child, new_cfg.child_range("resistance") )
+	foreach_ng( const config & child, new_cfg.child_range("resistance") )
 		resist_.merge(child, overwrite);
 
 	// "flies" is used when WML defines a movetype.

@@ -25,6 +25,7 @@
 
 #include "SDL_mixer.h"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 #include <list>
@@ -596,7 +597,7 @@ void commit_music_changes()
 		return;
 
 	// If current track no longer on playlist, change it.
-	BOOST_FOREACH(const music_track &m, current_track_list) {
+	foreach_ng(const music_track &m, current_track_list) {
 		if (current_track == m)
 			return;
 	}
@@ -614,7 +615,7 @@ void write_music_play_list(config& snapshot)
 {
 	// First entry clears playlist, others append to it.
 	bool append = false;
-	BOOST_FOREACH(music_track &m, current_track_list) {
+	foreach_ng(music_track &m, current_track_list) {
 		m.write(snapshot, append);
 		append = true;
 	}

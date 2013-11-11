@@ -37,6 +37,7 @@
 #include "../unit/unit_map.hpp"
 #include "../whiteboard/manager.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine("engine");
@@ -526,14 +527,14 @@ void undo_list::read(const config & cfg)
 	committed_actions_ = committed_actions_ || cfg["committed"].to_bool();
 
 	// Build the undo stack.
-	BOOST_FOREACH( const config & child, cfg.child_range("undo") ) {
+	foreach_ng( const config & child, cfg.child_range("undo") ) {
 		undo_action * action = undo_action::create(child, "[undo]");
 		if ( action )
 			undos_.push_back(action);
 	}
 
 	// Build the redo stack.
-	BOOST_FOREACH( const config & child, cfg.child_range("redo") ) {
+	foreach_ng( const config & child, cfg.child_range("redo") ) {
 		undo_action * action = undo_action::create(child, "[redo]");
 		if ( action )
 			redos_.push_back(action);

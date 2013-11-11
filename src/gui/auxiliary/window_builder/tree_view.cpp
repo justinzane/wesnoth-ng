@@ -22,7 +22,7 @@
 #include "gui/auxiliary/window_builder/helper.hpp"
 #include "gui/widgets/tree_view.hpp"
 #include "utils/foreach.tpp"
-#include "wml_exception.hpp"
+#include "serdes/wml_exception.hpp"
 
 namespace gui2 {
 

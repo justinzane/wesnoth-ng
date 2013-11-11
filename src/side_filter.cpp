@@ -27,6 +27,7 @@
 #include "net/network.hpp"
 #include "net/network.hpp"
 
+#include "global.hpp"
 #include <boost/foreach.hpp>
 
 static lg::log_domain log_engine_sf("engine/side_filter");
@@ -64,7 +65,7 @@ std::vector<int> side_filter::get_teams() const
 {
 	//@todo: replace with better implementation
 	std::vector<int> result;
-	BOOST_FOREACH(const team &t, *resources::teams) {
+	foreach_ng(const team &t, *resources::teams) {
 		if (match(t)) {
 			result.push_back(t.side());
 		}
@@ -115,7 +116,7 @@ bool side_filter::match_internal(const team &t) const
 		else {
 			const std::vector<std::string>& these_team_names = utils::split(this_team_name);
 			bool search_futile = true;
-			BOOST_FOREACH(const std::string& this_single_team_name, these_team_names) {
+			foreach_ng(const std::string& this_single_team_name, these_team_names) {
 				if(this_single_team_name == that_team_name) {
 					search_futile = false;
 					break;
@@ -129,7 +130,7 @@ bool side_filter::match_internal(const team &t) const
 	if(cfg_.has_child("has_unit")) {
 		const vconfig& unit_filter = cfg_.child("has_unit");
 		bool found = false;
-		BOOST_FOREACH(unit &u, *resources::units) {
+		foreach_ng(unit &u, *resources::units) {
 			if (u.side() != t.side()) {
 				continue;
 			}
@@ -140,7 +141,7 @@ bool side_filter::match_internal(const team &t) const
 		}
 		if(!found && unit_filter["search_recall_list"].to_bool(false)) {
 			const std::vector<unit>& recall_list = t.recall_list();
-			BOOST_FOREACH(const unit& u, recall_list) {
+			foreach_ng(const unit& u, recall_list) {
 				scoped_recall_unit this_unit("this_unit", t.save_id(), &u - &recall_list[0]);
 				if(u.matches_filter(unit_filter, u.get_location(), flat_)) {
 					found = true;
@@ -158,7 +159,7 @@ bool side_filter::match_internal(const team &t) const
 		side_filter s_filter(enemy_of);
 		const std::vector<int>& teams = s_filter.get_teams();
 		if(teams.empty()) return false;
-		BOOST_FOREACH(const int side, teams) {
+		foreach_ng(const int side, teams) {
 			if(!(*resources::teams)[side - 1].is_enemy(t.side()))
 				return false;
 		}
@@ -169,7 +170,7 @@ bool side_filter::match_internal(const team &t) const
 		side_filter s_filter(allied_with);
 		const std::vector<int>& teams = s_filter.get_teams();
 		if(teams.empty()) return false;
-		BOOST_FOREACH(const int side, teams) {
+		foreach_ng(const int side, teams) {
 			if((*resources::teams)[side - 1].is_enemy(t.side()))
 				return false;
 		}
