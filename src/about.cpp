@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
+/**
+ * @file src/about.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief Show screen with scrolling credits.
+ * @authors 
+ * @copyright Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify
@@ -14,7 +18,7 @@
 
 /**
  * @file
- * Show screen with scrolling credits.
+ *
  */
 
 #include "about.hpp"

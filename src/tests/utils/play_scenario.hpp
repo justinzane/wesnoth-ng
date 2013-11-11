@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2008 - 2013 by Pauli Nieminen <paniemin@cc.hut.fi>
+/**
+ * @file src/tests/utils/play_scenario.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2008 - 2013 by Pauli Nieminen <paniemin@cc.hut.fi>
    Part of thie Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify

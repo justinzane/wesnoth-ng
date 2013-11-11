@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2003 by David White <dave@whitevine.net>
+/**
+ * @file src/random.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2003 by David White <dave@whitevine.net>
    Copyright (C) 2005 - 2013 by Yann Dirson <ydirson@altern.org>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 

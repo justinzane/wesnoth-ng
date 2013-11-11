@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2011 - 2013 by Dmitry Kovalenko <nephro.wes@gmail.com>
+/**
+ * @file src/ai/lua/lua_object.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2011 - 2013 by Dmitry Kovalenko <nephro.wes@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify

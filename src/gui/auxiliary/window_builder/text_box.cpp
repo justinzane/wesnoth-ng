@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2008 - 2013 by Mark de Wever <koraq@xs4all.nl>
+/**
+ * @file src/gui/auxiliary/window_builder/text_box.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2008 - 2013 by Mark de Wever <koraq@xs4all.nl>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify

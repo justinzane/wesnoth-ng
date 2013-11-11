@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2013 by L.Sebilleau <l.sebilleau@free.fr>
+/**
+ * @file src/generators/yamg/yamg_hexheap.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2013 by L.Sebilleau <l.sebilleau@free.fr>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify

@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2003 by David White <dave@whitevine.net>
+/**
+ * @file src/pathfind/pathfind.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2003 by David White <dave@whitevine.net>
    Copyright (C) 2005 - 2013 by Guillaume Melquiond <guillaume.melquiond@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 

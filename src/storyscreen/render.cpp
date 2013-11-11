@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
+/**
+ * @file src/storyscreen/render.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
    Copyright (C) 2009 - 2013 by Ignacio R. Morelle <shadowm2006@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 

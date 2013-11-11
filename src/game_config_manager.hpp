@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2013 by Andrius Silinskas <silinskas.andrius@gmail.com>
+/**
+ * @file src/game_config_manager.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2013 by Andrius Silinskas <silinskas.andrius@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify

@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2003-2005 by David White <dave@whitevine.net>
+/**
+ * @file src/playcampaign.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2003-2005 by David White <dave@whitevine.net>
    Copyright (C) 2005 - 2013 by Philippe Plantier <ayin@anathas.org>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org
 

@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2007 - 2009
+/**
+ * @file src/mp/multiplayer_lobby.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2007 - 2009
    Part of the Battle for Wesnoth Project http://www.wesnoth.org
 
    This program is free software; you can redistribute it and/or modify

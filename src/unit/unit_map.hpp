@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2006 - 2009 by Rusty Russell <rusty@rustcorp.com.au>
+/**
+ * @file src/unit/unit_map.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2006 - 2009 by Rusty Russell <rusty@rustcorp.com.au>
    Copyright (C) 2010 - 2013 by Guillaume Melquiond <guillaume.melquiond@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 

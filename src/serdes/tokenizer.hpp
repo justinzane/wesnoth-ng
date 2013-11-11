@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2004 - 2009 by Philippe Plantier <ayin@anathas.org>
+/**
+ * @file src/serdes/tokenizer.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2004 - 2009 by Philippe Plantier <ayin@anathas.org>
    Copyright (C) 2010 - 2013 by Guillaume Melquiond <guillaume.melquiond@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org
 

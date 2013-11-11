@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2013 by Ignacio Riquelme Morelle <shadowm2006@gmail.com>
+/**
+ * @file src/gui/dialogs/edit_text.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2013 by Ignacio Riquelme Morelle <shadowm2006@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify

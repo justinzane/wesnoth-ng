@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
+/**
+ * @file src/server/player_network.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
    Copyright (C) 2009 - 2013 by Tomasz Sniatowski <kailoran@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 

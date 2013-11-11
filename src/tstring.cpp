@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2004 by Philippe Plantier <ayin@anathas.org>
+/**
+ * @file src/tstring.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2004 by Philippe Plantier <ayin@anathas.org>
    Copyright (C) 2005 - 2013 by Guillaume Melquiond <guillaume.melquiond@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org
 

@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2003 - 2013 by Jörg Hinrichs, refactored from various
+/**
+ * @file src/savegame.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2003 - 2013 by Jörg Hinrichs, refactored from various
    places formerly created by David White <dave@whitevine.net>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 

@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2012 - 2013 by Mark de Wever <koraq@xs4all.nl>
+/**
+ * @file src/tests/test_sdl_utils.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2012 - 2013 by Mark de Wever <koraq@xs4all.nl>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify

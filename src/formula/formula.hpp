@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2007 - 2013 by David White <dave.net>
+/**
+ * @file src/formula/formula.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2007 - 2013 by David White <dave.net>
    Part of the Silver Tree Project
 
    This program is free software; you can redistribute it and/or modify

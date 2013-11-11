@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2009 - 2013 by Karol Nowak <grywacz@gmail.com>
+/**
+ * @file src/tests/test_serialization.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2009 - 2013 by Karol Nowak <grywacz@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
    This program is free software; you can redistribute it and/or modify

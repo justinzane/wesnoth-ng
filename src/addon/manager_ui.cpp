@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2003 - 2008 by David White <dave@whitevine.net>
+/**
+ * @file src/addon/manager_ui.cpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2003 - 2008 by David White <dave@whitevine.net>
                  2008 - 2013 by Ignacio Riquelme Morelle <shadowm2006@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 

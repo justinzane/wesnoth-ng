@@ -1,5 +1,9 @@
-/*
-   Copyright (C) 2008 by David White <dave@whitevine.net>
+/**
+ * @file src/asserts.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2008 by David White <dave@whitevine.net>
                  2008 - 2013 by Richard Kettering <kettering.richard@gmail.com>
    Part of the Battle for Wesnoth Project http://www.wesnoth.org/
 
