@@ -12,16 +12,16 @@ from glob import glob
 from subprocess import Popen, PIPE, call
 from os import access, F_OK
 
-EnsureSConsVersion(0,98,3)
+EnsureSConsVersion(0, 98, 3)
 
 # Warn user of current set of build options.
 AddOption('--option-cache',
           dest='option_cache',
-          nargs=1, type = 'string',
-          action = 'store',
-          metavar = 'FILE',
+          nargs=1, type='string',
+          action='store',
+          metavar='FILE',
           help='file with cached construction variables',
-          default = '.scons-option-cache')
+          default='.scons-option-cache')
 
 if os.path.exists(GetOption("option_cache")):
     optfile = file(GetOption("option_cache"))
@@ -31,7 +31,7 @@ if os.path.exists(GetOption("option_cache")):
 # Get the Wesnoth version number --------------------------------------------------------------
 
 config_h_re = re.compile(r"^.*#define\s*(\S*)\s*\"(\S*)\".*$", re.MULTILINE)
-build_config = dict( config_h_re.findall(File("src/wesconfig.h").get_contents()) )
+build_config = dict(config_h_re.findall(File("src/wesconfig.h").get_contents()))
 try:
     version = build_config["VERSION"]
     print "Building Wesnoth version %s" % version
@@ -51,7 +51,7 @@ opts.AddVariables(
     # Basic Build Options ---------------------------------------------------------------------
     ListVariable('default_targets',
                  'Targets that will be built if no target is specified in command line.',
-                 "wesnoth,wesnothd",
+                 "wesnoth,wesnothd,campaignd,cutter,exploder",
                  Split("wesnoth wesnothd campaignd cutter exploder test")),
     EnumVariable('build',
                  'Build variant: debug, release profile or base (no subdirectory)',
@@ -70,6 +70,9 @@ opts.AddVariables(
                  True),
     BoolVariable('ccache',
                  "Use ccache",
+                 False),
+    BoolVariable('SDL2',
+                 'Enable SDL2 instead of SDL1.2.',
                  False),
     BoolVariable('openmp',
                  'Enable openmp use.',
@@ -270,7 +273,7 @@ env = Environment(tools=["tar",
                          "gettext",
                          "install",
                          "python_devel",
-                         "scanreplace"], options = opts, toolpath = ["scons"])
+                         "scanreplace"], options=opts, toolpath=["scons"])
 
 if env["lockfile"]:
     print "Creating lockfile"
@@ -291,7 +294,7 @@ try:
     env['ENV']['INCLUDE_SERVER_PID'] = os.environ['INCLUDE_SERVER_PID']
 except KeyError as e:
     print(e.message)
-    
+
 if env["PLATFORM"] == "win32":
     env.Tool("mingw")
 else:
@@ -302,7 +305,7 @@ if env['cxxtool'] in ("clang++", "clang", "llvm"):
     env['CC'] = 'clang'
     env['CXX'] = "clang++"
     env.Tool('llvm')
-    env.Append(LINKFLAGS = "-Wl,-plugin,/usr/lib/LLVMgold.so")
+    env.Append(LINKFLAGS="-Wl,-plugin,/usr/lib/LLVMgold.so")
 elif env['cxxtool'] in (None, "", "g++"):
     env['CC'] = "gcc"
     env['CXX'] = "g++"
@@ -439,20 +442,26 @@ def Warning(message):
     return False
 
 from metasconf import init_metasconf
-configure_args = dict(custom_tests = init_metasconf(env, ["cplusplus",
+configure_args = dict(custom_tests=init_metasconf(env, ["cplusplus",
                                                           "llvm",
                                                           "python_devel",
-                                                          "sdl",
+                                                          "sdl2",
                                                           "boost",
                                                           "pango",
                                                           "opencv",
                                                           "gcrypt",
                                                           "pkgconfig",
                                                           "gettext",
-                                                          "lua"]), config_h = "config.h",
+                                                          "lua"]), config_h="config.h",
     log_file="$build_dir/config.log", conf_dir="$build_dir/sconf_temp")
 
 env.MergeFlags(env["extra_flags_config"])
+
+if env["SDL2"]:
+    sdl_version = "2.0.0"
+else:
+    sdl_version = "1.2.7"
+
 if env["prereqs"]:
     conf = env.Configure(**configure_args)
 
@@ -467,19 +476,19 @@ if env["prereqs"]:
 
     def CheckAsio(conf):
         if env["PLATFORM"] == 'win32':
-            conf.env.Append(LIBS = ["libws2_32"])
+            conf.env.Append(LIBS=["libws2_32"])
             have_libpthread = True
         elif "clang++" in env['CXX']:
-            have_libpthread = True # Check always fails with clang++
+            have_libpthread = True  # Check always fails with clang++
         else:
             have_libpthread = conf.CheckLib("pthread")
         return have_libpthread and \
             conf.CheckBoost("system") and \
-            conf.CheckBoost("asio", header_only = True)
+            conf.CheckBoost("asio", header_only=True)
 
     if env['host'] in ['x86_64-nacl', 'i686-nacl']:
         # libppapi_cpp has a reverse dependency on the following function
-        env.Append(LINKFLAGS = ['-Wl,--undefined=_ZN2pp12CreateModuleEv'])
+        env.Append(LINKFLAGS=['-Wl,--undefined=_ZN2pp12CreateModuleEv'])
         conf.CheckLib("ppapi")
         conf.CheckLib("ppapi_cpp")
         conf.CheckLib("nacl-mounts")
@@ -487,7 +496,7 @@ if env["prereqs"]:
         # Enumerating all transitive dependencies.
         conf.CheckLib("pthread")
         conf.CheckLib("dl")
-        conf.CheckLib("SDL")
+        conf.CheckLib("SDL", use_sdl2=env["SDL2"])
         conf.CheckLib("jpeg")
         conf.CheckLib("png")
         conf.CheckLib("tiff")
@@ -499,15 +508,15 @@ if env["prereqs"]:
         conf.CheckLib("mikmod")
 
     have_server_prereqs = (conf.CheckGcrypt() and
-                           conf.CheckCPlusPlus(gcc_version = "3.3") and
+                           conf.CheckCPlusPlus(gcc_version="3.3") and
                            conf.CheckGettextLibintl() and
-                           conf.CheckBoost("iostreams", require_version = "1.34.1") and
+                           conf.CheckBoost("iostreams", require_version="1.34.1") and
                            conf.CheckBoostIostreamsGZip() and
                            conf.CheckBoostIostreamsBZip2() and
-                           conf.CheckBoost("smart_ptr", header_only = True) and
-                           conf.CheckSDL(require_version = '1.2.7') and
-                           conf.CheckSDL('SDL_net') and
-                           conf.CheckPango("cairo", require_version = "1.21.3") or
+                           conf.CheckBoost("smart_ptr", header_only=True) and
+                           conf.CheckSDL(require_version=sdl_version, use_sdl2=env["SDL2"]) and
+                           conf.CheckSDL('SDL_net', use_sdl2=env["SDL2"]) and
+                           conf.CheckPango("cairo", require_version="1.21.3") or
                            Warning("Base prerequisites are not met."))
 
     env = conf.Finish()
@@ -519,12 +528,12 @@ if env["prereqs"]:
         conf.CheckOpenCV() and \
         conf.CheckPKG("fontconfig") and \
         conf.CheckBoost("program_options", require_version="1.35.0") and \
-        conf.CheckBoost("regex", require_version = "1.35.0") and \
-        conf.CheckSDL("SDL_ttf", require_version = "2.0.8") and \
-        conf.CheckSDL("SDL_mixer", require_version = '1.2.0') and \
-        conf.CheckSDL("SDL_image", require_version = '1.2.0') and \
+        conf.CheckBoost("regex", require_version="1.35.0") and \
+        conf.CheckSDL("SDL_ttf", require_version="2.0.8", use_sdl2=env["SDL2"]) and \
+        conf.CheckSDL("SDL_mixer", require_version='1.2.0', use_sdl2=env["SDL2"]) and \
+        conf.CheckSDL("SDL_image", require_version='1.2.0', use_sdl2=env["SDL2"]) and \
         conf.CheckLib("vorbisfile") and \
-        conf.CheckOgg() or \
+        conf.CheckOgg(use_sdl2=env["SDL2"]) or \
         Warning("Client prerequisites not met. wesnoth, cutter and exploder cannot be built.")
 
     have_X = False
@@ -534,7 +543,7 @@ if env["prereqs"]:
 
         env["notifications"] = env["notifications"] and conf.CheckPKG("dbus-1")
         if env["notifications"]:
-            client_env.Append(CPPDEFINES = ["HAVE_LIBDBUS"])
+            client_env.Append(CPPDEFINES=["HAVE_LIBDBUS"])
 
         if client_env['fribidi']:
             client_env['fribidi'] = (conf.CheckPKG('fribidi >= 0.10.9') or
@@ -542,16 +551,16 @@ if env["prereqs"]:
 
     if env["forum_user_handler"]:
         env.ParseConfig("pkg_config --libs --cflags mysql")
-        env.Append(CPPDEFINES = ["HAVE_MYSQLPP"])
+        env.Append(CPPDEFINES=["HAVE_MYSQLPP"])
 
     client_env = conf.Finish()
 
     test_env = client_env.Clone()
     conf = test_env.Configure(**configure_args)
 
-    have_test_prereqs = (have_client_prereqs and 
-                         have_server_prereqs and 
-                         conf.CheckBoost('unit_test_framework') or 
+    have_test_prereqs = (have_client_prereqs and
+                         have_server_prereqs and
+                         conf.CheckBoost('unit_test_framework') or
                          Warning("Unit tests are disabled because their prerequisites are not met."))
     test_env = conf.Finish()
     if (not have_test_prereqs) and "test" in env["default_targets"]:
@@ -588,30 +597,30 @@ if not env['nls']:
 #
 
 for env in [test_env, client_env, env]:
-    env.Prepend(CPPPATH = ["#/", "#/src"])
+    env.Prepend(CPPPATH=["#/", "#/src"])
 
-    env.Append(CPPDEFINES = ["HAVE_CONFIG_H"])
+    env.Append(CPPDEFINES=["HAVE_CONFIG_H"])
 
     if "gcc" in env["TOOLS"]:
-        env.AppendUnique(CCFLAGS = Split("-W -Wall"))
-        env.AppendUnique(CFLAGS = '-std=' + env["cstd"])
-        env.AppendUnique(CXXFLAGS = '-std=' + env['cxxstd'])
+        env.AppendUnique(CCFLAGS=Split("-W -Wall"))
+        env.AppendUnique(CFLAGS='-std=' + env["cstd"])
+        env.AppendUnique(CXXFLAGS='-std=' + env['cxxstd'])
 
     # Todo add check for OpenMP capable compilers and versions
     if env['openmp']:
-        env.AppendUnique(CXXFLAGS = ["-fopenmp"], LIBS = ["gomp"])
+        env.AppendUnique(CXXFLAGS=["-fopenmp"], LIBS=["gomp"])
 
     if env['strict']:
-        env.AppendUnique(CCFLAGS = Split("-Werror $(-Wno-unused-local-typedefs$)"))
+        env.AppendUnique(CCFLAGS=Split("-Werror $(-Wno-unused-local-typedefs$)"))
 
     if env['lowmem']:
-        env.Append(CPPDEFINES = "LOW_MEM")
+        env.Append(CPPDEFINES="LOW_MEM")
 
     if env['internal_data']:
-        env.Append(CPPDEFINES = "USE_INTERNAL_DATA")
+        env.Append(CPPDEFINES="USE_INTERNAL_DATA")
 
     if have_X:
-        env.Append(CPPDEFINES = "_X11")
+        env.Append(CPPDEFINES="_X11")
 
 # Simulate autools-like behavior of prefix on various paths
     installdirs = Split("bindir datadir fifodir icondir desktopdir mandir docdir python_site_packages_dir")
@@ -619,12 +628,12 @@ for env in [test_env, client_env, env]:
         env[d] = os.path.join(env["prefix"], env[d])
 
     if env["PLATFORM"] == 'win32':
-        env.Append(LIBS = ["wsock32", "intl", "z"], CCFLAGS = ["-mthreads"], LINKFLAGS = ["-mthreads"], CPPDEFINES = ["_WIN32_WINNT=0x0500"])
-    if env["PLATFORM"] == 'darwin':            # Mac OS X
-        env.Append(FRAMEWORKS = "Carbon")            # Carbon GUI
+        env.Append(LIBS=["wsock32", "intl", "z"], CCFLAGS=["-mthreads"], LINKFLAGS=["-mthreads"], CPPDEFINES=["_WIN32_WINNT=0x0500"])
+    if env["PLATFORM"] == 'darwin':  # Mac OS X
+        env.Append(FRAMEWORKS="Carbon")  # Carbon GUI
 
 if not env['static_test']:
-    test_env.Append(CPPDEFINES = "BOOST_TEST_DYN_LINK")
+    test_env.Append(CPPDEFINES="BOOST_TEST_DYN_LINK")
 
 try:
     if call("utils/autorevision -t h > revision.h", shell=True) == 0:
@@ -634,21 +643,21 @@ except:
 
 Export(Split("env client_env test_env have_client_prereqs have_server_prereqs have_test_prereqs"))
 
-SConscript(dirs = Split("po doc packaging/windows packaging/systemd"))
+SConscript(dirs=Split("po doc packaging/windows packaging/systemd"))
 
 binaries = Split("wesnoth wesnothd cutter exploder campaignd test")
 builds = {
-    "base"          : dict(CCFLAGS   = "$OPT_FLAGS"),    # Don't build in subdirectory
-    "debug"         : dict(CCFLAGS   = Split("$DEBUG_FLAGS")),
-    "release"       : dict(CCFLAGS   = "$OPT_FLAGS"),
-    "profile"       : dict(CCFLAGS   = "-pg", LINKFLAGS = "-pg")
+    "base"          : dict(CCFLAGS="$OPT_FLAGS"),  # Don't build in subdirectory
+    "debug"         : dict(CCFLAGS=Split("$DEBUG_FLAGS")),
+    "release"       : dict(CCFLAGS="$OPT_FLAGS"),
+    "profile"       : dict(CCFLAGS="-pg", LINKFLAGS="-pg")
     }
 build = env["build"]
 
 for env in [test_env, client_env, env]:
     env.AppendUnique(**builds[build])
-    env.Append(CXXFLAGS = Split(os.environ.get('CXXFLAGS', [])), 
-               LINKFLAGS = Split(os.environ.get('LDFLAGS', [])))
+    env.Append(CXXFLAGS=Split(os.environ.get('CXXFLAGS', [])),
+               LINKFLAGS=Split(os.environ.get('LDFLAGS', [])))
     env.MergeFlags(env["extra_flags_" + build])
 
 print("--------------------------------------------------------------------------------------")
@@ -666,14 +675,14 @@ else:
     build_dir = os.path.join("$build_dir", build)
 
 # Define object file names --------------------------------------------------------------------
-if build == "release" : 
+if build == "release" :
     build_suffix = ""
-else                  : 
+else                  :
     build_suffix = "-" + build
 Export("build_suffix")
 
 # Call scr/SConscript -------------------------------------------------------------------------
-env.SConscript("src/SConscript",  variant_dir = build_dir, duplicate = False)
+env.SConscript("src/SConscript", variant_dir=build_dir, duplicate=False)
 
 Import(binaries + ["sources"])
 binary_nodes = map(eval, binaries)
@@ -684,9 +693,9 @@ if have_client_prereqs and env["nls"]:
     env.Requires("wesnoth", Dir("translations"))
 
 # Utility productions (Unix-like systems only) ------------------------------------------------
-# Make a tags file for Emacs: Exuberant Ctags doesn't understand the -l c++ flag 
+# Make a tags file for Emacs: Exuberant Ctags doesn't understand the -l c++ flag
 # so if the etags fails try the ctags version
-env.Command("TAGS", sources, 
+env.Command("TAGS", sources,
             'etags -l c++ $SOURCES.srcpath || (ctags --tag-relative=yes -f src/tags $SOURCES.srcpath)')
 env.Clean(all, 'TAGS')
 
@@ -720,19 +729,19 @@ def InstallManpages(env, component):
 
 # Now the actual installation productions -----------------------------------------------------
 # Install game and associated resources
-env.InstallBinary(wesnoth)              # Game
-env.InstallData("datadir",              # data
-                "wesnoth", 
+env.InstallBinary(wesnoth)  # Game
+env.InstallData("datadir",  # data
+                "wesnoth",
                 map(Dir, installable_subs))
-env.InstallData("docdir",               # docs
-                "wesnoth", 
-                [Glob("doc/manual/*.html"), 
-                 Dir("doc/manual/styles"), 
+env.InstallData("docdir",  # docs
+                "wesnoth",
+                [Glob("doc/manual/*.html"),
+                 Dir("doc/manual/styles"),
                  Dir("doc/manual/images")])
-InstallManpages(env, "wesnoth")         # manpages
-env.InstallBinary(campaignd)            # Wesnoth campaign server
-env.InstallBinary(cutter)               # And the artists' tools
-env.InstallBinary(exploder)             # And the artists' tools
+InstallManpages(env, "wesnoth")  # manpages
+env.InstallBinary(campaignd)  # Wesnoth campaign server
+env.InstallBinary(cutter)  # And the artists' tools
+env.InstallBinary(exploder)  # And the artists' tools
 
 # Install translations if requested
 if env["nls"]:
@@ -748,11 +757,11 @@ if have_client_prereqs and have_X and env["desktop_entry"]:
      env.InstallData("desktopdir", "wesnoth", "icons/wesnoth.desktop")
 
 # Python tools
-env.InstallData("bindir", 
-                "pytools", 
+env.InstallData("bindir",
+                "pytools",
                 map(lambda tool: os.path.join("data", "tools", tool), pythontools))
-env.InstallData("python_site_packages_dir", 
-                "pytools", 
+env.InstallData("python_site_packages_dir",
+                "pytools",
                 map(lambda module: os.path.join("data", "tools", "wesnoth", module), pythonmodules))
 
 # Wesnoth MP server install
@@ -770,24 +779,24 @@ if not access(fifodir, F_OK):
 
 # Handle systemd MP Server install
 if env["systemd"]:
-    env.InstallData("prefix", 
-                    "wesnothd", 
-                    "#packaging/systemd/wesnothd.service", 
+    env.InstallData("prefix",
+                    "wesnothd",
+                    "#packaging/systemd/wesnothd.service",
                     "lib/systemd/system")
-    env.InstallData("prefix", 
-                    "wesnothd", 
-                    "#packaging/systemd/wesnothd.conf", 
+    env.InstallData("prefix",
+                    "wesnothd",
+                    "#packaging/systemd/wesnothd.conf",
                     "lib/tmpfiles.d")
 
 
 # Compute things for default install based on which targets have been created. ----------------
 install = env.Alias('install', [])
 for installable in ('wesnoth', 'wesnothd', 'campaignd', 'exploder', 'cutter'):
-    if (os.path.exists(installable + build_suffix) or 
-        installable in COMMAND_LINE_TARGETS or 
+    if (os.path.exists(installable + build_suffix) or
+        installable in COMMAND_LINE_TARGETS or
         "all" in COMMAND_LINE_TARGETS
         ):
-        env.Alias('install', env.Alias('install-'+installable))
+        env.Alias('install', env.Alias('install-' + installable))
 
 # Un-installation -----------------------------------------------------------------------------
 def Uninstall(nodes):
@@ -804,7 +813,7 @@ env.Precious(uninstall)
 
 # Making a distribution tarball. --------------------------------------------------------------
 env["version"] = build_config.get("VERSION")
-if 'dist' in COMMAND_LINE_TARGETS:    # Speedup, the manifest is expensive
+if 'dist' in COMMAND_LINE_TARGETS:  # Speedup, the manifest is expensive
     def dist_manifest():
         "Get an argument list suitable for passing to a distribution archiver."
         # Start by getting a list of all files under version control
@@ -823,7 +832,7 @@ if 'dist' in COMMAND_LINE_TARGETS:    # Speedup, the manifest is expensive
 # Make binary distribution (from installed client side) ---------------------------------------
 bin_tar_env = env.Clone()
 bin_tarball = bin_tar_env.Tar('wesnoth-binary.tar.bz2',
-                              os.path.join(bindir,"wesnoth"))
+                              os.path.join(bindir, "wesnoth"))
 bin_tar_env.Append(TARFLAGS='-j', TARCOMSTR="Making binary tarball...")
 env.Clean(all, 'wesnoth-binary.tar.bz2')
 env.Alias('binary-dist', bin_tarball)
@@ -836,12 +845,12 @@ env.Clean(all, 'wesnoth-data.tar.bz2')
 env.Alias('data-dist', data_tarball)
 
 # Windows installer ---------------------------------------------------------------------------
-text_builder = Builder(action = Copy("$TARGET", "$SOURCE"), single_source = True, suffix = ".txt")
+text_builder = Builder(action=Copy("$TARGET", "$SOURCE"), single_source=True, suffix=".txt")
 env.WindowsInstaller([
     wesnoth, wesnothd,
     Dir(installable_subs), env["nls"] and Dir("translations") or [],
     glob("*.dll"),
-    text_builder(env, source = Split("README copyright COPYING changelog players_changelog"))
+    text_builder(env, source=Split("README copyright COPYING changelog players_changelog"))
     ])
 
 # Making Mac OS X application bundles ---------------------------------------------------------
@@ -857,16 +866,16 @@ env.Clean(all, "Battle For Wesnoth.app")
 
 # Sanity checking -----------------------------------------------------------------------------
 # @note that this is a "#!/bin/sh" script
-sanity_check = env.Command('sanity-check', 
-                           '', 
-                           [Action("cd utils; ./sanity_check"), 
+sanity_check = env.Command('sanity-check',
+                           '',
+                           [Action("cd utils; ./sanity_check"),
                             Action("cd data/tools; make sanity-check"), ])
 env.AlwaysBuild(sanity_check)
 env.Precious(sanity_check)
 
 # Make the project dependency graph (requires graph-includes). --------------------------------
 # @todo Fix this to use env['CPPPATH']
-env.Command("wesnoth-deps.dot", 
+env.Command("wesnoth-deps.dot",
             [],
             "graph-includes -verbose --class wesnoth \
             -sysI /usr/include/c++/4.0 -sysI /usr/include -sysI /usr/include/SDL \

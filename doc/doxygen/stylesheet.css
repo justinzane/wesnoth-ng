@@ -1,5 +1,9 @@
+* {
+    color: #cfcfcf;
+    background-color: #000000;
+}
 BODY,H1,H2,H3,H4,H5,H6,P,CENTER,TD,TH,UL,DL,DIV {
-	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-family: "Source Sans Pro", "DejaVu Sans", sans-serif;
 }
 BODY,TD {
        font-size: 90%;
@@ -80,7 +84,7 @@ A.codeRef:visited { font-weight: normal; color: #0000FF}
 A:hover { text-decoration: none; background-color: #f2f2ff }
 DL.el { margin-left: -1cm }
 .fragment {
-       font-family: monospace, fixed;
+       font-family: "Source Code Pro", "DejaVu Sans Mono", monospace, fixed;
        font-size: 95%;
 }
 PRE.fragment {
@@ -347,7 +351,7 @@ HR { height: 1px;
 
 /* for the tree view */
 .ftvtree {
-	font-family: sans-serif;
+	font-family: "Source Sans Pro", "DejaVu Sans", sans-serif;
 	margin:0.5em;
 }
 .directory { font-size: 9pt; font-weight: bold; }
