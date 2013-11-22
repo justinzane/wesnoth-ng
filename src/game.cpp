@@ -19,26 +19,30 @@
 #include "global.hpp"
 
 #include "about.hpp"
-#include "addon/manager.hpp"
-#include "addon/manager_ui.hpp"
 #include "commandline_options.hpp"
 #include "game_config_manager.hpp"
 #include "game_controller.hpp"
-#include "gui/dialogs/title_screen.hpp"
-#ifdef DEBUG_WINDOW_LAYOUT_GRAPHS
-#include "gui/widgets/debug.hpp"
-#endif
-#include "gui/widgets/window.hpp"
+#include "global.hpp"
 #include "help.hpp"
 #include "loadscreen.hpp"
 #include "playcampaign.hpp"
 #include "preferences_display.hpp"
 #include "replay.hpp"
+#include "statistics.hpp"
+#include "version.hpp"
+
+#include "addon/manager.hpp"
+#include "addon/manager_ui.hpp"
+
+#include "gui/dialogs/title_screen.hpp"
+#ifdef DEBUG_WINDOW_LAYOUT_GRAPHS
+#include "gui/widgets/debug.hpp"
+#endif
+#include "gui/widgets/window.hpp"
+
 #include "serdes/binary_or_text.hpp"
 #include "serdes/parser.hpp"
 #include "serdes/validator.hpp"
-#include "statistics.hpp"
-#include "version.hpp"
 #include "serdes/wml_exception.hpp"
 
 #include <cerrno>
@@ -46,7 +50,6 @@
 #include <fstream>
 #include <libintl.h>
 
-#include "global.hpp"
 #include <boost/foreach.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/bzip2.hpp>
