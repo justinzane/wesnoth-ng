@@ -30,16 +30,92 @@
 
 namespace logd {
 
+std::string domain2name(log_domain dom) {
+    std::string retval;
+    switch (dom) {
+        case log_domain::AI:
+            retval = "AI         "; break;
+        case log_domain::ARCH_DEP:
+            retval = "Arch. Dep. "; break;
+        case log_domain::CMPGN_SRVR:
+            retval = "CampaignD  "; break;
+        case log_domain::DISP_SRVR:
+            retval = "DisplayD   "; break;
+        case log_domain::EDITOR:
+            retval = "Editor     "; break;
+        case log_domain::FORMULA:
+            retval = "Formula    "; break;
+        case log_domain::EVENTS:
+            retval = "GameEvents "; break;
+        case log_domain::UI:
+            retval = "UI         "; break;
+        case log_domain::LUA:
+            retval = "Lua        "; break;
+        case log_domain::MP:
+            retval = "Multiplayer"; break;
+        case log_domain::NET:
+            retval = "Networking "; break;
+        case log_domain::PATHFIND:
+            retval = "Pathfind   "; break;
+        case log_domain::SCRIPT:
+            retval = "Scripting  "; break;
+        case log_domain::SERDES:
+            retval = "SerDes     "; break;
+        case log_domain::SERVER:
+            retval = "WesnothD   "; break;
+        case log_domain::TEST:
+            retval = "Test       "; break;
+        case log_domain::CUTTER:
+            retval = "Cutter     "; break;
+        case log_domain::EXPLODER:
+            retval = "Exploder   "; break;
+        case log_domain::VALIDATOR:
+            retval = "Validator  "; break;
+        case log_domain::UNIT:
+            retval = "Units      "; break;
+        case log_domain::WESMAGE:
+            retval = "Wesmage    "; break;
+        case log_domain::WHTBRD:
+            retval = "Whiteboard "; break;
+        case log_domain::WIDGETS:
+            retval = "UI/Widgets "; break;
+        case log_domain::MISC:
+            retval = "Misc       "; break;
+        default:
+            retval = "Unknown    ";
+    }
+    return retval;
+}
+
+std::string level2name(log_level lev) {
+    std::string retval;
+    switch (lev) {
+        case log_level::ERROR:
+            retval = "ERROR  : "; break;
+        case log_level::WARN:
+            retval = "WARNING: "; break;
+        case log_level::INFO:
+            retval = "Info   : "; break;
+        case log_level::DEBUG:
+            retval = "Debug  : "; break;
+        case log_level::BATSHIT:
+            retval = "XDebug : "; break;
+        default:
+            retval = "         ";
+    }
+    return retval;
+}
+
 bool should_quit() { return quit_logd_; }
 
 void do_quit() { quit_logd_ = false; }
 
-void write(log_level& lev, log_domain& dom, std::string& msg) {
+void write(log_msg& msg) {
     // @todo allow configuration of output streams
-    if (lev == log_level::ERROR || lev == log_level::WARN) {
-        std::cerr << level2name(lev) << domain2name(dom) << msg << "\n";
+    if (msg.level() == log_level::ERROR || msg.level() == log_level::WARN) {
+        std::cerr << level2name(msg.level()) << domain2name(msg.domain()) << msg.message() << "\n";
     } else {
-        std::cout << level2name(lev) << domain2name(dom) << msg << "\n";
+        std::cout << level2name(msg.level()) << domain2name(msg.domain()) << msg.message() << "\n";
     }
 }
 
@@ -58,11 +134,11 @@ int main(int argc, char* argv[]) {
         msgpack::unpacked unpckd;
         msgpack::unpack(&unpckd, reinterpret_cast<char*>(zmsg.data()), zmsg.size());
         msgpack::object obj = unpckd.get();
-        std::string log_msg;
-        obj.convert(&log_msg);
+        log_msg msg;
+        obj.convert(&msg);
         //;
     }
-
+    return 0;
 } //end main
 
 } //end namespace logd

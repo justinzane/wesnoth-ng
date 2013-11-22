@@ -27,12 +27,15 @@ def CheckMsgPack(context, conf, require_version=None):
     env = context.env
 
     if not conf.CheckCXXHeader("msgpack.hpp"):
+        context.Result("MessagePack ... no")
         return false
 
     if not conf.CheckLib("msgpack"):
+        context.Result("MessagePack ... no")
         return false
 
     env.AppendUnique(LIBS="msgpack")
+    context.Result("MessagePack ... yes")
     return True
 
 config_checks = { "CheckMsgPack" : CheckMsgPack, }

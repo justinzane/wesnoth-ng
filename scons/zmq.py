@@ -27,12 +27,15 @@ def CheckZMQ(context, conf, require_version=None):
     env = context.env
 
     if not conf.CheckCXXHeader("zmq.hpp"):
+        context.Result("ZMQ ... no")
         return False
 
     if not conf.CheckLib("zmq"):
+        context.Result("ZMQ ... no")
         return False
 
     env.AppendUnique(LIBS="zmq")
+    context.Result("ZMQ ... yes")
     return True
 
 config_checks = { "CheckZMQ" : CheckZMQ, }

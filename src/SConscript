@@ -19,6 +19,7 @@ libwesnoth_core_sources = Split("""
     gettext.cpp
     log/log.cpp
     log/logd.cpp
+    log/log_msg.cpp
     map.cpp
     map_location.cpp
     net/network.cpp

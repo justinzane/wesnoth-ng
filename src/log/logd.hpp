@@ -30,6 +30,7 @@
 #define __cplusplus 201103L
 #endif
 
+#include "log_msg.hpp"
 #include "../defs.hpp"
 #include <zmq.hpp>
 #include <msgpack.hpp>
@@ -39,122 +40,12 @@
 #include <tuple>
 
 namespace logd {
-// Enums --------------------------------------------------------------------------------------
-enum class log_level {
-        SILENT,
-        ERROR,
-        WARN,
-        INFO,
-        DEBUG,
-        BATSHIT
-};
-
-enum class log_domain {
-        AI,
-        ARCH_DEP,
-        CMPGN_SRVR,
-        DISP_SRVR,
-        EDITOR,
-        FORMULA,
-        EVENTS,
-        UI,
-        LUA,
-        MP,
-        NET,
-        PATHFIND,
-        SCRIPT,
-        SERDES,
-        SERVER,
-        TEST,
-        CUTTER,
-        EXPLODER,
-        VALIDATOR,
-        UNIT,
-        WESMAGE,
-        WHTBRD,
-        WIDGETS,
-        MSGPACK,
-        SDL2,
-        ZMQ,
-        MISC
-};
-
 // Functions ----------------------------------------------------------------------------------
-inline std::string domain2name(log_domain& dom) {
-    std::string retval;
-    switch (dom) {
-        case log_domain::AI:
-            retval = "AI         "; break;
-        case log_domain::ARCH_DEP:
-            retval = "Arch. Dep. "; break;
-        case log_domain::CMPGN_SRVR:
-            retval = "CampaignD  "; break;
-        case log_domain::DISP_SRVR:
-            retval = "DisplayD   "; break;
-        case log_domain::EDITOR:
-            retval = "Editor     "; break;
-        case log_domain::FORMULA:
-            retval = "Formula    "; break;
-        case log_domain::EVENTS:
-            retval = "GameEvents "; break;
-        case log_domain::UI:
-            retval = "UI         "; break;
-        case log_domain::LUA:
-            retval = "Lua        "; break;
-        case log_domain::MP:
-            retval = "Multiplayer"; break;
-        case log_domain::NET:
-            retval = "Networking "; break;
-        case log_domain::PATHFIND:
-            retval = "Pathfind   "; break;
-        case log_domain::SCRIPT:
-            retval = "Scripting  "; break;
-        case log_domain::SERDES:
-            retval = "SerDes     "; break;
-        case log_domain::SERVER:
-            retval = "WesnothD   "; break;
-        case log_domain::TEST:
-            retval = "Test       "; break;
-        case log_domain::CUTTER:
-            retval = "Cutter     "; break;
-        case log_domain::EXPLODER:
-            retval = "Exploder   "; break;
-        case log_domain::VALIDATOR:
-            retval = "Validator  "; break;
-        case log_domain::UNIT:
-            retval = "Units      "; break;
-        case log_domain::WESMAGE:
-            retval = "Wesmage    "; break;
-        case log_domain::WHTBRD:
-            retval = "Whiteboard "; break;
-        case log_domain::WIDGETS:
-            retval = "UI/Widgets "; break;
-        case log_domain::MISC:
-            retval = "Misc       "; break;
-        default:
-            retval = "Unknown    ";
-    }
-    return retval;
-}
+/** @brief converts an element of the log_domain enum into a corresponding string. */
+std::string domain2name(log_domain dom);
 
-inline std::string level2name(log_level& lev) {
-    std::string retval;
-    switch (lev) {
-        case log_level::ERROR:
-            retval = "ERROR  : "; break;
-        case log_level::WARN:
-            retval = "WARNING: "; break;
-        case log_level::INFO:
-            retval = "Info   : "; break;
-        case log_level::DEBUG:
-            retval = "Debug  : "; break;
-        case log_level::BATSHIT:
-            retval = "XDebug : "; break;
-        default:
-            retval = "         ";
-    }
-    return retval;
-}
+/** @brief converts an element of the log_level enum into a corresponding string. */
+std::string level2name(log_level lev);
 
 /** @brief Called by client loop for exit. */
 bool should_quit();
@@ -163,7 +54,7 @@ bool should_quit();
 void do_quit();
 
 /** @brief Output received log messages. */
-void write(log_level& lev, log_domain& dom, std::string& msg);
+void write(log_msg& msg);
 
 // Variables
 bool quit_logd_ {false};
