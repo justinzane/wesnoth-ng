@@ -1,0 +1,347 @@
+/**
+ * @file src/sdl_utils.hpp
+ * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
+ * @brief 
+ * @authors 
+ * @copyright Copyright (C) 2003 - 2013 by David White <dave@whitevine.net>
+ Part of the Battle for Wesnoth Project http://www.wesnoth.org/
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY.
+
+ See the COPYING file for more details.
+ */
+
+/** @file */
+
+#ifndef SDL_UTILS_INCLUDED
+#define SDL_UTILS_INCLUDED
+
+#include "defs.hpp"
+#include "floating_point_emulation.hpp"
+#include "global.hpp"
+#include "neon.hpp"
+#include "scoped_resource.hpp"
+#include "util.hpp"
+#include "video.hpp"
+#include <SDL2/SDL.h>
+#include <boost/math/constants/constants.hpp>
+#include <algorithm>
+#include <cassert>
+#include <cstring>
+#include <iostream>
+#include <cstdlib>
+#include <iosfwd>
+#include <map>
+#include <string>
+
+SDLKey sdl_keysym_from_name(std::string const &keyname);
+
+bool point_in_rect(int x, int y, const SDL_Rect& rect);
+bool rects_overlap(const SDL_Rect& rect1, const SDL_Rect& rect2);
+SDL_Rect intersect_rects(SDL_Rect const &rect1, SDL_Rect const &rect2);
+SDL_Rect union_rects(const SDL_Rect &rect1, const SDL_Rect &rect2);
+
+SDL_Surface make_neutral_surface(const SDL_Surface &surf);
+SDL_Surface create_neutral_surface(int w, int h);
+SDL_Surface create_optimized_surface(const SDL_Surface &surf);
+
+/**
+ * Stretches a SDL_Surface in the horizontal direction.
+ *
+ *  The stretches a SDL_Surface it uses the first pixel in the horizontal
+ *  direction of the original SDL_Surface and copies that to the destination.
+ *  This means only the first column of the original is used for the destination.
+ *  @param surf              The source surface.
+ *  @param w                 The width of the resulting surface.
+ *  @param optimize          Should the return SDL_Surface be RLE optimized.
+ *
+ *  @return                  An optimized surface.
+ *                           returned.
+ *  @retval 0                Returned upon error.
+ *  @retval surf             Returned if w == surf->w, note this ignores the
+ *                           optimize flag.
+ */
+SDL_Surface stretch_surface_horizontal(const SDL_Surface& surf,
+                                       const unsigned w,
+                                       const bool optimize = true);
+
+/**
+ *  Stretches a SDL_Surface in the vertical direction.
+ *
+ *  The stretches a SDL_Surface it uses the first pixel in the vertical
+ *  direction of the original SDL_Surface and copies that to the destination.
+ *  This means only the first row of the original is used for the destination.
+ *  @param surf              The source surface.
+ *  @param h                 The height of the resulting surface.
+ *  @param optimize          Should the return SDL_Surface be RLE optimized.
+ *
+ *  @return                  An optimized surface.
+ *                           returned.
+ *
+ *  @retval surf             Returned if h == surf->h, note this ignores the
+ *                           optimize flag.
+ */
+SDL_Surface stretch_surface_vertical(const SDL_Surface& surf,
+                                     const unsigned h,
+                                     const bool optimize = true);
+
+/** Scale a surface
+ *  @param surf              The source surface.
+ *  @param w                 The width of the resulting surface.
+ *  @param h                 The height of the resulting surface.
+ *  @param optimize          Should the return SDL_Surface be RLE optimized.
+ *  @return                  A SDL_Surface containing the scaled version of the source.
+ *  @retval 0                Returned upon error.
+ *  @retval surf             Returned if w == surf->w and h == surf->h
+ *                           note this ignores the optimize flag.
+ */
+SDL_Surface scale_surface(const SDL_Surface &surf, int w, int h, bool optimize = true);
+
+/** Scale a SDL_Surface using modified nearest neighbour algorithm. Use only if
+ * preserving sharp edges is a priority (e.g. minimap). 
+ *  @param surf              The source surface.
+ *  @param w                 The width of the resulting surface.
+ *  @param h                 The height of the resulting surface.
+ *  @param optimize          Should the return SDL_Surface be RLE optimized.
+ *  @return                  A SDL_Surface containing the scaled version of the source.
+ *  @retval 0                Returned upon error.
+ *  @retval surf             Returned if w == surf->w and h == surf->h
+ *                           note this ignores the optimize flag.
+ */
+SDL_Surface scale_surface_sharp(const SDL_Surface& surf, int w, int h, bool optimize = true);
+
+/** Tile a surface
+ * @param surf               The source surface.
+ * @param w                  The width of the resulting surface.
+ * @param h                  The height of the resulting surface.
+ * @param optimize           Should the return SDL_Surface be RLE optimized
+ * @return                   A SDL_Surface containing the tiled version of the source.
+ * @retval 0                 Returned upon error
+ * @retval surf              Returned if w == surf->w and h == surf->h
+ *                           note this ignores the optimize flag.
+ */
+SDL_Surface tile_surface(const SDL_Surface &surf, int w, int h, bool optimize = true);
+
+SDL_Surface adjust_surface_color(const SDL_Surface &surf, int r, int g, int b, bool optimize =
+    true);
+SDL_Surface greyscale_image(const SDL_Surface &surf, bool optimize = true);
+/** create an heavy shadow of the image, by blurring, increasing alpha and darkening */
+SDL_Surface shadow_image(const SDL_Surface &surf, bool optimize = true);
+
+/**
+ * Recolors a SDL_Surface using a map with source and converted palette values.
+ * This is most often used for team-coloring.
+ *
+ * @param surf               The source surface.
+ * @param map_rgb            Map of color values, with the keys corresponding to the
+ *                           source palette, and the values to the recolored palette.
+ * @param optimize           Whether the new SDL_Surface should be RLE encoded. Only
+ *                           useful when the source is not the screen and it is
+ *                           going to be used multiple times.
+ * @return                   A recolored surface, or a null SDL_Surface if there are
+ *                           problems with the source.
+ */
+SDL_Surface recolor_image(SDL_Surface surf, const std::map<Uint32, Uint32>& map_rgb,
+bool optimize = true);
+
+SDL_Surface brighten_image(const SDL_Surface &surf, fixed_t amount, bool optimize = true);
+
+/** Get a portion of the screen.
+ *  Send NULL if the portion is outside of the screen.
+ *  @param surf              The source surface.
+ *  @param rect              The portion of the source SDL_Surface to copy.
+ *  @param optimize_format   Optimize by converting to result to display format.
+ *                           Only useful if the source is not the screen and you
+ *                           plan to blit the result on screen several times.
+ *  @return                  A SDL_Surface containing the portion of the source.
+ *                           No RLE or Alpha bits are set.
+ *  @retval 0                if error or the portion is outside of the surface.
+ */
+SDL_Surface get_surface_portion(const SDL_Surface &surf, SDL_Rect &rect,
+bool optimize_format = false);
+
+SDL_Surface adjust_surface_alpha(const SDL_Surface &surf, fixed_t amount, bool optimize = true);
+SDL_Surface adjust_surface_alpha_add(const SDL_Surface &surf, int amount, bool optimize = true);
+
+/** Applies a mask on a surface. */
+SDL_Surface mask_surface(const SDL_Surface &surf, const SDL_Surface &mask, bool* empty_result =
+    NULL,
+                         const std::string& filename = std::string());
+
+/** Check if a SDL_Surface fit into a mask */
+bool in_mask_surface(const SDL_Surface &surf, const SDL_Surface &mask);
+
+/** Progressively reduce alpha of bottom part of the surface
+ *  @param surf              The source surface.
+ *  @param depth             The height of the bottom part in pixels
+ *  @param alpha_base        The alpha adjustment at the interface
+ *  @param alpha_delta       The alpha adjustment reduction rate by pixel depth
+ *  @param optimize          Optimize by converting to result to display
+ */
+SDL_Surface submerge_alpha(const SDL_Surface &surf,
+                           int depth,
+                           float alpha_base,
+                           float alpha_delta,
+                           bool optimize = true);
+
+/**
+ * Light surf using lightmap
+ * @param surf               The source surface.
+ * @param lightmap           add/subtract this color to surf
+ *                           but RGB values are converted to (X-128)*2
+ *                           to cover the full (-256,256) spectrum.
+ *                           Should already be neutral
+ * @param optimize           Whether the new SDL_Surface should be RLE encoded.
+ */
+SDL_Surface light_surface(const SDL_Surface &surf, const SDL_Surface &lightmap, bool optimize =
+    true);
+
+/** Cross-fades a surface. */
+SDL_Surface blur_surface(const SDL_Surface &surf, int depth = 1, bool optimize = true);
+
+/**
+ * Cross-fades a SDL_Surface in place.
+ *
+ * @param surf                    The SDL_Surface to blur, must be not optimized
+ *                                and have 32 bits per pixel.
+ * @param rect                    The part of the SDL_Surface to blur.
+ * @param depth                   The depth of the blurring.
+ */
+void blur_surface(SDL_Surface& surf, SDL_Rect rect, unsigned depth = 1);
+
+/**
+ * Cross-fades a SDL_Surface with alpha channel.
+ *
+ * @todo FIXME: This is just an adapted copy-paste
+ * of the normal blur but with blur alpha channel too
+ */
+SDL_Surface blur_alpha_surface(const SDL_Surface &surf, int depth = 1, bool optimize = true);
+
+/** Cuts a rectangle from a surface. */
+SDL_Surface cut_surface(const SDL_Surface &surf, SDL_Rect const &r);
+
+/**
+ * Blends a SDL_Surface with a color.
+ *
+ * Every pixel in the SDL_Surface will be blended with the @p color given. The
+ * final color of a pixel is amount * @p color + (1 - amount) * original.
+ *
+ * @param surf                    The SDL_Surface to blend.
+ * @param amount                  The amount of the new color is determined by
+ *                                @p color. Must be a number in the range
+ *                                [0, 1].
+ * @param color                   The color to blend width, note its alpha
+ *                                channel is ignored.
+ * @param optimize                Should the return SDL_Surface be RLE optimized.
+ *
+ * @return                        The blended surface.
+ */
+SDL_Surface blend_surface(const SDL_Surface &surf,
+                          const double amount,
+                          const Uint32 color,
+                          const bool optimize = true);
+
+/**
+ * Rotates a SDL_Surface by any degrees.
+ *
+ * @pre @zoom >= @offset          Otherwise @return will have empty pixels.
+ * @pre @offset > 0               Otherwise the procedure will not return.
+ *
+ * @param surf                    The SDL_Surface to rotate.
+ * @param angle                   The angle of rotation.
+ * @param zoom                    Which zoom level to use for calculating the result.
+ * @param offset                  Pixel offset when scanning the zoomed source.
+ * @param optimize                Should the return SDL_Surface be RLE optimized.
+ *
+ * @return                        The rotated surface.
+ */
+SDL_Surface rotate_any_surface(const SDL_Surface& surf,
+                               float angle,
+                               int zoom,
+                               int offset,
+                               bool optimize = true);
+
+/**
+ * Rotates a surface 180 degrees.
+ *
+ * @param surf                    The SDL_Surface to rotate.
+ * @param optimize                Should the return SDL_Surface be RLE optimized.
+ *
+ * @return                        The rotated surface.
+ */
+SDL_Surface rotate_180_surface(const SDL_Surface &surf, bool optimize = true);
+
+/**
+ * Rotates a surface 90 degrees.
+ *
+ * @param surf                    The SDL_Surface to rotate.
+ * @param clockwise               Whether the rotation should be clockwise (true)
+ *                                or counter-clockwise (false).
+ * @param optimize                Should the return SDL_Surface be RLE optimized.
+ *
+ * @return                        The rotated surface.
+ */
+SDL_Surface rotate_90_surface(const SDL_Surface &surf, bool clockwise, bool optimize = true);
+
+SDL_Surface flip_surface(const SDL_Surface &surf, bool optimize = true);
+SDL_Surface flop_surface(const SDL_Surface &surf, bool optimize = true);
+SDL_Surface create_compatible_surface(const SDL_Surface &surf, int width = -1, int height = -1);
+
+SDL_Rect get_non_transparent_portion(const SDL_Surface &surf);
+
+SDL_Color inverse(const SDL_Color& color);
+
+SDL_Color int_to_color(const Uint32 rgb);
+
+SDL_Color create_color(const unsigned char red,
+                       unsigned char green,
+                       unsigned char blue,
+                       unsigned char unused = 255);
+
+struct surface_restorer {
+        surface_restorer();
+        surface_restorer(class CVideo* target, const SDL_Rect& rect);
+        ~surface_restorer();
+
+        void restore() const;
+        void restore(SDL_Rect const &dst) const;
+        void update();
+        void cancel();
+
+        const SDL_Rect& area() const {
+            return rect_;
+        }
+
+    private:
+        class CVideo* target_;
+        SDL_Rect rect_;
+        SDL_Surface surface_;
+};
+
+void draw_rectangle(int x, int y, int w, int h, Uint32 color, SDL_Surface tg);
+
+void draw_solid_tinted_rectangle(int x,
+                                 int y,
+                                 int w,
+                                 int h,
+                                 int r,
+                                 int g,
+                                 int b,
+                                 double alpha,
+                                 SDL_Surface target);
+
+// blit the image on the center of the rectangle
+// and a add a colored background
+void draw_centered_on_background(SDL_Surface surf,
+                                 const SDL_Rect& rect,
+                                 const SDL_Color& color,
+                                 SDL_Surface target);
+
+std::ostream& operator<<(std::ostream& s, const SDL_Rect& rect);
+
+#endif

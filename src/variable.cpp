@@ -59,7 +59,7 @@ namespace
 
 
 vconfig::vconfig() :
-	cache_(), cfg_(NULL)
+	cache_(), cfg_(nullptr)
 {
 }
 
@@ -79,7 +79,7 @@ vconfig::vconfig(const config & cfg, const boost::shared_ptr<config> & cache) :
  * See also make_safe().
  */
 vconfig::vconfig(const config &cfg, bool manage_memory) :
-	cache_(manage_memory ? new config(cfg) : NULL),
+	cache_(manage_memory ? new config(cfg) : nullptr),
 	cfg_(manage_memory ? cache_.get() : &cfg)
 {
 }
@@ -484,9 +484,9 @@ variable_info::variable_info(const std::string& varname,
 	key(),
 	explicit_index(false),
 	index(0),
-	vars(NULL)
+	vars(nullptr)
 {
-	assert(repos != NULL);
+	assert(repos != nullptr);
 	activate_scope_variable(varname);
 
 	vars = &resources::gamedata->variables_;

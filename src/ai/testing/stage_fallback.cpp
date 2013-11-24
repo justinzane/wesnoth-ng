@@ -74,7 +74,7 @@ bool fallback_to_other_ai::do_play_stage()
 		fallback_ai_->new_turn();
 		fallback_ai_->play_turn();
 	} else {
-		ERR_AI_TESTING_STAGE_FALLBACK << "side "<<get_side()<<" : UNABLE TO FALLBACK, fallback ai is NULL"<<std::endl;
+		ERR_AI_TESTING_STAGE_FALLBACK << "side "<<get_side()<<" : UNABLE TO FALLBACK, fallback ai is nullptr"<<std::endl;
 	}
 	return false;
 }

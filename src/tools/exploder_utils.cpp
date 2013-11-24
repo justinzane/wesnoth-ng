@@ -63,7 +63,7 @@ std::string get_exploder_dir()
 //translated to the position (x,y) on dest.
 //All surfaces are supposed to be neutral surfaces, mask and src are supposed
 //to be of identical size.
-void masked_overwrite_surface(surface dest, surface src, surface mask, int x, int y)
+void masked_overwrite_surface(SDL_Surface dest, SDL_Surface src, SDL_Surface mask, int x, int y)
 {
 	surface_lock dest_lock(dest);
 	surface_lock src_lock(src);
@@ -135,9 +135,9 @@ void masked_overwrite_surface(surface dest, surface src, surface mask, int x, in
 }
 
 
-//returns true if the image is empty. the surface surf is considered to be a
+//returns true if the image is empty. the SDL_Surface surf is considered to be a
 //neutral surface.
-bool image_empty(surface surf)
+bool image_empty(SDL_Surface surf)
 {
 	//an image is considered empty if
 	// * all its pixels have 0 alpha, OR
@@ -170,22 +170,22 @@ namespace {
 }
 
 //saves the given SDL structure into a given filename.
-void save_image(surface surf, const std::string &filename)
+void save_image(SDL_Surface surf, const std::string &filename)
 {
 	//opens the actual file
 	const util::scoped_FILE file(fopen(filename.c_str(),"wb"));
 
 	//initializes PNG write structures
-	//TODO: review whether providing NULL error handlers is something
+	//TODO: review whether providing nullptr error handlers is something
 	//sensible
 	png_struct* png_ptr = png_create_write_struct
-		(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+		(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 	if(!png_ptr)
 		throw exploder_failure("Unable to initialize the png write structure");
 
 	png_info* info_ptr = png_create_info_struct(png_ptr);
 	if(!info_ptr) {
-		png_destroy_write_struct(&png_ptr, NULL);
+		png_destroy_write_struct(&png_ptr, nullptr);
 		throw exploder_failure("Unable to initialize the png info structure");
 	}
 
@@ -228,7 +228,7 @@ void save_image(surface surf, const std::string &filename)
 	png_set_rows(png_ptr, info_ptr, row_pointers);
 
 	//writes the actual image data
-	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
 
 	//cleans everything
 	png_write_end(png_ptr, info_ptr);

@@ -59,7 +59,7 @@ void location_callable::get_inputs(std::vector<game_logic::formula_input>* input
 int location_callable::do_compare(const game_logic::formula_callable* callable) const
 {
 	const location_callable* loc_callable = dynamic_cast<const location_callable*>(callable);
-	if(loc_callable == NULL) {
+	if(loc_callable == nullptr) {
 		return formula_callable::do_compare(callable);
 	}
 
@@ -114,7 +114,7 @@ void attack_type_callable::get_inputs(std::vector<game_logic::formula_input>* in
 int attack_type_callable::do_compare(const formula_callable* callable) const
 {
 	const attack_type_callable* att_callable = dynamic_cast<const attack_type_callable*>(callable);
-	if(att_callable == NULL) {
+	if(att_callable == nullptr) {
 		return formula_callable::do_compare(callable);
 	}
 
@@ -266,7 +266,7 @@ void unit_callable::get_inputs(std::vector<game_logic::formula_input>* inputs) c
 int unit_callable::do_compare(const formula_callable* callable) const
 {
 	const unit_callable* u_callable = dynamic_cast<const unit_callable*>(callable);
-	if(u_callable == NULL) {
+	if(u_callable == nullptr) {
 		return formula_callable::do_compare(callable);
 	}
 
@@ -343,7 +343,7 @@ void unit_type_callable::get_inputs(std::vector<game_logic::formula_input>* inpu
 int unit_type_callable::do_compare(const formula_callable* callable) const
 {
 	const unit_type_callable* u_callable = dynamic_cast<const unit_type_callable*>(callable);
-	if(u_callable == NULL) {
+	if(u_callable == nullptr) {
 		return formula_callable::do_compare(callable);
 	}
 
@@ -376,7 +376,7 @@ void terrain_callable::get_inputs(std::vector<game_logic::formula_input>* inputs
 int terrain_callable::do_compare(const formula_callable* callable) const
 {
 	const terrain_callable* terr_callable = dynamic_cast<const terrain_callable*>(callable);
-	if(terr_callable == NULL) {
+	if(terr_callable == nullptr) {
 		return formula_callable::do_compare(callable);
 	}
 

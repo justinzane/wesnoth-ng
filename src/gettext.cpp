@@ -32,7 +32,7 @@ const char* sgettext (const char *msgid)
 	const char *msgval = gettext (msgid);
 	if (msgval == msgid) {
 		msgval = std::strrchr (msgid, '^');
-		if (msgval == NULL)
+		if (msgval == nullptr)
 			msgval = msgid;
 		else
 			msgval++;
@@ -46,7 +46,7 @@ const char* dsgettext (const char * domainname, const char *msgid)
 	const char *msgval = dgettext (domainname, msgid);
 	if (msgval == msgid) {
 		msgval = std::strrchr (msgid, '^');
-		if (msgval == NULL)
+		if (msgval == nullptr)
 			msgval = msgid;
 		else
 			msgval++;
@@ -59,7 +59,7 @@ const char* sngettext (const char *singular, const char *plural, int n)
 	const char *msgval = ngettext (singular, plural, n);
 	if (msgval == singular) {
 		msgval = std::strrchr (singular, '^');
-		if (msgval == NULL)
+		if (msgval == nullptr)
 			msgval = singular;
 		else
 			msgval++;
@@ -73,7 +73,7 @@ const char* dsngettext (const char * domainname, const char *singular, const cha
 	const char *msgval = dngettext (domainname, singular, plural, n);
 	if (msgval == singular) {
 		msgval = std::strrchr (singular, '^');
-		if (msgval == NULL)
+		if (msgval == nullptr)
 			msgval = singular;
 		else
 			msgval++;

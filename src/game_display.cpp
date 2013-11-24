@@ -117,20 +117,20 @@ void game_display::new_turn()
 		const time_of_day& old_tod = tod_manager_.get_previous_time_of_day();
 
 		if(old_tod.image_mask != tod.image_mask) {
-			const surface old_mask(image::get_image(old_tod.image_mask,image::SCALED_TO_HEX));
-			const surface new_mask(image::get_image(tod.image_mask,image::SCALED_TO_HEX));
+			const SDL_Surface old_mask(image::get_image(old_tod.image_mask,image::SCALED_TO_HEX));
+			const SDL_Surface new_mask(image::get_image(tod.image_mask,image::SCALED_TO_HEX));
 
 			const int niterations = static_cast<int>(10/turbo_speed());
 			const int frame_time = 30;
 			const int starting_ticks = SDL_GetTicks();
 			for(int i = 0; i != niterations; ++i) {
 
-				if(old_mask != NULL) {
+				if(old_mask != nullptr) {
 					const fixed_t proportion = ftofxp(1.0) - fxpdiv(i,niterations);
 					tod_hex_mask1.assign(adjust_surface_alpha(old_mask,proportion));
 				}
 
-				if(new_mask != NULL) {
+				if(new_mask != nullptr) {
 					const fixed_t proportion = fxpdiv(i,niterations);
 					tod_hex_mask2.assign(adjust_surface_alpha(new_mask,proportion));
 				}
@@ -146,8 +146,8 @@ void game_display::new_turn()
 			}
 		}
 
-		tod_hex_mask1.assign(NULL);
-		tod_hex_mask2.assign(NULL);
+		tod_hex_mask1.assign(nullptr);
+		tod_hex_mask2.assign(nullptr);
 	}
 
 	first_turn_ = false;
@@ -287,10 +287,10 @@ void game_display::draw_hex(const map_location& loc)
 	if(on_map && loc == mouseoverHex_) {
 		tdrawing_layer hex_top_layer = LAYER_MOUSEOVER_BOTTOM;
 		const unit *u = get_visible_unit(loc, (*teams_)[viewing_team()] );
-		if( u != NULL ) {
+		if( u != nullptr ) {
 			hex_top_layer = LAYER_MOUSEOVER_TOP;
 		}
-		if(u == NULL) {
+		if(u == nullptr) {
 			drawing_buffer_add( hex_top_layer, loc, xpos, ypos,
 					image::get_image("misc/hover-hex-top.png~RC(magenta>gold)", image::SCALED_TO_HEX));
 			drawing_buffer_add(LAYER_MOUSEOVER_BOTTOM, loc, xpos, ypos,
@@ -520,7 +520,7 @@ std::vector<surface> game_display::footsteps_images(const map_location& loc)
 	}
 	const std::string foot_speed_prefix = game_config::foot_speed_prefix[image_number-1];
 
-	surface teleport = NULL;
+	SDL_Surface teleport = nullptr;
 
 	// We draw 2 half-hex (with possibly different directions),
 	// but skip the first for the first step.
@@ -556,7 +556,7 @@ std::vector<surface> game_display::footsteps_images(const map_location& loc)
 	}
 
 	// we draw teleport image (if any) in last
-	if (teleport != NULL) res.push_back(teleport);
+	if (teleport != nullptr) res.push_back(teleport);
 
 	return res;
 }
@@ -637,7 +637,7 @@ void game_display::set_route(const pathfind::marked_route *route)
 {
 	invalidate_route();
 
-	if(route != NULL) {
+	if(route != nullptr) {
 		route_ = *route;
 	} else {
 		route_.steps.clear();
@@ -703,7 +703,7 @@ game_display::fake_unit & game_display::fake_unit::operator=(unit const & a)
 		this->~fake_unit();
 		new (this) fake_unit(a);
 		// Restore our old display.
-		if ( display != NULL )
+		if ( display != nullptr )
 			place_on_game_display(display);
 	}
 	return *this;
@@ -726,7 +726,7 @@ game_display::fake_unit::~fake_unit()
  * Duplicate additions are not allowed.
  */
 void game_display::fake_unit::place_on_game_display(game_display * display){
-	assert(my_display_ == NULL); //Can only be placed on 1 game_display
+	assert(my_display_ == nullptr); //Can only be placed on 1 game_display
 	my_display_=display;
 	my_display_->place_temporary_unit(this);
 }
@@ -738,9 +738,9 @@ void game_display::fake_unit::place_on_game_display(game_display * display){
  */
 int game_display::fake_unit::remove_from_game_display(){
 	int ret(0);
-	if(my_display_ != NULL){
+	if(my_display_ != nullptr){
 		ret = my_display_->remove_temporary_unit(this);
-		my_display_=NULL;
+		my_display_=nullptr;
 	}
 	return ret;
 }
@@ -832,7 +832,7 @@ static DBusHandlerResult filter_dbus_signal(DBusConnection *, DBusMessage *buf, 
 	}
 
 	uint32_t id;
-	dbus_message_get_args(buf, NULL,
+	dbus_message_get_args(buf, nullptr,
 		DBUS_TYPE_UINT32, &id,
 		DBUS_TYPE_INVALID);
 
@@ -848,11 +848,11 @@ static DBusHandlerResult filter_dbus_signal(DBusConnection *, DBusMessage *buf, 
 static DBusConnection *get_dbus_connection()
 {
 	if (preferences::get("disable_notifications", false)) {
-		return NULL;
+		return nullptr;
 	}
 
 	static bool initted = false;
-	static DBusConnection *connection = NULL;
+	static DBusConnection *connection = nullptr;
 
 	if (!initted)
 	{
@@ -867,9 +867,9 @@ static DBusConnection *get_dbus_connection()
 		if (!connection) {
 			ERR_DP << "Failed to open DBus session: " << err.message << '\n';
 			dbus_error_free(&err);
-			return NULL;
+			return nullptr;
 		}
-		dbus_connection_add_filter(connection, filter_dbus_signal, NULL, NULL);
+		dbus_connection_add_filter(connection, filter_dbus_signal, nullptr, nullptr);
 	}
 	if (connection) {
 		dbus_connection_read_write(connection, 0);
@@ -901,7 +901,7 @@ static uint32_t send_dbus_notification(DBusConnection *connection, uint32_t repl
 	const char *app_icon = app_icon_.c_str();
 	const char *summary = owner.c_str();
 	const char *body = message.c_str();
-	const char **actions = NULL;
+	const char **actions = nullptr;
 	dbus_message_append_args(buf,
 		DBUS_TYPE_STRING, &app_icon,
 		DBUS_TYPE_STRING, &summary,
@@ -931,7 +931,7 @@ static uint32_t send_dbus_notification(DBusConnection *connection, uint32_t repl
 		return 0;
 	}
 	uint32_t id;
-	dbus_message_get_args(ret, NULL,
+	dbus_message_get_args(ret, nullptr,
 		DBUS_TYPE_UINT32, &id,
 		DBUS_TYPE_INVALID);
 	dbus_message_unref(ret);
@@ -985,21 +985,21 @@ void game_display::send_notification(const std::string& /*owner*/, const std::st
 #endif
 
 #ifdef HAVE_GROWL
-	CFStringRef app_name = CFStringCreateWithCString(NULL, "Wesnoth", kCFStringEncodingUTF8);
-	CFStringRef cf_owner = CFStringCreateWithCString(NULL, owner.c_str(), kCFStringEncodingUTF8);
-	CFStringRef cf_message = CFStringCreateWithCString(NULL, message.c_str(), kCFStringEncodingUTF8);
+	CFStringRef app_name = CFStringCreateWithCString(nullptr, "Wesnoth", kCFStringEncodingUTF8);
+	CFStringRef cf_owner = CFStringCreateWithCString(nullptr, owner.c_str(), kCFStringEncodingUTF8);
+	CFStringRef cf_message = CFStringCreateWithCString(nullptr, message.c_str(), kCFStringEncodingUTF8);
 	//Should be changed as soon as there are more than 2 types of notifications
-	CFStringRef cf_note_name = CFStringCreateWithCString(NULL, owner == _("Turn changed") ? _("Turn changed") : _("Chat message"), kCFStringEncodingUTF8);
+	CFStringRef cf_note_name = CFStringCreateWithCString(nullptr, owner == _("Turn changed") ? _("Turn changed") : _("Chat message"), kCFStringEncodingUTF8);
 
 	growl_obj.applicationName = app_name;
-	growl_obj.registrationDictionary = NULL;
-	growl_obj.applicationIconData = NULL;
-	growl_obj.growlIsReady = NULL;
-	growl_obj.growlNotificationWasClicked = NULL;
-	growl_obj.growlNotificationTimedOut = NULL;
+	growl_obj.registrationDictionary = nullptr;
+	growl_obj.applicationIconData = nullptr;
+	growl_obj.growlIsReady = nullptr;
+	growl_obj.growlNotificationWasClicked = nullptr;
+	growl_obj.growlNotificationTimedOut = nullptr;
 
 	Growl_SetDelegate(&growl_obj);
-	Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext(cf_owner, cf_message, cf_note_name, NULL, NULL, NULL, NULL);
+	Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext(cf_owner, cf_message, cf_note_name, nullptr, nullptr, nullptr, nullptr);
 
 	CFRelease(app_name);
 	CFRelease(cf_owner);
@@ -1034,8 +1034,8 @@ void game_display::set_team(size_t teamindex, bool show_everything)
 	}
 	else
 	{
-		labels().set_team(NULL);
-		viewpoint_ = NULL;
+		labels().set_team(nullptr);
+		viewpoint_ = nullptr;
 	}
 	labels().recalculate_labels();
 	if(resources::whiteboard)

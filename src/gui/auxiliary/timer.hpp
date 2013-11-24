@@ -36,7 +36,7 @@
 
 #include <boost/function.hpp>
 
-#include <SDL_types.h>
+#include <SDL2/SDL_types.h>
 
 namespace gui2 {
 

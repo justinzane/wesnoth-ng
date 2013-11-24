@@ -91,14 +91,14 @@ static bool operator<(const tkey& lhs, const tkey& rhs)
 /** Value type for the cache. */
 struct tvalue
 {
-	tvalue(const surface& surf)
+	tvalue(const SDL_Surface& surf)
 		: surf(surf)
 		, age(1)
 	{
 	}
 
 	/** The cached image. */
-	const surface surf;
+	const SDL_Surface surf;
 
 	/**
 	 * The age of the image.
@@ -134,7 +134,7 @@ struct tvalue
 	 * normally doesn't happen a lot so the clearing of the cache is rather
 	 * unusual.
 	 */
-	static const ::config* terrain = NULL;
+	static const ::config* terrain = nullptr;
 
 	/** The cache. */
 	typedef std::map<tkey, tvalue> tcache;
@@ -184,10 +184,10 @@ bool tminimap::disable_click_dismiss() const
 	return false;
 }
 
-const surface tminimap::get_image(const int w, const int h) const
+const SDL_Surface tminimap::get_image(const int w, const int h) const
 {
 	if(!terrain_) {
-		return NULL;
+		return nullptr;
 	}
 
 	if(terrain_ != terrain) {
@@ -218,7 +218,7 @@ const surface tminimap::get_image(const int w, const int h) const
 
 	try {
 		const gamemap map(*terrain_, map_data_);
-		const surface surf = image::getMinimap(w, h, map, NULL);
+		const SDL_Surface surf = image::getMinimap(w, h, map, nullptr);
 		cache.insert(std::make_pair(key, tvalue(surf)));
 #ifdef DEBUG_MINIMAP_CACHE
 		std::cerr << '-';
@@ -231,10 +231,10 @@ const surface tminimap::get_image(const int w, const int h) const
 		std::cerr << 'X';
 #endif
 	}
-	return NULL;
+	return nullptr;
 }
 
-void tminimap::impl_draw_background(surface& frame_buffer)
+void tminimap::impl_draw_background(SDL_Surface& frame_buffer)
 {
 	if (!terrain_) return;
 	assert(terrain_);
@@ -250,14 +250,14 @@ void tminimap::impl_draw_background(surface& frame_buffer)
 	SDL_Rect rect = get_rectangle();
 	assert(rect.w > 0 && rect.h > 0);
 
-	const ::surface surf = get_image(rect.w, rect.h);
+	const ::SDL_Surface surf = get_image(rect.w, rect.h);
 	if(surf) {
-		sdl_blit(surf, NULL, frame_buffer, &rect);
+		SDL_BlitSurface(surf, nullptr, frame_buffer, &rect);
 	}
 }
 
 void tminimap::impl_draw_background(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {
@@ -275,9 +275,9 @@ void tminimap::impl_draw_background(
 	SDL_Rect rect = calculate_blitting_rectangle(x_offset, y_offset);
 	assert(rect.w > 0 && rect.h > 0);
 
-	const ::surface surf = get_image(rect.w, rect.h);
+	const ::SDL_Surface surf = get_image(rect.w, rect.h);
 	if(surf) {
-		sdl_blit(surf, NULL, frame_buffer, &rect);
+		SDL_BlitSurface(surf, nullptr, frame_buffer, &rect);
 	}
 }
 

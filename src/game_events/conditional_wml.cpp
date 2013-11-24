@@ -63,7 +63,7 @@ namespace { // Support functions
 		const vconfig::child_list& have_unit = cond.get_children("have_unit");
 		backwards_compat = backwards_compat && have_unit.empty();
 		for(vconfig::child_list::const_iterator u = have_unit.begin(); u != have_unit.end(); ++u) {
-			if(resources::units == NULL)
+			if(resources::units == nullptr)
 				return false;
 			std::vector<std::pair<int,int> > counts = (*u).has_attribute("count")
 				? utils::parse_ranges((*u)["count"]) : default_counts;

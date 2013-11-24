@@ -38,7 +38,7 @@ REGISTER_WIDGET(image)
 
 tpoint timage::calculate_best_size() const
 {
-	surface image(image::get_image(image::locator(label())));
+	SDL_Surface image(image::get_image(image::locator(label())));
 
 	if(!image) {
 		DBG_GUI_L << LOG_HEADER << " empty image return default.\n";

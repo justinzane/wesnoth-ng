@@ -36,7 +36,7 @@ ttree_view_definition::ttree_view_definition(const config& cfg)
 
 ttree_view_definition::tresolution::tresolution(const config& cfg)
 	: tresolution_definition_(cfg)
-	, grid(NULL)
+	, grid(nullptr)
 {
 /*WIKI
  * @page = GUIWidgetDefinitionWML

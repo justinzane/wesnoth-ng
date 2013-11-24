@@ -67,7 +67,7 @@ public:
 	virtual bool can_scroll_down() = 0;
 
 	//drawing
-	virtual void adjust_size(const SDL_Rect& target) = 0;
+	virtual void adjust_size(const SDL_Rect* target) = 0;
 	virtual void draw() = 0;
 
 	//group

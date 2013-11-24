@@ -158,7 +158,7 @@ namespace {
 
 			// execute the script, we run is a separate thread and share the
 			// output which will make the logging look ugly.
-			execlp(script.c_str(), script.c_str(), addon.c_str(), static_cast<char *>(NULL));
+			execlp(script.c_str(), script.c_str(), addon.c_str(), static_cast<char *>(nullptr));
 
 			// exec() and family never return; if they do, we have a problem
 			std::cerr << "ERROR: exec failed with errno " << errno << " for addon " << addon
@@ -339,7 +339,7 @@ namespace {
 					if (const config &req = data.child("request_campaign_list"))
 					{
 						LOG_CS << "sending campaign list to " << network::ip_address(sock) << " using gzip";
-						time_t epoch = time(NULL);
+						time_t epoch = time(nullptr);
 						config campaign_list;
 						campaign_list["timestamp"] = lexical_cast<std::string>(epoch);
 						if (req["times_relative_to"] != "now") {
@@ -430,7 +430,7 @@ namespace {
 						const std::string& name = upload["name"];
 						std::string lc_name(name.size(), ' ');
 						std::transform(name.begin(), name.end(), lc_name.begin(), tolower);
-						config *campaign = NULL;
+						config *campaign = nullptr;
 						foreach_ng(config &c, campaigns().child_range("campaign")) {
 							if (utils::lowercase(c["name"]) == lc_name) {
 								campaign = &c;
@@ -447,7 +447,7 @@ namespace {
 						} else if (!data) {
 							LOG_CS << "Upload aborted - no add-on data.\n";
 							network::send_data(construct_error("Add-on rejected: No add-on data was supplied."), sock);
-						} else if ((illegal_name_upload = !addon_name_legal(upload["name"])) && campaign == NULL) {
+						} else if ((illegal_name_upload = !addon_name_legal(upload["name"])) && campaign == nullptr) {
 							// Only deny upload if we don't have an add-on with that id/name
 							// already. TODO: remove for next add-ons server instance.
 							LOG_CS << "Upload aborted - invalid add-on name.\n";
@@ -498,7 +498,7 @@ namespace {
 								message += "\n<255,255,0>Note: The version you specified is invalid. This add-on will be ignored for automatic update checks.";
 							}
 
-							if(campaign == NULL) {
+							if(campaign == nullptr) {
 								campaign = &campaigns().add_child("campaign");
 							}
 
@@ -519,7 +519,7 @@ namespace {
 							if((*campaign)["downloads"].empty()) {
 								(*campaign)["downloads"] = 0;
 							}
-							(*campaign)["timestamp"] = lexical_cast<std::string>(time(NULL));
+							(*campaign)["timestamp"] = lexical_cast<std::string>(time(nullptr));
 
 							int uploads = (*campaign)["uploads"].to_int() + 1;
 							(*campaign)["uploads"] = uploads;
@@ -631,7 +631,7 @@ namespace {
 			} catch(const config::error& e) {
 				network::connection err_sock = 0;
 				network::connection const * err_connection = boost::get_error_info<network::connection_info>(e);
-				if(err_connection != NULL) {
+				if(err_connection != nullptr) {
 					err_sock = *err_connection;
 				}
 				if(err_sock == 0 && sock > 0)

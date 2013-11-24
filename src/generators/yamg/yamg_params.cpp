@@ -72,9 +72,9 @@ yamg_params::yamg_params()
     , hexes_castles_cust()
     , base_snow_cust()
     , roads_cust()
-    , lilies_cust(NULL)
-    , fields_cust(NULL)
-    , bridges_cust(NULL)
+    , lilies_cust(nullptr)
+    , fields_cust(nullptr)
+    , bridges_cust(nullptr)
 {
     //ctor set defaults values
 #ifdef YAMG_STANDALONE
@@ -93,50 +93,50 @@ yamg_params::yamg_params()
 
     int i;
     for(i=0; i < M_NUMLEVEL; i++)
-        base_cust[i] = NULL;
+        base_cust[i] = nullptr;
     for(i=0; i < 12; i++)
-        forest_cust[i] = NULL;
+        forest_cust[i] = nullptr;
     for(i=0; i < 14; i++)
-        houses_cust[i] = NULL;
+        houses_cust[i] = nullptr;
     for(i=0; i < 10; i++)
-        keeps_castles_cust[i] = NULL;
+        keeps_castles_cust[i] = nullptr;
     for(i=0; i < 10; i++)
-        hexes_castles_cust[i] = NULL;
+        hexes_castles_cust[i] = nullptr;
     for(i=0; i < M_NUMLEVEL; i++)
-        base_snow_cust[i] = NULL;
+        base_snow_cust[i] = nullptr;
     for(i=0; i < 4; i++)
-        roads_cust[i] = NULL;
+        roads_cust[i] = nullptr;
 }
 
 yamg_params::~yamg_params()
 {
     int i;
     for(i=0; i < M_NUMLEVEL; i++)
-        if(base_cust[i] != NULL)
+        if(base_cust[i] != nullptr)
             delete base_cust[i];
     for(i=0; i < 12; i++)
-        if(forest_cust[i] != NULL)
+        if(forest_cust[i] != nullptr)
             delete forest_cust[i];
     for(i=0; i < 14; i++)
-        if(houses_cust[i] != NULL)
+        if(houses_cust[i] != nullptr)
             delete houses_cust[i];
     for(i=0; i < 10; i++)
-        if(keeps_castles_cust[i] != NULL)
+        if(keeps_castles_cust[i] != nullptr)
             delete keeps_castles_cust[i];
     for(i=0; i < 10; i++)
-        if(hexes_castles_cust[i] != NULL)
+        if(hexes_castles_cust[i] != nullptr)
             delete hexes_castles_cust[i];
     for(i=0; i < M_NUMLEVEL; i++)
-        if(base_snow_cust[i] != NULL)
+        if(base_snow_cust[i] != nullptr)
             delete base_snow_cust[i];
     for(i=0; i < 4; i++)
-        if(roads_cust[i] != NULL)
+        if(roads_cust[i] != nullptr)
             delete roads_cust[i];
-    if(lilies_cust != NULL)
+    if(lilies_cust != nullptr)
         delete lilies_cust;
-    if(bridges_cust != NULL)
+    if(bridges_cust != nullptr)
         delete bridges_cust;
-    if(fields_cust != NULL)
+    if(fields_cust != nullptr)
         delete fields_cust;
 }
 
@@ -274,11 +274,11 @@ void yamg_params::store_terrain_codes(const char *input, const char **table, uns
 unsigned int yamg_params::read_params(const char *ficnom)
 {
     FILE *f;
-    char buf[20000], instr[100], value[2048], *wr = NULL, *ptr, *end;
+    char buf[20000], instr[100], value[2048], *wr = nullptr, *ptr, *end;
     int n,i;
 
     f = fopen(ficnom,"r");
-    if(f == NULL)
+    if(f == nullptr)
         return YAMG_FILENOTFOUND;
 
     n = fread(buf,1,20000,f);

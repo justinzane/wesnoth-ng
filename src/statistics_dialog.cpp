@@ -168,7 +168,7 @@ statistics_dialog::statistics_dialog(game_display &disp,
 		const unsigned int team,
 		const std::string& team_id,
 		const std::string& player) :
-	dialog(disp, title, "", gui::NULL_DIALOG),
+	dialog(disp, title, "", gui::nullptr_DIALOG),
 	detail_btn_(new gui::standard_dialog_button(disp.video(), _("Details"), 0 , false)),
 	toggle_btn_(new gui::dialog_button(disp.video(), "", gui::button::TYPE_PRESS, BUTTON_TOGGLE)),
 	scene_btn_(new gui::dialog_button(disp.video(), _("Select Scenario"), gui::button::TYPE_PRESS, BUTTON_SCENE)),
@@ -322,9 +322,9 @@ void statistics_dialog::do_scene_selection()
 
 	// Let the player choose a scenario.
 	SDL_Rect const &loc = scene_btn_->location();
-	size_t new_scenario = gui::show_dialog(get_display(), NULL, "", "",
-	                                       gui::MESSAGE, &names, NULL, "", NULL,
-	                                       -1, NULL, loc.x, loc.y + loc.h);
+	size_t new_scenario = gui::show_dialog(get_display(), nullptr, "", "",
+	                                       gui::MESSAGE, &names, nullptr, "", nullptr,
+	                                       -1, nullptr, loc.x, loc.y + loc.h);
 
 	if ( new_scenario != scenario_index_  &&  new_scenario < scenarios_.size() )
 	{

@@ -33,8 +33,8 @@ static lg::log_domain log_display("display");
 
 namespace gui{
 	floating_textbox::floating_textbox() :
-		box_(NULL),
-		check_(NULL),
+		box_(nullptr),
+		check_(nullptr),
 		mode_(TEXTBOX_NONE),
 		label_string_(),
 		label_(0)
@@ -45,13 +45,13 @@ namespace gui{
 		if(!active()) {
 			return;
 		}
-		if(check_ != NULL) {
+		if(check_ != nullptr) {
 			if(mode_ == TEXTBOX_MESSAGE) {
 				preferences::set_message_private(check_->checked());
 			}
 		}
-		box_.assign(NULL);
-		check_.assign(NULL);
+		box_.assign(nullptr);
+		check_.assign(nullptr);
 		font::remove_floating_label(label_);
 		mode_ = TEXTBOX_NONE;
 		gui.invalidate_all();
@@ -59,14 +59,14 @@ namespace gui{
 
 	void floating_textbox::update_location(game_display& gui)
 	{
-		if (box_ == NULL)
+		if (box_ == nullptr)
 			return;
 
-		const SDL_Rect& area = gui.map_outside_area();
+		const SDL_Rect* area = gui.map_outside_area();
 
 		const int border_size = 10;
 
-		const int ypos = area.y+area.h-30 - (check_ != NULL ? check_->height() + border_size : 0);
+		const int ypos = area.y+area.h-30 - (check_ != nullptr ? check_->height() + border_size : 0);
 
 		if (label_ != 0)
 			font::remove_floating_label(label_);
@@ -82,7 +82,7 @@ namespace gui{
 		if (label_ == 0)
 			return;
 
-		const SDL_Rect& label_area = font::get_floating_label_rect(label_);
+		const SDL_Rect* label_area = font::get_floating_label_rect(label_);
 		const int textbox_width = area.w - label_area.w - border_size*3;
 
 		if(textbox_width <= 0) {
@@ -90,7 +90,7 @@ namespace gui{
 			return;
 		}
 
-		if(box_ != NULL) {
+		if(box_ != nullptr) {
 			box_->set_volatile(true);
 			const SDL_Rect rect = create_rect(
 				  area.x + label_area.w + border_size * 2
@@ -101,7 +101,7 @@ namespace gui{
 			box_->set_location(rect);
 		}
 
-		if(check_ != NULL) {
+		if(check_ != nullptr) {
 			check_->set_volatile(true);
 			check_->set_location(box_->location().x,box_->location().y + box_->location().h + border_size);
 		}
@@ -141,7 +141,7 @@ namespace gui{
 			text.append(line_start ? ": " : " ");
 		} else if (matches.size() > 1) {
 			std::string completion_list = utils::join(matches, " ");
-			resources::screen->add_chat_message(time(NULL), "", 0, completion_list,
+			resources::screen->add_chat_message(time(nullptr), "", 0, completion_list,
 					events::chat_handler::MESSAGE_PRIVATE, false);
 		}
 		box_->set_text(text);

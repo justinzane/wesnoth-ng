@@ -81,7 +81,7 @@ component* component::get_child(const path_element &child)
 	if (i!=property_handlers_.end()) {
 		return i->second->handle_get(child);
 	}
-	return NULL;
+	return nullptr;
 }
 
 
@@ -143,8 +143,8 @@ property_handler_map& component::property_handlers()
 
 static component *find_component(component *root, const std::string &path, path_element &tail)
 {
-	if (root==NULL) {
-		return NULL;
+	if (root==nullptr) {
+		return nullptr;
 	}
 
 	//match path elements in [modify_ai] tag
@@ -175,15 +175,15 @@ static component *find_component(component *root, const std::string &path, path_
 		elements.push_back(pe);
 	}
 	if (elements.size()<1) {
-		return NULL;
+		return nullptr;
 	}
 
 	std::vector< path_element >::iterator k_max = elements.end()-1;
 	for (std::vector< path_element >::iterator k = elements.begin(); k!=k_max; ++k) {
 		//not last
 		c = c->get_child(*k);
-		if (c==NULL) {
-			return NULL;
+		if (c==nullptr) {
+			return nullptr;
 		}
 	}
 
@@ -197,7 +197,7 @@ bool component_manager::add_component(component *root, const std::string &path, 
 {
 	path_element tail;
 	component *c = find_component(root,path,tail);
-	if (c==NULL) {
+	if (c==nullptr) {
 		return false;
 	}
 	const config &ch = cfg.child(tail.property);
@@ -212,7 +212,7 @@ bool component_manager::change_component(component *root, const std::string &pat
 {
 	path_element tail;
 	component *c = find_component(root,path,tail);
-	if (c==NULL) {
+	if (c==nullptr) {
 		return false;
 	}
 	const config &ch = cfg.child(tail.property);
@@ -226,7 +226,7 @@ bool component_manager::delete_component(component *root, const std::string &pat
 {
 	path_element tail;
 	component *c = find_component(root,path,tail);
-	if (c==NULL) {
+	if (c==nullptr) {
 		return false;
 	}
 	return c->delete_child(tail);
@@ -259,7 +259,7 @@ std::string component_manager::print_component_tree(component *root, const std::
 	component *c;
 	if (!path.empty()) {
 		c = find_component(root,path,tail);
-		if (c==NULL) {
+		if (c==nullptr) {
 			ERR_AI_COMPONENT << "unable to find component" <<std::endl;
 			return "";
 		}
@@ -277,7 +277,7 @@ component* component_manager::get_component(component *root, const std::string &
 		path_element tail;
 		return find_component(root, path, tail);
 	}
-	return NULL;
+	return nullptr;
 }
 
 } //end of namespace ai

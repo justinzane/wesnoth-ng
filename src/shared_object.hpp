@@ -46,9 +46,9 @@ class shared_object {
 public:
 	typedef T type;
 
-	shared_object() : val_(NULL) { set(T()); }
+	shared_object() : val_(nullptr) { set(T()); }
 
-	explicit shared_object(const T &o) : val_(NULL) { set(o); }
+	explicit shared_object(const T &o) : val_(nullptr) { set(o); }
 
 	shared_object(const shared_object& o) : val_(o.val_) {
 		assert(valid());
@@ -118,7 +118,7 @@ protected:
 	const node* val_;
 
 	bool valid() const {
-		return val_ != NULL;
+		return val_ != nullptr;
 	}
 
 	void clear() {
@@ -126,7 +126,7 @@ protected:
 		val_->count--;
 
 		if (val_->count == 0) index().erase(index().find(val_->val));
-		val_ = NULL;
+		val_ = nullptr;
 	}
 
 };

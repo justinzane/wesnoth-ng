@@ -163,7 +163,7 @@ public:
 	leader_scroll_dialog(display &disp, const std::string &title,
 			std::vector<bool> &leader_bools, int selected,
 			gui::DIALOG_RESULT extra_result) :
-		dialog(disp, title, "", gui::NULL_DIALOG),
+		dialog(disp, title, "", gui::nullptr_DIALOG),
 		scroll_btn_(new gui::standard_dialog_button(disp.video(), _("Scroll To"), 0, false)),
 		leader_bools_(leader_bools),
 		extra_result_(extra_result)
@@ -287,7 +287,7 @@ void menu_handler::status_table(int selected)
                 }
 		str << COLUMN_SEPARATOR
 			<< data.units << COLUMN_SEPARATOR << data.upkeep << COLUMN_SEPARATOR
-			<< (data.net_income < 0 ? font::BAD_TEXT : font::NULL_MARKUP) << utils::signed_value(data.net_income);
+			<< (data.net_income < 0 ? font::BAD_TEXT : font::nullptr_MARKUP) << utils::signed_value(data.net_income);
 		total_villages += data.villages;
 		items.push_back(str.str());
 	}
@@ -504,7 +504,7 @@ void menu_handler::show_chat_log()
         gui2::tchat_log chat_log_dialog(vconfig(c),&recorder);
         chat_log_dialog.show(resources::screen->video());
         //std::string text = recorder.build_chat_log();
-        //gui::show_dialog(*gui_,NULL,_("Chat Log"),"",gui::CLOSE_ONLY,NULL,NULL,"",&text);
+        //gui::show_dialog(*gui_,nullptr,_("Chat Log"),"",gui::CLOSE_ONLY,nullptr,nullptr,"",&text);
 
 }
 
@@ -573,7 +573,7 @@ void menu_handler::recruit(int side_num, const map_location &last_hex)
 			int wb_gold = resources::whiteboard->get_spent_gold_for(side_num);
 			//display units that we can't afford to recruit in red
 			prefix = (type->cost() > current_team.gold() - wb_gold
-					? font::BAD_TEXT : font::NULL_MARKUP);
+					? font::BAD_TEXT : font::nullptr_MARKUP);
 		} // end planned unit map scope
 
 		std::stringstream description;
@@ -921,7 +921,7 @@ namespace { // Helpers for create_unit()
 	 * (Intended for use when a unit is created in debug mode via hotkey or
 	 * context menu.)
 	 * @returns the selected type and gender. If this is canceled, the
-	 *          returned type is NULL.
+	 *          returned type is nullptr.
 	 *
 	 * @todo Replace choose_unit() when complete.
 	 */
@@ -937,14 +937,14 @@ namespace { // Helpers for create_unit()
 		if(create_dlg.no_choice()) {
 			// the static cast fixes http://connect.microsoft.com/VisualStudio/feedback/details/520043/
 			// c++11's nullptr would be a better solution as soon as we support it.
-			return type_and_gender(static_cast<const unit_type *>(NULL), unit_race::NUM_GENDERS);
+			return type_and_gender(static_cast<const unit_type *>(nullptr), unit_race::NUM_GENDERS);
 		}
 
 		const std::string& ut_id = create_dlg.choice();
 		const unit_type *utp = unit_types.find(ut_id);
 		if (!utp) {
 			ERR_NG << "Create unit dialog returned nonexistent or unusable unit_type id '" << ut_id << "'.\n";
-			return type_and_gender(static_cast<const unit_type *>(NULL), unit_race::NUM_GENDERS);
+			return type_and_gender(static_cast<const unit_type *>(nullptr), unit_race::NUM_GENDERS);
 		}
 		const unit_type &ut = *utp;
 
@@ -964,7 +964,7 @@ namespace { // Helpers for create_unit()
 	 * (Intended for use when a unit is created in debug mode via hotkey or
 	 * context menu.)
 	 * @returns the selected type and gender. If this is canceled, the
-	 *          returned type is NULL.
+	 *          returned type is nullptr.
 	 */
 	type_and_gender choose_unit(game_display& gui)
 	{
@@ -1036,7 +1036,7 @@ namespace { // Helpers for create_unit()
 			                                       unit_choices[choice]->genders().front());
 		}
 		else
-			return type_and_gender(static_cast<const unit_type *>(NULL), unit_race::NUM_GENDERS);
+			return type_and_gender(static_cast<const unit_type *>(nullptr), unit_race::NUM_GENDERS);
 	}
 
 	/**
@@ -1080,12 +1080,12 @@ void menu_handler::create_unit(mouse_handler& mousehandler)
 	// Save the current mouse location before popping up the choice menu (which
 	// gives time for the mouse to move, changing the location).
 	const map_location destination = mousehandler.get_last_hex();
-	assert(gui_ != NULL);
+	assert(gui_ != nullptr);
 
 	// Let the user select the kind of unit to create.
 	type_and_gender selection = gui2::new_widgets ? choose_unit_2(*gui_) :
 	                                                choose_unit(*gui_);
-	if ( selection.first != NULL )
+	if ( selection.first != nullptr )
 		// Make it so.
 		create_and_place(*gui_, map_, units_, destination,
 		                 *selection.first, selection.second);
@@ -1207,7 +1207,7 @@ void menu_handler::move_unit_to_loc(const unit_map::iterator &ui,
 	gui_->set_route(&route);
 	gui_->unhighlight_reach();
 	actions::move_unit(route.steps, &recorder, resources::undo_stack, continue_move);
-	gui_->set_route(NULL);
+	gui_->set_route(nullptr);
 	gui_->invalidate_game_status();
 }
 
@@ -1292,7 +1292,7 @@ void menu_handler::execute_gotos(mouse_handler &mousehandler, int side)
 	} while(change && blocked_unit);
 
 	// erase the footsteps after movement
-	gui_->set_route(NULL);
+	gui_->set_route(nullptr);
 	gui_->invalidate_game_status();
 }
 
@@ -1357,7 +1357,7 @@ void menu_handler::search()
 void menu_handler::do_speak(){
 	//None of the two parameters really needs to be passed since the information belong to members of the class.
 	//But since it makes the called method more generic, it is done anyway.
-	chat_handler::do_speak(textbox_info_.box()->text(),textbox_info_.check() != NULL ? textbox_info_.check()->checked() : false);
+	chat_handler::do_speak(textbox_info_.box()->text(),textbox_info_.check() != nullptr ? textbox_info_.check()->checked() : false);
 }
 
 
@@ -1811,7 +1811,7 @@ class chat_command_handler : public map_command_handler<chat_command_handler>
 
 		void print(const std::string& title, const std::string& message)
 		{
-			chat_handler_.add_chat_message(time(NULL), title, 0, message);
+			chat_handler_.add_chat_message(time(nullptr), title, 0, message);
 		}
 		void init_map()
 		{
@@ -2015,7 +2015,7 @@ class console_handler : public map_command_handler<console_handler>, private cha
 		}
 		void print(const std::string& title, const std::string& message)
 		{
-			menu_handler_.add_chat_message(time(NULL), title, 0, message);
+			menu_handler_.add_chat_message(time(nullptr), title, 0, message);
 		}
 		void init_map()
 		{
@@ -2168,7 +2168,7 @@ void chat_handler::change_logging(const std::string& data) {
 		const std::string& msg =
 				vgettext("Unknown debug level: '$level'.", symbols);
 		ERR_NG << msg << "\n";
-		add_chat_message(time(NULL), _("error"), 0, msg);
+		add_chat_message(time(nullptr), _("error"), 0, msg);
 		return;
 	}
 	if (!lg::set_log_domain_severity(domain, severity)) {
@@ -2177,7 +2177,7 @@ void chat_handler::change_logging(const std::string& data) {
 		const std::string& msg =
 				vgettext("Unknown debug domain: '$domain'.", symbols);
 		ERR_NG << msg << "\n";
-		add_chat_message(time(NULL), _("error"), 0, msg);
+		add_chat_message(time(nullptr), _("error"), 0, msg);
 		return;
 	} else {
 		utils::string_map symbols;
@@ -2186,7 +2186,7 @@ void chat_handler::change_logging(const std::string& data) {
 		const std::string& msg =
 				vgettext("Switched domain: '$domain' to level: '$level'.", symbols);
 		LOG_NG << msg << "\n";
-		add_chat_message(time(NULL), "log", 0, msg);
+		add_chat_message(time(nullptr), "log", 0, msg);
 	}
 }
 
@@ -2200,7 +2200,7 @@ void chat_handler::send_command(const std::string& cmd, const std::string& args 
 	|| cmd == "mute" || cmd == "unmute") {
 		data.add_child(cmd)["username"] = args;
 	} else if (cmd == "ping") {
-		data[cmd] = lexical_cast<std::string>(time(NULL));
+		data[cmd] = lexical_cast<std::string>(time(nullptr));
 	} else if (cmd == "green") {
 		data.add_child("query")["type"] = "lobbymsg @" + args;
 	} else if (cmd == "red") {
@@ -2255,14 +2255,14 @@ void chat_handler::add_whisper_sent(const std::string& receiver, const std::stri
 {
 	utils::string_map symbols;
 	symbols["receiver"] = receiver;
-	add_chat_message(time(NULL), VGETTEXT("whisper to $receiver", symbols), 0, message);
+	add_chat_message(time(nullptr), VGETTEXT("whisper to $receiver", symbols), 0, message);
 }
 
 void chat_handler::add_whisper_received(const std::string& sender, const std::string& message)
 {
 	utils::string_map symbols;
 	symbols["sender"] = sender;
-	add_chat_message(time(NULL), VGETTEXT("whisper: $sender", symbols), 0, message);
+	add_chat_message(time(nullptr), VGETTEXT("whisper: $sender", symbols), 0, message);
 }
 
 void chat_handler::send_chat_room_message(const std::string& room,
@@ -2284,7 +2284,7 @@ void chat_handler::add_chat_room_message_sent(const std::string &room, const std
 void chat_handler::add_chat_room_message_received(const std::string &room,
 	const std::string &speaker, const std::string &message)
 {
-	add_chat_message(time(NULL), room + ": " + speaker, 0, message, events::chat_handler::MESSAGE_PRIVATE);
+	add_chat_message(time(nullptr), room + ": " + speaker, 0, message, events::chat_handler::MESSAGE_PRIVATE);
 }
 
 
@@ -2505,7 +2505,7 @@ void menu_handler::send_chat_message(const std::string& message, bool allies_onl
 	config cfg;
 	cfg["id"] = preferences::login();
 	cfg["message"] = message;
-	const time_t time = ::time(NULL);
+	const time_t time = ::time(nullptr);
 	std::stringstream ss;
 	ss << time;
 	cfg["time"] = ss.str();
@@ -2753,7 +2753,7 @@ void console_handler::do_layers() {
 		int tz = image::tile_size;
 		SDL_Rect r = create_rect(0,0,tz,tz);
 
-		surface surf = image::get_image(img.get_filename());
+		SDL_Surface surf = image::get_image(img.get_filename());
 
 		// calculate which part of the image the terrain engine uses
 		if(loc_cut.valid()) {
@@ -2775,7 +2775,7 @@ void console_handler::do_layers() {
 
 		// cut and mask the image
 		// ~CROP and ~BLIT have limitations, we do some math to avoid them
-		SDL_Rect r2 = intersect_rects(r, create_rect(0,0,surf->w,surf->h));
+		SDL_Rect r2 = rects_intersect(r, create_rect(0,0,surf->w,surf->h));
 		if(r2.w > 0 && r2.h > 0) {
 			str << "~BLIT("
 					<< name << "~CROP("
@@ -3171,11 +3171,11 @@ void menu_handler::do_ai_formula(const std::string& str,
 	int side_num, mouse_handler& /*mousehandler*/)
 {
 	try {
-		add_chat_message(time(NULL), _("ai"), 0, ai::manager::evaluate_command(side_num, str));
+		add_chat_message(time(nullptr), _("ai"), 0, ai::manager::evaluate_command(side_num, str));
 	} catch(end_turn_exception&) {
 		resources::controller->force_end_turn();
 	} catch(...) {
-		//add_chat_message(time(NULL), _("ai"), 0, "ERROR IN FORMULA");
+		//add_chat_message(time(nullptr), _("ai"), 0, "ERROR IN FORMULA");
 	}
 }
 

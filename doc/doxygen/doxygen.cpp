@@ -181,7 +181,7 @@ For this to work, key_event() must be called whenever a keyboard event happens.
 @namespace image	Cache of images.
 
 This module manages the cache of images. With an image name, you can get
-the surface corresponding to that image, and don't need to free the image.
+the SDL_Surface corresponding to that image, and don't need to free the image.
 Note that surfaces returned from here are invalidated whenever events::pump()
 is called, and so shouldn't be kept, but should be regotten from here as
 needed.

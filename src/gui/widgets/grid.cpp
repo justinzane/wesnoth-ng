@@ -133,7 +133,7 @@ twidget* tgrid::swap_child(
 		return old;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void tgrid::remove_child(const unsigned row, const unsigned col)
@@ -145,7 +145,7 @@ void tgrid::remove_child(const unsigned row, const unsigned col)
 	if(cell.widget()) {
 		delete cell.widget();
 	}
-	cell.set_widget(NULL);
+	cell.set_widget(nullptr);
 }
 
 void tgrid::remove_child(const std::string& id, const bool find_all)
@@ -154,7 +154,7 @@ void tgrid::remove_child(const std::string& id, const bool find_all)
 
 		if(child.id() == id) {
 			delete child.widget();
-			child.set_widget(NULL);
+			child.set_widget(nullptr);
 
 			if(!find_all) {
 				break;
@@ -567,7 +567,7 @@ void tgrid::set_origin(const tpoint& origin)
 	}
 }
 
-void tgrid::set_visible_rectangle(const SDL_Rect& rectangle)
+void tgrid::set_visible_rectangle(const SDL_Rect* rectangle)
 {
 	// Inherited.
 	twidget::set_visible_rectangle(rectangle);
@@ -929,7 +929,7 @@ void tgrid::layout(const tpoint& origin)
 	}
 }
 
-void tgrid::impl_draw_children(surface& frame_buffer)
+void tgrid::impl_draw_children(SDL_Surface& frame_buffer)
 {
 	/*
 	 * The call to SDL_PumpEvents seems a bit like black magic.
@@ -966,7 +966,7 @@ void tgrid::impl_draw_children(surface& frame_buffer)
 }
 
 void tgrid::impl_draw_children(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {

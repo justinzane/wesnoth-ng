@@ -17,7 +17,7 @@
 */
 
 #include "exploder_composer.hpp"
-#include "SDL_image.h"
+#include "SDL2/SDL_image.h"
 
 #include <iostream>
 
@@ -26,7 +26,7 @@ composer::composer() : interactive_(false), verbose_(false)
 }
 
 
-surface composer::compose(const std::string &src, const std::string &dest)
+SDL_Surface composer::compose(const std::string &src, const std::string &dest)
 {
 	cutter cut;
 	cut.set_verbose(verbose_);
@@ -43,12 +43,12 @@ surface composer::compose(const std::string &src, const std::string &dest)
 	if(verbose_) {
 		std::cerr << "Loading images...\n";
 	}
-	const surface src_surface(make_neutral_surface(IMG_Load(src.c_str())));
-	if(src_surface == NULL)
+	const SDL_Surface src_surface(make_neutral_surface(IMG_Load(src.c_str())));
+	if(src_surface == nullptr)
 		throw exploder_failure("Unable to load the source image " + src);
 
-	const surface dest_surface(make_neutral_surface(IMG_Load(dest.c_str())));
-	if(dest_surface == NULL)
+	const SDL_Surface dest_surface(make_neutral_surface(IMG_Load(dest.c_str())));
+	if(dest_surface == nullptr)
 		throw exploder_failure("Unable to load the destination image " + dest);
 
 	if(verbose_) {
@@ -65,8 +65,8 @@ surface composer::compose(const std::string &src, const std::string &dest)
 		if(src_surfaces.find(name) == src_surfaces.end())
 			continue;
 
-		const cutter::positioned_surface& src_ps = src_surfaces.find(name)->second;
-		const cutter::positioned_surface& dest_ps = itor->second;
+		const cutter::positioned_SDL_Surface& src_ps = src_surfaces.find(name)->second;
+		const cutter::positioned_SDL_Surface& dest_ps = itor->second;
 
 		if(!image_empty(dest_ps.image)) {
 			if(interactive_) {

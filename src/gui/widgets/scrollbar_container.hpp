@@ -116,7 +116,7 @@ public:
 	virtual void set_origin(const tpoint& origin) OVERRIDE;
 
 	/** See @ref twidget::set_visible_rectangle. */
-	virtual void set_visible_rectangle(const SDL_Rect& rectangle) OVERRIDE;
+	virtual void set_visible_rectangle(const SDL_Rect* rectangle) OVERRIDE;
 
 	/***** ***** ***** inherited ****** *****/
 
@@ -162,7 +162,7 @@ public:
 	tgrid *content_grid() { return content_grid_; }
 	const tgrid *content_grid() const { return content_grid_; }
 
-	const SDL_Rect& content_visible_area() const
+	const SDL_Rect* content_visible_area() const
 		{ return content_visible_area_; }
 
 	/***** ***** ***** scrollbar helpers ***** ****** *****/
@@ -201,7 +201,7 @@ protected:
 	 *
 	 * @param rect                The rect which should be visible.
 	 */
-	void show_content_rect(const SDL_Rect& rect);
+	void show_content_rect(const SDL_Rect* rect);
 
 	/*
 	 * The widget contains the following three grids.
@@ -460,11 +460,11 @@ private:
 	virtual void layout_children() OVERRIDE;
 
 	/** See @ref twidget::impl_draw_children. */
-	virtual void impl_draw_children(surface& frame_buffer) OVERRIDE;
+	virtual void impl_draw_children(SDL_Surface& frame_buffer) OVERRIDE;
 
 	/** See @ref twidget::impl_draw_children. */
 	virtual void impl_draw_children(
-			  surface& frame_buffer
+			  SDL_Surface& frame_buffer
 			, int x_offset
 			, int y_offset) OVERRIDE;
 

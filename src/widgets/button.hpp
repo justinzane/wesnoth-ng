@@ -73,7 +73,7 @@ private:
 	void calculate_size();
 
 	std::string label_;
-	surface image_, pressedImage_, activeImage_, pressedActiveImage_,
+	SDL_Surface image_, pressedImage_, activeImage_, pressedActiveImage_,
 		touchedImage_, disabledImage_, pressedDisabledImage_,
 		overlayImage_, overlayPressedImage_, overlayPressedDisabledImage_, overlayDisabledImage_,
 		overlayActiveImage_;

@@ -189,7 +189,7 @@ void ttoggle_panel::set_state(const tstate state)
 	assert(conf);
 }
 
-void ttoggle_panel::impl_draw_background(surface& frame_buffer)
+void ttoggle_panel::impl_draw_background(SDL_Surface& frame_buffer)
 {
 	// We don't have a fore and background and need to draw depending on
 	// our state, like a control. So we use the controls drawing method.
@@ -197,7 +197,7 @@ void ttoggle_panel::impl_draw_background(surface& frame_buffer)
 }
 
 void ttoggle_panel::impl_draw_background(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {
@@ -206,7 +206,7 @@ void ttoggle_panel::impl_draw_background(
 	tcontrol::impl_draw_background(frame_buffer, x_offset, y_offset);
 }
 
-void ttoggle_panel::impl_draw_foreground(surface& frame_buffer)
+void ttoggle_panel::impl_draw_foreground(SDL_Surface& frame_buffer)
 {
 	// We don't have a fore and background and need to draw depending on
 	// our state, like a control. So we use the controls drawing method.
@@ -214,7 +214,7 @@ void ttoggle_panel::impl_draw_foreground(surface& frame_buffer)
 }
 
 void ttoggle_panel::impl_draw_foreground(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {

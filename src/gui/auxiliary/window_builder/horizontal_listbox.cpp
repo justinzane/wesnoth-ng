@@ -42,7 +42,7 @@ tbuilder_horizontal_listbox::tbuilder_horizontal_listbox(const config& cfg)
 			get_scrollbar_mode(cfg["vertical_scrollbar_mode"]))
 	, horizontal_scrollbar_mode(
 			get_scrollbar_mode(cfg["horizontal_scrollbar_mode"]))
-	, list_builder(NULL)
+	, list_builder(nullptr)
 	, list_data()
 {
 	const config &l = cfg.child("list_definition");
@@ -108,7 +108,7 @@ twidget* tbuilder_horizontal_listbox::build() const
 
 	widget->init_grid(conf->grid);
 
-	widget->finalize(NULL, NULL, list_data);
+	widget->finalize(nullptr, nullptr, list_data);
 
 	return widget;
 #endif

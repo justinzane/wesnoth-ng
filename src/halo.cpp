@@ -33,7 +33,7 @@ namespace halo
 {
 
 namespace {
-display* disp = NULL;
+display* disp = nullptr;
 
 class effect
 {
@@ -61,7 +61,7 @@ private:
 	ORIENTATION orientation_;
 
 	int x_, y_;
-	surface surf_, buffer_;
+	SDL_Surface surf_, buffer_;
 	SDL_Rect rect_;
 
 	/** The location of the center of the halo. */
@@ -107,13 +107,13 @@ effect::effect(int xpos, int ypos, const animated<image::locator>::anim_descript
 	orientation_(orientation),
 	x_(xpos),
 	y_(ypos),
-	surf_(NULL),
-	buffer_(NULL),
+	surf_(nullptr),
+	buffer_(nullptr),
 	rect_(empty_rect),
 	loc_(loc),
 	overlayed_hexes_()
 {
-	assert(disp != NULL);
+	assert(disp != nullptr);
 
 	set_location(xpos,ypos);
 
@@ -129,14 +129,14 @@ void effect::set_location(int x, int y)
 	if (new_x != x_ || new_y != y_) {
 		x_ = new_x;
 		y_ = new_y;
-		buffer_.assign(NULL);
+		buffer_.assign(nullptr);
 		overlayed_hexes_.clear();
 	}
 }
 
 bool effect::render()
 {
-	if(disp == NULL) {
+	if(disp == nullptr) {
 		return false;
 	}
 
@@ -159,7 +159,7 @@ bool effect::render()
 
 	images_.update_last_draw_time();
 	surf_.assign(image::get_image(current_image(),image::SCALED_TO_ZOOM));
-	if(surf_ == NULL) {
+	if(surf_ == nullptr) {
 		return false;
 	}
 	if(orientation_ == HREVERSE || orientation_ == HVREVERSE) {
@@ -191,22 +191,22 @@ bool effect::render()
 	}
 
 	if(rects_overlap(rect,clip_rect) == false) {
-		buffer_.assign(NULL);
+		buffer_.assign(nullptr);
 		return false;
 	}
 
-	surface screen = disp->get_screen_surface();
+	SDL_Surface screen = disp->get_screen_surface();
 
 	const clip_rect_setter clip_setter(screen, &clip_rect);
-	if(buffer_ == NULL || buffer_->w != rect.w || buffer_->h != rect.h) {
+	if(buffer_ == nullptr || buffer_->w != rect.w || buffer_->h != rect.h) {
 		SDL_Rect rect = rect_;
 		buffer_.assign(get_surface_portion(screen,rect));
 	} else {
 		SDL_Rect rect = rect_;
-		sdl_blit(screen,&rect,buffer_,NULL);
+		SDL_BlitSurface(screen,&rect,buffer_,nullptr);
 	}
 
-	sdl_blit(surf_,NULL,screen,&rect);
+	SDL_BlitSurface(surf_,nullptr,screen,&rect);
 
 	update_rect(rect_);
 
@@ -219,7 +219,7 @@ void effect::unrender()
 		return;
 	}
 
-	surface screen = disp->get_screen_surface();
+	SDL_Surface screen = disp->get_screen_surface();
 
 	SDL_Rect clip_rect = disp->map_outside_area();
 	const clip_rect_setter clip_setter(screen, &clip_rect);
@@ -234,7 +234,7 @@ void effect::unrender()
 	const int ypos = y_ + screeny - surf_->h/2;
 
 	SDL_Rect rect = create_rect(xpos, ypos, surf_->w, surf_->h);
-	sdl_blit(buffer_,NULL,screen,&rect);
+	SDL_BlitSurface(buffer_,nullptr,screen,&rect);
 	update_rect(rect);
 }
 

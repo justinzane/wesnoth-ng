@@ -142,7 +142,7 @@ static time_t get_time(const config &speak)
 	else
 	{
 		//fallback in case sender uses wesnoth that doesn't send timestamps
-		time = ::time(NULL);
+		time = ::time(nullptr);
 	}
 	return time;
 }
@@ -191,7 +191,7 @@ chat_msg::~chat_msg()
 replay::replay() :
 	cfg_(),
 	pos_(0),
-	current_(NULL),
+	current_(nullptr),
 	skip_(false),
 	message_locations(),
 	expected_advancements_()
@@ -200,7 +200,7 @@ replay::replay() :
 replay::replay(const config& cfg) :
 	cfg_(cfg),
 	pos_(0),
-	current_(NULL),
+	current_(nullptr),
 	skip_(false),
 	message_locations(),
 	expected_advancements_()
@@ -532,7 +532,7 @@ void replay::add_chat_message_location()
 void replay::speak(const config& cfg)
 {
 	config* const cmd = add_command(false);
-	if(cmd != NULL) {
+	if(cmd != nullptr) {
 		cmd->add_child("speak",cfg);
 		(*cmd)["undo"] = false;
 		add_chat_message_location();
@@ -672,8 +672,8 @@ void replay::undo()
 	}
 
 	remove_command(cmd);
-	current_ = NULL;
-	set_random(NULL);
+	current_ = nullptr;
+	set_random(nullptr);
 }
 
 config &replay::command(int n)
@@ -710,7 +710,7 @@ void replay::revert_action()
 config* replay::get_next_action()
 {
 	if (pos_ >= ncommands())
-		return NULL;
+		return nullptr;
 
 	LOG_REPLAY << "up to replay action " << pos_ + 1 << '/' << ncommands() << '\n';
 
@@ -722,7 +722,7 @@ config* replay::get_next_action()
 
 void replay::pre_replay()
 {
-	if (rng::random() == NULL && ncommands() > 0) {
+	if (rng::random() == nullptr && ncommands() > 0) {
 		if (at_end())
 		{
 			add_command(true);
@@ -742,8 +742,8 @@ bool replay::at_end() const
 void replay::set_to_end()
 {
 	pos_ = ncommands();
-	current_ = NULL;
-	set_random(NULL);
+	current_ = nullptr;
+	set_random(nullptr);
 }
 
 void replay::clear()
@@ -752,8 +752,8 @@ void replay::clear()
 	message_log.clear();
 	cfg_ = config();
 	pos_ = 0;
-	current_ = NULL;
-	set_random(NULL);
+	current_ = nullptr;
+	set_random(nullptr);
 	skip_ = false;
 }
 
@@ -780,7 +780,7 @@ void replay::add_config(const config& cfg, MARK_SENT mark)
 
 namespace {
 
-replay* replay_src = NULL;
+replay* replay_src = nullptr;
 
 struct replay_source_manager
 {
@@ -802,7 +802,7 @@ private:
 
 replay& get_replay_source()
 {
-	if(replay_src != NULL) {
+	if(replay_src != nullptr) {
 		return *replay_src;
 	} else {
 		return recorder;
@@ -852,14 +852,14 @@ static void check_checksums(const config &cfg)
 		if (!u.valid()) {
 			std::stringstream message;
 			message << "non existent unit to checksum at " << loc.x+1 << "," << loc.y+1 << "!";
-			resources::screen->add_chat_message(time(NULL), "verification", 1, message.str(),
+			resources::screen->add_chat_message(time(nullptr), "verification", 1, message.str(),
 					events::chat_handler::MESSAGE_PRIVATE, false);
 			continue;
 		}
 		if (get_checksum(*u) != ch["value"]) {
 			std::stringstream message;
 			message << "checksum mismatch at " << loc.x+1 << "," << loc.y+1 << "!";
-			resources::screen->add_chat_message(time(NULL), "verification", 1, message.str(),
+			resources::screen->add_chat_message(time(nullptr), "verification", 1, message.str(),
 					events::chat_handler::MESSAGE_PRIVATE, false);
 		}
 	}
@@ -871,7 +871,7 @@ bool do_replay(int side_num, replay *obj)
 
 	const replay_source_manager replaymanager(obj);
 
-//	replay& replayer = (obj != NULL) ? *obj : recorder;
+//	replay& replayer = (obj != nullptr) ? *obj : recorder;
 
 	if (!get_replay_source().is_skipping()){
 		resources::screen->recalculate_minimap();
@@ -904,7 +904,7 @@ bool do_replay_handle(int side_num, const std::string &do_untill)
 		}
 
 		//if there is nothing more in the records
-		if(cfg == NULL) {
+		if(cfg == nullptr) {
 			//replayer.set_skip(false);
 			return false;
 		}
@@ -1179,8 +1179,8 @@ bool do_replay_handle(int side_num, const std::string &do_untill)
 			if ( current_team.is_ai() || current_team.is_network_ai() )
 				show_move = show_move && preferences::show_ai_moves();
 			const int num_steps =
-				actions::move_unit(steps, NULL, resources::undo_stack, true,
-				                   show_move, NULL, NULL, &early_stop);
+				actions::move_unit(steps, nullptr, resources::undo_stack, true,
+				                   show_move, nullptr, nullptr, &early_stop);
 
 			// Verify our destination.
 			const map_location& actual_stop = steps[num_steps];

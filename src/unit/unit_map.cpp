@@ -82,7 +82,7 @@ unit_map::~unit_map() {
 unit_map::t_ilist::iterator unit_map::begin_core() const {
 	self_check();
 	t_ilist::iterator i = ilist_.begin();
-	while (i != the_end_ && (i->unit == NULL)) { ++i; }
+	while (i != the_end_ && (i->unit == nullptr)) { ++i; }
 	return i;
 }
 
@@ -109,7 +109,7 @@ std::pair<unit_map::unit_iterator, bool> unit_map::move(const map_location &src,
 
 	//Fail if there is no unit to move
 	unit *p = lit->unit;
-	if(p == NULL){ return std::make_pair(make_unit_iterator(lit), false);}
+	if(p == nullptr){ return std::make_pair(make_unit_iterator(lit), false);}
 
 	p->set_location(dst);
 
@@ -139,7 +139,7 @@ otherwise all operations are reverted.
 3. Try insertion in the lmap and remove the umap and the list item on failure
 
 The one oddity is that to facilitate non-invalidating iterators the list
-sometimes has NULL pointers which should be used when they correspond
+sometimes has nullptr pointers which should be used when they correspond
 to uids previously used.
  */
 std::pair<unit_map::unit_iterator, bool> unit_map::insert(unit *p) {
@@ -168,7 +168,7 @@ std::pair<unit_map::unit_iterator, bool> unit_map::insert(unit *p) {
 
 	if (! uinsert.second) {
 		//If the UID is empty reinsert the unit in the same list element
-		if ( uinsert.first->second->unit == NULL) {
+		if ( uinsert.first->second->unit == nullptr) {
 			ilist_.pop_front();
 			lit = uinsert.first->second;
 			lit->unit = p;
@@ -213,7 +213,7 @@ std::pair<unit_map::unit_iterator, bool> unit_map::insert(unit *p) {
 			umap_.erase(uinsert.first);
 		} else {
 			//undo a reinsertion
-			uinsert.first->second->unit = NULL;
+			uinsert.first->second->unit = nullptr;
 		}
 		DBG_NG << "Trying to add " << p->name()
 			   << " - " << p->id() << " at location ("<<loc <<"); Occupied  by "
@@ -269,7 +269,7 @@ void unit_map::clear(bool force) {
 unit *unit_map::extract(const map_location &loc) {
 	self_check();
 	t_lmap::iterator i = lmap_.find(loc);
-	if (i == lmap_.end()) { return NULL; }
+	if (i == lmap_.end()) { return nullptr; }
 
 	t_ilist::iterator lit(i->second);
 
@@ -286,7 +286,7 @@ unit *unit_map::extract(const map_location &loc) {
 		ilist_.erase( lit );
 	} else {
 		//Soft extraction keeps the old lit item if any iterators reference it
-		lit->unit = NULL;
+		lit->unit = nullptr;
 		lit->deleted_uid = uid;
 		assert( uid != 0);
 	}
@@ -304,7 +304,7 @@ unit *unit_map::extract(const map_location &loc) {
 void unit_map::error_recovery_externally_changed_uid(t_ilist::iterator const & lit) const {
 	std::string name, id ;
 	size_t uid;
-	if(lit->unit != NULL){
+	if(lit->unit != nullptr){
 		unit const * u(lit->unit);
 		name = u->name();
 		id = u->id();
@@ -344,7 +344,7 @@ size_t unit_map::erase(const map_location &loc) {
 unit_map::unit_iterator unit_map::find(size_t id) {
 	self_check();
 	t_umap::iterator i(umap_.find(id));
-	if((i != umap_.end()) && i->second->unit==NULL){ i = umap_.end() ;}
+	if((i != umap_.end()) && i->second->unit==nullptr){ i = umap_.end() ;}
 	return make_unit_iterator<t_umap::iterator>( i ); }
 
 unit_map::unit_iterator unit_map::find(const map_location &loc) {
@@ -400,7 +400,7 @@ bool unit_map::self_check() const {
 		if(lit->ref_count < 0){
 			good=false;
 			ERR_NG << "unit_map list element ref_count <0 is " << lit->ref_count<<"\n"; }
-		if(lit->unit != NULL){
+		if(lit->unit != nullptr){
 			lit->unit->id(); //crash if bad pointer
 		} else {
 			if(lit->ref_count <= 0){
@@ -424,9 +424,9 @@ bool unit_map::self_check() const {
 		if(uit->second == the_end_ ){
 			good=false;
 			ERR_NG << "unit_map umap element == the_end_ "<<"\n"; }
-		if(uit->second->unit == NULL && uit->second->ref_count == 0 ){
+		if(uit->second->unit == nullptr && uit->second->ref_count == 0 ){
 			good=false;
-			ERR_NG << "unit_map umap unit==NULL when refcount == 0 uid="<<uit->second->deleted_uid<<"\n";
+			ERR_NG << "unit_map umap unit==nullptr when refcount == 0 uid="<<uit->second->deleted_uid<<"\n";
 		}
 		if(uit->second->unit && uit->second->unit->underlying_id() != uit->first){
 			good=false;

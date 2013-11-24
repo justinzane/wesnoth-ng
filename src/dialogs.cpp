@@ -445,7 +445,7 @@ void show_unit_list(display& gui)
 		dialogs::units_list_preview_pane unit_preview(units_list);
 		unit_preview.set_selection(selected);
 
-		gui::dialog umenu(gui, _("Unit List"), "", gui::NULL_DIALOG);
+		gui::dialog umenu(gui, _("Unit List"), "", gui::nullptr_DIALOG);
 		umenu.set_menu(items, &sorter);
 		umenu.add_pane(&unit_preview);
 		//sort by type name
@@ -476,7 +476,7 @@ void show_objectives(const config &level, const std::string &objectives)
 int recruit_dialog(display& disp, std::vector< const unit_type* >& units, const std::vector< std::string >& items, int side, const std::string& title_suffix)
 {
 	dialogs::unit_types_preview_pane unit_preview(
-		units, NULL, side);
+		units, nullptr, side);
 	std::vector<gui::preview_pane*> preview_panes;
 	preview_panes.push_back(&unit_preview);
 
@@ -684,7 +684,7 @@ public:
 		set_measurements(std::min<int>(200,video.getx()/4),
 				 std::min<int>(400,video.gety() * 4/5));
 
-		if (difficulty_option_ != NULL) {
+		if (difficulty_option_ != nullptr) {
 			difficulty_option_->enable(false);
 		}
 	}
@@ -718,7 +718,7 @@ private:
 
 void save_preview_pane::decide_on_difficulty_option()
 {
-	if (difficulty_option_ == NULL || size_t(index_) >= info_->size()) {
+	if (difficulty_option_ == nullptr || size_t(index_) >= info_->size()) {
 		return;
 	}
 
@@ -733,7 +733,7 @@ void save_preview_pane::draw_contents()
 		return;
 	}
 
-	surface screen = video().getSurface();
+	SDL_Surface screen = video().getSurface();
 
 	SDL_Rect const &loc = location();
 	const SDL_Rect area = create_rect(loc.x + save_preview_border
@@ -753,12 +753,12 @@ void save_preview_pane::draw_contents()
 	if(!leader_image.empty() && image::exists(leader_image))
 	{
 #ifdef LOW_MEM
-		const surface& image(image::get_image(leader_image));
+		const SDL_Surface& image(image::get_image(leader_image));
 #else
 		// NOTE: assuming magenta for TC here. This is what's used in all of
 		// mainline, so the compromise should be good enough until we add more
 		// summary fields to help with this and deciding the side color range.
-		const surface& image(image::get_image(leader_image + "~RC(magenta>1)"));
+		const SDL_Surface& image(image::get_image(leader_image + "~RC(magenta>1)"));
 #endif
 
 		have_leader_image = !image.null();
@@ -767,7 +767,7 @@ void save_preview_pane::draw_contents()
 			SDL_Rect image_rect = create_rect(area.x, area.y, image->w, image->h);
 			ypos += image_rect.h + save_preview_border;
 
-			sdl_blit(image,NULL,screen,&image_rect);
+			SDL_BlitSurface(image,nullptr,screen,&image_rect);
 		}
 	}
 
@@ -786,19 +786,19 @@ void save_preview_pane::draw_contents()
 		}
 	}
 
-	surface map_surf(NULL);
+	SDL_Surface map_surf(nullptr);
 
 	if(map_data.empty() == false) {
 		const std::map<std::string,surface>::const_iterator itor = map_cache_.find(map_data);
 		if(itor != map_cache_.end()) {
 			map_surf = itor->second;
-		} else if(map_ != NULL) {
+		} else if(map_ != nullptr) {
 			try {
 				const int minimap_size = 100;
 				map_->read(map_data);
 
 				map_surf = image::getMinimap(minimap_size, minimap_size, *map_);
-				if(map_surf != NULL) {
+				if(map_surf != nullptr) {
 					map_cache_.insert(std::pair<std::string,surface>(map_data, map_surf));
 				}
 			} catch(incorrect_map_format_error& e) {
@@ -809,7 +809,7 @@ void save_preview_pane::draw_contents()
 		}
 	}
 
-	if(map_surf != NULL) {
+	if(map_surf != nullptr) {
 		// Align the map to the left when the leader image is missing.
 		const int map_x = have_leader_image ? area.x + area.w - map_surf->w : area.x;
 		SDL_Rect map_rect = create_rect(map_x
@@ -818,7 +818,7 @@ void save_preview_pane::draw_contents()
 				, map_surf->h);
 
 		ypos = std::max<int>(ypos,map_rect.y + map_rect.h + save_preview_border);
-		sdl_blit(map_surf,NULL,screen,&map_rect);
+		SDL_BlitSurface(map_surf,nullptr,screen,&map_rect);
 	}
 
 	char time_buf[256] = {0};
@@ -837,7 +837,7 @@ void save_preview_pane::draw_contents()
 
 	std::stringstream str;
 
-	str << font::BOLD_TEXT << font::NULL_MARKUP
+	str << font::BOLD_TEXT << font::nullptr_MARKUP
 		<< (*info_)[index_].name() << '\n' << time_buf;
 
 	const std::string& campaign_type = summary["campaign_type"];
@@ -848,13 +848,13 @@ void save_preview_pane::draw_contents()
 
 		if(campaign_type == "scenario") {
 			const std::string campaign_id = summary["campaign"];
-			const config *campaign = NULL;
+			const config *campaign = nullptr;
 			if (!campaign_id.empty()) {
 				if (const config &c = game_config_->find_child("campaign", "id", campaign_id))
 					campaign = &c;
 			}
 			utils::string_map symbols;
-			if (campaign != NULL) {
+			if (campaign != nullptr) {
 				symbols["campaign_name"] = (*campaign)["name"];
 			} else {
 				// Fallback to nontranslatable campaign id.
@@ -863,7 +863,7 @@ void save_preview_pane::draw_contents()
 			str << vgettext("Campaign: $campaign_name", symbols);
 
 			// Display internal id for debug purposes if we didn't above
-			if (game_config::debug && (campaign != NULL)) {
+			if (game_config::debug && (campaign != nullptr)) {
 				str << '\n' << "(" << campaign_id << ")";
 			}
 		} else if(campaign_type == "multiplayer") {
@@ -897,16 +897,16 @@ void save_preview_pane::draw_contents()
 
 std::string format_time_summary(time_t t)
 {
-	time_t curtime = time(NULL);
+	time_t curtime = time(nullptr);
 	const struct tm* timeptr = localtime(&curtime);
-	if(timeptr == NULL) {
+	if(timeptr == nullptr) {
 		return "";
 	}
 
 	const struct tm current_time = *timeptr;
 
 	timeptr = localtime(&t);
-	if(timeptr == NULL) {
+	if(timeptr == nullptr) {
 		return "";
 	}
 
@@ -989,7 +989,7 @@ std::string load_game_dialog(display& disp, const config& game_config, bool* sel
 
 	gui::dialog lmenu(disp,
 			  _("Load Game"),
-			  "", gui::NULL_DIALOG);
+			  "", gui::nullptr_DIALOG);
 	lmenu.set_basic_behavior(gui::OK_CANCEL);
 
 	gui::menu::basic_sorter sorter;
@@ -999,9 +999,9 @@ std::string load_game_dialog(display& disp, const config& game_config, bool* sel
 	gui::filter_textbox* filter = new gui::filter_textbox(disp.video(), _("Filter: "), items, items, 1, lmenu);
 	lmenu.set_textbox(filter);
 
-	gui::dialog_button* change_difficulty_option = NULL;
+	gui::dialog_button* change_difficulty_option = nullptr;
 
-	if(select_difficulty != NULL) {
+	if(select_difficulty != nullptr) {
 		// implementation of gui::dialog::add_option, needed for storing a pointer to the option-box
 		change_difficulty_option = new gui::dialog_button(disp.video(), _("Change difficulty"), gui::button::TYPE_CHECK);
 		change_difficulty_option->set_check(false);
@@ -1013,13 +1013,13 @@ std::string load_game_dialog(display& disp, const config& game_config, bool* sel
 	save_preview_pane save_preview(disp.video(),game_config,&map_obj,games,*filter,change_difficulty_option);
 	lmenu.add_pane(&save_preview);
 	// create an option for whether the replay should be shown or not
-	if(show_replay != NULL) {
+	if(show_replay != nullptr) {
 		lmenu.add_option(_("Show replay"), false,
 			gui::dialog::BUTTON_CHECKBOX_LEFT,
 			_("Play the embedded replay from the saved game if applicable")
 			);
 	}
-	if(cancel_orders != NULL) {
+	if(cancel_orders != nullptr) {
 		lmenu.add_option(_("Cancel orders"), false,
 			gui::dialog::BUTTON_CHECKBOX_LEFT,
 			_("Cancel any pending unit movements in the saved game")
@@ -1042,10 +1042,10 @@ std::string load_game_dialog(display& disp, const config& game_config, bool* sel
 
 	res = filter->get_index(res);
 	int option_index = 0;
-	if (select_difficulty != NULL) {
+	if (select_difficulty != nullptr) {
 		*select_difficulty = lmenu.option_checked(option_index++) && change_difficulty_option->enabled();
 	}
-	if(show_replay != NULL) {
+	if(show_replay != nullptr) {
 	  *show_replay = lmenu.option_checked(option_index++);
 
 		const config& summary = games[res].summary();
@@ -1053,7 +1053,7 @@ std::string load_game_dialog(display& disp, const config& game_config, bool* sel
 			*show_replay = true;
 		}
 	}
-	if (cancel_orders != NULL) {
+	if (cancel_orders != nullptr) {
 		*cancel_orders = lmenu.option_checked(option_index++);
 	}
 
@@ -1140,7 +1140,7 @@ void unit_preview_pane::draw_contents()
 
 	const bool right_align = left_side();
 
-	surface screen = video().getSurface();
+	SDL_Surface screen = video().getSurface();
 
 	SDL_Rect const &loc = location();
 	const SDL_Rect area = create_rect(loc.x + unit_preview_border
@@ -1150,13 +1150,13 @@ void unit_preview_pane::draw_contents()
 
 	const clip_rect_setter clipper(screen, &area);
 
-	surface unit_image = det.image;
+	SDL_Surface unit_image = det.image;
 	if (!left_)
 		unit_image = image::reverse_image(unit_image);
 
 	SDL_Rect image_rect = create_rect(area.x, area.y, 0, 0);
 
-	if(unit_image != NULL) {
+	if(unit_image != nullptr) {
 		SDL_Rect rect = create_rect(
 				  right_align
 					? area.x
@@ -1165,7 +1165,7 @@ void unit_preview_pane::draw_contents()
 				, unit_image->w
 				, unit_image->h);
 
-		sdl_blit(unit_image,NULL,screen,&rect);
+		SDL_BlitSurface(unit_image,nullptr,screen,&rect);
 		image_rect = rect;
 	}
 
@@ -1262,7 +1262,7 @@ void unit_preview_pane::draw_contents()
 	for(std::vector<std::string>::const_iterator line = lines.begin(); line != lines.end(); ++line) {
 		int xpos = area.x;
 		if(right_align && !weapons_) {
-			const SDL_Rect& line_area = font::text_area(*line,font::SIZE_SMALL);
+			const SDL_Rect* line_area = font::text_area(*line,font::SIZE_SMALL);
 			// right align, but if too long, don't hide line's beginning
 			if (line_area.w < area.w)
 				xpos = area.x + area.w - line_area.w;
@@ -1274,7 +1274,7 @@ void unit_preview_pane::draw_contents()
 }
 
 units_list_preview_pane::units_list_preview_pane(const unit *u, TYPE type, bool on_left_side) :
-	unit_preview_pane(NULL, type, on_left_side),
+	unit_preview_pane(nullptr, type, on_left_side),
 	units_(1, u)
 {
 }
@@ -1352,7 +1352,7 @@ unit_types_preview_pane::unit_types_preview_pane(
 
 size_t unit_types_preview_pane::size() const
 {
-	return (unit_types_!=NULL) ? unit_types_->size() : 0;
+	return (unit_types_!=nullptr) ? unit_types_->size() : 0;
 }
 
 const unit_types_preview_pane::details unit_types_preview_pane::get_details() const
@@ -1360,7 +1360,7 @@ const unit_types_preview_pane::details unit_types_preview_pane::get_details() co
 	const unit_type* t = (*unit_types_)[index_];
 	details det;
 
-	if (t==NULL)
+	if (t==nullptr)
 		return det;
 
 	// Make sure the unit type is built with enough data for our needs.
@@ -1426,7 +1426,7 @@ void unit_types_preview_pane::process_event()
 {
 	if (details_button_.pressed() && index_ >= 0 && index_ < int(size())) {
 		const unit_type* type = (*unit_types_)[index_];
-		if (type != NULL)
+		if (type != nullptr)
 			show_unit_description(*type);
 	}
 }

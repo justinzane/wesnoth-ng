@@ -191,7 +191,7 @@ unit::unit(const unit& o):
 
            animations_(o.animations_),
 
-           anim_(NULL),
+           anim_(nullptr),
 		   next_idling_(0),
 
            frame_begin_time_(o.frame_begin_time_),
@@ -266,7 +266,7 @@ unit::unit(const config &cfg, bool use_traits, game_state* state, const vconfig*
 	is_healthy_(false),
 	modification_descriptions_(),
 	animations_(),
-	anim_(NULL),
+	anim_(nullptr),
 	next_idling_(0),
 	frame_begin_time_(0),
 	unit_halo_(halo::NO_HALO),
@@ -552,7 +552,7 @@ unit::unit(const unit_type &u_type, int side, bool real_unit,
 	unrenamable_(false),
 	side_(side),
 	gender_(gender != unit_race::NUM_GENDERS ?
-		gender : generate_gender(u_type, real_unit, NULL)),
+		gender : generate_gender(u_type, real_unit, nullptr)),
 	alpha_(),
 	unit_formula_(),
 	unit_loop_formula_(),
@@ -588,7 +588,7 @@ unit::unit(const unit_type &u_type, int side, bool real_unit,
 	is_healthy_(false),
 	modification_descriptions_(),
 	animations_(),
-	anim_(NULL),
+	anim_(nullptr),
 	next_idling_(0),
 	frame_begin_time_(0),
 	unit_halo_(halo::NO_HALO),
@@ -1036,7 +1036,7 @@ inline bool mod_duration_match(const std::string & mod_dur,
 void unit::expire_modifications(const std::string & duration)
 {
 	// If any modifications expire, then we will need to rebuild the unit.
-	const unit_type * rebuild_from = NULL;
+	const unit_type * rebuild_from = nullptr;
 
 	// Loop through all types of modifications.
 	for(unsigned int i = 0; i != NumModificationTypes; ++i) {
@@ -1053,7 +1053,7 @@ void unit::expire_modifications(const std::string & duration)
 					rebuild_from = &get_unit_type(v->str());
 				}
 				// Else, if we have not already specified a type to build from:
-				else if ( rebuild_from == NULL )
+				else if ( rebuild_from == nullptr )
 					rebuild_from = &type();
 
 				modifications_.remove_child(mod_name, j);
@@ -1061,7 +1061,7 @@ void unit::expire_modifications(const std::string & duration)
 		}
 	}
 
-	if ( rebuild_from != NULL ) {
+	if ( rebuild_from != nullptr ) {
 		clear_haloes();
 		advance_to(*rebuild_from);
 	}
@@ -1240,7 +1240,7 @@ bool unit::matches_filter(const vconfig& cfg, const map_location& loc, bool use_
 	bool matches = true;
 
 	if(loc.valid()) {
-		assert(resources::units != NULL);
+		assert(resources::units != nullptr);
 		scoped_xy_unit auto_store("this_unit", loc.x, loc.y, *resources::units);
 		matches = internal_matches_filter(cfg, loc, use_flat_tod);
 	} else {
@@ -1307,10 +1307,10 @@ bool unit::internal_matches_filter(const vconfig& cfg, const map_location& loc, 
 	}
 
 	if(cfg.has_child("filter_location")) {
-		assert(resources::game_map != NULL);
-		assert(resources::teams != NULL);
-		assert(resources::tod_manager != NULL);
-		assert(resources::units != NULL);
+		assert(resources::game_map != nullptr);
+		assert(resources::teams != nullptr);
+		assert(resources::tod_manager != nullptr);
+		assert(resources::units != nullptr);
 		const vconfig& t_cfg = cfg.child("filter_location");
 		terrain_filter t_filter(t_cfg, *resources::units, use_flat_tod);
 		if(!t_filter.match(loc)) {
@@ -1779,7 +1779,7 @@ void unit::add_formula_var(std::string str, variant var) {
 	formula_vars_->add(str, var);
 }
 
-const surface unit::still_image(bool scaled) const
+const SDL_Surface unit::still_image(bool scaled) const
 {
 	image::locator image_loc;
 
@@ -1794,7 +1794,7 @@ const surface unit::still_image(bool scaled) const
 	}
 #endif
 
-	surface unit_image(image::get_image(image_loc, scaled ? image::SCALED_TO_ZOOM : image::UNSCALED));
+	SDL_Surface unit_image(image::get_image(image_loc, scaled ? image::SCALED_TO_ZOOM : image::UNSCALED));
 	return unit_image;
 }
 
@@ -1992,8 +1992,8 @@ void unit::redraw_unit()
 		draw_bars = rects_overlap(unit_rect, disp.map_outside_area());
 	}
 
-	surface ellipse_front(NULL);
-	surface ellipse_back(NULL);
+	SDL_Surface ellipse_front(nullptr);
+	SDL_Surface ellipse_back(nullptr);
 	int ellipse_floating = 0;
 	// Always show the ellipse for selected units
 	if(draw_bars && (preferences::show_side_colors() || disp.selected_hex() == loc_)) {
@@ -2024,19 +2024,19 @@ void unit::redraw_unit()
 		ellipse_front.assign(image::get_image(image::locator(buf), image::SCALED_TO_ZOOM));
 	}
 
-	if (ellipse_back != NULL) {
+	if (ellipse_back != nullptr) {
 		//disp.drawing_buffer_add(display::LAYER_UNIT_BG, loc,
 		disp.drawing_buffer_add(display::LAYER_UNIT_FIRST, loc_,
 			xsrc, ysrc +adjusted_params.y-ellipse_floating, ellipse_back);
 	}
 
-	if (ellipse_front != NULL) {
+	if (ellipse_front != nullptr) {
 		//disp.drawing_buffer_add(display::LAYER_UNIT_FG, loc,
 		disp.drawing_buffer_add(display::LAYER_UNIT_FIRST, loc_,
 			xsrc, ysrc +adjusted_params.y-ellipse_floating, ellipse_front);
 	}
 	if(draw_bars) {
-		const image::locator* orb_img = NULL;
+		const image::locator* orb_img = nullptr;
 		static const image::locator partmoved_orb(game_config::images::orb + "~RC(magenta>" +
 						game_config::images::partmoved_orb_color + ")"  );
 		static const image::locator moved_orb(game_config::images::orb + "~RC(magenta>" +
@@ -2068,9 +2068,9 @@ void unit::redraw_unit()
 			}
 		}
 
-		assert(orb_img != NULL);
-		surface orb(image::get_image(*orb_img,image::SCALED_TO_ZOOM));
-		if (orb != NULL) {
+		assert(orb_img != nullptr);
+		SDL_Surface orb(image::get_image(*orb_img,image::SCALED_TO_ZOOM));
+		if (orb != nullptr) {
 			disp.drawing_buffer_add(display::LAYER_UNIT_BAR,
 				loc_, xsrc, ysrc +adjusted_params.y, orb);
 		}
@@ -2098,7 +2098,7 @@ void unit::redraw_unit()
 		}
 
 		if (can_recruit()) {
-			surface crown(image::get_image("misc/leader-crown.png",image::SCALED_TO_ZOOM));
+			SDL_Surface crown(image::get_image("misc/leader-crown.png",image::SCALED_TO_ZOOM));
 			if(!crown.null()) {
 				//if(bar_alpha != ftofxp(1.0)) {
 				//	crown = adjust_surface_alpha(crown, bar_alpha);
@@ -2109,8 +2109,8 @@ void unit::redraw_unit()
 		}
 
 		for(std::vector<std::string>::const_iterator ov = overlays().begin(); ov != overlays().end(); ++ov) {
-			const surface ov_img(image::get_image(*ov, image::SCALED_TO_ZOOM));
-			if(ov_img != NULL) {
+			const SDL_Surface ov_img(image::get_image(*ov, image::SCALED_TO_ZOOM));
+			if(ov_img != nullptr) {
 				disp.drawing_buffer_add(display::LAYER_UNIT_BAR,
 					loc_, xsrc, ysrc +adjusted_params.y, ov_img);
 			}
@@ -2349,7 +2349,7 @@ void unit::add_modification(const std::string& mod_type, const config& mod, bool
 		is_healthy_ = is_healthy_ || id == "healthy";
 	}
 
-	config *new_child = NULL;
+	config *new_child = nullptr;
 	if(no_add == false) {
 		new_child = &modifications_.add_child(mod_type, mod);
 	}
@@ -2685,7 +2685,7 @@ void unit::add_modification(const std::string& mod_type, const config& mod, bool
 		if ((last_effect)["apply_to"] == "variation") {
 			variation_ = last_effect["name"].str();
 			const unit_type * base_type = unit_types.find(type().base_id());
-			assert(base_type != NULL);
+			assert(base_type != nullptr);
 			advance_to(*base_type);
 		} else if ((last_effect)["apply_to"] == "type") {
 			config::attribute_value &prev_type = (*new_child)["prev_type"];
@@ -2774,7 +2774,7 @@ const unit_animation* unit::choose_animation(const display& disp, const map_loca
 	}
 
 	if(max_val == unit_animation::MATCH_FAIL) {
-		return NULL;
+		return nullptr;
 	}
 	return options[rand()%options.size()];
 }
@@ -3005,7 +3005,7 @@ unit *get_visible_unit(const map_location &loc,
 {
 	unit_map::iterator ui = find_visible_unit(loc,
 		current_team, see_all);
-	if (ui == resources::units->end()) return NULL;
+	if (ui == resources::units->end()) return nullptr;
 	return &*ui;
 }
 
@@ -3085,7 +3085,7 @@ temporary_unit_remover::~temporary_unit_remover()
 temporary_unit_mover::temporary_unit_mover(unit_map& m, const map_location& src,
                                            const map_location& dst, int new_moves)
 	: m_(m), src_(src), dst_(dst), old_moves_(-1),
-	  temp_(src == dst ? NULL : m.extract(dst))
+	  temp_(src == dst ? nullptr : m.extract(dst))
 {
 	std::pair<unit_map::iterator, bool> move_result = m.move(src_, dst_);
 
@@ -3104,7 +3104,7 @@ temporary_unit_mover::temporary_unit_mover(unit_map& m, const map_location& src,
 temporary_unit_mover::temporary_unit_mover(unit_map& m, const map_location& src,
                                            const map_location& dst)
 	: m_(m), src_(src), dst_(dst), old_moves_(-1),
-	  temp_(src == dst ? NULL : m.extract(dst))
+	  temp_(src == dst ? nullptr : m.extract(dst))
 {
 	m.move(src_, dst_);
 }
@@ -3154,7 +3154,7 @@ const tportrait* unit::portrait(
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void unit::remove_attacks_ai()

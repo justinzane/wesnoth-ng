@@ -24,16 +24,16 @@
 #include <boost/function.hpp>
 
 typedef boost::function<
-		void(const surface&, const double, const Uint32)>
+		void(const SDL_Surface*, const double, const Uint32)>
 		tblend_functor;
 
 
 inline void
-blend_image(const surface& src, tblend_functor functor)
+blend_image(const SDL_Surface& src, tblend_functor functor)
 {
 	for(Uint32 color = 0x00FF0000; color != 0x00000000; color >>= 8) {
 		for(int i = 0xf; i < 0x100; i += 0x10) {
-			const surface dst = blend_surface(src, i / 255., color);
+			const SDL_Surface dst = blend_surface(src, i / 255., color);
 			if(functor) {
 				functor(dst, i, color);
 			}

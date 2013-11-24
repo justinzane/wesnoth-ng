@@ -61,8 +61,8 @@ REGISTER_DIALOG(editor_generate_map)
 teditor_generate_map::teditor_generate_map()
 	: map_generators_()
 	, current_map_generator_(0)
-	, current_generator_label_(NULL)
-	, gui_(NULL)
+	, current_generator_label_(nullptr)
+	, gui_(nullptr)
 {
 }
 

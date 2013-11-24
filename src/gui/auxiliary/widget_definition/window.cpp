@@ -54,7 +54,7 @@ twindow_definition::twindow_definition(const config& cfg)
 
 twindow_definition::tresolution::tresolution(const config& cfg)
 	: tpanel_definition::tresolution(cfg)
-	, grid(NULL)
+	, grid(nullptr)
 {
 	const config &child = cfg.child("grid");
 //	VALIDATE(child, _("No grid defined."));

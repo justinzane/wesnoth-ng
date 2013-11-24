@@ -127,7 +127,7 @@ static bool hotkey(twindow& window, const ttitle_screen::tresult result)
 
 ttitle_screen::ttitle_screen()
 	: logo_timer_id_(0)
-	, debug_clock_(NULL)
+	, debug_clock_(nullptr)
 {
 }
 
@@ -168,7 +168,7 @@ static bool fullscreen(CVideo& video)
 	preferences::set_fullscreen(video , !preferences::fullscreen());
 
 	// Setting to fullscreen doesn't seem to generate a resize event.
-	const SDL_Rect& rect = screen_area();
+	const SDL_Rect* rect = screen_area();
 
 	SDL_Event event;
 	event.type = SDL_VIDEORESIZE;
@@ -423,7 +423,7 @@ void ttitle_screen::show_debug_clock_window(CVideo& video)
 
 	if(debug_clock_) {
 		delete debug_clock_;
-		debug_clock_ = NULL;
+		debug_clock_ = nullptr;
 	} else {
 		debug_clock_ = new tdebug_clock();
 		debug_clock_->show(video, true);

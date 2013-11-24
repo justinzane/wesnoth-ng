@@ -126,7 +126,7 @@ void tcontainer_::set_origin(const tpoint& origin)
 	grid_.set_origin(client_position);
 }
 
-void tcontainer_::set_visible_rectangle(const SDL_Rect& rectangle)
+void tcontainer_::set_visible_rectangle(const SDL_Rect* rectangle)
 {
 	// Inherited.
 	twidget::set_visible_rectangle(rectangle);
@@ -134,7 +134,7 @@ void tcontainer_::set_visible_rectangle(const SDL_Rect& rectangle)
 	grid_.set_visible_rectangle(rectangle);
 }
 
-void tcontainer_::impl_draw_children(surface& frame_buffer)
+void tcontainer_::impl_draw_children(SDL_Surface& frame_buffer)
 {
 	assert(get_visible() == twidget::tvisible::visible
 			&& grid_.get_visible() == twidget::tvisible::visible);
@@ -143,7 +143,7 @@ void tcontainer_::impl_draw_children(surface& frame_buffer)
 }
 
 void tcontainer_::impl_draw_children(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {

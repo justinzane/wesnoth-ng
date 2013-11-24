@@ -234,7 +234,7 @@ template const config editor_palette<unit_type>::active_group_report();
 template const config editor_palette<overlay>::active_group_report();
 
 template<class Item>
-void editor_palette<Item>::adjust_size(const SDL_Rect& target)
+void editor_palette<Item>::adjust_size(const SDL_Rect* target)
 {
 	palette_x_ = target.x;
 	palette_y_ = target.y;
@@ -249,9 +249,9 @@ void editor_palette<Item>::adjust_size(const SDL_Rect& target)
 	gui_.video().clear_help_string(help_handle_);
 	help_handle_ = gui_.video().set_help_string(get_help_string());
 }
-template void editor_palette<t_translation::t_terrain>::adjust_size(const SDL_Rect& target);
-template void editor_palette<unit_type>::adjust_size(const SDL_Rect& target);
-template void editor_palette<overlay>::adjust_size(const SDL_Rect& target);
+template void editor_palette<t_translation::t_terrain>::adjust_size(const SDL_Rect* target);
+template void editor_palette<unit_type>::adjust_size(const SDL_Rect* target);
+template void editor_palette<overlay>::adjust_size(const SDL_Rect* target);
 
 template<class Item>
 void editor_palette<Item>::select_fg_item(const std::string& item_id)
@@ -350,7 +350,7 @@ void editor_palette<Item>::draw_contents()
 		//typedef std::map<std::string, Item> item_map_wurscht;
 		typename item_map::iterator item = item_map_.find(item_id);
 
-		surface item_image(NULL);
+		SDL_Surface item_image(nullptr);
 		std::stringstream tooltip_text;
 		draw_item((*item).second, item_image, tooltip_text);
 

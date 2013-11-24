@@ -24,7 +24,7 @@ class color_range;
 
 #include "tstring.hpp"
 
-#include <SDL_types.h>
+#include <SDL2/SDL_types.h>
 
 #include <vector>
 #include <map>

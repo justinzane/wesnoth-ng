@@ -162,7 +162,7 @@ void terrain_palette::setup(const config& cfg)
 }
 
 void terrain_palette::draw_item(const t_translation::t_terrain& terrain,
-		surface& image, std::stringstream& tooltip_text) {
+		SDL_Surface& image, std::stringstream& tooltip_text) {
 
 	const t_translation::t_terrain base_terrain =
 			map().get_terrain_info(terrain).default_base();
@@ -170,13 +170,13 @@ void terrain_palette::draw_item(const t_translation::t_terrain& terrain,
 	//Draw default base for overlay terrains
 	if(base_terrain != t_translation::NONE_TERRAIN) {
 		const std::string base_filename = "terrain/" + map().get_terrain_info(base_terrain).editor_image() + ".png";
-		surface base_image(image::get_image(base_filename));
+		SDL_Surface base_image(image::get_image(base_filename));
 
-		if(base_image == NULL) {
+		if(base_image == nullptr) {
 			tooltip_text << "BASE IMAGE NOT FOUND\n";
 			ERR_ED << "image for terrain : '" << base_filename << "' not found\n";
 			base_image = image::get_image(game_config::images::missing);
-			if (base_image == NULL) {
+			if (base_image == nullptr) {
 				ERR_ED << "Placeholder image not found\n";
 				return;
 			}
@@ -190,11 +190,11 @@ void terrain_palette::draw_item(const t_translation::t_terrain& terrain,
 
 	const std::string filename = "terrain/" + map().get_terrain_info(terrain).editor_image() + ".png";
 	image = image::get_image(filename);
-	if(image == NULL) {
+	if(image == nullptr) {
 		tooltip_text << "IMAGE NOT FOUND\n";
 		ERR_ED << "image for terrain: '" << filename << "' not found\n";
 		image = image::get_image(game_config::images::missing);
-		if (image == NULL) {
+		if (image == nullptr) {
 			ERR_ED << "Placeholder image not found\n";
 			return;
 		}

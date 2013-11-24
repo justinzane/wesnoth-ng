@@ -356,7 +356,7 @@ LEVEL_RESULT playsingle_controller::play_scenario(
 	gui_->labels().read(level_);
 
 	// Read sound sources
-	assert(soundsources_manager_ != NULL);
+	assert(soundsources_manager_ != nullptr);
 	foreach_ng(const config &s, level_.child_range("sound_source")) {
 		soundsource::sourcespec spec(s);
 		soundsources_manager_->add(spec);
@@ -847,7 +847,7 @@ void playsingle_controller::after_human_turn()
 	end_turn_record_unlock();
 
 	// Clear moves from the GUI.
-	gui_->set_route(NULL);
+	gui_->set_route(nullptr);
 	gui_->unhighlight_reach();
 }
 

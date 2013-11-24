@@ -271,7 +271,7 @@ hotkey_preferences_dialog::hotkey_preferences_dialog(display& disp) :
 		editor_hotkeys_(disp.video(), boost::assign::list_of(heading_),
 				false, -1, -1, &editor_sorter_, &gui::menu::bluebg_style),
 		disp_(disp),
-		parent(NULL)
+		parent(nullptr)
 {
 
 	set_measurements(preferences::width, preferences::height);
@@ -279,7 +279,7 @@ hotkey_preferences_dialog::hotkey_preferences_dialog(display& disp) :
 	// Populate the command vectors, this needs to happen only once.
 	const boost::ptr_vector<hotkey::hotkey_command>& list = hotkey::get_hotkey_commands();
 	
-	//for (size_t i = 0; list[i].id != hotkey::HOTKEY_NULL; ++i) {
+	//for (size_t i = 0; list[i].id != hotkey::HOTKEY_nullptr; ++i) {
 	foreach_ng(const hotkey::hotkey_command& command, list)
 	{
 		if (command.hidden) 
@@ -332,8 +332,8 @@ void hotkey_preferences_dialog::set_hotkey_menu(bool keep_viewport) {
 	general_hotkeys_.hide(true);
 
 	// Helpers to keep the switch statement small.
-	gui::menu* active_hotkeys = NULL;
-	std::vector<std::string>* commands = NULL;
+	gui::menu* active_hotkeys = nullptr;
+	std::vector<std::string>* commands = nullptr;
 
 	// Determine the menu corresponding to the selected tab.
 	switch (tab_) {
@@ -367,7 +367,7 @@ void hotkey_preferences_dialog::set_hotkey_menu(bool keep_viewport) {
 
 		menu_items.push_back(
 				(formatter() << truncated_description << HELP_STRING_SEPARATOR
-						<< description << COLUMN_SEPARATOR << font::NULL_MARKUP
+						<< description << COLUMN_SEPARATOR << font::nullptr_MARKUP
 						<< name << HELP_STRING_SEPARATOR << name).str() );
 	}
 
@@ -445,7 +445,7 @@ void hotkey_preferences_dialog::set_selection(int index) {
 void hotkey_preferences_dialog::process_event() {
 
 	std::string id;
-	gui::menu* active_menu_ = NULL;
+	gui::menu* active_menu_ = nullptr;
 	switch (tab_) {
 	case hotkey::SCOPE_GAME:
 		id = game_commands_[game_hotkeys_.selection()];
@@ -539,7 +539,7 @@ void hotkey_preferences_dialog::show_binding_dialog(
 	const std::string text = _("Press desired hotkey (Esc cancels)");
 
 	SDL_Rect clip_rect = create_rect(0, 0, disp_.w(), disp_.h());
-	SDL_Rect text_size = font::draw_text(NULL, clip_rect, font::SIZE_LARGE,
+	SDL_Rect text_size = font::draw_text(nullptr, clip_rect, font::SIZE_LARGE,
 			font::NORMAL_COLOR, text, 0, 0);
 
 	const int centerx = disp_.w() / 2;
@@ -609,7 +609,7 @@ void hotkey_preferences_dialog::show_binding_dialog(
 	if (!(keycode == SDLK_ESCAPE && (mod & any_mod) == 0)) {
 
 		hotkey::hotkey_item newhk(id);
-		hotkey::hotkey_item* oldhk = NULL;
+		hotkey::hotkey_item* oldhk = nullptr;
 
 		CKey keystate;
 		bool shift = keystate[SDLK_RSHIFT] || keystate[SDLK_LSHIFT];

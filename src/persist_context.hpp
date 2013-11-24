@@ -131,7 +131,7 @@ protected:
 			else if (cfg.has_child(next.root_))
 				return get_node(cfg.child(next.root_), next);
 			else
-				return NULL;
+				return nullptr;
 		}
 		else 
 			return &cfg;
@@ -143,7 +143,7 @@ protected:
 			if (cfg.has_child(next.root_))
 				return get_node(cfg.child(next.root_), next);
 			else
-				return NULL;
+				return nullptr;
 		}
 		else 
 			return &cfg;

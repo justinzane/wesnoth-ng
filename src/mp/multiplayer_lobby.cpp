@@ -52,7 +52,7 @@ std::vector<std::string> empty_string_vector;
 
 namespace mp {
 gamebrowser::gamebrowser(CVideo& video, const config &map_hashes) :
-	menu(video, empty_string_vector, false, -1, -1, NULL, &menu::bluebg_style),
+	menu(video, empty_string_vector, false, -1, -1, nullptr, &menu::bluebg_style),
 	gold_icon_locator_("themes/gold.png"),
 	xp_icon_locator_("themes/units.png"),
 	vision_icon_locator_("misc/invisible.png"),
@@ -78,7 +78,7 @@ gamebrowser::gamebrowser(CVideo& video, const config &map_hashes) :
 	set_numeric_keypress_selection(false);
 }
 
-void gamebrowser::set_inner_location(const SDL_Rect& rect)
+void gamebrowser::set_inner_location(const SDL_Rect* rect)
 {
 	set_full_size(games_.size());
 	set_shown_size(rect.h / row_height());
@@ -100,7 +100,7 @@ SDL_Rect gamebrowser::get_item_rect(size_t index) const {
 		const SDL_Rect res = { 0, 0, 0, 0 };
 		return res;
 	}
-	const SDL_Rect& loc = inner_location();
+	const SDL_Rect* loc = inner_location();
 	return create_rect(
 			  loc.x
 			, loc.y + (index - visible_range_.first) * row_height()
@@ -114,7 +114,7 @@ void gamebrowser::draw()
 		return;
 	if(dirty()) {
 		bg_restore();
-		util::scoped_ptr<clip_rect_setter> clipper(NULL);
+		util::scoped_ptr<clip_rect_setter> clipper(nullptr);
 		if(clip_rect())
 			clipper.assign(new clip_rect_setter(video().getSurface(), clip_rect()));
 		draw_contents();
@@ -135,13 +135,13 @@ void gamebrowser::draw_contents()
 	}
 }
 
-void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TYPE /*type*/) {
+void gamebrowser::draw_row(const size_t index, const SDL_Rect* item_rect, ROW_TYPE /*type*/) {
 	const game_item& game = games_[index];
 	int xpos = item_rect.x + margin_;
 	int ypos = item_rect.y + margin_;
 	std::string no_era_string = "";
 	// Draw minimaps
-	if (game.mini_map != NULL) {
+	if (game.mini_map != nullptr) {
 		int minimap_x = xpos + (minimap_size_ - game.mini_map->w)/2;
 		int minimap_y = ypos + (minimap_size_ - game.mini_map->h)/2;
 		video().blit_surface(minimap_x, minimap_y, game.mini_map);
@@ -171,12 +171,12 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 		font_color = font::DISABLED_COLOR;
 	}
 
-	const surface status_text(font::get_rendered_text(game.status,
+	const SDL_Surface status_text(font::get_rendered_text(game.status,
 	    font::SIZE_NORMAL, font_color));
 	const int status_text_width = status_text ? status_text->w : 0;
 
 	// First line: draw game name
-	const surface name_surf(font::get_rendered_text(
+	const SDL_Surface name_surf(font::get_rendered_text(
 	    font::make_text_ellipsis(game.name + no_era_string, font::SIZE_PLUS,
 	        (item_rect.x + item_rect.w) - xpos - margin_ - status_text_width - h_padding_),
 	    font::SIZE_PLUS, font_color));
@@ -193,7 +193,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	ypos = item_rect.y + item_rect.h/3 + margin_;
 
 	// Draw map info
-	const surface map_info_surf(font::get_rendered_text(
+	const SDL_Surface map_info_surf(font::get_rendered_text(
 	    font::make_text_ellipsis(game.map_info, font::SIZE_NORMAL,
 	        (item_rect.x + item_rect.w) - xpos - margin_),
 		font::SIZE_NORMAL, font::NORMAL_COLOR));
@@ -205,7 +205,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	ypos = item_rect.y + 2*item_rect.h/3 - margin_;
 
 	// Draw modifications info
-	const surface mod_info_surf(font::get_rendered_text(
+	const SDL_Surface mod_info_surf(font::get_rendered_text(
 	    font::make_text_ellipsis(game.mod_info, font::SIZE_NORMAL,
 	        (item_rect.x + item_rect.w) - xpos - margin_),
 		font::SIZE_NORMAL, font::NORMAL_COLOR));
@@ -217,7 +217,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	ypos = item_rect.y + item_rect.h  - margin_;
 
 	// Draw observer icon
-	const surface observer_icon(image::get_image(game.observers
+	const SDL_Surface observer_icon(image::get_image(game.observers
 	    ? observer_icon_locator_ : no_observer_icon_locator_));
 	if(observer_icon) {
 		video().blit_surface(xpos, ypos - observer_icon->h, observer_icon);
@@ -231,7 +231,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	// Draw shuffle icon
 	if (game.shuffle_sides)
 	{
-		const surface shuffle_icon(image::get_image(shuffle_sides_icon_locator_));
+		const SDL_Surface shuffle_icon(image::get_image(shuffle_sides_icon_locator_));
 		if(shuffle_icon) {
 			video().blit_surface(xpos, ypos - shuffle_icon->h/2, shuffle_icon);
 
@@ -240,7 +240,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	}
 
 	// Draw gold icon
-	const surface gold_icon(image::get_image(gold_icon_locator_));
+	const SDL_Surface gold_icon(image::get_image(gold_icon_locator_));
 	if(gold_icon) {
 		video().blit_surface(xpos, ypos - gold_icon->h/2, gold_icon);
 
@@ -248,7 +248,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	}
 
 	// Draw gold text
-	const surface gold_text(font::get_rendered_text(game.gold, font::SIZE_NORMAL,
+	const SDL_Surface gold_text(font::get_rendered_text(game.gold, font::SIZE_NORMAL,
 		game.use_map_settings ? font::GRAY_COLOR : font::NORMAL_COLOR));
 	if(gold_text) {
 		video().blit_surface(xpos, ypos - gold_text->h/2, gold_text);
@@ -257,7 +257,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	}
 
 	// Draw xp icon
-	const surface xp_icon(image::get_image(xp_icon_locator_));
+	const SDL_Surface xp_icon(image::get_image(xp_icon_locator_));
 	if(xp_icon) {
 		video().blit_surface(xpos, ypos - xp_icon->h/2, xp_icon);
 
@@ -265,7 +265,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	}
 
 	// Draw xp text
-	const surface xp_text(font::get_rendered_text(game.xp, font::SIZE_NORMAL, font::NORMAL_COLOR));
+	const SDL_Surface xp_text(font::get_rendered_text(game.xp, font::SIZE_NORMAL, font::NORMAL_COLOR));
 	if(xp_text) {
 		video().blit_surface(xpos, ypos - xp_text->h/2, xp_text);
 
@@ -274,13 +274,13 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 
 	if(!game.time_limit.empty()) {
 		// Draw time icon
-		const surface time_icon(image::get_image(time_limit_icon_locator_));
+		const SDL_Surface time_icon(image::get_image(time_limit_icon_locator_));
 		video().blit_surface(xpos, ypos - time_icon->h/2, time_icon);
 
 		xpos += time_icon->w + h_padding_;
 
 		// Draw time text
-		const surface time_text(font::get_rendered_text(game.time_limit,
+		const SDL_Surface time_text(font::get_rendered_text(game.time_limit,
 			font::SIZE_NORMAL, font::NORMAL_COLOR));
 		video().blit_surface(xpos, ypos - time_text->h/2, time_text);
 
@@ -288,7 +288,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	}
 
 	// Draw vision icon
-	const surface vision_icon(image::get_image(vision_icon_locator_));
+	const SDL_Surface vision_icon(image::get_image(vision_icon_locator_));
 	if(vision_icon) {
 		video().blit_surface(xpos, ypos - vision_icon->h/2, vision_icon);
 
@@ -296,7 +296,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	}
 
 	// Draw vision text
-	const surface vision_text(font::get_rendered_text(
+	const SDL_Surface vision_text(font::get_rendered_text(
 	    font::make_text_ellipsis(game.vision, font::SIZE_NORMAL,
 	        (item_rect.x + item_rect.w) - xpos - margin_),
 	    font::SIZE_NORMAL,
@@ -308,7 +308,7 @@ void gamebrowser::draw_row(const size_t index, const SDL_Rect& item_rect, ROW_TY
 	// Draw map settings text
 	if (game.use_map_settings) {
 		xpos += vision_text->w + 4 * h_padding_;
-		const surface map_settings_text(font::get_rendered_text(
+		const SDL_Surface map_settings_text(font::get_rendered_text(
 		    font::make_text_ellipsis(_("Use map settings"), font::SIZE_NORMAL,
 		        (item_rect.x + item_rect.w) - xpos - margin_),
 		    font::SIZE_NORMAL,
@@ -378,13 +378,13 @@ void gamebrowser::handle_event(const SDL_Event& event)
 			x = reinterpret_cast<long>(event.user.data1);
 			y = reinterpret_cast<long>(event.user.data2);
 		}
-		const SDL_Rect& loc = inner_location();
+		const SDL_Rect* loc = inner_location();
 
-		if(!games_.empty() && point_in_rect(x, y, loc)) {
+		if(!games_.empty() && is_point_in_rect(x, y, loc)) {
 			for(size_t i = visible_range_.first; i != visible_range_.second; ++i) {
-				const SDL_Rect& item_rect = get_item_rect(i);
+				const SDL_Rect* item_rect = get_item_rect(i);
 
-				if(point_in_rect(x, y, item_rect)) {
+				if(is_point_in_rect(x, y, item_rect)) {
 					set_focus(true);
 					selected_ = i;
 					break;
@@ -424,7 +424,7 @@ struct minimap_cache_item {
 	}
 
 	std::string map_data;
-	surface mini_map;
+	SDL_Surface mini_map;
 	std::string map_info_size;
 };
 
@@ -874,7 +874,7 @@ void lobby::hide_children(bool hide)
 	filter_text_.hide(hide);
 }
 
-void lobby::layout_children(const SDL_Rect& rect)
+void lobby::layout_children(const SDL_Rect* rect)
 {
 	ui::layout_children(rect);
 
@@ -961,9 +961,9 @@ void lobby::process_event()
 
 			std::string password;
 			if(join && game.password_required) {
-				const int res = gui::show_dialog(disp_, NULL, _("Password Required"),
+				const int res = gui::show_dialog(disp_, nullptr, _("Password Required"),
 				          _("Joining this game requires a password."),
-						  gui::OK_CANCEL, NULL, NULL, _("Password: "), &password);
+						  gui::OK_CANCEL, nullptr, nullptr, _("Password: "), &password);
 				if(res != 0) {
 					return;
 				}

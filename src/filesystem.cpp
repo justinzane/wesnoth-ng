@@ -135,7 +135,7 @@ void get_files_in_dir(const std::string &directory,
 
 		if (::stat(maincfg.c_str(), &st) != -1) {
 			LOG_FS << "_main.cfg found : " << maincfg << '\n';
-			if (files != NULL) {
+			if (files != nullptr) {
 				if (mode == ENTIRE_FILE_PATH)
 					files->push_back(maincfg);
 				else
@@ -147,22 +147,22 @@ void get_files_in_dir(const std::string &directory,
 
 	DIR* dir = opendir(directory.c_str());
 
-	if(dir == NULL) {
+	if(dir == nullptr) {
 		return;
 	}
 
 	struct dirent* entry;
-	while((entry = readdir(dir)) != NULL) {
+	while((entry = readdir(dir)) != nullptr) {
 		if(entry->d_name[0] == '.')
 			continue;
 #ifdef __APPLE__
 		// HFS Mac OS X decomposes filenames using combining unicode characters.
 		// Try to get the precomposed form.
 		char macname[MAXNAMLEN+1];
-		CFStringRef cstr = CFStringCreateWithCString(NULL,
+		CFStringRef cstr = CFStringCreateWithCString(nullptr,
 							 entry->d_name,
 							 kCFStringEncodingUTF8);
-		CFMutableStringRef mut_str = CFStringCreateMutableCopy(NULL,
+		CFMutableStringRef mut_str = CFStringCreateMutableCopy(nullptr,
 							 0, cstr);
 		CFStringNormalize(mut_str, kCFStringNormalizationFormC);
 		CFStringGetCString(mut_str,
@@ -191,13 +191,13 @@ void get_files_in_dir(const std::string &directory,
 				if(filter == SKIP_PBL_FILES && looks_like_pbl(basename)) {
 					continue;
 				}
-				if (files != NULL) {
+				if (files != nullptr) {
 					if (mode == ENTIRE_FILE_PATH)
 						files->push_back(fullname);
 					else
 						files->push_back(basename);
 				}
-				if (checksum != NULL) {
+				if (checksum != nullptr) {
 					if(st.st_mtime > checksum->modified) {
 						checksum->modified = st.st_mtime;
 					}
@@ -213,7 +213,7 @@ void get_files_in_dir(const std::string &directory,
 						::stat((fullname+"/"+maincfg_filename).c_str(), &st)!=-1 &&
 						S_ISREG(st.st_mode)) {
 					LOG_FS << "_main.cfg found : ";
-					if (files != NULL) {
+					if (files != nullptr) {
 						if (mode == ENTIRE_FILE_PATH) {
 							files->push_back(fullname + "/" + maincfg_filename);
 							LOG_FS << fullname << "/" << maincfg_filename << '\n';
@@ -225,7 +225,7 @@ void get_files_in_dir(const std::string &directory,
 					// Show what I consider strange
 						LOG_FS << fullname << "/" << maincfg_filename << " not used now but skip the directory \n";
 					}
-				} else if (dirs != NULL) {
+				} else if (dirs != nullptr) {
 					if (mode == ENTIRE_FILE_PATH)
 						dirs->push_back(fullname);
 					else
@@ -237,13 +237,13 @@ void get_files_in_dir(const std::string &directory,
 
 	closedir(dir);
 
-	if(files != NULL)
+	if(files != nullptr)
 		std::sort(files->begin(),files->end());
 
-	if (dirs != NULL)
+	if (dirs != nullptr)
 		std::sort(dirs->begin(),dirs->end());
 
-	if (files != NULL && reorder == DO_REORDER) {
+	if (files != nullptr && reorder == DO_REORDER) {
 		// move finalcfg_filename, if present, to the end of the vector
 		for (unsigned int i = 0; i < files->size(); i++) {
 			if (ends_with((*files)[i], "/" + finalcfg_filename)) {
@@ -370,7 +370,7 @@ std::string get_next_filename(const std::string& name, const std::string& extens
 std::string get_dir(const std::string& dir_path)
 {
 	DIR* dir = opendir(dir_path.c_str());
-	if(dir == NULL) {
+	if(dir == nullptr) {
 		const int res = mkdir(dir_path.c_str(),AccessMode);
 		if(res == 0) {
 			dir = opendir(dir_path.c_str());
@@ -379,7 +379,7 @@ std::string get_dir(const std::string& dir_path)
 		}
 	}
 
-	if(dir == NULL)
+	if(dir == nullptr)
 		return "";
 
 	closedir(dir);
@@ -444,7 +444,7 @@ std::string get_cwd()
 {
 	char buf[1024];
 	const char* const res = getcwd(buf,sizeof(buf));
-	if(res != NULL) {
+	if(res != nullptr) {
 		std::string str(res);
 
 #ifdef _WIN32
@@ -553,7 +553,7 @@ void set_preferences_dir(std::string path)
 		if(SHGetSpecialFolderPath) {
 			LOG_FS << "Using SHGetSpecialFolderPath to find My Documents\n";
 			char my_documents_path[MAX_PATH];
-			if(SHGetSpecialFolderPath(NULL, my_documents_path, 5, 1)) {
+			if(SHGetSpecialFolderPath(nullptr, my_documents_path, 5, 1)) {
 				std::string mygames_path = std::string(my_documents_path) + "/" + "My Games";
 				boost::algorithm::replace_all(mygames_path, std::string("\\"), std::string("/"));
 				create_directory_if_missing(mygames_path);
@@ -662,8 +662,8 @@ static void setup_user_data_dir()
 
 	const bool res = create_directory_if_missing(dir_path);
 	// probe read permissions (if we could make the directory)
-	DIR* const dir = res ? opendir(dir_path.c_str()) : NULL;
-	if(dir == NULL) {
+	DIR* const dir = res ? opendir(dir_path.c_str()) : nullptr;
+	if(dir == nullptr) {
 		ERR_FS << "could not open or create preferences directory at " << dir_path << '\n';
 		return;
 	}
@@ -787,7 +787,7 @@ void write_file(const std::string& fname, const std::string& data)
 {
 	//const util::scoped_resource<FILE*,close_FILE> file(fopen(fname.c_str(),"wb"));
 	const util::scoped_FILE file(fopen(fname.c_str(),"wb"));
-	if(file.get() == NULL) {
+	if(file.get() == nullptr) {
 		throw io_exception("Could not open file for writing: '" + fname + "'");
 	}
 
@@ -924,7 +924,7 @@ static void get_file_tree_checksum_internal(const std::string& path, file_tree_c
 {
 
 	std::vector<std::string> dirs;
-	get_files_in_dir(path,NULL,&dirs, ENTIRE_FILE_PATH, SKIP_MEDIA_DIR, DONT_REORDER, &res);
+	get_files_in_dir(path,nullptr,&dirs, ENTIRE_FILE_PATH, SKIP_MEDIA_DIR, DONT_REORDER, &res);
 	loadscreen::increment_progress();
 
 	for(std::vector<std::string>::const_iterator j = dirs.begin(); j != dirs.end(); ++j) {

@@ -20,7 +20,7 @@
 #define SHA1_H_INCLUDED
 
 #include <string>
-#include "SDL_types.h"
+#include "SDL2/SDL_types.h"
 
 class sha1_hash
 {

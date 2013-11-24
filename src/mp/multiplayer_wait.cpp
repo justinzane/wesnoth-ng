@@ -88,7 +88,7 @@ void wait::leader_preview_pane::draw_contents()
 {
 	bg_restore();
 
-	surface screen = video().getSurface();
+	SDL_Surface screen = video().getSurface();
 
 	SDL_Rect const &loc = location();
 	const SDL_Rect area = create_rect(loc.x + leader_pane_border,
@@ -131,12 +131,12 @@ void wait::leader_preview_pane::draw_contents()
 
 	SDL_Rect image_rect = {area.x,area.y,0,0};
 
-	surface unit_image(image::get_image(image));
+	SDL_Surface unit_image(image::get_image(image));
 
 	if (!unit_image.null()) {
 		image_rect.w = unit_image->w;
 		image_rect.h = unit_image->h;
-		sdl_blit(unit_image, NULL, screen, &image_rect);
+		SDL_BlitSurface(unit_image, nullptr, screen, &image_rect);
 	}
 
 	font::draw_text(&video(), area, font::SIZE_PLUS, font::NORMAL_COLOR,
@@ -192,7 +192,7 @@ wait::wait(game_display& disp, const config& cfg, game_state& state,
 	ui(disp, _("Game Lobby"), cfg, c, gamelist),
 	cancel_button_(disp.video(), first_scenario ? _("Cancel") : _("Quit")),
 	start_label_(disp.video(), _("Waiting for game to start..."), font::SIZE_SMALL, font::LOBBY_COLOR),
-	game_menu_(disp.video(), std::vector<std::string>(), false, -1, -1, NULL, &gui::menu::bluebg_style),
+	game_menu_(disp.video(), std::vector<std::string>(), false, -1, -1, nullptr, &gui::menu::bluebg_style),
 	level_(),
 	state_(state),
 	first_scenario_(first_scenario),
@@ -259,7 +259,7 @@ void wait::join_game(bool observe)
 		//(i.e. we're loading from a saved game), then prefer to get the side
 		//with the same description as our login. Otherwise just choose the first
 		//available side.
-		const config *side_choice = NULL;
+		const config *side_choice = nullptr;
 		int side_num = -1, nb_sides = 0;
 		foreach_ng(const config &sd, level_.child_range("side"))
 		{
@@ -346,7 +346,7 @@ void wait::join_game(bool observe)
 			leader_preview_pane leader_selector(disp(), flg, color);
 			preview_panes.push_back(&leader_selector);
 
-			const int faction_choice = gui::show_dialog(disp(), NULL,
+			const int faction_choice = gui::show_dialog(disp(), nullptr,
 				_("Choose your faction:"), _("Starting position: ") +
 				lexical_cast<std::string>(side_num + 1), gui::OK_CANCEL,
 				&choices, &preview_panes);
@@ -405,7 +405,7 @@ void wait::start_game()
 	LOG_NW << "starting game\n";
 }
 
-void wait::layout_children(const SDL_Rect& rect)
+void wait::layout_children(const SDL_Rect* rect)
 {
 	ui::layout_children(rect);
 

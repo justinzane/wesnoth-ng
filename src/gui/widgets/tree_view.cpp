@@ -45,10 +45,10 @@ ttree_view::ttree_view(const std::vector<tnode_definition>& node_definitions)
 	, root_node_(new ttree_view_node(
 		  "root"
 		, node_definitions_
-		, NULL
+		, nullptr
 		, *this
 		, std::map<std::string, string_map>()))
-	, selected_item_(NULL)
+	, selected_item_(nullptr)
 	, selection_change_callback_()
 {
 	connect_signal<event::LEFT_BUTTON_DOWN>(

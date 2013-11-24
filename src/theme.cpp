@@ -219,7 +219,7 @@ static void expand_partialresolution(config& dst_cfg, const config& top_cfg)
 	return;
 }
 
-static void do_resolve_rects(const config& cfg, config& resolved_config, config* resol_cfg = NULL) {
+static void do_resolve_rects(const config& cfg, config& resolved_config, config* resol_cfg = nullptr) {
 
 		// recursively resolve children
 		foreach_ng(const config::any_child &value, cfg.all_children_range()) {
@@ -233,7 +233,7 @@ static void do_resolve_rects(const config& cfg, config& resolved_config, config*
 
 		// override default reference rect with "ref" parameter if any
 		if (!cfg["ref"].empty()) {
-			if (resol_cfg == NULL) {
+			if (resol_cfg == nullptr) {
 				ERR_DP << "Use of ref= outside a [resolution] block\n";
 			} else {
 				//DBG_DP << ">> Looking for " << cfg["ref"] << "\n";
@@ -319,7 +319,7 @@ theme::tborder::tborder(const config& cfg) :
 	VALIDATE(size >= 0.0 && size <= 0.5, _("border_size should be between 0.0 and 0.5."));
 }
 
-SDL_Rect& theme::object::location(const SDL_Rect& screen) const
+SDL_Rect* theme::object::location(const SDL_Rect* screen) const
 {
 	if(last_screen_ == screen && !location_modified_)
 		return relative_loc_;
@@ -588,7 +588,7 @@ const std::string theme::action::tooltip(size_t index) const {
 	return result.str();
 }
 
-theme::theme(const config& cfg, const SDL_Rect& screen) :
+theme::theme(const config& cfg, const SDL_Rect* screen) :
 	theme_reset_event_("theme_reset"),
 	cur_theme(),
 	cfg_(),
@@ -610,12 +610,12 @@ theme::theme(const config& cfg, const SDL_Rect& screen) :
 	set_resolution(screen);
 }
 
-bool theme::set_resolution(const SDL_Rect& screen)
+bool theme::set_resolution(const SDL_Rect* screen)
 {
 	bool result = false;
 
 	int current_rating = 1000000;
-	const config *current = NULL;
+	const config *current = nullptr;
 	foreach_ng(const config &i, cfg_.child_range("resolution"))
 	{
 		int width = i["width"];
@@ -883,7 +883,7 @@ const theme::status_item* theme::get_status_item(const std::string& key) const
 	if(i != status_.end())
 		return &i->second;
 	else
-		return NULL;
+		return nullptr;
 }
 
 std::map<std::string, config> theme::known_themes;
@@ -916,7 +916,7 @@ const theme::menu *theme::get_menu_item(const std::string &key) const
 	foreach_ng(const theme::menu &m, menus_) {
 		if (m.get_id() == key) return &m;
 	}
-	return NULL;
+	return nullptr;
 }
 
 const theme::action *theme::get_action_item(const std::string &key) const
@@ -924,12 +924,12 @@ const theme::action *theme::get_action_item(const std::string &key) const
 	foreach_ng(const theme::action &a, actions_) {
 		if (a.get_id() == key) return &a;
 	}
-	return NULL;
+	return nullptr;
 }
 
 theme::object* theme::refresh_title(const std::string& id, const std::string& new_title){
 
-	theme::object* res = NULL;
+	theme::object* res = nullptr;
 
 	for (std::vector<theme::action>::iterator a = actions_.begin(); a != actions_.end(); ++a){
 		if (a->get_id() == id) {

@@ -461,7 +461,7 @@ public:
 
 	static factory_map& get_list() {
 		static factory_map *aspect_factories;
-		if (aspect_factories==NULL) {
+		if (aspect_factories==nullptr) {
 			aspect_factories = new factory_map;
 		}
 		return *aspect_factories;
@@ -504,7 +504,7 @@ public:
 
 	static factory_map& get_list() {
 		static factory_map *aspect_factories;
-		if (aspect_factories==NULL) {
+		if (aspect_factories==nullptr) {
 			aspect_factories = new factory_map;
 		}
 		return *aspect_factories;

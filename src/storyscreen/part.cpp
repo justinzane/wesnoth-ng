@@ -70,11 +70,11 @@ void floating_image::assign(const floating_image& fi)
 	autoscaled_ = fi.autoscaled_; centered_ = fi.centered_;
 }
 
-floating_image::render_input floating_image::get_render_input(double xscale, double yscale, SDL_Rect& dst_rect) const
+floating_image::render_input floating_image::get_render_input(double xscale, double yscale, SDL_Rect* dst_rect) const
 {
 	render_input ri = {
 		{0,0,0,0},
-		file_.empty() ? NULL : image::get_image(file_)
+		file_.empty() ? nullptr : image::get_image(file_)
 	};
 
 	if(!ri.image.null()) {

@@ -257,7 +257,7 @@ double situation::get_battle_score(const unit& attacker, const unit& defender, c
 	int nb_sol = 0;
 	double weight = attacker.hitpoints() / attacker.max_hitpoints();
 
-	battle_context bc(*resources::units, att_loc, def_loc, -1, -1, 0.5, NULL, &attacker);
+	battle_context bc(*resources::units, att_loc, def_loc, -1, -1, 0.5, nullptr, &attacker);
 
 	std::vector<double> hp_dist = bc.get_defender_combatant().hp_dist;
 

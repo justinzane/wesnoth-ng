@@ -69,7 +69,7 @@ public:
 		 *                        definition, this parameter contains the values
 		 *                        for these formulas.
 		 */
-		virtual void draw(surface& canvas
+		virtual void draw(SDL_Surface& canvas
 				, const game_logic::map_formula_callable& variables) = 0;
 	};
 
@@ -92,10 +92,10 @@ public:
 	 * It makes sure the image on the canvas is up to date. Also executes the
 	 * pre-blitting functions.
 	 *
-	 * @param surf                The surface to blit upon.
+	 * @param surf                The SDL_Surface to blit upon.
 	 * @param rect                The place to blit to.
 	 */
-	void blit(surface& surf, SDL_Rect rect);
+	void blit(SDL_Surface& surf, SDL_Rect rect);
 
 	/**
 	 * Sets the config.
@@ -114,7 +114,7 @@ public:
 	void set_height(const unsigned height) { h_ = height; set_is_dirty(true); }
 	unsigned get_height() const { return h_; }
 
-	surface& surf() { return canvas_; }
+	SDL_Surface& surf() { return canvas_; }
 
 	void set_variable(const std::string& key, const variant& value)
 	{
@@ -142,8 +142,8 @@ private:
 	/** Height of the canvas. */
 	unsigned h_;
 
-	/** The surface we draw all items on. */
-	surface canvas_;
+	/** The SDL_Surface we draw all items on. */
+	SDL_Surface canvas_;
 
 	/** The variables of the canvas. */
 	game_logic::map_formula_callable variables_;

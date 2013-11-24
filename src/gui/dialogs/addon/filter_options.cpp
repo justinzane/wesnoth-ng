@@ -170,7 +170,7 @@ void taddon_filter_options::toggle_sort_callback(ttoggle_button* active)
 {
 	FOREACH(const AUTO& e, sort_tgroup_) {
 		ttoggle_button* const b = e.first;
-		if(b == NULL) {
+		if(b == nullptr) {
 			continue;
 		}
 		else if(b == active && !b->get_value()) {
@@ -189,7 +189,7 @@ void taddon_filter_options::toggle_dir_callback(ttoggle_button* active)
 {
 	FOREACH(const AUTO& e, dir_tgroup_) {
 		ttoggle_button* const b = e.first;
-		if(b == NULL) {
+		if(b == nullptr) {
 			continue;
 		}
 		else if(b == active && !b->get_value()) {

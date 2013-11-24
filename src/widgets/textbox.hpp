@@ -33,8 +33,8 @@ public:
 	virtual ~textbox();
 
 	const std::string text() const;
-	void set_text(const std::string& text, const SDL_Color& color =font::NORMAL_COLOR);
-	void append_text(const std::string& text,bool auto_scroll = false, const SDL_Color& color =font::NORMAL_COLOR);
+	void set_text(const std::string& text, const SDL_Color* color =font::NORMAL_COLOR);
+	void append_text(const std::string& text,bool auto_scroll = false, const SDL_Color* color =font::NORMAL_COLOR);
 	void clear();
 
 	void set_editable(bool value);
@@ -76,7 +76,7 @@ private:
 	//the cursor should be inverted every 500 ms.
 	//this will be reset when keyboard input events occur
 	int show_cursor_at_;
-	surface text_image_;
+	SDL_Surface text_image_;
 
 	bool wrap_;
 
@@ -94,14 +94,14 @@ private:
 	void pass_event_to_target(const SDL_Event& event);
 
 	void draw_cursor(int pos, CVideo &video) const;
-	void update_text_cache(bool reset = false, const SDL_Color& color =font::NORMAL_COLOR);
-	surface add_text_line(const wide_string& text, const SDL_Color& color =font::NORMAL_COLOR);
+	void update_text_cache(bool reset = false, const SDL_Color* color =font::NORMAL_COLOR);
+	SDL_Surface add_text_line(const wide_string& text, const SDL_Color* color =font::NORMAL_COLOR);
 	bool is_selection();
 	void erase_selection();
 
 	//make it so that only one textbox object can be receiving
 	//events at a time.
-	bool requires_event_focus(const SDL_Event *event=NULL) const;
+	bool requires_event_focus(const SDL_Event *event=nullptr) const;
 
 	bool show_scrollbar() const;
 };

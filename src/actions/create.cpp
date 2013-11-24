@@ -168,7 +168,7 @@ map_location unit_creator::find_location(const config &cfg, const unit* pass_che
 		if(loc.valid() && resources::game_map->on_board(loc)) {
 			if ( place != "map_overwrite" ) {
 				loc = find_vacant_tile(loc, pathfind::VACANT_ANY,
-				                       pass ? pass_check : NULL);
+				                       pass ? pass_check : nullptr);
 			}
 			if(loc.valid() && resources::game_map->on_board(loc)) {
 				return loc;
@@ -238,7 +238,7 @@ void unit_creator::post_create(const map_location &loc, const unit &new_unit, bo
 		preferences::encountered_units().insert(new_unit.type_id());
 	}
 
-	bool show = show_ && (resources::screen !=NULL) && !resources::screen->fogged(loc);
+	bool show = show_ && (resources::screen !=nullptr) && !resources::screen->fogged(loc);
 	bool animate = show && anim;
 
 	if (get_village_) {
@@ -247,7 +247,7 @@ void unit_creator::post_create(const map_location &loc, const unit &new_unit, bo
 		}
 	}
 
-	if (resources::screen!=NULL) {
+	if (resources::screen!=nullptr) {
 
 		if (invalidate_ ) {
 			resources::screen->invalidate(loc);
@@ -275,7 +275,7 @@ bool can_recruit_from(const map_location& leader_loc, int side)
 	if( !map.is_keep(leader_loc) )
 		return false;
 
-	if ( side < 1  ||  resources::teams == NULL  ||
+	if ( side < 1  ||  resources::teams == nullptr  ||
 	     resources::teams->size() < static_cast<size_t>(side) ) {
 		// Invalid side specified.
 		// Currently this cannot happen, but it could conceivably be used in
@@ -284,7 +284,7 @@ bool can_recruit_from(const map_location& leader_loc, int side)
  		return false;
 	}
 
-	return pathfind::find_vacant_tile(leader_loc, pathfind::VACANT_CASTLE, NULL,
+	return pathfind::find_vacant_tile(leader_loc, pathfind::VACANT_CASTLE, nullptr,
 	                                  &(*resources::teams)[side-1])
 	       != map_location::null_location;
 }
@@ -305,7 +305,7 @@ bool can_recruit_on(const map_location& leader_loc, const map_location& recruit_
 	if( !map.is_keep(leader_loc) )
 		return false;
 
-	if ( side < 1  ||  resources::teams == NULL  ||
+	if ( side < 1  ||  resources::teams == nullptr  ||
 	     resources::teams->size() < static_cast<size_t>(side) ) {
 		// Invalid side specified.
 		// Currently this cannot happen, but it could conceivably be used in
@@ -318,7 +318,7 @@ bool can_recruit_on(const map_location& leader_loc, const map_location& recruit_
 	if ( view_team.shrouded(recruit_loc) )
 		return false;
 
-	if ( get_visible_unit(recruit_loc, view_team) != NULL )
+	if ( get_visible_unit(recruit_loc, view_team) != nullptr )
 		return false;
 
 	castle_cost_calculator calc(map, view_team);
@@ -407,7 +407,7 @@ namespace { // Helpers for get_recalls()
 	 */
 	void add_leader_filtered_recalls(const unit & leader,
 	                                 std::vector<const unit*> & result,
-	                                 std::set<size_t> * already_added = NULL)
+	                                 std::set<size_t> * already_added = nullptr)
 	{
 		const team& leader_team = (*resources::teams)[leader.side()-1];
 		const std::vector<unit>& recall_list = leader_team.recall_list();
@@ -425,7 +425,7 @@ namespace { // Helpers for get_recalls()
 				if ( recall_unit.matches_filter(vconfig(leader.recall_filter()), map_location::null_location) )
 				{
 					result.push_back(&recall_unit);
-					if ( already_added != NULL )
+					if ( already_added != nullptr )
 						already_added->insert(underlying_id);
 				}
 			}
@@ -777,7 +777,7 @@ namespace { // Helpers for place_recruit()
 	void recruit_checksums(const unit &new_unit, bool wml_triggered)
 	{
 		const config* ran_results = get_random_results();
-		if ( ran_results != NULL ) {
+		if ( ran_results != nullptr ) {
 			// When recalling from WML there should be no random results, if we
 			// use random we might get the replay out of sync.
 			assert(!wml_triggered);
@@ -898,7 +898,7 @@ bool place_recruit(const unit &u, const map_location &recruit_location, const ma
 	}
 	// Make sure the unit appears (if either !show or the animation is suppressed).
 	new_unit_itor->set_hidden(false);
-	if ( resources::screen != NULL ) {
+	if ( resources::screen != nullptr ) {
 		resources::screen->invalidate(current_loc);
 		resources::screen->redraw_minimap();
 	}
@@ -962,7 +962,7 @@ void recruit_unit(const unit_type & u_type, int side_num, const map_location & l
 	}
 
 	// Update the screen.
-	if ( resources::screen != NULL )
+	if ( resources::screen != nullptr )
 		resources::screen->invalidate_game_status();
 		// Other updates were done by place_recruit().
 
@@ -1012,7 +1012,7 @@ bool recall_unit(const std::string & id, team & current_team,
 	}
 
 	// Update the screen.
-	if ( resources::screen != NULL )
+	if ( resources::screen != nullptr )
 		resources::screen->invalidate_game_status();
 		// Other updates were done by place_recruit().
 

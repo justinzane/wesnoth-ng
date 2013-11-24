@@ -73,7 +73,7 @@ void swap_grid(tgrid* grid,
 	widget->set_id(id);
 
 	// Get the container containing the wanted widget.
-	tgrid* parent_grid = NULL;
+	tgrid* parent_grid = nullptr;
 	if(grid) {
 		parent_grid = find_widget<tgrid>(grid, id, false, false);
 	}
@@ -98,9 +98,9 @@ void tstacked_widget::finalize(
 	assert(generator_);
 	string_map empty_data;
 	FOREACH(const AUTO& builder, widget_builder) {
-		generator_->create_item(-1, builder, empty_data, NULL);
+		generator_->create_item(-1, builder, empty_data, nullptr);
 	}
-	swap_grid(NULL, &grid(), generator_, "_content_grid");
+	swap_grid(nullptr, &grid(), generator_, "_content_grid");
 
 	for(size_t i = 0; i < generator_->get_item_count(); ++i) {
 		generator_->select_item(i, true);

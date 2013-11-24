@@ -38,7 +38,7 @@ static lg::log_domain log_engine("engine");
 #define WRN_NG LOG_STREAM(warn, log_engine)
 
 terrain_builder::building_ruleset terrain_builder::building_rules_;
-const config* terrain_builder::rules_cfg_ = NULL;
+const config* terrain_builder::rules_cfg_ = nullptr;
 
 terrain_builder::rule_image::rule_image(int layer, int x, int y, bool global_image, int cx, int cy) :
 	layer(layer),
@@ -230,7 +230,7 @@ const terrain_builder::imagelist *terrain_builder::get_terrain_at(const map_loca
 		const std::string &tod, const TERRAIN_TYPE terrain_type)
 {
 	if(!tile_map_.on_map(loc))
-		return NULL;
+		return nullptr;
 
 	tile& tile_at = tile_map_[loc];
 
@@ -246,7 +246,7 @@ const terrain_builder::imagelist *terrain_builder::get_terrain_at(const map_loca
 		return &img_list;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 bool terrain_builder::update_animation(const map_location &loc)
@@ -638,7 +638,7 @@ terrain_builder::terrain_constraint &terrain_builder::add_constraints(
 		const map_location& loc,
 		const t_translation::t_match& type, const config& global_images)
 {
-	terrain_constraint *cons = NULL;
+	terrain_constraint *cons = nullptr;
 	foreach_ng(terrain_constraint &c, constraints) {
 		if (c.loc == loc) {
 			cons = &c;
@@ -1046,7 +1046,7 @@ void terrain_builder::build_terrains()
 		// and later try to apply the rule only on them
 		size_t min_size = INT_MAX;
 		t_translation::t_list min_types;
-		const terrain_constraint *min_constraint = NULL;
+		const terrain_constraint *min_constraint = nullptr;
 
 		foreach_ng(const terrain_constraint &constraint, rule.constraints)
 		{
@@ -1103,5 +1103,5 @@ terrain_builder::tile* terrain_builder::get_tile(const map_location &loc)
 {
 	if(tile_map_.on_map(loc))
 		return &(tile_map_[loc]);
-	return NULL;
+	return nullptr;
 }

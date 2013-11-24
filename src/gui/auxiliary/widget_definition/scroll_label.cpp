@@ -36,7 +36,7 @@ tscroll_label_definition::tscroll_label_definition(const config& cfg)
 
 tscroll_label_definition::tresolution::tresolution(const config& cfg)
 	: tresolution_definition_(cfg)
-	, grid(NULL)
+	, grid(nullptr)
 {
 /*WIKI
  * @page = GUIWidgetDefinitionWML

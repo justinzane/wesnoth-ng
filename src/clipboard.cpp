@@ -23,7 +23,7 @@
 #include "clipboard.hpp"
 #include <algorithm>
 
-#include <SDL_version.h>
+#include <SDL2/SDL_version.h>
 
 #if SDL_VERSION_ATLEAST(2,0,0)
 
@@ -61,7 +61,7 @@ void handle_system_event(const SDL_Event& /*event*/)
 
 #define CLIPBOARD_FUNCS_DEFINED
 
-#include "SDL_syswm.h"
+#include "SDL2/SDL_syswm.h"
 
 #include <unistd.h>
 
@@ -419,7 +419,7 @@ void copy_to_clipboard(const std::string& text, const bool)
 {
 	if(text.empty())
 		return;
-	if(!OpenClipboard(NULL))
+	if(!OpenClipboard(nullptr))
 		return;
 	EmptyClipboard();
 
@@ -437,7 +437,7 @@ void copy_to_clipboard(const std::string& text, const bool)
 	}
 
 	const HGLOBAL hglb = GlobalAlloc(GMEM_MOVEABLE, (str.size() + 1) * sizeof(TCHAR));
-	if(hglb == NULL) {
+	if(hglb == nullptr) {
 		CloseClipboard();
 		return;
 	}
@@ -452,16 +452,16 @@ std::string copy_from_clipboard(const bool)
 {
 	if(!IsClipboardFormatAvailable(CF_TEXT))
 		return "";
-	if(!OpenClipboard(NULL))
+	if(!OpenClipboard(nullptr))
 		return "";
 
 	HGLOBAL hglb = GetClipboardData(CF_TEXT);
-	if(hglb == NULL) {
+	if(hglb == nullptr) {
 		CloseClipboard();
 		return "";
 	}
 	char const * buffer = reinterpret_cast<char*>(GlobalLock(hglb));
-	if(buffer == NULL) {
+	if(buffer == nullptr) {
 		CloseClipboard();
 		return "";
 	}
@@ -501,13 +501,13 @@ std::string copy_from_clipboard(const bool)
 {
 	const char* data;
 	ssize_t size;
-	BMessage *clip = NULL;
+	BMessage *clip = nullptr;
 	if (be_clipboard->Lock())
 	{
 		clip = be_clipboard->Data();
 		be_clipboard->Unlock();
 	}
-	if (clip != NULL && clip->FindData("text/plain", B_MIME_TYPE, (const void**)&data, &size) == B_OK)
+	if (clip != nullptr && clip->FindData("text/plain", B_MIME_TYPE, (const void**)&data, &size) == B_OK)
 		return (const char*)data;
 	else
 		return "";
@@ -535,7 +535,7 @@ void copy_to_clipboard(const std::string& text, const bool)
 	OSStatus err = noErr;
 	PasteboardRef clipboard;
 	PasteboardSyncFlags syncFlags;
-	CFDataRef textData = NULL;
+	CFDataRef textData = nullptr;
 	err = PasteboardCreate(kPasteboardClipboard, &clipboard);
 	if (err != noErr) return;
 	err = PasteboardClear(clipboard);

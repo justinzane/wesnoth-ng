@@ -87,7 +87,7 @@ struct user_info
 {
 	explicit user_info(const config& c);
 
-	void update_state(int selected_game_id, const room_info* current_room = NULL);
+	void update_state(int selected_game_id, const room_info* current_room = nullptr);
 	void update_relation();
 
 	enum user_relation { FRIEND, ME, NEUTRAL, IGNORED };
@@ -113,7 +113,7 @@ struct game_info
 	bool can_join() const;
 	bool can_observe() const;
 
-	surface mini_map;
+	SDL_Surface mini_map;
 	int id;
 	std::string map_data;
 	std::string name;

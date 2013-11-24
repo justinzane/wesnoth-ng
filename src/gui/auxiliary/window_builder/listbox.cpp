@@ -46,9 +46,9 @@ tbuilder_listbox::tbuilder_listbox(const config& cfg)
 			get_scrollbar_mode(cfg["vertical_scrollbar_mode"]))
 	, horizontal_scrollbar_mode(
 			get_scrollbar_mode(cfg["horizontal_scrollbar_mode"]))
-	, header(NULL)
-	, footer(NULL)
-	, list_builder(NULL)
+	, header(nullptr)
+	, footer(nullptr)
+	, list_builder(nullptr)
 	, list_data()
 {
 	if(const config &h = cfg.child("header")) {

@@ -193,7 +193,7 @@ extern replay recorder;
 
 //replays up to one turn from the recorder object
 //returns true if it got to the end of the turn without data running out
-bool do_replay(int side_num, replay *obj = NULL);
+bool do_replay(int side_num, replay *obj = nullptr);
 
 bool do_replay_handle(int side_num, const std::string &do_untill);
 

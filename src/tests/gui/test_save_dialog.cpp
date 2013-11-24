@@ -31,7 +31,7 @@
 #include "unit/unit_types.hpp"
 //
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 #include "tests/utils/fake_event_source.hpp"
 #include "tests/utils/fake_display.hpp"

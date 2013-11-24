@@ -25,7 +25,7 @@
 #include "tools/exploder_utils.hpp"
 #include "tests/test_sdl_utils.hpp"
 
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 #include <boost/bind.hpp>
 #include "global.hpp"
@@ -51,7 +51,7 @@ show_usage()
 static surface
 create_image_base(const std::string& filename)
 {
-	surface result = SDL_CreateRGBSurface(
+	SDL_Surface result = SDL_CreateRGBSurface(
 			  SDL_SWSURFACE
 			, 1024
 			, 1024
@@ -82,7 +82,7 @@ create_image_base(const std::string& filename)
 
 static void
 create_image_blend_functor(
-		  const surface& dst
+		  const SDL_Surface& dst
 		, const std::string root
 		, const Uint8 amount
 		, const Uint32 color)
@@ -93,14 +93,14 @@ create_image_blend_functor(
 }
 
 static void
-create_image_blend(const surface& src, const std::string& root)
+create_image_blend(const SDL_Surface& src, const std::string& root)
 {
 	blend_image(
 			  src
 			, boost::bind(&create_image_blend_functor, _1, root, _2, _3));
 }
 
-typedef void (*tfunctor) (const surface&, const std::string&);
+typedef void (*tfunctor) (const SDL_Surface*, const std::string&);
 typedef std::pair<std::string, tfunctor> tcreator;
 
 static const tcreator creators[] =
@@ -142,7 +142,7 @@ main(int argc, char* argv[])
 	}
 
 	try {
-		const surface base_image = create_image_base(root + "/base.png");
+		const SDL_Surface base_image = create_image_base(root + "/base.png");
 
 		foreach_ng(const tcreator& creator, creators) {
 			creator.second(base_image, root + creator.first);

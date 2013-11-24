@@ -19,7 +19,7 @@
 #define FONT_HPP_INCLUDED
 
 #include "exceptions.hpp"
-#include "SDL_ttf.h"
+#include "SDL2/SDL_ttf.h"
 
 #include "sdl_utils.hpp"
 
@@ -74,11 +74,11 @@ inline int relative_size(int size)
 	return (SIZE_NORMAL * size / 14);
 }
 
-// Returns a SDL surface containing the text rendered in a given color.
-surface get_rendered_text(const std::string& text, int size, const SDL_Color& color, int style=0);
+// Returns a SDL SDL_Surface containing the text rendered in a given color.
+SDL_Surface get_rendered_text(const std::string& text, int size, const SDL_Color* color, int style=0);
 
-SDL_Rect draw_text_line(surface gui_surface, const SDL_Rect& area, int size,
-						const SDL_Color& color, const std::string& text,
+SDL_Rect draw_text_line(SDL_Surface gui_surface, const SDL_Rect* area, int size,
+						const SDL_Color* color, const std::string& text,
 						int x, int y, bool use_tooltips, int style);
 
 // Returns the maximum height of a font, in pixels
@@ -137,26 +137,25 @@ public:
 		lifetime_ = lifetime;
 		alpha_change_ = -255 / lifetime_;
 	}
-	void set_color(const SDL_Color& color) {color_ = color;}
-	void set_bg_color(const SDL_Color& bg_color) {
+	void set_color(const SDL_Color* color) {color_ = color;}
+	void set_bg_color(const SDL_Color* bg_color) {
 		bgcolor_ = bg_color;
-		bgalpha_ = bg_color.unused;
 	}
 	void set_border_size(int border) {border_ = border;}
 	// set width for word wrapping (use -1 to disable it)
 	void set_width(int w) {width_ = w;}
 	void set_height(int h) { height_ = h; }
-	void set_clip_rect(const SDL_Rect& r) {clip_rect_ = r;}
+	void set_clip_rect(const SDL_Rect* r) {clip_rect_ = r;}
 	void set_alignment(ALIGN align) {align_ = align;}
 	void set_scroll_mode(LABEL_SCROLL_MODE scroll) {scroll_ = scroll;}
 	void use_markup(bool b) {use_markup_ = b;}
 
 	void move(double xmove, double ymove);
 
-	void draw(surface screen);
-	void undraw(surface screen);
+	void draw(SDL_Surface screen);
+	void undraw(SDL_Surface screen);
 
-	surface create_surface();
+	SDL_Surface create_surface();
 
 	bool expired() const { return lifetime_ == 0; }
 
@@ -168,7 +167,7 @@ private:
 
 	int xpos(size_t width) const;
 
-	surface surf_, buf_;
+	SDL_Surface surf_, buf_;
 	std::string text_;
 	int font_size_;
 	SDL_Color color_, bgcolor_;
@@ -206,8 +205,8 @@ void show_floating_label(int handle, bool show);
 
 SDL_Rect get_floating_label_rect(int handle);
 
-void draw_floating_labels(surface screen);
-void undraw_floating_labels(surface screen);
+void draw_floating_labels(SDL_Surface screen);
+void undraw_floating_labels(SDL_Surface screen);
 
 bool load_font_config();
 

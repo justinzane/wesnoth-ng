@@ -34,7 +34,7 @@ namespace implementation {
 
 tbuilder_multi_page::tbuilder_multi_page(const config& cfg)
 	: implementation::tbuilder_control(cfg)
-	, builder(NULL)
+	, builder(nullptr)
 	, data()
 {
 	const config &page = cfg.child("page_definition");

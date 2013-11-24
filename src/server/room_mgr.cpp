@@ -48,7 +48,7 @@ const char* const room_manager::lobby_name_ = "lobby";
 
 room_manager::room_manager(player_map &all_players)
 	: all_players_(all_players)
-	, lobby_(NULL)
+	, lobby_(nullptr)
 	, rooms_by_name_()
 	, rooms_by_player_()
 	, player_stored_rooms_()
@@ -115,7 +115,7 @@ void room_manager::read_rooms()
 		}
 	}
 	lobby_ = get_room(lobby_name_);
-	if (lobby_ == NULL) {
+	if (lobby_ == nullptr) {
 		lobby_ = create_room(lobby_name_);
 		lobby_->set_persistent(true);
 		lobby_->set_logged(true);
@@ -150,7 +150,7 @@ room* room_manager::get_room(const std::string &name)
 	if (i != rooms_by_name_.end()) {
 		return i->second;
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -163,7 +163,7 @@ room* room_manager::create_room(const std::string &name)
 {
 	if (room_exists(name)) {
 		DBG_LOBBY << "Requested creation of already existing room '" << name << "'\n";
-		return NULL;
+		return nullptr;
 	}
 	room* r = new room(name);
 	rooms_by_name_.insert(std::make_pair(name, r));
@@ -173,7 +173,7 @@ room* room_manager::create_room(const std::string &name)
 room* room_manager::get_create_room(const std::string &name, network::connection player)
 {
 	room* r = get_room(name);
-	if (r == NULL) {
+	if (r == nullptr) {
 		bool can_create = false;
 		switch (new_room_policy_) {
 			case PP_EVERYONE:
@@ -203,7 +203,7 @@ room* room_manager::get_create_room(const std::string &name, network::connection
 			r = create_room(name);
 		} else {
 			lobby_->send_server_message("The room does not exist", player);
-			return NULL;
+			return nullptr;
 		}
 	}
 	return r;
@@ -263,13 +263,13 @@ room* room_manager::require_room(const std::string& room_name,
                                    const char *log_string)
 {
 	room* r = get_room(room_name);
-	if (r == NULL) {
+	if (r == nullptr) {
 		lobby_->send_server_message("The room does not exist", user->first);
 		WRN_LOBBY << "Player " << user->second.name()
 			<< " (conn " << user->first << ")"
 			<< " attempted to " << log_string
 			<< "a nonexistent room '" << room_name << "'\n";
-		return NULL;
+		return nullptr;
 	}
 	return r;
 }
@@ -279,14 +279,14 @@ room* room_manager::require_member(const std::string& room_name,
                                    const char *log_string)
 {
 	room* r = require_room(room_name, user, log_string);
-	if (r == NULL) return NULL;
+	if (r == nullptr) return nullptr;
 	if (!r->is_member(user->first)) {
 		lobby_->send_server_message("You are not a member of this room", user->first);
 		WRN_LOBBY << "Player " << user->second.name()
 			<< " (conn " << user->first << ")"
 			<< " attempted to " << log_string
 			<< "room '" << room_name << "', but is not a member of that room\n";
-		return NULL;
+		return nullptr;
 	}
 	return r;
 }
@@ -345,7 +345,7 @@ void room_manager::unstore_player_rooms(const player_map::iterator user)
 	join_msg.set_attr_dup("player", user->second.name().c_str());
 	foreach_ng(const std::string& room_name, it->second) {
 		room* r = get_create_room(room_name, user->first);
-		if (r == NULL) {
+		if (r == nullptr) {
 			LOG_LOBBY << "Player " << user->second.name() << " unable to rejoin room " << room_name << "\n";
 			continue;
 		}
@@ -367,7 +367,7 @@ void room_manager::process_message(simple_wml::document &data, const player_map:
 	std::string room_name = message->attr("room").to_string();
 	if (room_name.empty()) room_name = lobby_name_;
 	room* r = require_member(room_name, user, "message");
-	if (r == NULL) {
+	if (r == nullptr) {
 		std::stringstream ss;
 		ss << "You are not a member of the room '" << room_name << "'. "
 			<< "Your message has not been relayed.";
@@ -402,7 +402,7 @@ void room_manager::process_room_join(simple_wml::document &data, const player_ma
 	assert(msg);
 	std::string room_name = msg->attr("room").to_string();
 	room* r = get_create_room(room_name, user->first);
-	if (r == NULL) {
+	if (r == nullptr) {
 		return;
 	}
 	if (!player_enters_room(user->first, r)) {
@@ -427,7 +427,7 @@ void room_manager::process_room_part(simple_wml::document &data, const player_ma
 		return;
 	}
 	room* r = require_member(room_name, user, "quit");
-	if (r == NULL) return;
+	if (r == nullptr) return;
 	player_exits_room(user->first, r);
 	msg->set_attr_dup("player", user->second.name().c_str());
 	r->send_data(data);
@@ -447,7 +447,7 @@ void room_manager::process_room_query(simple_wml::document& data, const player_m
 	simple_wml::node& resp = doc.root().add_child("room_query_response");
 	simple_wml::node* q;
 	q = msg->child("rooms");
-	if (q != NULL) {
+	if (q != nullptr) {
 		fill_room_list(resp);
 		send_to_one(doc, user->first);
 		return;
@@ -457,16 +457,16 @@ void room_manager::process_room_query(simple_wml::document& data, const player_m
 
 	/* room-specific queries */
 	room* r = require_room(room_name, user, "query");
-	if (r == NULL) return;
+	if (r == nullptr) return;
 	resp.set_attr_dup("room", room_name.c_str());
 	q = msg->child("names");
-	if (q != NULL) {
+	if (q != nullptr) {
 		fill_member_list(r, resp);
 		send_to_one(doc, user->first);
 		return;
 	}
 	q = msg->child("persist");
-	if (q != NULL) {
+	if (q != nullptr) {
 		if (user->second.is_moderator()) {
 			WRN_LOBBY << "Attempted room set persistent by non-moderator";
 		} else {
@@ -490,7 +490,7 @@ void room_manager::process_room_query(simple_wml::document& data, const player_m
 		return;
 	}
 	q = msg->child("logged");
-	if (q != NULL) {
+	if (q != nullptr) {
 		if (user->second.is_moderator()) {
 			WRN_LOBBY << "Attempted room set logged by non-moderator.";
 		} else {
@@ -514,7 +514,7 @@ void room_manager::process_room_query(simple_wml::document& data, const player_m
 		return;
 	}
 	q = msg->child("topic");
-	if (q != NULL) {
+	if (q != nullptr) {
 		if (q->attr("value").empty()) {
 			resp.set_attr_dup("topic", r->topic().c_str());
 			send_to_one(doc, user->first);

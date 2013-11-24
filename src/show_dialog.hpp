@@ -77,8 +77,8 @@ public:
 
 	dialog_frame(CVideo &video, const std::string& title="",
 		const style& dialog_style=default_style,
-		bool auto_restore=true, std::vector<button*>* buttons=NULL,
-		button* help_button=NULL);
+		bool auto_restore=true, std::vector<button*>* buttons=nullptr,
+		button* help_button=nullptr);
 	~dialog_frame();
 
 	dimension_measurements layout(int x, int y, int w, int h);
@@ -109,11 +109,11 @@ private:
 	surface_restorer* restorer_;
 	bool auto_restore_;
 	dimension_measurements dim_;
-	surface top_, bot_, left_, right_, top_left_, bot_left_, top_right_, bot_right_, bg_;
+	SDL_Surface top_, bot_, left_, right_, top_left_, bot_left_, top_right_, bot_right_, bg_;
 	bool have_border_;
 };
 
-//frame_measurements draw_dialog_frame(int x, int y, int w, int h, CVideo &video, const std::string* dialog_style=NULL, surface_restorer* restorer=NULL);
+//frame_measurements draw_dialog_frame(int x, int y, int w, int h, CVideo &video, const std::string* dialog_style=nullptr, surface_restorer* restorer=nullptr);
 
 //SDL_Rect draw_dialog_background(int x, int y, int w, int h, CVideo &video, const std::string& dialog_style);
 
@@ -131,11 +131,11 @@ private:
 //if 'restorer' is present, it will be set to a restorer that will reset the screen area
 //to its original state after the dialog is drawn.
 //void draw_dialog(int x, int y, int w, int h, CVideo &video, const std::string& title,
- //                const std::string* dialog_style=NULL, std::vector<button*>* buttons=NULL,
- //                surface_restorer* restorer=NULL, button* help_button=NULL, label** label_widget);
+ //                const std::string* dialog_style=nullptr, std::vector<button*>* buttons=nullptr,
+ //                surface_restorer* restorer=nullptr, button* help_button=nullptr, label** label_widget);
 //void draw_dialog(frame_measurements &fm, CVideo &video, const std::string& title,
- //                const std::string* dialog_style=NULL, std::vector<button*>* buttons=NULL,
- //                surface_restorer* restorer=NULL, button* help_button=NULL, label** label_widget);
+ //                const std::string* dialog_style=nullptr, std::vector<button*>* buttons=nullptr,
+ //                surface_restorer* restorer=nullptr, button* help_button=nullptr, label** label_widget);
 
 class dialog_button_action
 {
@@ -156,7 +156,7 @@ struct dialog_button_info
 	std::string label;
 };
 
-enum DIALOG_TYPE { MESSAGE, OK_ONLY, YES_NO, OK_CANCEL, CANCEL_ONLY, CLOSE_ONLY, NULL_DIALOG };
+enum DIALOG_TYPE { MESSAGE, OK_ONLY, YES_NO, OK_CANCEL, CANCEL_ONLY, CLOSE_ONLY, nullptr_DIALOG };
 
 struct check_item {
 	check_item(const std::string& label, bool checked) : label(label), checked(checked) {}
@@ -180,21 +180,21 @@ public:
 //if a menu is given, then returns -1 if the dialog was canceled, and the
 //index of the selection otherwise. If no menu is given, returns the index
 //of the button that was pressed
-int show_dialog(display &screen, surface image,
+int show_dialog(display &screen, SDL_Surface image,
 				const std::string& caption, const std::string& message,
 				DIALOG_TYPE type=MESSAGE,
-				const std::vector<std::string>* menu_items=NULL,
-				const std::vector<preview_pane*>* preview_panes=NULL,
+				const std::vector<std::string>* menu_items=nullptr,
+				const std::vector<preview_pane*>* preview_panes=nullptr,
 				const std::string& text_widget_label="",
-				std::string* text_widget_text=NULL,
+				std::string* text_widget_text=nullptr,
 				const int text_widget_max_chars = 256,
-				std::vector<check_item>* options=NULL,
+				std::vector<check_item>* options=nullptr,
 				int xloc=-1,
 				int yloc=-1,
-				const dialog_frame::style* dialog_style=NULL,
-				std::vector<dialog_button_info>* buttons=NULL,
-				const menu::sorter* sorter=NULL,
-				menu::style* menu_style=NULL
+				const dialog_frame::style* dialog_style=nullptr,
+				std::vector<dialog_button_info>* buttons=nullptr,
+				const menu::sorter* sorter=nullptr,
+				menu::style* menu_style=nullptr
 			 );
 
 void check_quit(CVideo &video);

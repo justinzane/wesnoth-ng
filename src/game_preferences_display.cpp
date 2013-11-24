@@ -239,13 +239,13 @@ preferences_dialog::preferences_dialog(display& disp, const config& game_cfg)
 	  friends_input_(disp.video(), 170),
 
 	  slider_label_width_(0),
-	  advanced_(disp.video(),std::vector<std::string>(),false,-1,-1,NULL,&gui::menu::bluebg_style),
-	  friends_(disp.video(),std::vector<std::string>(),false,-1,-1,NULL,&gui::menu::bluebg_style),
+	  advanced_(disp.video(),std::vector<std::string>(),false,-1,-1,nullptr,&gui::menu::bluebg_style),
+	  friends_(disp.video(),std::vector<std::string>(),false,-1,-1,nullptr,&gui::menu::bluebg_style),
 
 	  advanced_selection_(-1),
 	  friends_selection_(-1),
 
-	  tab_(GENERAL_TAB), disp_(disp), game_cfg_(game_cfg), adv_preferences_cfg_(), parent(NULL)
+	  tab_(GENERAL_TAB), disp_(disp), game_cfg_(game_cfg), adv_preferences_cfg_(), parent(nullptr)
 {
 	sort_advanced_preferences();
 
@@ -1022,7 +1022,7 @@ void preferences_dialog::process_event()
 		if(advanced_.selection() != advanced_selection_) {
 			advanced_selection_ = advanced_.selection();
 			const config* const adv = get_advanced_pref();
-			if(adv != NULL) {
+			if(adv != nullptr) {
 				const config& pref = *adv;
 				const std::string description = pref["description"];
 				std::string value = preferences::get(pref["field"]);
@@ -1054,7 +1054,7 @@ void preferences_dialog::process_event()
 
 		const config* const adv = get_advanced_pref();
 		if(advanced_button_.pressed()) {
-			if(adv != NULL) {
+			if(adv != nullptr) {
 				const config& pref = *adv;
 				preferences::set(pref["field"],
 						advanced_button_.checked());
@@ -1063,7 +1063,7 @@ void preferences_dialog::process_event()
 		}
 
 		if(advanced_slider_.value_change()) {
-			if(adv != NULL) {
+			if(adv != nullptr) {
 				const config& pref = *adv;
 				preferences::set(pref["field"],
 						str_cast(advanced_slider_.value()));
@@ -1087,7 +1087,7 @@ const config* preferences_dialog::get_advanced_pref() const
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void preferences_dialog::set_advanced_menu()
@@ -1263,7 +1263,7 @@ void preferences_dialog::set_selection(int index)
 
 	const bool hide_advanced = tab_ != ADVANCED_TAB;
 	advanced_.hide(hide_advanced);
-	std::string adv_type = get_advanced_pref() != NULL ? (*get_advanced_pref())["type"].str() : "";
+	std::string adv_type = get_advanced_pref() != nullptr ? (*get_advanced_pref())["type"].str() : "";
 	const bool hide_advanced_bool = hide_advanced || adv_type != "boolean";
 	const bool hide_advanced_int = hide_advanced || adv_type != "int";
 	advanced_button_.hide(hide_advanced_bool);

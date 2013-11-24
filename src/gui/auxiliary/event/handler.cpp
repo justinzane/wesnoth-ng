@@ -60,8 +60,8 @@ namespace event {
 
 /***** Static data. *****/
 class thandler;
-static thandler* handler = NULL;
-static events::event_context* event_context = NULL;
+static thandler* handler = nullptr;
+static events::event_context* event_context = nullptr;
 
 #ifdef MAIN_EVENT_HANDLER
 static unsigned draw_interval = 0;
@@ -85,8 +85,8 @@ static Uint32 timer_sdl_draw_event(Uint32, void*)
 
 	data.type = DRAW_EVENT;
 	data.code = 0;
-	data.data1 = NULL;
-	data.data2 = NULL;
+	data.data1 = nullptr;
+	data.data2 = nullptr;
 
 	event.type = DRAW_EVENT;
 	event.user = data;
@@ -201,7 +201,7 @@ private:
 	 * Gets the dispatcher that wants to receive the keyboard input.
 	 *
 	 * @returns                   The dispatcher.
-	 * @retval NULL               No dispatcher found.
+	 * @retval nullptr               No dispatcher found.
 	 */
 	tdispatcher* keyboard_dispatcher();
 
@@ -277,9 +277,9 @@ private:
 
 thandler::thandler()
 	: events::handler(false)
-	, mouse_focus(NULL)
+	, mouse_focus(nullptr)
 	, dispatchers_()
-	, keyboard_focus_(NULL)
+	, keyboard_focus_(nullptr)
 {
 	if(SDL_WasInit(SDL_INIT_TIMER) == 0) {
 		if(SDL_InitSubSystem(SDL_INIT_TIMER) == -1) {
@@ -422,10 +422,10 @@ void thandler::disconnect(tdispatcher* dispatcher)
 	dispatchers_.erase(itor);
 
 	if(dispatcher == mouse_focus) {
-		mouse_focus = NULL;
+		mouse_focus = nullptr;
 	}
 	if(dispatcher == keyboard_focus_) {
-		keyboard_focus_ = NULL;
+		keyboard_focus_ = nullptr;
 	}
 
 	/***** Set proper state for the other dispatchers. *****/
@@ -442,7 +442,7 @@ void thandler::disconnect(tdispatcher* dispatcher)
 	if(dispatchers_.empty()) {
 		leave();
 		delete event_context;
-		event_context = NULL;
+		event_context = nullptr;
 	}
 }
 
@@ -451,7 +451,7 @@ void thandler::activate()
 	FOREACH(AUTO dispatcher, dispatchers_) {
 		dispatcher->fire(SDL_ACTIVATE
 				, dynamic_cast<twidget&>(*dispatcher)
-				, NULL);
+				, nullptr);
 	}
 }
 
@@ -491,7 +491,7 @@ void thandler::draw(const bool force)
 	if(!dispatchers_.empty()) {
 		CVideo& video = dynamic_cast<twindow&>(*dispatchers_.back()).video();
 
-		surface frame_buffer = video.getSurface();
+		SDL_Surface frame_buffer = video.getSurface();
 
 		cursor::draw(frame_buffer);
 		video.flip();
@@ -619,7 +619,7 @@ tdispatcher* thandler::keyboard_dispatcher()
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void thandler::hat_motion(const SDL_JoyHatEvent& event)
@@ -701,17 +701,17 @@ tmanager::tmanager()
 
 #ifdef MAIN_EVENT_HANDLER
 	draw_interval = 30;
-	SDL_AddTimer(draw_interval, timer_sdl_draw_event, NULL);
+	SDL_AddTimer(draw_interval, timer_sdl_draw_event, nullptr);
 
 	event_poll_interval = 10;
-	SDL_AddTimer(event_poll_interval, timer_sdl_poll_events, NULL);
+	SDL_AddTimer(event_poll_interval, timer_sdl_poll_events, nullptr);
 #endif
 }
 
 tmanager::~tmanager()
 {
 	delete handler;
-	handler = NULL;
+	handler = nullptr;
 
 #ifdef MAIN_EVENT_HANDLER
 	draw_interval = 0;
@@ -760,7 +760,7 @@ void release_mouse(tdispatcher* dispatcher)
 	assert(handler);
 	assert(dispatcher);
 	if(handler->mouse_focus == dispatcher) {
-		handler->mouse_focus = NULL;
+		handler->mouse_focus = nullptr;
 	}
 }
 

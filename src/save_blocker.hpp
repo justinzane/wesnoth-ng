@@ -19,7 +19,7 @@
 #ifndef SAVE_BLOCKER_H_INCLUDED
 #define SAVE_BLOCKER_H_INCLUDED
 
-#include "SDL_mutex.h"
+#include "SDL2/SDL_mutex.h"
 
 #include <cassert>
 

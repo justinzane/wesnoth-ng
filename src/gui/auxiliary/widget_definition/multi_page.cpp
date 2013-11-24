@@ -36,7 +36,7 @@ tmulti_page_definition::tmulti_page_definition(const config& cfg)
 
 tmulti_page_definition::tresolution::tresolution(const config& cfg)
 	: tresolution_definition_(cfg)
-	, grid(NULL)
+	, grid(nullptr)
 {
 /*WIKI
  * @page = GUIWidgetDefinitionWML

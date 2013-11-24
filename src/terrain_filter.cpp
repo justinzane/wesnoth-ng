@@ -111,7 +111,7 @@ namespace {
 bool terrain_filter::match_internal(const map_location& loc, const bool ignore_xy) const
 {
 	if(cfg_.has_attribute("terrain")) {
-		if(cache_.parsed_terrain == NULL) {
+		if(cache_.parsed_terrain == nullptr) {
 			cache_.parsed_terrain = new t_translation::t_match(cfg_["terrain"]);
 		}
 		if(!cache_.parsed_terrain->is_empty) {
@@ -132,13 +132,13 @@ bool terrain_filter::match_internal(const map_location& loc, const bool ignore_x
 			variable_info vi(cfg_["find_in"], false, variable_info::TYPE_CONTAINER);
 			if(!vi.is_valid) return false;
 			if(vi.explicit_index) {
-				if(map_location(vi.as_container(),NULL) != loc) {
+				if(map_location(vi.as_container(),nullptr) != loc) {
 					return false;
 				}
 			} else {
 				bool found = false;
 				foreach_ng(const config &cfg, vi.as_array()) {
-					if (map_location(cfg, NULL) == loc) {
+					if (map_location(cfg, nullptr) == loc) {
 						found = true;
 						break;
 					}
@@ -194,7 +194,7 @@ bool terrain_filter::match_internal(const map_location& loc, const bool ignore_x
 			for (j = dirs.begin(); j != j_end; ++j) {
 				map_location &adj = adjacent[*j];
 				if (resources::game_map->on_board(adj)) {
-					if(cache_.adjacent_matches == NULL) {
+					if(cache_.adjacent_matches == nullptr) {
 						while(index >= std::distance(cache_.adjacent_match_cache.begin(), cache_.adjacent_match_cache.end())) {
 							const vconfig& adj_cfg = adj_cfgs[cache_.adjacent_match_cache.size()];
 							std::pair<terrain_filter, std::map<map_location,bool> > amc_pair(
@@ -392,11 +392,11 @@ void terrain_filter::get_locations(std::set<map_location>& locs, bool with_borde
 			if(!vi.is_valid) {
 				xy_set.clear();
 			} else if(vi.explicit_index) {
-				map_location test_loc(vi.as_container(),NULL);
+				map_location test_loc(vi.as_container(),nullptr);
 				xy_set.insert(test_loc);
 			} else {
 				foreach_ng(const config &cfg, vi.as_array()) {
-					map_location test_loc(cfg, NULL);
+					map_location test_loc(cfg, nullptr);
 					xy_set.insert(test_loc);
 				}
 			}
@@ -417,7 +417,7 @@ void terrain_filter::get_locations(std::set<map_location>& locs, bool with_borde
 		if(!vi.is_valid) {
 			xy_set.clear();
 		} else if(vi.explicit_index) {
-			map_location test_loc(vi.as_container(),NULL);
+			map_location test_loc(vi.as_container(),nullptr);
 			if(xy_set.count(test_loc)) {
 				xy_set.clear();
 				xy_set.insert(test_loc);
@@ -427,7 +427,7 @@ void terrain_filter::get_locations(std::set<map_location>& locs, bool with_borde
 		} else {
 			std::set<map_location> findin_locs;
 			foreach_ng(const config &cfg, vi.as_array()) {
-				map_location test_loc(cfg, NULL);
+				map_location test_loc(cfg, nullptr);
 				if (xy_set.count(test_loc)) {
 					findin_locs.insert(test_loc);
 				}
@@ -438,7 +438,7 @@ void terrain_filter::get_locations(std::set<map_location>& locs, bool with_borde
 
 	//handle location filter
 	if(cfg_.has_child("filter_adjacent_location")) {
-		if(cache_.adjacent_matches == NULL) {
+		if(cache_.adjacent_matches == nullptr) {
 			cache_.adjacent_matches = new std::vector<std::set<map_location> >();
 		}
 		const vconfig::child_list& adj_cfgs = cfg_.get_children("filter_adjacent_location");

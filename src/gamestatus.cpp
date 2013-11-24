@@ -98,7 +98,7 @@ wml_menu_item::wml_menu_item(const std::string& id, const config* cfg) :
 		use_hotkey_(true),
 		use_wml_menu_(true)
 {
-	if(cfg != NULL) {
+	if(cfg != nullptr) {
 		image_ = (*cfg)["image"].str();
 		description_ = (*cfg)["description"];
 		needs_select_ = (*cfg)["needs_select"].to_bool();
@@ -313,10 +313,10 @@ wml_menu_item & wmi_container::get_item(const std::string& id)
 	
 	// the static cast fixes http://connect.microsoft.com/VisualStudio/feedback/details/520043/
 	// c++11's nullptr would be a better solution as soon as we support it.
-	map_t::iterator add_it = wml_menu_items_.insert(map_t::value_type(id, static_cast<wml_menu_item *>(NULL))).first;
+	map_t::iterator add_it = wml_menu_items_.insert(map_t::value_type(id, static_cast<wml_menu_item *>(nullptr))).first;
 
 	// If we ended up with a dummy value, create an entry for it.
-	if ( add_it->second == NULL )
+	if ( add_it->second == nullptr )
 		add_it->second = new wml_menu_item(id);
 
 	// Return the item.
@@ -375,7 +375,7 @@ void wmi_container::set_menu_items(const config& cfg)
 
 		std::string id = item["id"];
 		wml_menu_item*& mref = wml_menu_items_[id];
-		if(mref == NULL) {
+		if(mref == nullptr) {
 			mref = new wml_menu_item(id, &item);
 		} else {
 			WRN_NG << "duplicate menu item (" << id << ") while loading from config\n";
@@ -627,7 +627,7 @@ carryover* carryover_info::get_side(std::string save_id){
 			return &side;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 class team_builder {
@@ -640,7 +640,7 @@ public:
 		, leader_configs_()
 		, level_(level)
 		, map_(map)
-		, player_cfg_(NULL)
+		, player_cfg_(nullptr)
 		, player_exists_(false)
 		, save_id_(save_id)
 		, seen_ids_()
@@ -648,7 +648,7 @@ public:
 		, side_cfg_(side_cfg)
 		, snapshot_(snapshot)
 		, starting_pos_(starting_pos)
-		, t_(NULL)
+		, t_(nullptr)
 		, teams_(teams)
 		, unit_configs_()
 		, units_(units)
@@ -666,7 +666,7 @@ public:
 		//create a new instance of team and push it to back of resources::teams vector
 		new_team();
 
-		assert(t_!=NULL);
+		assert(t_!=nullptr);
 
 		//set team objectives if necessary
 		objectives();
@@ -736,7 +736,7 @@ protected:
 
 		log_step("init");
 
-		player_cfg_ = NULL;
+		player_cfg_ = nullptr;
 		//track whether a [player] tag with persistence information exists (in addition to the [side] tag)
 		player_exists_ = false;
 
@@ -755,7 +755,7 @@ protected:
 
 	bool use_player_cfg() const
 	{
-		return (player_cfg_ != NULL) && (!snapshot_);
+		return (player_cfg_ != nullptr) && (!snapshot_);
 	}
 
 	void gold()
@@ -840,7 +840,7 @@ protected:
 		config & stored = leader_configs_.back();
 
 		// Remove the attributes used to define a side.
-		for ( size_t i = 0; team::attributes[i] != NULL; ++i ) {
+		for ( size_t i = 0; team::attributes[i] != nullptr; ++i ) {
 			stored.remove_attribute(team::attributes[i]);
 		}
 
@@ -1352,7 +1352,7 @@ void convert_old_saves(config& cfg){
 void game_state::write_snapshot(config& cfg, game_display* gui) const
 {
 	log_scope("write_game");
-	if(gui != NULL){
+	if(gui != nullptr){
 		cfg["snapshot"] = true;
 		cfg["playing_team"] = str_cast(gui->playing_team());
 
@@ -1381,11 +1381,11 @@ void game_state::write_snapshot(config& cfg, game_display* gui) const
 
 	cfg["difficulty"] = classification_.difficulty;
 
-	if(resources::gamedata != NULL){
+	if(resources::gamedata != nullptr){
 		resources::gamedata->write_snapshot(cfg);
 	}
 
-	if(gui != NULL){
+	if(gui != nullptr){
 		gui->labels().write(cfg);
 	}
 }

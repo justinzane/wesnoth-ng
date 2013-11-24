@@ -109,7 +109,7 @@ unit* suppose_dead::get_unit() const
 	if (itor.valid())
 		return &*itor;
 	else
-		return NULL;
+		return nullptr;
 }
 
 void suppose_dead::accept(visitor& v)

@@ -48,7 +48,7 @@ bool is_scope_active(scope s);
 enum INPUT_CONTROLL {
 	INPUT_SCROLL_HORIZONTAL,
 	INPUT_SCROLL_VERTICAL,
-	INPUT_NULL
+	INPUT_nullptr
 };
 
 enum HOTKEY_COMMAND {
@@ -148,7 +148,7 @@ enum HOTKEY_COMMAND {
 
 	HOTKEY_WML, 
 
-	HOTKEY_NULL
+	HOTKEY_nullptr
 };
 
 
@@ -494,9 +494,9 @@ public:
 };
 
 /* Functions to be called every time a event is intercepted.
- * Will call the relevant function in executor if the event is not NULL.
+ * Will call the relevant function in executor if the event is not nullptr.
  * Also handles some events in the function itself,
- * and so is still meaningful to call with executor=NULL
+ * and so is still meaningful to call with executor=nullptr
  */
 void jbutton_event(display& disp, const SDL_JoyButtonEvent& event, command_executor* executor);
 void jhat_event(display& disp, const SDL_JoyHatEvent& event, command_executor* executor);
@@ -509,7 +509,7 @@ void execute_command(display& disp, hotkey_command& command, command_executor* e
 // Object which will ensure that basic keyboard events like escape
 // are handled properly for the duration of its lifetime.
 struct basic_handler : public events::handler {
-	basic_handler(display* disp, command_executor* exec=NULL);
+	basic_handler(display* disp, command_executor* exec=nullptr);
 
 	void handle_event(const SDL_Event& event);
 

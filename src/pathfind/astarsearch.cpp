@@ -153,7 +153,7 @@ plain_route a_star_search(const map_location& src, const map_location& dst,
 	//----------------- PRE_CONDITIONS ------------------
 	assert(src.valid(width, height));
 	assert(dst.valid(width, height));
-	assert(calc != NULL);
+	assert(calc != nullptr);
 	assert(stop_at <= calc->getNoPathValue());
 	//---------------------------------------------------
 

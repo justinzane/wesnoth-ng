@@ -28,7 +28,7 @@
 #include <vector>
 #include <boost/next_prior.hpp>
 
-#include "SDL_types.h"
+#include "SDL2/SDL_types.h"
 
 /** The type we use to represent Unicode strings. */
 typedef std::vector<wchar_t> wide_string;

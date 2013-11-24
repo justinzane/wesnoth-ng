@@ -92,7 +92,7 @@ public:
 	 * node. This node has no parent node and some other special features so
 	 * several code paths need to check whether they are the parent node.
 	 */
-	bool is_root_node() const { return parent_node_ == NULL; }
+	bool is_root_node() const { return parent_node_ == nullptr; }
 
 	/**
 	 * The indention level of the node.
@@ -129,7 +129,7 @@ public:
 	 *
 	 * @todo Implement properly.
 	 */
-	virtual iterator::twalker_* create_walker() OVERRIDE { return NULL; }
+	virtual iterator::twalker_* create_walker() OVERRIDE { return nullptr; }
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
@@ -251,14 +251,14 @@ private:
 			, unsigned width);
 
 	/** See @ref twidget::set_visible_rectangle. */
-	virtual void set_visible_rectangle(const SDL_Rect& rectangle) OVERRIDE;
+	virtual void set_visible_rectangle(const SDL_Rect* rectangle) OVERRIDE;
 
 	/** See @ref twidget::impl_draw_children. */
-	virtual void impl_draw_children(surface& frame_buffer) OVERRIDE;
+	virtual void impl_draw_children(SDL_Surface& frame_buffer) OVERRIDE;
 
 	/** See @ref twidget::impl_draw_children. */
 	virtual void impl_draw_children(
-			  surface& frame_buffer
+			  SDL_Surface& frame_buffer
 			, int x_offset
 			, int y_offset) OVERRIDE;
 

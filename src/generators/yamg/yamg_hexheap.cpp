@@ -58,8 +58,8 @@ void yamg_hexheap::add_hex(yamg_hex *h) {
 yamg_hex *yamg_hexheap::pick_hex() {
 yamg_hex *h, *res;
 
-	  if( table_ == NULL || last_ == 0 )
-		  return NULL;
+	  if( table_ == nullptr || last_ == 0 )
+		  return nullptr;
 
       res = table_[0];
 

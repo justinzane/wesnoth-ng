@@ -102,7 +102,7 @@ public:
 	 * The methodes hide_children and layout_children are supposed to be
 	 * overridden by subclasses of this class which add new sub-widgets.
 	 */
-	void set_location(const SDL_Rect& rect);
+	void set_location(const SDL_Rect* rect);
 	using widget::set_location;
 
 protected:
@@ -171,7 +171,7 @@ protected:
 	 * Lays the children out. This method is to be overridden by the subclasses
 	 * of the mp_ui class; it will be called.
 	 */
-	virtual void layout_children(const SDL_Rect& rect);
+	virtual void layout_children(const SDL_Rect* rect);
 
 	/** Sets the result of this dialog, to be checked by get_result(). */
 	result set_result(result res);

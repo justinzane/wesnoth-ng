@@ -36,21 +36,21 @@ tmulti_page::tmulti_page()
 	: tcontainer_(0)
 	, generator_(
 			tgenerator_::build(true, true, tgenerator_::independent, false))
-	, page_builder_(NULL)
+	, page_builder_(nullptr)
 {
 }
 
 void tmulti_page::add_page(const string_map& item)
 {
 	assert(generator_);
-	generator_->create_item(-1, page_builder_, item, NULL);
+	generator_->create_item(-1, page_builder_, item, nullptr);
 }
 
 void tmulti_page::add_page(
 		const std::map<std::string /* widget id */, string_map>& data)
 {
 	assert(generator_);
-	generator_->create_item(-1, page_builder_, data, NULL);
+	generator_->create_item(-1, page_builder_, data, nullptr);
 }
 
 void tmulti_page::remove_page(const unsigned page, unsigned count)
@@ -130,7 +130,7 @@ void swap_grid(tgrid* grid,
 	widget->set_id(id);
 
 	// Get the container containing the wanted widget.
-	tgrid* parent_grid = NULL;
+	tgrid* parent_grid = nullptr;
 	if(grid) {
 		parent_grid = find_widget<tgrid>(grid, id, false, false);
 	}
@@ -153,17 +153,17 @@ void tmulti_page::finalize(
 		const std::vector<string_map>& page_data)
 {
 	assert(generator_);
-	generator_->create_items(-1, page_builder_, page_data, NULL);
-	swap_grid(NULL, &grid(), generator_, "_content_grid");
+	generator_->create_items(-1, page_builder_, page_data, nullptr);
+	swap_grid(nullptr, &grid(), generator_, "_content_grid");
 }
 
-void tmulti_page::impl_draw_background(surface& /*frame_buffer*/)
+void tmulti_page::impl_draw_background(SDL_Surface* /*frame_buffer*/)
 {
 	/* DO NOTHING */
 }
 
 void tmulti_page::impl_draw_background(
-		  surface& /*frame_buffer*/
+		  SDL_Surface* /*frame_buffer*/
 		, int /*x_offset*/
 		, int /*y_offset*/)
 {

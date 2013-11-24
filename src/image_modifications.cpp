@@ -40,11 +40,11 @@ static lg::log_domain log_display("display");
 namespace image {
 
 
-/** Adds @a mod to the queue (unless mod is NULL). */
+/** Adds @a mod to the queue (unless mod is nullptr). */
 void modification_queue::push(modification * mod)
 {
 	// Null pointers do not get stored. (Shouldn't happen, but just in case.)
-	if ( mod != NULL )
+	if ( mod != nullptr )
 		priorities_[mod->priority()].push_back(mod);
 }
 
@@ -94,7 +94,7 @@ std::map<std::string, mod_parser> mod_parsers;
  * @param encoded_mod A string representing a single modification
  *
  * @return A pointer to the decoded modification object
- * @retval NULL if the string is invalid or a parser isn't found
+ * @retval nullptr if the string is invalid or a parser isn't found
  */
 modification* decode_modification(const std::string& encoded_mod)
 {
@@ -103,7 +103,7 @@ modification* decode_modification(const std::string& encoded_mod)
 	if(split.size() != 2) {
 		ERR_DP << "error parsing image modifications: "
 		       << encoded_mod << "\n";
-		return NULL;
+		return nullptr;
 	}
 
 	std::string mod_type = split[0];
@@ -112,7 +112,7 @@ modification* decode_modification(const std::string& encoded_mod)
 	if(mod_parsers.find(mod_type) == mod_parsers.end()) {
 		ERR_DP << "unknown image function in path: "
 		       << mod_type << '\n';
-		return NULL;
+		return nullptr;
 	}
 
 	return (*mod_parsers[mod_type])(args);
@@ -155,15 +155,15 @@ modification_queue modification::decode(const std::string& encoded_mods)
 	return mods;
 }
 
-surface rc_modification::operator()(const surface& src) const
+SDL_Surface rc_modification::operator()(const SDL_Surface& src) const
 {
 	// unchecked
 	return recolor_image(src, rc_map_);
 }
 
-surface fl_modification::operator()(const surface& src) const
+SDL_Surface fl_modification::operator()(const SDL_Surface& src) const
 {
-	surface ret = src;
+	SDL_Surface ret = src;
 
 	if ( horiz_  && vert_ ) {
 		// Slightly faster than doing both a flip and a flop.
@@ -181,7 +181,7 @@ surface fl_modification::operator()(const surface& src) const
 	return ret;
 }
 
-surface rotate_modification::operator()(const surface& src) const
+SDL_Surface rotate_modification::operator()(const SDL_Surface& src) const
 {
 	// Convert the number of degrees to the interval [0,360].
 	const int normalized = degrees_ >= 0 ?
@@ -200,12 +200,12 @@ surface rotate_modification::operator()(const surface& src) const
 	return rotate_any_surface(src, normalized, zoom_, offset_);
 }
 
-surface gs_modification::operator()(const surface& src) const
+SDL_Surface gs_modification::operator()(const SDL_Surface& src) const
 {
 	return greyscale_image(src);
 }
 
-surface crop_modification::operator()(const surface& src) const
+SDL_Surface crop_modification::operator()(const SDL_Surface& src) const
 {
 	SDL_Rect area = slice_;
 	if(area.w == 0) {
@@ -225,12 +225,12 @@ surface crop_modification::operator()(const surface& src) const
 	return cut_surface(src, area);
 }
 
-const SDL_Rect& crop_modification::get_slice() const
+const SDL_Rect* crop_modification::get_slice() const
 {
 	return slice_;
 }
 
-surface blit_modification::operator()(const surface& src) const
+SDL_Surface blit_modification::operator()(const SDL_Surface& src) const
 {
 	if(x_ >= src->w) {
 		std::stringstream sstr;
@@ -268,15 +268,15 @@ surface blit_modification::operator()(const surface& src) const
 		throw texception(sstr);
 	}
 
-	//blit_surface want neutral surfaces
-	surface nsrc = make_neutral_surface(src);
-	surface nsurf = make_neutral_surface(surf_);
+	//blit_SDL_Surface want neutral surfaces
+	SDL_Surface nsrc = make_neutral_surface(src);
+	SDL_Surface nsurf = make_neutral_surface(surf_);
 	SDL_Rect r = create_rect(x_, y_, 0, 0);
-	blit_surface(nsurf, NULL, nsrc, &r);
+	blit_surface(nsurf, nullptr, nsrc, &r);
 	return nsrc;
 }
 
-const surface& blit_modification::get_surface() const
+const SDL_Surface& blit_modification::get_surface() const
 {
 	return surf_;
 }
@@ -291,17 +291,17 @@ int blit_modification::get_y() const
 	return y_;
 }
 
-surface mask_modification::operator()(const surface& src) const
+SDL_Surface mask_modification::operator()(const SDL_Surface& src) const
 {
 	if(src->w == mask_->w &&  src->h == mask_->h && x_ == 0 && y_ == 0)
 		return mask_surface(src, mask_);
 	SDL_Rect r = create_rect(x_, y_, 0, 0);
-	surface new_mask = create_neutral_surface(src->w, src->h);
-	blit_surface(mask_, NULL, new_mask, &r);
+	SDL_Surface new_mask = create_neutral_surface(src->w, src->h);
+	blit_surface(mask_, nullptr, new_mask, &r);
 	return mask_surface(src, new_mask);
 }
 
-const surface& mask_modification::get_mask() const
+const SDL_Surface& mask_modification::get_mask() const
 {
 	return mask_;
 }
@@ -316,11 +316,11 @@ int mask_modification::get_y() const
 	return y_;
 }
 
-surface light_modification::operator()(const surface& src) const {
-	if(src == NULL) { return NULL; }
+SDL_Surface light_modification::operator()(const SDL_Surface& src) const {
+	if(src == nullptr) { return nullptr; }
 
-	//light_surface wants a neutral surface having same dimensions
-	surface nsurf;
+	//light_SDL_Surface wants a neutral SDL_Surface having same dimensions
+	SDL_Surface nsurf;
 	if(surf_->w != src->w || surf_->h != src->h)
 		nsurf = scale_surface(surf_, src->w, src->h, false);
 	else
@@ -328,12 +328,12 @@ surface light_modification::operator()(const surface& src) const {
 	return light_surface(src, nsurf);;
 }
 
-const surface& light_modification::get_surface() const
+const SDL_Surface& light_modification::get_surface() const
 {
 	return surf_;
 }
 
-surface scale_modification::operator()(const surface& src) const
+SDL_Surface scale_modification::operator()(const SDL_Surface& src) const
 {
 	const int old_w = src->w;
 	const int old_h = src->h;
@@ -366,7 +366,7 @@ int scale_modification::get_h() const
 	return h_;
 }
 
-surface o_modification::operator()(const surface& src) const
+SDL_Surface o_modification::operator()(const SDL_Surface& src) const
 {
 	return adjust_surface_alpha(src, ftofxp(opacity_));
 }
@@ -376,7 +376,7 @@ float o_modification::get_opacity() const
 	return opacity_;
 }
 
-surface cs_modification::operator()(const surface& src) const
+SDL_Surface cs_modification::operator()(const SDL_Surface& src) const
 {
 	return(
 		(r_ != 0 || g_ != 0 || b_ != 0) ?
@@ -400,7 +400,7 @@ int cs_modification::get_b() const
 	return b_;
 }
 
-surface blend_modification::operator()(const surface& src) const
+SDL_Surface blend_modification::operator()(const SDL_Surface& src) const
 {
 	return blend_surface(src, a_, display::rgb(r_, g_, b_));
 
@@ -426,7 +426,7 @@ float blend_modification::get_a() const
 	return a_;
 }
 
-surface bl_modification::operator()(const surface& src) const
+SDL_Surface bl_modification::operator()(const SDL_Surface& src) const
 {
 	return blur_alpha_surface(src, depth_);
 }
@@ -436,35 +436,35 @@ int bl_modification::get_depth() const
 	return depth_;
 }
 
-surface brighten_modification::operator()(const surface &src) const
+SDL_Surface brighten_modification::operator()(const SDL_Surface &src) const
 {
-	surface ret = make_neutral_surface(src);
-	surface tod_bright(image::get_image(game_config::images::tod_bright));
+	SDL_Surface ret = make_neutral_surface(src);
+	SDL_Surface tod_bright(image::get_image(game_config::images::tod_bright));
 	if (tod_bright)
-		blit_surface(tod_bright, NULL, ret, NULL);
+		blit_surface(tod_bright, nullptr, ret, nullptr);
 	return ret;
 }
 
-surface darken_modification::operator()(const surface &src) const
+SDL_Surface darken_modification::operator()(const SDL_Surface &src) const
 {
-	surface ret = make_neutral_surface(src);
-	surface tod_dark(image::get_image(game_config::images::tod_dark));
+	SDL_Surface ret = make_neutral_surface(src);
+	SDL_Surface tod_dark(image::get_image(game_config::images::tod_dark));
 	if (tod_dark)
-		blit_surface(tod_dark, NULL, ret, NULL);
+		blit_surface(tod_dark, nullptr, ret, nullptr);
 	return ret;
 }
 
-surface background_modification::operator()(const surface &src) const
+SDL_Surface background_modification::operator()(const SDL_Surface &src) const
 {
-	surface ret = make_neutral_surface(src);
-	SDL_FillRect(ret, NULL, SDL_MapRGBA(ret->format, color_.r, color_.g,
+	SDL_Surface ret = make_neutral_surface(src);
+	SDL_FillRect(ret, nullptr, SDL_MapRGBA(ret->format, color_.r, color_.g,
 					    color_.b, color_.unused));
 	SDL_SetAlpha(src, SDL_SRCALPHA, SDL_ALPHA_OPAQUE);
-	SDL_BlitSurface(src, NULL, ret, NULL);
+	SDL_BlitSurface(src, nullptr, ret, nullptr);
 	return ret;
 }
 
-const SDL_Color& background_modification::get_color() const
+const SDL_Color* background_modification::get_color() const
 {
 	return color_;
 }
@@ -499,7 +499,7 @@ REGISTER_MOD_PARSER(TC, args)
 	if(params.size() < 2) {
 		ERR_DP << "too few arguments passed to the ~TC() function\n";
 
-		return NULL;
+		return nullptr;
 	}
 
 	int side_n = lexical_cast_default<int>(params[0], -1);
@@ -507,7 +507,7 @@ REGISTER_MOD_PARSER(TC, args)
 	if (side_n < 1) {
 		ERR_DP << "invalid team (" << side_n
 		       << ") passed to the ~TC() function\n";
-		return NULL;
+		return nullptr;
 	}
 	else if (side_n < static_cast<int>(image::get_team_colors().size())) {
 		team_color = image::get_team_colors()[side_n - 1];
@@ -519,7 +519,7 @@ REGISTER_MOD_PARSER(TC, args)
 		} catch(bad_lexical_cast const&) {
 			ERR_DP << "bad things happen\n";
 
-			return NULL;
+			return nullptr;
 		}
 	}
 
@@ -531,7 +531,7 @@ REGISTER_MOD_PARSER(TC, args)
 		       << "' palette\n"
 		       << "bailing out from TC\n";
 
-		return NULL;
+		return nullptr;
 	}
 
 	std::map<Uint32, Uint32> rc_map;
@@ -549,7 +549,7 @@ REGISTER_MOD_PARSER(TC, args)
 		       << '\n'
 		       << "bailing out from TC\n";
 
-		return NULL;
+		return nullptr;
 	}
 
 	return new rc_modification(rc_map);
@@ -592,7 +592,7 @@ REGISTER_MOD_PARSER(RC, args)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // Palette switch
@@ -604,7 +604,7 @@ REGISTER_MOD_PARSER(PAL, args)
 		ERR_DP << "not enough arguments passed to the ~PAL() function: "
 		       << args << "\n";
 
-		return NULL;
+		return nullptr;
 	}
 
 
@@ -629,7 +629,7 @@ REGISTER_MOD_PARSER(PAL, args)
 		ERR_DP
 			<< "bailing out from PAL\n";
 
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -668,7 +668,7 @@ REGISTER_MOD_PARSER(ROTATE, args)
 					lexical_cast_default<int>(slice_params[2]));
 			break;
 	}
-	return NULL;
+	return nullptr;
 }
 
 // Grayscale
@@ -685,7 +685,7 @@ REGISTER_MOD_PARSER(CS, args)
 
 	if(s == 0) {
 		ERR_DP << "no arguments passed to the ~CS() function\n";
-		return NULL;
+		return nullptr;
 	}
 
 	int r = 0, g = 0, b = 0;
@@ -709,7 +709,7 @@ REGISTER_MOD_PARSER(BLEND, args)
 
 	if(params.size() != 4) {
 		ERR_DP << "~BLEND() requires exactly 4 arguments\n";
-		return NULL;
+		return nullptr;
 	}
 
 	float opacity = 0.0f;
@@ -740,7 +740,7 @@ REGISTER_MOD_PARSER(CROP, args)
 
 	if(s == 0 || (s == 1 && slice_params[0].empty())) {
 		ERR_DP << "no arguments passed to the ~CROP() function\n";
-		return NULL;
+		return nullptr;
 	}
 
 	SDL_Rect slice_rect = { 0, 0, 0, 0 };
@@ -776,7 +776,7 @@ REGISTER_MOD_PARSER(BLIT, args)
 
 	if(s == 0 || (s == 1 && param[0].empty())){
 		ERR_DP << "no arguments passed to the ~BLIT() function\n";
-		return NULL;
+		return nullptr;
 	}
 
 	int x = 0, y = 0;
@@ -788,15 +788,15 @@ REGISTER_MOD_PARSER(BLIT, args)
 
 	if(x < 0 || y < 0) { //required by blit_surface
 		ERR_DP << "negative position arguments in ~BLIT() function\n";
-		return NULL;
+		return nullptr;
 	}
 
 	const image::locator img(param[0]);
 	std::stringstream message;
 	message << "~BLIT():";
 	if(!check_image(img, message))
-		return NULL;
-	surface surf = get_image(img);
+		return nullptr;
+	SDL_Surface surf = get_image(img);
 
 	return new blit_modification(surf, x, y);
 }
@@ -809,7 +809,7 @@ REGISTER_MOD_PARSER(MASK, args)
 
 	if(s == 0 || (s == 1 && param[0].empty())){
 		ERR_DP << "no arguments passed to the ~MASK() function\n";
-		return NULL;
+		return nullptr;
 	}
 
 	int x = 0, y = 0;
@@ -821,15 +821,15 @@ REGISTER_MOD_PARSER(MASK, args)
 
 	if(x < 0 || y < 0) { //required by blit_surface
 		ERR_DP << "negative position arguments in ~MASK() function\n";
-		return NULL;
+		return nullptr;
 	}
 
 	const image::locator img(param[0]);
 	std::stringstream message;
 	message << "~MASK():";
 	if(!check_image(img, message))
-		return NULL;
-	surface surf = get_image(img);
+		return nullptr;
+	SDL_Surface surf = get_image(img);
 
 	return new mask_modification(surf, x, y);
 }
@@ -839,10 +839,10 @@ REGISTER_MOD_PARSER(L, args)
 {
 	if(args.empty()){
 		ERR_DP << "no arguments passed to the ~L() function\n";
-		return NULL;
+		return nullptr;
 	}
 
-	surface surf = get_image(args);
+	SDL_Surface surf = get_image(args);
 
 	return new light_modification(surf);
 }
@@ -855,7 +855,7 @@ REGISTER_MOD_PARSER(SCALE, args)
 
 	if(s == 0 || (s == 1 && scale_params[0].empty())) {
 		ERR_DP << "no arguments passed to the ~SCALE() function\n";
-		return NULL;
+		return nullptr;
 	}
 
 	int w = 0, h = 0;
@@ -924,14 +924,14 @@ REGISTER_MOD_PARSER(B, args)
 
 REGISTER_MOD_PARSER(NOP, )
 {
-	return NULL;
+	return nullptr;
 }
 
 // Fake image function used by GUI2 portraits until
 // Mordante gets rid of it. *tsk* *tsk*
 REGISTER_MOD_PARSER(RIGHT, )
 {
-	return NULL;
+	return nullptr;
 }
 
 // Add a bright overlay.

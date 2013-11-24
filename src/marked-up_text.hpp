@@ -24,13 +24,13 @@
 
 class CVideo;
 struct surface;
-#include <SDL_video.h>
+#include <SDL2/SDL_video.h>
 #include <string>
 
 namespace font {
 
 /** Standard markups for color, size, font, images. */
-extern const char LARGE_TEXT, SMALL_TEXT, BOLD_TEXT, NORMAL_TEXT, NULL_MARKUP, BLACK_TEXT, GRAY_TEXT,
+extern const char LARGE_TEXT, SMALL_TEXT, BOLD_TEXT, NORMAL_TEXT, nullptr_MARKUP, BLACK_TEXT, GRAY_TEXT,
                   GOOD_TEXT, BAD_TEXT, GREEN_TEXT, RED_TEXT, COLOR_TEXT, IMAGE;
 
 // some colors often used in UI
@@ -72,16 +72,16 @@ std::string::const_iterator parse_markup(std::string::const_iterator i1,
  *
  * The above special characters can be quoted using a C-style backslash.
  *
- * A bounding rectangle of the text is returned. If dst is NULL, then the
+ * A bounding rectangle of the text is returned. If dst is nullptr, then the
  * text will not be drawn, and a bounding rectangle only will be returned.
  */
-SDL_Rect draw_text(surface dst, const SDL_Rect& area, int size,
-                   const SDL_Color& color, const std::string& text,
+SDL_Rect draw_text(SDL_Surface dst, const SDL_Rect* area, int size,
+                   const SDL_Color* color, const std::string& text,
                    int x, int y, bool use_tooltips = false, int style = 0);
 
-/** wrapper of the previous function, gui can also be NULL */
-SDL_Rect draw_text(CVideo* gui, const SDL_Rect& area, int size,
-                   const SDL_Color& color, const std::string& text,
+/** wrapper of the previous function, gui can also be nullptr */
+SDL_Rect draw_text(CVideo* gui, const SDL_Rect* area, int size,
+                   const SDL_Color* color, const std::string& text,
                    int x, int y, bool use_tooltips = false, int style = 0);
 
 /** Calculate the size of a text (in pixels) if it were to be drawn. */
@@ -107,16 +107,16 @@ bool is_format_char(char c);
 bool is_cjk_char(const wchar_t ch);
 
 /** Create string of color-markup, such as "<255,255,0>" for yellow. */
-std::string color2markup(const SDL_Color &color);
+std::string color2markup(const SDL_Color* color);
 
 /** Creates the hexadecimal string of a color, such as "#ffff00" for yellow. */
-std::string color2hexa(const SDL_Color &color);
+std::string color2hexa(const SDL_Color* color);
 
 /**
  * Creates pango markup of a color.
  * Don't forget to close it with a @c \</span\>.
  */
-std::string span_color(const SDL_Color &color);
+std::string span_color(const SDL_Color* color);
 
 /**
  * Wrap text.
@@ -139,8 +139,8 @@ std::string word_wrap_text(const std::string& unwrapped_text, int font_size,
  *
  * @returns                       A bounding rectangle of the text.
  */
-SDL_Rect draw_wrapped_text(CVideo* gui, const SDL_Rect& area, int font_size,
-			     const SDL_Color& color, const std::string& text,
+SDL_Rect draw_wrapped_text(CVideo* gui, const SDL_Rect* area, int font_size,
+			     const SDL_Color* color, const std::string& text,
 			     int x, int y, int max_width);
 
 } // end namespace font

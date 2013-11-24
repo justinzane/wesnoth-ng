@@ -61,7 +61,7 @@ unsigned tstate_default::get_state() const
 tmatrix::tmatrix(const implementation::tbuilder_matrix& builder)
 	: tbase(builder, get_control_type())
 	, content_()
-	, pane_(NULL)
+	, pane_(nullptr)
 {
 	boost::intrusive_ptr<const tmatrix_definition::tresolution> cfg =
 			boost::dynamic_pointer_cast<
@@ -117,7 +117,7 @@ void tmatrix::layout_initialise(const bool full_initialisation)
 }
 
 void tmatrix::impl_draw_children(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {
@@ -189,7 +189,7 @@ iterator::twalker_* tmatrix::create_walker()
 	/**
 	 * @todo Implement properly.
 	 */
-	return NULL;
+	return nullptr;
 }
 
 const std::string& tmatrix::get_control_type() const

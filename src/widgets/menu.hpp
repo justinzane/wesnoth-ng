@@ -43,11 +43,11 @@ public:
 		virtual void init() {}
 
 		virtual SDL_Rect item_size(const std::string& item) const;
-		virtual void draw_row_bg(menu& menu_ref, const size_t row_index, const SDL_Rect& rect, ROW_TYPE type);
-		virtual void draw_row(menu& menu_ref, const size_t row_index, const SDL_Rect& rect, ROW_TYPE type);
+		virtual void draw_row_bg(menu& menu_ref, const size_t row_index, const SDL_Rect* rect, ROW_TYPE type);
+		virtual void draw_row(menu& menu_ref, const size_t row_index, const SDL_Rect* rect, ROW_TYPE type);
 		void scale_images(int max_width, int max_height);
 
-		surface get_item_image(const image::locator &i_locator) const;
+		SDL_Surface get_item_image(const image::locator &i_locator) const;
 		size_t get_font_size() const;
 		size_t get_cell_padding() const;
 		size_t get_thickness() const;
@@ -72,8 +72,8 @@ public:
 		virtual ~imgsel_style();
 
 		virtual SDL_Rect item_size(const std::string& item) const;
-		virtual void draw_row_bg(menu& menu_ref, const size_t row_index, const SDL_Rect& rect, ROW_TYPE type);
-		virtual void draw_row(menu& menu_ref, const size_t row_index, const SDL_Rect& rect, ROW_TYPE type);
+		virtual void draw_row_bg(menu& menu_ref, const size_t row_index, const SDL_Rect* rect, ROW_TYPE type);
+		virtual void draw_row(menu& menu_ref, const size_t row_index, const SDL_Rect* rect, ROW_TYPE type);
 
 		virtual void init() { load_images(); }
 		bool load_images();
@@ -94,7 +94,7 @@ public:
 			bg_cache() : surf(), width(-1), height(-1)
 			{}
 
-			surface surf;
+			SDL_Surface surf;
 			int width, height;
 		};
 		bg_cache bg_cache_;
@@ -153,7 +153,7 @@ public:
 
 	menu(CVideo& video, const std::vector<std::string>& items,
 	     bool click_selects=false, int max_height=-1, int max_width=-1,
-		 const sorter* sorter_obj=NULL, style *menu_style=NULL, const bool auto_join=true);
+		 const sorter* sorter_obj=nullptr, style *menu_style=nullptr, const bool auto_join=true);
 
 	/** Default implementation, but defined out-of-line for efficiency reasons. */
 	~menu();
@@ -205,11 +205,11 @@ public:
 protected:
 	bool item_ends_with_image(const std::string& item) const;
 	virtual void handle_event(const SDL_Event& event);
-	void set_inner_location(const SDL_Rect& rect);
+	void set_inner_location(const SDL_Rect* rect);
 
-	bool requires_event_focus(const SDL_Event *event=NULL) const;
+	bool requires_event_focus(const SDL_Event *event=nullptr) const;
 	const std::vector<int>& column_widths() const;
-	virtual void draw_row(const size_t row_index, const SDL_Rect& rect, ROW_TYPE type);
+	virtual void draw_row(const size_t row_index, const SDL_Rect* rect, ROW_TYPE type);
 
 	style *style_;
 	bool silent_;

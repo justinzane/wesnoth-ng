@@ -911,7 +911,7 @@ variant attack_analysis::get_value(const std::string& key) const
 	} else if(key == "movements") {
 		std::vector<variant> res;
 		for(size_t n = 0; n != movements.size(); ++n) {
-			map_formula_callable* item = new map_formula_callable(NULL);
+			map_formula_callable* item = new map_formula_callable(nullptr);
 			item->add("src", variant(new location_callable(movements[n].first)));
 			item->add("dst", variant(new location_callable(movements[n].second)));
 			res.push_back(variant(item));

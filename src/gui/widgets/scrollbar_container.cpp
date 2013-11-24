@@ -72,12 +72,12 @@ tscrollbar_container::tscrollbar_container(const unsigned canvas_count)
 	, state_(ENABLED)
 	, vertical_scrollbar_mode_(auto_visible_first_run)
 	, horizontal_scrollbar_mode_(auto_visible_first_run)
-	, vertical_scrollbar_grid_(NULL)
-	, horizontal_scrollbar_grid_(NULL)
-	, vertical_scrollbar_(NULL)
-	, horizontal_scrollbar_(NULL)
-	, content_grid_(NULL)
-	, content_(NULL)
+	, vertical_scrollbar_grid_(nullptr)
+	, horizontal_scrollbar_grid_(nullptr)
+	, vertical_scrollbar_(nullptr)
+	, horizontal_scrollbar_(nullptr)
+	, content_grid_(nullptr)
+	, content_(nullptr)
 	, content_visible_area_()
 {
 	connect_signal<event::SDL_KEY_DOWN>(boost::bind(
@@ -430,14 +430,14 @@ void tscrollbar_container::set_origin(const tpoint& origin)
 	content_grid_->set_visible_rectangle(content_visible_area_);
 }
 
-void tscrollbar_container::set_visible_rectangle(const SDL_Rect& rectangle)
+void tscrollbar_container::set_visible_rectangle(const SDL_Rect* rectangle)
 {
 	// Inherited.
 	tcontainer_::set_visible_rectangle(rectangle);
 
 	// Now get the visible part of the content.
 	content_visible_area_
-			= intersect_rects(rectangle, content_->get_rectangle());
+			= rects_intersect(rectangle, content_->get_rectangle());
 
 	content_grid_->set_visible_rectangle(content_visible_area_);
 }
@@ -782,7 +782,7 @@ void tscrollbar_container::
 	}
 }
 
-void tscrollbar_container::impl_draw_children(surface& frame_buffer)
+void tscrollbar_container::impl_draw_children(SDL_Surface& frame_buffer)
 {
 	assert(get_visible() == twidget::tvisible::visible
 			&& content_grid_->get_visible() == twidget::tvisible::visible);
@@ -794,7 +794,7 @@ void tscrollbar_container::impl_draw_children(surface& frame_buffer)
 }
 
 void tscrollbar_container::impl_draw_children(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {
@@ -833,7 +833,7 @@ void tscrollbar_container::set_content_size(
 	content_grid_->place(origin, size);
 }
 
-void tscrollbar_container::show_content_rect(const SDL_Rect& rect)
+void tscrollbar_container::show_content_rect(const SDL_Rect* rect)
 {
 	assert(content_);
 	assert(horizontal_scrollbar_ && vertical_scrollbar_);

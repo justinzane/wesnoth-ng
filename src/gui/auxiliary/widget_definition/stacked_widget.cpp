@@ -36,7 +36,7 @@ tstacked_widget_definition::tstacked_widget_definition(const config& cfg)
 
 tstacked_widget_definition::tresolution::tresolution(const config& cfg)
 	: tresolution_definition_(cfg)
-	, grid(NULL)
+	, grid(nullptr)
 {
 /*WIKI
  * @page = GUIWidgetDefinitionWML

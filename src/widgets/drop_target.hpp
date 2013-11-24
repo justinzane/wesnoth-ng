@@ -18,7 +18,7 @@
 #ifndef DROP_TARGET_H_INCLUDED
 #define DROP_TARGET_H_INCLUDED
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 #include <map>
 
@@ -47,10 +47,10 @@ namespace gui {
 		static drop_target_group next_group_;
 
 		int next_free_id(const drop_target_group& group) const;
-		bool hit_rect(const SDL_Rect& hit_loc, const int not_id) const;
+		bool hit_rect(const SDL_Rect* hit_loc, const int not_id) const;
 		drop_groups::iterator find_this() const;
 
-		const SDL_Rect& loc_;
+		const SDL_Rect* loc_;
 		const int id_;
 		drop_group_manager_ptr group_;
 
@@ -77,7 +77,7 @@ namespace gui {
 		/**
 		 * Registers drop target and saves reference to location.
 		 **/
-		drop_target(const drop_group_manager_ptr group, const SDL_Rect& loc);
+		drop_target(const drop_group_manager_ptr group, const SDL_Rect* loc);
 		~drop_target();
 
 		int get_id() const;

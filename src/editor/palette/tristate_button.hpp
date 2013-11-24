@@ -60,7 +60,7 @@ public:
 	void release();
 
 	void set_item_image(
-			const surface& image)
+			const SDL_Surface& image)
 	{
 		itemImage_ = image;
 	}
@@ -88,7 +88,7 @@ private:
 
 	std::string label_;
 
-	surface baseImage_, touchedBaseImage_, activeBaseImage_,
+	SDL_Surface baseImage_, touchedBaseImage_, activeBaseImage_,
 		itemImage_,
 	//	normalImage_, activeImage_,
 		pressedDownImage_, pressedUpImage_, pressedBothImage_,

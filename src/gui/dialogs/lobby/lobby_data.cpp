@@ -62,7 +62,7 @@ void chat_log::add_message(const time_t& timestamp, const std::string& user, con
 
 
 void chat_log::add_message(const std::string& user, const std::string& message) {
-	add_message(time(NULL), user, message);
+	add_message(time(nullptr), user, message);
 }
 
 void chat_log::clear()
@@ -111,7 +111,7 @@ user_info::user_info(const config& c)
 	update_relation();
 }
 
-void user_info::update_state(int selected_game_id, const room_info* current_room /*= NULL*/)
+void user_info::update_state(int selected_game_id, const room_info* current_room /*= nullptr*/)
 {
 	if (game_id != 0) {
 		if (game_id == selected_game_id) {
@@ -120,7 +120,7 @@ void user_info::update_state(int selected_game_id, const room_info* current_room
 			state = GAME;
 		}
 	} else {
-		if (current_room != NULL && current_room->is_member(name)) {
+		if (current_room != nullptr && current_room->is_member(name)) {
 			state = SEL_ROOM;
 		} else {
 			state = LOBBY;

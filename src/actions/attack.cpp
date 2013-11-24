@@ -71,7 +71,7 @@ battle_context_unit_stats::battle_context_unit_stats(const unit &u,
 		const map_location& u_loc, int u_attack_num, bool attacking,
 		const unit &opp, const map_location& opp_loc,
 		const attack_type *opp_weapon, const unit_map& units) :
-	weapon(NULL),
+	weapon(nullptr),
 	attack_num(u_attack_num),
 	is_attacker(attacking),
 	is_poisoned(u.get_state(unit::STATE_POISONED)),
@@ -323,8 +323,8 @@ battle_context::battle_context(const unit_map& units,
 		const map_location& attacker_loc, const map_location& defender_loc,
 		int attacker_weapon, int defender_weapon, double aggression,
 		const combatant *prev_def, const unit* attacker_ptr) :
-	attacker_stats_(NULL), defender_stats_(NULL), attacker_combatant_(NULL),
-	defender_combatant_(NULL)
+	attacker_stats_(nullptr), defender_stats_(nullptr), attacker_combatant_(nullptr),
+	defender_combatant_(nullptr)
 {
 	const unit &attacker = attacker_ptr ? *attacker_ptr : *units.find(attacker_loc);
 	const unit &defender = *units.find(defender_loc);
@@ -344,8 +344,8 @@ battle_context::battle_context(const unit_map& units,
 
 	// If those didn't have to generate statistics, do so now.
 	if (!attacker_stats_) {
-		const attack_type *adef = NULL;
-		const attack_type *ddef = NULL;
+		const attack_type *adef = nullptr;
+		const attack_type *ddef = nullptr;
 		if (attacker_weapon >= 0) {
 			VALIDATE(attacker_weapon < static_cast<int>(attacker.attacks().size()),
 					_("An invalid attacker weapon got selected."));
@@ -368,14 +368,14 @@ battle_context::battle_context(const battle_context_unit_stats &att,
                                const battle_context_unit_stats &def) :
 	attacker_stats_(new battle_context_unit_stats(att)),
 	defender_stats_(new battle_context_unit_stats(def)),
-	attacker_combatant_(NULL),
-	defender_combatant_(NULL)
+	attacker_combatant_(nullptr),
+	defender_combatant_(nullptr)
 {
 }
 
 battle_context::battle_context(const battle_context &other) :
-	attacker_stats_(NULL), defender_stats_(NULL), attacker_combatant_(NULL),
-	defender_combatant_(NULL)
+	attacker_stats_(nullptr), defender_stats_(nullptr), attacker_combatant_(nullptr),
+	defender_combatant_(nullptr)
 {
 	*this = other;
 }
@@ -397,8 +397,8 @@ battle_context& battle_context::operator=(const battle_context &other)
 		delete defender_combatant_;
 		attacker_stats_ = new battle_context_unit_stats(*other.attacker_stats_);
 		defender_stats_ = new battle_context_unit_stats(*other.defender_stats_);
-		attacker_combatant_ = other.attacker_combatant_ ? new combatant(*other.attacker_combatant_, *attacker_stats_) : NULL;
-		defender_combatant_ = other.defender_combatant_ ? new combatant(*other.defender_combatant_, *defender_stats_) : NULL;
+		attacker_combatant_ = other.attacker_combatant_ ? new combatant(*other.attacker_combatant_, *attacker_stats_) : nullptr;
+		defender_combatant_ = other.defender_combatant_ ? new combatant(*other.defender_combatant_, *defender_stats_) : nullptr;
 	}
 	return *this;
 }
@@ -493,8 +493,8 @@ int battle_context::choose_attacker_weapon(const unit &attacker,
 	}
 
 	// Multiple options: simulate them, save best.
-	battle_context_unit_stats *best_att_stats = NULL, *best_def_stats = NULL;
-	combatant *best_att_comb = NULL, *best_def_comb = NULL;
+	battle_context_unit_stats *best_att_stats = nullptr, *best_def_stats = nullptr;
+	combatant *best_att_comb = nullptr, *best_def_comb = nullptr;
 
 	for (i = 0; i < choices.size(); ++i) {
 		const attack_type &att = attacker.attacks()[choices[i]];
@@ -502,7 +502,7 @@ int battle_context::choose_attacker_weapon(const unit &attacker,
 			attacker_loc, defender_loc, prev_def);
 		// If that didn't simulate, do so now.
 		if (!attacker_combatant_) {
-			const attack_type *def = NULL;
+			const attack_type *def = nullptr;
 			if (def_weapon >= 0) {
 				def = &defender.attacks()[def_weapon];
 			}
@@ -531,10 +531,10 @@ int battle_context::choose_attacker_weapon(const unit &attacker,
 			delete attacker_stats_;
 			delete defender_stats_;
 		}
-		attacker_combatant_ = NULL;
-		defender_combatant_ = NULL;
-		attacker_stats_ = NULL;
-		defender_stats_ = NULL;
+		attacker_combatant_ = nullptr;
+		defender_combatant_ = nullptr;
+		attacker_stats_ = nullptr;
+		defender_stats_ = nullptr;
 	}
 
 	attacker_combatant_ = best_att_comb;
@@ -765,9 +765,9 @@ namespace {
 
 	attack::attack(const map_location &attacker, const map_location &defender,
 			int attack_with, int defend_with, bool update_display) :
-		bc_(NULL),
-		a_stats_(NULL),
-		d_stats_(NULL),
+		bc_(nullptr),
+		a_stats_(nullptr),
+		d_stats_(nullptr),
 		abs_n_attack_(0),
 		abs_n_defend_(0),
 		update_att_fog_(false),
@@ -794,10 +794,10 @@ namespace {
 		config ev_data;
 		config& a_weapon_cfg = ev_data.add_child("first");
 		config& d_weapon_cfg = ev_data.add_child("second");
-		if(a_stats_->weapon != NULL && a_.valid()) {
+		if(a_stats_->weapon != nullptr && a_.valid()) {
 			a_weapon_cfg = a_stats_->weapon->get_cfg();
 		}
-		if(d_stats_->weapon != NULL && d_.valid()) {
+		if(d_stats_->weapon != nullptr && d_.valid()) {
 			d_weapon_cfg = d_stats_->weapon->get_cfg();
 		}
 		if(a_weapon_cfg["name"].empty()) {
@@ -842,11 +842,11 @@ namespace {
 			// Fix pointer to weapons
 			const_cast<battle_context_unit_stats*>(a_stats_)->weapon =
 				a_.valid() && a_.weapon_ >= 0
-					? &a_.get_unit().attacks()[a_.weapon_] : NULL;
+					? &a_.get_unit().attacks()[a_.weapon_] : nullptr;
 
 			const_cast<battle_context_unit_stats*>(d_stats_)->weapon =
 				d_.valid() && d_.weapon_ >= 0
-					? &d_.get_unit().attacks()[d_.weapon_] : NULL;
+					? &d_.get_unit().attacks()[d_.weapon_] : nullptr;
 
 			return;
 		}
@@ -1122,7 +1122,7 @@ namespace {
 
 		if (!attacker.valid()) {
 			unit_display::unit_die(defender.loc_, defender.get_unit(),
-				NULL, defender_stats->weapon);
+				nullptr, defender_stats->weapon);
 		} else {
 			unit_display::unit_die(defender.loc_, defender.get_unit(),
 				attacker_stats->weapon, defender_stats->weapon,
@@ -1311,8 +1311,8 @@ namespace {
 			u.set_experience(u.experience() + d_.xp_);
 		}
 
-		unit_display::unit_sheath_weapon(a_.loc_,a_.valid()?&a_.get_unit():NULL,a_stats_->weapon,
-				d_stats_->weapon,d_.loc_,d_.valid()?&d_.get_unit():NULL);
+		unit_display::unit_sheath_weapon(a_.loc_,a_.valid()?&a_.get_unit():nullptr,a_stats_->weapon,
+				d_stats_->weapon,d_.loc_,d_.valid()?&d_.get_unit():nullptr);
 
 		if (update_display_){
 			resources::screen->invalidate_unit();
@@ -1401,7 +1401,7 @@ void advance_unit(map_location loc, const std::string &advance_to,
 	std::vector<int> not_seeing = actions::get_sides_not_seeing(*u);
 
 	// Create the advanced unit.
-	bool use_amla = mod_option != NULL;
+	bool use_amla = mod_option != nullptr;
 	unit new_unit = use_amla ? get_amla_unit(*u, *mod_option) :
 	                           get_advanced_unit(*u, advance_to);
 	if ( !use_amla )

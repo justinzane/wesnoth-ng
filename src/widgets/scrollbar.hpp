@@ -91,7 +91,7 @@ protected:
 private:
 	SDL_Rect grip_area() const;
 	SDL_Rect groove_area() const;
-	surface mid_scaled_, groove_scaled_;
+	SDL_Surface mid_scaled_, groove_scaled_;
 
 	button uparrow_, downarrow_;
 

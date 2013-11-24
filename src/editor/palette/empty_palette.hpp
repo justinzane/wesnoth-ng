@@ -48,7 +48,7 @@ public:
 	virtual void select_bg_item(const std::string& /*item_id*/) {};
 
 	//drawing
-	virtual void adjust_size(const SDL_Rect& /*target*/) {};
+	virtual void adjust_size(const SDL_Rect* /*target*/) {};
 	virtual void draw() {};
 
 	void hide(bool hidden) {
@@ -70,7 +70,7 @@ public:
 		}
 	}
 
-	std::vector<gui::widget>* get_widgets() { return NULL; };
+	std::vector<gui::widget>* get_widgets() { return nullptr; };
 
 	//group
 	virtual void set_group(size_t /*index*/) {};

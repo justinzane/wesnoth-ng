@@ -41,10 +41,10 @@ tbuilder_matrix::tbuilder_matrix(const config& cfg)
 			get_scrollbar_mode(cfg["vertical_scrollbar_mode"]))
 	, horizontal_scrollbar_mode(
 			get_scrollbar_mode(cfg["horizontal_scrollbar_mode"]))
-	, builder_top(NULL)
-	, builder_bottom(NULL)
-	, builder_left(NULL)
-	, builder_right(NULL)
+	, builder_top(nullptr)
+	, builder_bottom(nullptr)
+	, builder_left(nullptr)
+	, builder_right(nullptr)
 	, builder_main(create_builder_widget(cfg.child("main", "[matrix]")))
 {
 	if(const config& top = cfg.child("top")) {

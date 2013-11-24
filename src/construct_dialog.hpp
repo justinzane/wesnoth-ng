@@ -71,7 +71,7 @@ private:
 
 class dialog_image : public widget {
 public:
-	dialog_image(label *const caption, CVideo &video, surface img) : widget(video, false),
+	dialog_image(label *const caption, CVideo &video, SDL_Surface img) : widget(video, false),
 	  surf_(img), caption_(caption)
 	{
 		if(!img.null()) {
@@ -80,7 +80,7 @@ public:
 	}
 	~dialog_image() { delete caption_; }
 
-	//surface surface() const { return surf_; }
+	//SDL_Surface surface() const { return surf_; }
 	label *caption() const { return caption_; }
 	void draw_contents();
 
@@ -91,7 +91,7 @@ public:
 	}
 private:
 
-	surface surf_;
+	SDL_Surface surf_;
 	label *caption_;
 };
 
@@ -155,9 +155,9 @@ private:
 class dialog_button : public button {
 public:
 	dialog_button(CVideo& video, const std::string& label, TYPE type=TYPE_PRESS,
-		int simple_result=CONTINUE_DIALOG, dialog_button_action *handler=NULL)
+		int simple_result=CONTINUE_DIALOG, dialog_button_action *handler=nullptr)
 		: button(video,label,type,"",DEFAULT_SPACE,false), simple_result_(simple_result),
-		parent_(NULL), handler_(handler)
+		parent_(nullptr), handler_(handler)
 	{}
 	void set_parent(class dialog *parent) {
 		parent_ = parent;
@@ -239,10 +239,10 @@ public:
 	//these widgets, therefore do not attempt to reference its
 	//widgets after destroying it
 	void set_image(dialog_image *const img) { delete image_; image_ = img; }
-	void set_image(surface surf, const std::string &caption="");
+	void set_image(SDL_Surface surf, const std::string &caption="");
 	void set_menu(menu *const m) { if ( menu_ != empty_menu ) delete menu_;
-	                               menu_ =  m == NULL ? empty_menu : m; }
-	void set_menu(const std::vector<std::string> & menu_items, menu::sorter* sorter=NULL);
+	                               menu_ =  m == nullptr ? empty_menu : m; }
+	void set_menu(const std::vector<std::string> & menu_items, menu::sorter* sorter=nullptr);
 	void set_menu_items(const std::vector<std::string> &menu_items, bool keep_selection=false);
 
 	//add_pane - preview panes are not currently memory managed
@@ -287,7 +287,7 @@ public:
 	/// Must not be called if any instances of this class exist.
 	/// Should be called if the display goes out of scope.
 	/// (Currently called by ~game_controller.)
-	static void delete_empty_menu()  { delete empty_menu; empty_menu = NULL; }
+	static void delete_empty_menu()  { delete empty_menu; empty_menu = nullptr; }
 
 protected:
 	void set_result(const int result) { result_ = result; }
@@ -308,7 +308,7 @@ private:
 	//process - execute a single dialog processing loop and return the result
 	int process(dialog_process_info &info);
 
-	/// A pointer to this empty menu is used instead of NULL (for menu_).
+	/// A pointer to this empty menu is used instead of nullptr (for menu_).
 	static menu * empty_menu;
 	/// Provides create-on-use semantics for empty_menu.
 	static menu * get_empty_menu(display &disp);
@@ -320,7 +320,7 @@ private:
 	const style& style_;
 	label *title_widget_, *message_;
 	DIALOG_TYPE type_;
-	gui::menu *menu_; // Never NULL; it equals empty_menu if there is currently no menu.
+	gui::menu *menu_; // Never nullptr; it equals empty_menu if there is currently no menu.
 	std::vector<preview_pane*> preview_panes_;
 	std::vector< std::pair<dialog_button*,BUTTON_LOCATION> > button_pool_;
 	std::vector<dialog_button*> standard_buttons_;

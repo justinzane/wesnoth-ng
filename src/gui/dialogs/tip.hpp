@@ -36,7 +36,7 @@ namespace tip {
 	 * The tip is a tooltip or a helptip. One type of tip is shown at the same
 	 * time, opening a second tip closes the first.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @param window_id           The id of the window used to show the tip.
 	 * @param message             The message to show in the tip.

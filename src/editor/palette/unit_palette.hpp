@@ -44,7 +44,7 @@ public:
 private:
 	virtual const std::string& get_id(const unit_type& terrain);
 
-	virtual void draw_item(const unit_type& terrain, surface& image, std::stringstream& tooltip_text);
+	virtual void draw_item(const unit_type& terrain, SDL_Surface& image, std::stringstream& tooltip_text);
 
 //	virtual void update_report();
 

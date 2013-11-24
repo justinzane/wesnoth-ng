@@ -34,14 +34,14 @@ struct tfilter
 	/**
 	 * The functor to call for the filter.
 	 *
-	 * @param surf                The surface to apply the filter to.
+	 * @param surf                The SDL_Surface to apply the filter to.
 	 * @param parameters          A string with the parameters for the
 	 *                            functor. The code is expected to be
 	 *                            supplied on the command line. So it should
 	 *                            be validated.
 	 */
 	typedef boost::function<void(
-				  surface& surf
+				  SDL_Surface& surf
 				, const std::string& parameters
 			)>
 			tfunctor;
@@ -110,7 +110,7 @@ struct tregister_filter
 			, tfilter(#name, #name description, boost::bind(name, _1, _2))));
 
 static void
-scale(surface& surf, const std::string& parameters)
+scale(SDL_Surface& surf, const std::string& parameters)
 {
 	unsigned width, height;
 	const int count = sscanf(parameters.c_str(), "%u,%u", &width, &height);
@@ -134,7 +134,7 @@ REGISTER(scale,
 	"|The height in pixel of the image after scaling.")
 
 static void
-brighten(surface& surf, const std::string& parameters)
+brighten(SDL_Surface& surf, const std::string& parameters)
 {
 	float amount;
 	const int count = sscanf(parameters.c_str(), "%f", &amount);
@@ -158,7 +158,7 @@ REGISTER(brighten,
 		"are set to zero. The alpha channel is not modified.")
 
 static void
-blend(surface& surf, const std::string& parameters)
+blend(SDL_Surface& surf, const std::string& parameters)
 {
 	float amount;
 	unsigned color;
@@ -191,7 +191,7 @@ REGISTER(blend,
 		"is ignored.")
 
 void
-filter_apply(surface& surf, const std::string& filter)
+filter_apply(SDL_Surface& surf, const std::string& filter)
 {
 	std::vector<std::string> f = utils::split(filter, ':', utils::STRIP_SPACES);
 

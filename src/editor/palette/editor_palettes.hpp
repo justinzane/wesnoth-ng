@@ -93,7 +93,7 @@ public:
 	 *
 	 * Use if the size_specs have changed.
 	 */
-	void adjust_size(const SDL_Rect& target);
+	void adjust_size(const SDL_Rect* target);
 
 	virtual bool scroll_up();
 	virtual bool can_scroll_up();
@@ -120,7 +120,7 @@ private:
 	/** Scroll the editor-palette to the bottom. */
 	void scroll_bottom();
 
-	virtual void draw_item(const Item& item, surface& item_image, std::stringstream& tooltip) = 0;
+	virtual void draw_item(const Item& item, SDL_Surface& item_image, std::stringstream& tooltip) = 0;
 
 	virtual const std::string& get_id(const Item& item) = 0;
 

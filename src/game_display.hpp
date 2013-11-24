@@ -110,7 +110,7 @@ public:
 
 	/**
 	 * Sets the route along which footsteps are drawn to show movement of a
-	 * unit. If NULL, no route is displayed. @a route does not have to remain
+	 * unit. If nullptr, no route is displayed. @a route does not have to remain
 	 * valid after being set.
 	 */
 	void set_route(const pathfind::marked_route *route);
@@ -172,11 +172,11 @@ public:
 	 */
 	class fake_unit : public unit {
 	public:
-		explicit fake_unit(unit const & u) : unit(u), my_display_(NULL) {}
-		fake_unit(fake_unit const & u) : unit(u), my_display_(NULL) {}
+		explicit fake_unit(unit const & u) : unit(u), my_display_(nullptr) {}
+		fake_unit(fake_unit const & u) : unit(u), my_display_(nullptr) {}
 		fake_unit(const unit_type& t, int side, unit_race::GENDER gender = unit_race::NUM_GENDERS)
 			: unit(t, side, false, gender)
-			, my_display_(NULL)
+			, my_display_(nullptr)
 		{}
 		/// Assignment operator, taking a fake_unit.
 		/// If already in the queue, @a this will be moved to the end of the

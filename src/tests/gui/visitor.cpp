@@ -34,7 +34,7 @@ static void add_widget(gui2::tgrid& grid
 		, const unsigned row
 		, const unsigned column)
 {
-	BOOST_REQUIRE_NE(widget, static_cast<gui2::twidget*>(NULL));
+	BOOST_REQUIRE_NE(widget, static_cast<gui2::twidget*>(nullptr));
 
 	widget->set_id(id);
 	grid.set_child(widget
@@ -53,7 +53,7 @@ static void test_control()
 	T control;
 	boost::scoped_ptr<gui2::iterator::twalker_> visitor(control.create_walker());
 
-	BOOST_REQUIRE_NE(visitor.get(), static_cast<void*>(NULL));
+	BOOST_REQUIRE_NE(visitor.get(), static_cast<void*>(nullptr));
 
 	/***** INITIAL STATE *****/
 
@@ -62,8 +62,8 @@ static void test_control()
 	BOOST_CHECK_EQUAL(visitor->at_end(gui2::iterator::twalker_::child), true);
 
 	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::widget), &control);
-	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::grid), static_cast<void*>(NULL));
-	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(NULL));
+	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::grid), static_cast<void*>(nullptr));
+	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(nullptr));
 
 	/***** VISITING WIDGET *****/
 
@@ -75,9 +75,9 @@ static void test_control()
 	BOOST_CHECK_EQUAL(visitor->at_end(gui2::iterator::twalker_::grid), true);
 	BOOST_CHECK_EQUAL(visitor->at_end(gui2::iterator::twalker_::child), true);
 
-	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::widget), static_cast<void*>(NULL));
-	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::grid), static_cast<void*>(NULL));
-	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(NULL));
+	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::widget), static_cast<void*>(nullptr));
+	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::grid), static_cast<void*>(nullptr));
+	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(nullptr));
 
 	/***** POST END *****/
 
@@ -111,7 +111,7 @@ static void test_grid()
 
 	BOOST_CHECK_EQUAL(visitor->at_end(gui2::iterator::twalker_::child), false);
 
-	BOOST_REQUIRE_NE(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(NULL));
+	BOOST_REQUIRE_NE(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(nullptr));
 	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child)->id(), "(1,1)");
 
 	/***** LABEL 2,1 *****/
@@ -120,7 +120,7 @@ static void test_grid()
 
 	BOOST_CHECK_EQUAL(visitor->at_end(gui2::iterator::twalker_::child), false);
 
-	BOOST_REQUIRE_NE(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(NULL));
+	BOOST_REQUIRE_NE(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(nullptr));
 	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child)->id(), "(2,1)");
 
 	/***** LABEL 1,2 *****/
@@ -129,7 +129,7 @@ static void test_grid()
 
 	BOOST_CHECK_EQUAL(visitor->at_end(gui2::iterator::twalker_::child), false);
 
-	BOOST_REQUIRE_NE(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(NULL));
+	BOOST_REQUIRE_NE(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(nullptr));
 	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child)->id(), "(1,2)");
 
 	/***** LABEL 2,2 *****/
@@ -138,7 +138,7 @@ static void test_grid()
 
 	BOOST_CHECK_EQUAL(visitor->at_end(gui2::iterator::twalker_::child), false);
 
-	BOOST_REQUIRE_NE(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(NULL));
+	BOOST_REQUIRE_NE(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(nullptr));
 	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child)->id(), "(2,2)");
 
 	/***** END *****/
@@ -147,7 +147,7 @@ static void test_grid()
 
 	BOOST_CHECK_EQUAL(visitor->at_end(gui2::iterator::twalker_::child), true);
 
-	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(NULL));
+	BOOST_CHECK_EQUAL(visitor->get(gui2::iterator::twalker_::child), static_cast<void*>(nullptr));
 
 	/***** POST END *****/
 

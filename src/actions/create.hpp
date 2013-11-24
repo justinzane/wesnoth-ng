@@ -49,13 +49,13 @@ public:
 	 * @retval map_location::null_location if unit is to be put into recall list
 	 * @retval valid on-board map location otherwise
 	 */
-	map_location find_location(const config &cfg, const unit* pass_check=NULL);
+	map_location find_location(const config &cfg, const unit* pass_check=nullptr);
 
 
 	/**
 	 * adds a unit on map without firing any events (so, usable during team construction in gamestatus)
 	 */
-	void add_unit(const config &cfg, const vconfig* vcfg = NULL);
+	void add_unit(const config &cfg, const vconfig* vcfg = nullptr);
 
 private:
 	void post_create(const map_location &loc, const unit &new_unit, bool anim);

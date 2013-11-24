@@ -85,7 +85,7 @@ public:
 
 	static factory_map& get_list() {
 		static factory_map *ai_factories;
-		if (ai_factories==NULL) {
+		if (ai_factories==nullptr) {
 			ai_factories = new factory_map;
 		}
 		return *ai_factories;

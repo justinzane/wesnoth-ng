@@ -68,9 +68,9 @@ public:
 	 * Returns the rendered text.
 	 *
 	 * Before rendering it tests whether a redraw is needed and if so it first
-	 * redraws the surface before returning it.
+	 * redraws the SDL_Surface before returning it.
 	 */
-	surface render() const;
+	SDL_Surface render() const;
 
 	/** Returns the width needed for the text. */
 	int get_width() const;
@@ -205,8 +205,8 @@ private:
 	PangoLayout* layout_;
 	mutable PangoRectangle rect_;
 
-	/** The surface to render upon used as a cache. */
-	mutable surface surface_;
+	/** The SDL_Surface to render upon used as a cache. */
+	mutable SDL_Surface surface_;
 
 	/** The text to draw (stored as utf-8). */
 	std::string text_;
@@ -283,7 +283,7 @@ private:
 	/**
 	 * Recalculates the text.
 	 *
-	 * When the text is recalculated the surface is dirtied.
+	 * When the text is recalculated the SDL_Surface is dirtied.
 	 *
 	 * @param force               Recalculate even if not dirty?
 	 */
@@ -305,7 +305,7 @@ private:
 	/**
 	 * Buffer to store the image on.
 	 *
-	 * We use a cairo surface to draw on this buffer and then use the buffer as
+	 * We use a cairo SDL_Surface to draw on this buffer and then use the buffer as
 	 * data source for the SDL_Surface. This means the buffer needs to be stored
 	 * in the object.
 	 */
@@ -314,7 +314,7 @@ private:
 	/**
 	 * Creates a new buffer.
 	 *
-	 * If needed frees the other surface and then creates a new buffer and
+	 * If needed frees the other SDL_Surface and then creates a new buffer and
 	 * initializes the entire buffer with values 0.
 	 *
 	 * NOTE eventhough we're clearly modifying function we don't change the

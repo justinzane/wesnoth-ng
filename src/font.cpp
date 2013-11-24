@@ -216,7 +216,7 @@ static TTF_Font* open_font(const std::string& fname, int size)
 				name = fname;
 				if(!file_exists(name)) {
 					ERR_FT << "Failed opening font: '" << name << "': No such file or directory\n";
-					return NULL;
+					return nullptr;
 				}
 			}
 		}
@@ -226,16 +226,16 @@ static TTF_Font* open_font(const std::string& fname, int size)
 		if(!file_exists(name)) {
 			if(!file_exists(fname)) {
 				ERR_FT << "Failed opening font: '" << name << "': No such file or directory\n";
-				return NULL;
+				return nullptr;
 			}
 			name = fname;
 		}
 	}
 
 	TTF_Font* font = TTF_OpenFont(name.c_str(),size);
-	if(font == NULL) {
+	if(font == nullptr) {
 		ERR_FT << "Failed opening font: TTF_OpenFont: " << TTF_GetError() << "\n";
-		return NULL;
+		return nullptr;
 	}
 
 	return font;
@@ -248,12 +248,12 @@ static TTF_Font* get_font(font_id id)
 		return it->second;
 
 	if(id.subset < 0 || size_t(id.subset) >= font_names.size())
-		return NULL;
+		return nullptr;
 
 	TTF_Font* font = open_font(font_names[id.subset], id.size);
 
-	if(font == NULL)
-		return NULL;
+	if(font == nullptr)
+		return nullptr;
 
 	TTF_SetFontStyle(font,TTF_STYLE_NORMAL);
 
@@ -363,7 +363,7 @@ void manager::init() const
 #if CAIRO_HAS_WIN32_FONT
 	foreach_ng(const std::string& path, get_binary_paths("fonts")) {
 		std::vector<std::string> files;
-		get_files_in_dir(path, &files, NULL, ENTIRE_FILE_PATH);
+		get_files_in_dir(path, &files, nullptr, ENTIRE_FILE_PATH);
 		foreach_ng(const std::string& file, files)
 			if(file.substr(file.length() - 4) == ".ttf" || file.substr(file.length() - 4) == ".ttc")
 				AddFontResourceA(file.c_str());
@@ -380,7 +380,7 @@ void manager::deinit() const
 #if CAIRO_HAS_WIN32_FONT
 	foreach_ng(const std::string& path, get_binary_paths("fonts")) {
 		std::vector<std::string> files;
-		get_files_in_dir(path, &files, NULL, ENTIRE_FILE_PATH);
+		get_files_in_dir(path, &files, nullptr, ENTIRE_FILE_PATH);
 		foreach_ng(const std::string& file, files)
 			if(file.substr(file.length() - 4) == ".ttf" || file.substr(file.length() - 4) == ".ttc")
 				RemoveFontResourceA(file.c_str());
@@ -471,11 +471,11 @@ public:
 #endif
 	std::vector<surface> const & get_surfaces() const;
 
-	bool operator==(text_surface const &t) const {
+	bool operator==(text_SDL_Surface const &t) const {
 		return hash_ == t.hash_ && font_size_ == t.font_size_
 			&& color_ == t.color_ && style_ == t.style_ && str_ == t.str_;
 	}
-	bool operator!=(text_surface const &t) const { return !operator==(t); }
+	bool operator!=(text_SDL_Surface const &t) const { return !operator==(t); }
 private:
 	int hash_;
 	int font_size_;
@@ -510,7 +510,7 @@ void text_surface::bidi_cvt()
 #else
 	n = fribidi_charset_to_unicode(FRIBIDI_CHAR_SET_UTF8, c_str, len, bidi_logical);
 #endif
-	fribidi_log2vis(bidi_logical, n, &base_dir, bidi_visual, NULL, NULL, NULL);
+	fribidi_log2vis(bidi_logical, n, &base_dir, bidi_visual, nullptr, nullptr, nullptr);
 #ifdef	OLD_FRIBIDI
 	fribidi_unicode_to_utf8 (bidi_visual, n, utf8str);
 #else
@@ -591,7 +591,7 @@ void text_surface::measure() const
 	foreach_ng(text_chunk const &chunk, chunks_)
 	{
 		TTF_Font* ttfont = get_font(font_id(chunk.subset, font_size_));
-		if(ttfont == NULL)
+		if(ttfont == nullptr)
 			continue;
 		font_style_setter const style_setter(ttfont, style_);
 
@@ -637,11 +637,11 @@ std::vector<surface> const &text_surface::get_surfaces() const
 	foreach_ng(text_chunk const &chunk, chunks_)
 	{
 		TTF_Font* ttfont = get_font(font_id(chunk.subset, font_size_));
-		if (ttfont == NULL)
+		if (ttfont == nullptr)
 			continue;
 		font_style_setter const style_setter(ttfont, style_);
 
-		surface s = surface(TTF_RenderUTF8_Blended(ttfont, chunk.text.c_str(), color_));
+		SDL_Surface s = surface(TTF_RenderUTF8_Blended(ttfont, chunk.text.c_str(), color_));
 		if(!s.null())
 			surfs_.push_back(s);
 	}
@@ -652,7 +652,7 @@ std::vector<surface> const &text_surface::get_surfaces() const
 class text_cache
 {
 public:
-	static text_surface &find(text_surface const &t);
+	static text_SDL_Surface &find(text_SDL_Surface const &t);
 	static void resize(unsigned int size);
 private:
 	typedef std::list< text_surface > text_list;
@@ -675,7 +675,7 @@ void text_cache::resize(unsigned int size)
 }
 
 
-text_surface &text_cache::find(text_surface const &t)
+text_SDL_Surface &text_cache::find(text_SDL_Surface const &t)
 {
 	static size_t lookup_ = 0, hit_ = 0;
 	text_list::iterator it_bgn = cache_.begin(), it_end = cache_.end();
@@ -697,7 +697,7 @@ text_surface &text_cache::find(text_surface const &t)
 
 }
 
-static surface render_text(const std::string& text, int fontsize, const SDL_Color& color, int style, bool use_markup)
+static SDL_Surface render_text(const std::string& text, int fontsize, const SDL_Color* color, int style, bool use_markup)
 {
 	// we keep blank lines and spaces (may be wanted for indentation)
 	const std::vector<std::string> lines = utils::split(text, '\n', 0);
@@ -711,8 +711,8 @@ static surface render_text(const std::string& text, int fontsize, const SDL_Colo
 		int text_style = style;
 
 		std::string::const_iterator after_markup = use_markup ?
-			parse_markup(ln->begin(), ln->end(), &sz, NULL, &text_style) : ln->begin();
-		text_surface txt_surf(sz, color, text_style);
+			parse_markup(ln->begin(), ln->end(), &sz, nullptr, &text_style) : ln->begin();
+		text_SDL_Surface txt_surf(sz, color, text_style);
 
 		if (after_markup == ln->end() && (ln+1 != ln_end || lines.begin()+1 == ln_end)) {
 			// we replace empty line by a space (to have a line height)
@@ -726,7 +726,7 @@ static surface render_text(const std::string& text, int fontsize, const SDL_Colo
 			txt_surf.set_text(line);
 		}
 
-		const text_surface& cached_surf = text_cache::find(txt_surf);
+		const text_SDL_Surface& cached_surf = text_cache::find(txt_surf);
 		const std::vector<surface>&res = cached_surf.get_surfaces();
 
 		if (!res.empty()) {
@@ -739,12 +739,12 @@ static surface render_text(const std::string& text, int fontsize, const SDL_Colo
 	if (surfaces.empty()) {
 		return surface();
 	} else if (surfaces.size() == 1 && surfaces.front().size() == 1) {
-		surface surf = surfaces.front().front();
+		SDL_Surface surf = surfaces.front().front();
 		SDL_SetAlpha(surf, SDL_SRCALPHA | SDL_RLEACCEL, SDL_ALPHA_OPAQUE);
 		return surf;
 	} else {
 
-		surface res(create_compatible_surface(surfaces.front().front(),width,height));
+		SDL_Surface res(create_compatible_surface(surfaces.front().front(),width,height));
 		if (res.null())
 			return res;
 
@@ -758,7 +758,7 @@ static surface render_text(const std::string& text, int fontsize, const SDL_Colo
 					j_end = i->end(); j != j_end; ++j) {
 				SDL_SetAlpha(*j, 0, 0); // direct blit without alpha blending
 				SDL_Rect dstrect = create_rect(xpos, ypos, 0, 0);
-				sdl_blit(*j, NULL, res, &dstrect);
+				SDL_BlitSurface(*j, nullptr, res, &dstrect);
 				xpos += (*j)->w;
 				height = std::max<size_t>((*j)->h, height);
 			}
@@ -770,18 +770,18 @@ static surface render_text(const std::string& text, int fontsize, const SDL_Colo
 }
 
 
-surface get_rendered_text(const std::string& str, int size, const SDL_Color& color, int style)
+SDL_Surface get_rendered_text(const std::string& str, int size, const SDL_Color* color, int style)
 {
 	// TODO maybe later also to parse markup here, but a lot to check
 	return render_text(str, size, color, style, false);
 }
 
-SDL_Rect draw_text_line(surface gui_surface, const SDL_Rect& area, int size,
-		   const SDL_Color& color, const std::string& text,
+SDL_Rect draw_text_line(SDL_Surface gui_surface, const SDL_Rect* area, int size,
+		   const SDL_Color* color, const std::string& text,
 		   int x, int y, bool use_tooltips, int style)
 {
 	if (gui_surface.null()) {
-		text_surface const &u = text_cache::find(text_surface(text, size, color, style));
+		text_SDL_Surface const &u = text_cache::find(text_surface(text, size, color, style));
 		return create_rect(0, 0, u.width(), u.height());
 	}
 
@@ -792,8 +792,8 @@ SDL_Rect draw_text_line(surface gui_surface, const SDL_Rect& area, int size,
 	const std::string etext = make_text_ellipsis(text, size, area.w);
 
 	// for the main current use, we already parsed markup
-	surface surface(render_text(etext,size,color,style,false));
-	if(surface == NULL) {
+	SDL_Surface surface(render_text(etext,size,color,style,false));
+	if(surface == nullptr) {
 		return create_rect(0, 0, 0, 0);
 	}
 
@@ -802,7 +802,7 @@ SDL_Rect draw_text_line(surface gui_surface, const SDL_Rect& area, int size,
 		dest.x = x;
 #ifdef	HAVE_FRIBIDI
 		// Oron -- Conditional, until all draw_text_line calls have fixed area parameter
-		if(getenv("NO_RTL") == NULL) {
+		if(getenv("NO_RTL") == nullptr) {
 			bool is_rtl = text_cache::find(text_surface(text, size, color, style)).is_rtl();
 			if(is_rtl)
 				dest.x = area.x + area.w - surface->w - (x - area.x);
@@ -829,11 +829,11 @@ SDL_Rect draw_text_line(surface gui_surface, const SDL_Rect& area, int size,
 		dest.h = area.y + area.h - dest.y;
 	}
 
-	if(gui_surface != NULL) {
+	if(gui_surface != nullptr) {
 		SDL_Rect src = dest;
 		src.x = 0;
 		src.y = 0;
-		sdl_blit(surface,&src,gui_surface,&dest);
+		SDL_BlitSurface(surface,&src,gui_surface,&dest);
 	}
 
 	if(use_tooltips) {
@@ -847,7 +847,7 @@ int get_max_height(int size)
 {
 	// Only returns the maximal size of the first font
 	TTF_Font* const font = get_font(font_id(0, size));
-	if(font == NULL)
+	if(font == nullptr)
 		return 0;
 	return TTF_FontHeight(font);
 }
@@ -869,7 +869,7 @@ SDL_Rect line_size(const std::string& line, int font_size, int style)
 	SDL_Rect res;
 
 	const SDL_Color col = { 0, 0, 0, 0 };
-	text_surface s(line, font_size, col, style);
+	text_SDL_Surface s(line, font_size, col, style);
 
 	res.w = s.width();
 	res.h = s.height();
@@ -922,7 +922,7 @@ std::stack<std::set<int> > label_contexts;
 namespace font {
 
 floating_label::floating_label(const std::string& text)
-		: surf_(NULL), buf_(NULL), text_(text),
+		: surf_(nullptr), buf_(nullptr), text_(text),
 		font_size_(SIZE_NORMAL),
 		color_(NORMAL_COLOR),	bgcolor_(), bgalpha_(0),
 		xpos_(0), ypos_(0),
@@ -951,7 +951,7 @@ int floating_label::xpos(size_t width) const
 	return xpos;
 }
 
-surface floating_label::create_surface()
+SDL_Surface floating_label::create_surface()
 {
 	if (surf_.null()) {
 		font::ttext text;
@@ -967,26 +967,26 @@ surface floating_label::create_surface()
 			text.set_text(text_, use_markup_);
 		}
 
-		surface foreground = text.render();
+		SDL_Surface foreground = text.render();
 
-		if(foreground == NULL) {
+		if(foreground == nullptr) {
 			ERR_FT << "could not create floating label's text" << std::endl;
-			return NULL;
+			return nullptr;
 		}
 
 		// combine foreground text with its background
 		if(bgalpha_ != 0) {
 			// background is a dark tooltip box
-			surface background = create_neutral_surface(foreground->w + border_*2, foreground->h + border_*2);
+			SDL_Surface background = create_neutral_surface(foreground->w + border_*2, foreground->h + border_*2);
 
-			if (background == NULL) {
+			if (background == nullptr) {
 				ERR_FT << "could not create tooltip box" << std::endl;
 				surf_ = create_optimized_surface(foreground);
 				return surf_;
 			}
 
 			Uint32 color = SDL_MapRGBA(foreground->format, bgcolor_.r,bgcolor_.g, bgcolor_.b, bgalpha_);
-			sdl_fill_rect(background,NULL, color);
+			SDL_FillRect(background,nullptr, color);
 
 			// we make the text less transparent, because the blitting on the
 			// dark background will darken the anti-aliased part.
@@ -996,7 +996,7 @@ surface floating_label::create_surface()
 
 			SDL_Rect r = create_rect( border_, border_, 0, 0);
 			SDL_SetAlpha(foreground,SDL_SRCALPHA,SDL_ALPHA_OPAQUE);
-			blit_surface(foreground, NULL, background, &r);
+			blit_surface(foreground, nullptr, background, &r);
 
 			surf_ = create_optimized_surface(background);
 			// RLE compression seems less efficient for big semi-transparent area
@@ -1005,20 +1005,20 @@ surface floating_label::create_surface()
 		}
 		else {
 			// background is blurred shadow of the text
-			surface background = create_neutral_surface
+			SDL_Surface background = create_neutral_surface
 				(foreground->w + 4, foreground->h + 4);
-			sdl_fill_rect(background, NULL, 0);
+			SDL_FillRect(background, nullptr, 0);
 			SDL_Rect r = { 2, 2, 0, 0 };
-			blit_surface(foreground, NULL, background, &r);
+			blit_surface(foreground, nullptr, background, &r);
 			background = shadow_image(background, false);
 
-			if (background == NULL) {
+			if (background == nullptr) {
 				ERR_FT << "could not create floating label's shadow" << std::endl;
 				surf_ = create_optimized_surface(foreground);
 				return surf_;
 			}
 			SDL_SetAlpha(foreground,SDL_SRCALPHA,SDL_ALPHA_OPAQUE);
-			blit_surface(foreground, NULL, background, &r);
+			blit_surface(foreground, nullptr, background, &r);
 			surf_ = create_optimized_surface(background);
 		}
 	}
@@ -1026,53 +1026,53 @@ surface floating_label::create_surface()
 	return surf_;
 }
 
-void floating_label::draw(surface screen)
+void floating_label::draw(SDL_Surface screen)
 {
 	if(!visible_) {
-		buf_.assign(NULL);
+		buf_.assign(nullptr);
 		return;
 	}
 
 	create_surface();
-	if(surf_ == NULL) {
+	if(surf_ == nullptr) {
 		return;
 	}
 
-	if(buf_ == NULL) {
+	if(buf_ == nullptr) {
 		buf_.assign(create_compatible_surface(screen, surf_->w, surf_->h));
-		if(buf_ == NULL) {
+		if(buf_ == nullptr) {
 			return;
 		}
 	}
 
-	if(screen == NULL) {
+	if(screen == nullptr) {
 		return;
 	}
 
 	SDL_Rect rect = create_rect(xpos(surf_->w), ypos_, surf_->w, surf_->h);
 	const clip_rect_setter clip_setter(screen, &clip_rect_);
-	sdl_blit(screen,&rect,buf_,NULL);
-	sdl_blit(surf_,NULL,screen,&rect);
+	SDL_BlitSurface(screen,&rect,buf_,nullptr);
+	SDL_BlitSurface(surf_,nullptr,screen,&rect);
 
 	update_rect(rect);
 }
 
-void floating_label::undraw(surface screen)
+void floating_label::undraw(SDL_Surface screen)
 {
-	if(screen == NULL || buf_ == NULL) {
+	if(screen == nullptr || buf_ == nullptr) {
 		return;
 	}
 
 	SDL_Rect rect = create_rect(xpos(surf_->w), ypos_, surf_->w, surf_->h);
 	const clip_rect_setter clip_setter(screen, &clip_rect_);
-	sdl_blit(buf_,NULL,screen,&rect);
+	SDL_BlitSurface(buf_,nullptr,screen,&rect);
 
 	update_rect(rect);
 
 	move(xmove_,ymove_);
 	if(lifetime_ > 0) {
 		--lifetime_;
-		if(alpha_change_ != 0 && (xmove_ != 0.0 || ymove_ != 0.0) && surf_ != NULL) {
+		if(alpha_change_ != 0 && (xmove_ != 0.0 || ymove_ != 0.0) && surf_ != nullptr) {
 			// fade out moving floating labels
 			// note that we don't optimize these surfaces since they will always change
 			surf_.assign(adjust_surface_alpha_add(surf_,alpha_change_,false));
@@ -1133,8 +1133,8 @@ SDL_Rect get_floating_label_rect(int handle)
 {
 	const label_map::iterator i = labels.find(handle);
 	if(i != labels.end()) {
-		const surface surf = i->second.create_surface();
-		if(surf != NULL) {
+		const SDL_Surface surf = i->second.create_surface();
+		if(surf != nullptr) {
 			return create_rect(0, 0, surf->w, surf->h);
 		}
 	}
@@ -1144,8 +1144,8 @@ SDL_Rect get_floating_label_rect(int handle)
 
 floating_label_context::floating_label_context()
 {
-	surface const screen = SDL_GetVideoSurface();
-	if(screen != NULL) {
+	SDL_Surface const screen = SDL_GetVideoSurface();
+	if(screen != nullptr) {
 		draw_floating_labels(screen);
 	}
 
@@ -1161,13 +1161,13 @@ floating_label_context::~floating_label_context()
 
 	label_contexts.pop();
 
-	surface const screen = SDL_GetVideoSurface();
-	if(screen != NULL) {
+	SDL_Surface const screen = SDL_GetVideoSurface();
+	if(screen != nullptr) {
 		undraw_floating_labels(screen);
 	}
 }
 
-void draw_floating_labels(surface screen)
+void draw_floating_labels(SDL_Surface screen)
 {
 	if(label_contexts.empty()) {
 		return;
@@ -1184,7 +1184,7 @@ void draw_floating_labels(surface screen)
 	}
 }
 
-void undraw_floating_labels(surface screen)
+void undraw_floating_labels(SDL_Surface screen)
 {
 	if(label_contexts.empty()) {
 		return;

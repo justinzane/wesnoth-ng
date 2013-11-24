@@ -34,7 +34,7 @@ namespace gui {
 		return group_id->second++;
 	}
 
-	drop_target::drop_target(const drop_group_manager_ptr group, const SDL_Rect& loc) : loc_(loc), id_(next_free_id(group->get_group_id())), group_(group)
+	drop_target::drop_target(const drop_group_manager_ptr group, const SDL_Rect* loc) : loc_(loc), id_(next_free_id(group->get_group_id())), group_(group)
 	{
 		groups_.insert(std::make_pair(group_->get_group_id(), this));
 	}
@@ -88,7 +88,7 @@ namespace gui {
 		return next_group_++;
 	}
 
-	bool drop_target::hit_rect(const SDL_Rect& hit_loc, const int not_id) const
+	bool drop_target::hit_rect(const SDL_Rect* hit_loc, const int not_id) const
 	{
 		if (id_ == not_id)
 			return false;

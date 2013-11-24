@@ -30,7 +30,7 @@
 #include "windows_tray_notification.hpp"
 #endif
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 #include <algorithm>
 #include <cassert>

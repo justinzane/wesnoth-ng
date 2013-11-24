@@ -40,7 +40,7 @@ static lg::log_domain log_display("display");
 
 namespace image {
 
-surface getMinimap(int w, int h, const gamemap &map, const team *vw)
+SDL_Surface getMinimap(int w, int h, const gamemap &map, const team *vw)
 {
 	const int scale = 8;
 
@@ -49,12 +49,12 @@ surface getMinimap(int w, int h, const gamemap &map, const team *vw)
 	const size_t map_width = map.w()*scale*3/4;
 	const size_t map_height = map.h()*scale;
 	if(map_width == 0 || map_height == 0) {
-		return surface(NULL);
+		return surface(nullptr);
 	}
 
-	surface minimap(create_neutral_surface(map_width, map_height));
-	if(minimap == NULL)
-		return surface(NULL);
+	SDL_Surface minimap(create_neutral_surface(map_width, map_height));
+	if(minimap == nullptr)
+		return surface(nullptr);
 
 	typedef mini_terrain_cache_map cache_map;
 	cache_map *normal_cache = &mini_terrain_cache;
@@ -63,14 +63,14 @@ surface getMinimap(int w, int h, const gamemap &map, const team *vw)
 	for(int y = 0; y != map.total_height(); ++y) {
 		for(int x = 0; x != map.total_width(); ++x) {
 
-			surface surf(NULL);
+			SDL_Surface surf(nullptr);
 
 			const map_location loc(x,y);
 			if(map.on_board(loc)) {
 
-				const bool shrouded = (vw != NULL && vw->shrouded(loc));
+				const bool shrouded = (vw != nullptr && vw->shrouded(loc));
 				// shrouded hex are not considered fogged (no need to fog a black image)
-				const bool fogged = (vw != NULL && !shrouded && vw->fogged(loc));
+				const bool fogged = (vw != nullptr && !shrouded && vw->fogged(loc));
 				const t_translation::t_terrain terrain = shrouded ?
 						t_translation::VOID_TERRAIN : map[loc];
 				const terrain_type& terrain_info = map.get_terrain_info(terrain);
@@ -91,24 +91,24 @@ surface getMinimap(int w, int h, const gamemap &map, const team *vw)
 				if(i == cache->end()) {
 					std::string base_file =
 							"terrain/" + terrain_info.minimap_image() + ".png";
-					surface tile = get_image(base_file,image::HEXED);
+					SDL_Surface tile = get_image(base_file,image::HEXED);
 
 					//Compose images of base and overlay if necessary
 					// NOTE we also skip overlay when base is missing (to avoid hiding the error)
-					if(tile != NULL && map.get_terrain_info(terrain).is_combined()) {
+					if(tile != nullptr && map.get_terrain_info(terrain).is_combined()) {
 						std::string overlay_file =
 								"terrain/" + terrain_info.minimap_image_overlay() + ".png";
-						surface overlay = get_image(overlay_file,image::HEXED);
+						SDL_Surface overlay = get_image(overlay_file,image::HEXED);
 
-						if(overlay != NULL && overlay != tile) {
-							surface combined = create_neutral_surface(tile->w, tile->h);
+						if(overlay != nullptr && overlay != tile) {
+							SDL_Surface combined = create_neutral_surface(tile->w, tile->h);
 							SDL_Rect r = create_rect(0,0,0,0);
-							sdl_blit(tile, NULL, combined, &r);
+							SDL_BlitSurface(tile, nullptr, combined, &r);
 							r.x = std::max(0, (tile->w - overlay->w)/2);
 							r.y = std::max(0, (tile->h - overlay->h)/2);
-							//blit_surface needs neutral surface
-							surface overlay_neutral = make_neutral_surface(overlay);
-							blit_surface(overlay_neutral, NULL, combined, &r);
+							//blit_SDL_Surface needs neutral surface
+							SDL_Surface overlay_neutral = make_neutral_surface(overlay);
+							blit_surface(overlay_neutral, nullptr, combined, &r);
 							tile = combined;
 						}
 					}
@@ -137,8 +137,8 @@ surface getMinimap(int w, int h, const gamemap &map, const team *vw)
 						, 0
 						, 0);
 
-				if(surf != NULL)
-					sdl_blit(surf, NULL, minimap, &maprect);
+				if(surf != nullptr)
+					SDL_BlitSurface(surf, nullptr, minimap, &maprect);
 			}
 		}
 	}

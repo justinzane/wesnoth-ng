@@ -884,7 +884,7 @@ static void generate_and_push_ai_table(lua_State* L, ai::engine_lua* engine) {
 			{ "check_recruit", &cfun_ai_check_recruit },
 			//{ "",},
 			//{ "",},
-			{ NULL, NULL } };
+			{ nullptr, nullptr } };
 	for (const luaL_Reg* p = callbacks; p->name; ++p) {
 		lua_pushlightuserdata(L, engine);
 		lua_pushcclosure(L, p->func, 1);
@@ -901,14 +901,14 @@ lua_ai_context* lua_ai_context::create(lua_State *L, char const *code, ai::engin
 		char const *m = lua_tostring(L, -1);
 		ERR_LUA << "error while initializing ai:  " <<m << '\n';
 		lua_pop(L, 2);//return with stack size 0 []
-		return NULL;
+		return nullptr;
 	}
 	//push data table here
 	generate_and_push_ai_table(L, engine);
 
 	//compile the ai as a closure
 	if (!luaW_pcall(L, 1, 1, true)) {
-		return NULL;//return with stack size 0 []
+		return nullptr;//return with stack size 0 []
 	}
 
 	// Retrieve the ai elements table from the registry.
@@ -930,7 +930,7 @@ lua_ai_action_handler* lua_ai_action_handler::create(lua_State *L, char const *c
 		char const *m = lua_tostring(L, -1);
 		ERR_LUA << "error while creating ai function:  " <<m << '\n';
 		lua_pop(L, 2);//return with stack size 0 []
-		return NULL;
+		return nullptr;
 	}
 
 

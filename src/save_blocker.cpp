@@ -18,8 +18,8 @@
 
 #include "save_blocker.hpp"
 
-play_controller* save_blocker::controller_ = NULL;
-void (play_controller::*save_blocker::callback_)() = NULL;
+play_controller* save_blocker::controller_ = nullptr;
+void (play_controller::*save_blocker::callback_)() = nullptr;
 SDL_sem* save_blocker::sem_ = SDL_CreateSemaphore(1);
 
 save_blocker::save_blocker() {
@@ -30,8 +30,8 @@ save_blocker::~save_blocker() {
 	unblock();
 	if(controller_ && callback_) {
 		(controller_->*callback_)();
-		controller_ = NULL;
-		callback_ = NULL;
+		controller_ = nullptr;
+		callback_ = nullptr;
 	}
 }
 

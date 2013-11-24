@@ -51,7 +51,7 @@ void mouse_action_item::move(editor_display& disp, const map_location& hex)
 	//	const item_map::const_item_iterator item_it = items.find(hex);
 //		if (item_it != items.end()) {
 //
-//			disp.set_mouseover_hex_overlay(NULL);
+//			disp.set_mouseover_hex_overlay(nullptr);
 //
 //			SDL_Rect rect;
 //			rect.x = disp.get_location_x(hex);
@@ -75,7 +75,7 @@ editor_action* mouse_action_item::click_left(editor_display& disp, int x, int y)
 {
 	start_hex_ = disp.hex_clicked_on(x, y);
 	if (!disp.get_map().on_board(start_hex_)) {
-		return NULL;
+		return nullptr;
 	}
 
 	const overlay& item = item_palette_.selected_fg_item();
@@ -88,23 +88,23 @@ editor_action* mouse_action_item::click_left(editor_display& disp, int x, int y)
 //		set_item_mouse_overlay(disp, item_it->type());
 
 	click_ = true;
-	return NULL;
+	return nullptr;
 }
 
 editor_action* mouse_action_item::drag_left(editor_display& disp, int x, int y, bool& /*partial*/, editor_action* /*last_undo*/)
 {
 	map_location hex = disp.hex_clicked_on(x, y);
 	click_ = (hex == start_hex_);
-	return NULL;
+	return nullptr;
 }
 
 editor_action* mouse_action_item::up_left(editor_display& disp, int x, int y)
 {
-	if (!click_) return NULL;
+	if (!click_) return nullptr;
 	click_ = false;
 	map_location hex = disp.hex_clicked_on(x, y);
 	if (!disp.get_map().on_board(hex)) {
-		return NULL;
+		return nullptr;
 	}
 
 //	item_type type = item_palette_.selected_fg_item();
@@ -117,7 +117,7 @@ editor_action* mouse_action_item::up_left(editor_display& disp, int x, int y)
 //	if (!new_item_type) {
 //		//TODO rewrite the error message.
 //		ERR_ED << "create item dialog returned inexistent or unusable item_type id '" << type_id << "'\n";
-//		return NULL;
+//		return nullptr;
 //	}
 //
 //	const item_type &ut = *new_item_type;
@@ -127,22 +127,22 @@ editor_action* mouse_action_item::up_left(editor_display& disp, int x, int y)
 //	editor_action* action = new editor_action_item(hex, new_item);
 //	return action;
 
-	return NULL;
+	return nullptr;
 }
 
 editor_action* mouse_action_item::drag_end_left(editor_display& disp, int x, int y)
 {
-	if (click_) return NULL;
-	editor_action* action = NULL;
+	if (click_) return nullptr;
+	editor_action* action = nullptr;
 
 	map_location hex = disp.hex_clicked_on(x, y);
 	if (!disp.get_map().on_board(hex))
-		return NULL;
+		return nullptr;
 
 //	const item_map& items = disp.get_items();
 //	const item_map::const_item_iterator item_it = items.find(start_hex_);
 //	if (item_it == items.end())
-//		return NULL;
+//		return nullptr;
 
 	action = new editor_action_item_replace(start_hex_, hex);
 	return action;
@@ -163,7 +163,7 @@ editor_action* mouse_action_item::click_right(editor_display& disp, int x, int y
 	}
 
 	click_ = true;
-	return NULL;
+	return nullptr;
 }
 */
 
@@ -171,7 +171,7 @@ editor_action* mouse_action_item::click_right(editor_display& disp, int x, int y
 //{
 //	map_location hex = disp.hex_clicked_on(x, y);
 //	if (previous_move_hex_ == hex)
-//		return NULL;
+//		return nullptr;
 //
 //	click_ = (start_hex_ == hex);
 //	previous_move_hex_ = hex;
@@ -189,12 +189,12 @@ editor_action* mouse_action_item::click_right(editor_display& disp, int x, int y
 //		}
 //	}
 //
-//	return NULL;
+//	return nullptr;
 //}
 
 //editor_action* mouse_action_item::up_right(editor_display& disp, int /*x*/, int /*y*/)
 //{
-//	if (!click_) return NULL;
+//	if (!click_) return nullptr;
 //	click_ = false;
 //
 //	const item_map& items = disp.get_items();
@@ -203,16 +203,16 @@ editor_action* mouse_action_item::click_right(editor_display& disp, int x, int y
 //		return new editor_action_item_delete(start_hex_);
 //	}
 //
-//	return NULL;
+//	return nullptr;
 //}
 
 //editor_action* mouse_action_item::drag_end_right(editor_display& disp, int x, int y)
 //{
-//	if (click_) return NULL;
+//	if (click_) return nullptr;
 //
 //	map_location hex = disp.hex_clicked_on(x, y);
 //	if (!disp.get_map().on_board(hex))
-//		return NULL;
+//		return nullptr;
 //
 //	if(new_direction_ != old_direction_) {
 //
@@ -223,7 +223,7 @@ editor_action* mouse_action_item::click_right(editor_display& disp, int x, int y
 //		}
 //	}
 //
-//	return NULL;
+//	return nullptr;
 //}
 
 
@@ -240,7 +240,7 @@ void mouse_action_item::set_item_mouse_overlay(editor_display& disp, const overl
 	filename << u.image; // << "~RC(" << u.flag_rgb() << '>'
 		//	<< team::get_side_color_index(disp.viewing_side()) << ')';
 
-	surface image(image::get_image(filename.str()));
+	SDL_Surface image(image::get_image(filename.str()));
 	Uint8 alpha = 196;
 	//TODO don't hardcode
 	int size = 72;

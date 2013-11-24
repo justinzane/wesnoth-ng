@@ -102,7 +102,7 @@ const terrain_label* map_labels::get_label(const map_location& loc, const std::s
 		if (itor != label_map->second.end())
 			return itor->second;
 	}
-	return NULL;
+	return nullptr;
 }
 
 const terrain_label* map_labels::get_label(const map_location& loc) const
@@ -110,7 +110,7 @@ const terrain_label* map_labels::get_label(const map_location& loc) const
 	const terrain_label* res = get_label(loc, team_name());
 	// no such team label, we try global label, except if it's what we just did
 	// NOTE: This also avoid infinite recursion
-	if (res == NULL && team_name() != "") {
+	if (res == nullptr && team_name() != "") {
 		return get_label(loc, "");
 	}
 	return res;
@@ -403,7 +403,7 @@ const map_location& terrain_label::location() const
 	return loc_;
 }
 
-const SDL_Color& terrain_label::color() const
+const SDL_Color* terrain_label::color() const
 {
 	return color_;
 }

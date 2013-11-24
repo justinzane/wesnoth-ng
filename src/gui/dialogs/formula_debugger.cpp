@@ -110,7 +110,7 @@ void tformula_debugger::pre_show(CVideo& /*video*/, twindow& window)
 					<< "</span>: \"<span color=\"yellow\">" << i.name()
 					<< "</span>\": '" << i.str() << "' = "
 					<< "<span color=\"red\">"
-					<< i.value().to_debug_string(NULL,false)
+					<< i.value().to_debug_string(nullptr,false)
 					<<"</span>" << std::endl;
 		}
 	}

@@ -109,7 +109,7 @@ ttext::ttext() :
 	calculation_dirty_(true),
 	length_(0),
 	surface_dirty_(true),
-	surface_buffer_(NULL)
+	surface_buffer_(nullptr)
 {
 	// With 72 dpi the sizes are the same as with SDL_TTF so hardcoded.
 	pango_cairo_context_set_resolution(context_, 72.0);
@@ -140,12 +140,12 @@ ttext::~ttext()
 		g_object_unref(layout_);
 	}
 	if(surface_buffer_) {
-		surface_.assign(NULL);
+		surface_.assign(nullptr);
 		delete[] surface_buffer_;
 	}
 }
 
-surface ttext::render() const
+SDL_Surface ttext::render() const
 {
 	rerender();
 	return surface_;
@@ -247,7 +247,7 @@ gui2::tpoint ttext::get_cursor_position(
 
 	// Convert the byte offset in a position.
 	PangoRectangle rect;
-	pango_layout_get_cursor_pos(layout_, offset, &rect, NULL);
+	pango_layout_get_cursor_pos(layout_, offset, &rect, nullptr);
 
 	return gui2::tpoint(PANGO_PIXELS(rect.x), PANGO_PIXELS(rect.y));
 }
@@ -308,7 +308,7 @@ bool ttext::set_text(const std::string& text, const bool markedup)
 			 * leave the layout in an undefined state regarding markup so
 			 * clear it unconditionally.
 			 */
-			pango_layout_set_attributes(layout_, NULL);
+			pango_layout_set_attributes(layout_, nullptr);
 			pango_layout_set_text(layout_, narrow.c_str(), narrow.size());
 		}
 		text_ = narrow;
@@ -524,7 +524,7 @@ void ttext::recalculate(const bool force) const
 					, context_
 					, font.get());
 
-			PangoFontMetrics* m = pango_font_get_metrics(f, NULL);
+			PangoFontMetrics* m = pango_font_get_metrics(f, nullptr);
 
 			int w = pango_font_metrics_get_approximate_char_width(m);
 			w *= characters_per_line_;
@@ -551,7 +551,7 @@ void ttext::recalculate(const bool force) const
 			pango_layout_set_width(layout_, maximum_width == -1
 					? -1
 					: (maximum_width + hack) * PANGO_SCALE);
-			pango_layout_get_pixel_extents(layout_, NULL, &rect_);
+			pango_layout_get_pixel_extents(layout_, nullptr, &rect_);
 
 			DBG_GUI_L << "ttext::" << __func__
 					<< " text '" << gui2::debug_truncate(text_)
@@ -664,7 +664,7 @@ void ttext::rerender(const bool force) const
 
 #ifndef _WIN32
 
-		// The cairo surface is in CAIRO_FORMAT_ARGB32 which uses
+		// The cairo SDL_Surface is in CAIRO_FORMAT_ARGB32 which uses
 		// pre-multiplied alpha. SDL doesn't use that so the pixels need to be
 		// decoded again.
 		for (int y = 0; y < height; ++y) {
@@ -693,7 +693,7 @@ void ttext::create_surface_buffer(const size_t size) const
 {
 	// clear old buffer
 	if(surface_buffer_) {
-		surface_.assign(NULL);
+		surface_.assign(nullptr);
 		delete[] surface_buffer_;
 	}
 
@@ -704,7 +704,7 @@ void ttext::create_surface_buffer(const size_t size) const
 bool ttext::set_markup(const std::string& text)
 {
 	if(pango_parse_markup(text.c_str(), text.size()
-			, 0, NULL, NULL, NULL, NULL)) {
+			, 0, nullptr, nullptr, nullptr, nullptr)) {
 
 		/* Markup is valid so set it. */
 		pango_layout_set_markup(layout_, text.c_str(), text.size());
@@ -734,7 +734,7 @@ bool ttext::set_markup(const std::string& text)
 	 */
 	if(text.size() != semi_escaped.size()
 			&& !pango_parse_markup(semi_escaped.c_str(), semi_escaped.size()
-				, 0, NULL, NULL, NULL, NULL)) {
+				, 0, nullptr, nullptr, nullptr, nullptr)) {
 
 		/* Fixing the ampersands didn't work. */
 		ERR_GUI_L << "ttext::" << __func__

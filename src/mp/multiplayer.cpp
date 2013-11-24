@@ -404,7 +404,7 @@ static server_type open_connection(game_display& disp, const std::string& origin
 
                 // Somewhat hacky...
                 // If we broke out of the do-while loop above error
-                // is still going to be NULL
+                // is still going to be nullptr
                 if(!*error) break;
             }  // end login loop
         }
@@ -665,7 +665,7 @@ static void enter_lobby_mode(game_display& disp, const config& game_config, game
             , 0
             , 255);
 
-        sdl_fill_rect(disp.video().getSurface(), NULL, color);
+        SDL_FillRect(disp.video().getSurface(), nullptr, color);
 
         if(preferences::new_lobby()) {
             gui2::tlobby_main dlg(game_config, li, disp);
@@ -831,7 +831,7 @@ void start_local_game_commandline(game_display& disp,
         parameters.scenario_data = level;
     } else {
         DBG_MP << "generating random map" << std::endl;
-        util::scoped_ptr<map_generator> generator(NULL);
+        util::scoped_ptr<map_generator> generator(nullptr);
         generator.assign(create_map_generator(level["map_generation"], level.child("generator")));
         parameters.scenario_data = generator->create_scenario(std::vector<std::string>());
 

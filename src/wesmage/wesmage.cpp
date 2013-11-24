@@ -29,7 +29,7 @@
 #include "global.hpp"
 #include <boost/foreach.hpp>
 
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 
 #include <ctime>
 #include <iostream>
@@ -65,7 +65,7 @@ main(int argc, char* argv[])
 	try {
 		const toptions& options = toptions::parse(argc, argv);
 
-		surface surf(make_neutral_surface(
+		SDL_Surface surf(make_neutral_surface(
 				IMG_Load(options.input_filename.c_str())));
 
 		if(!surf) {
@@ -79,7 +79,7 @@ main(int argc, char* argv[])
 		std::vector<surface> surfaces;
 		if(options.count != 1) {
 			for(int i = 1; i < options.count; ++i) {
-				// make_neutral_surface make a deep-copy of the image.
+				// make_neutral_SDL_Surface make a deep-copy of the image.
 				surfaces.push_back(make_neutral_surface(surf));
 			}
 		}

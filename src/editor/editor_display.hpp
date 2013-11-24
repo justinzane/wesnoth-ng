@@ -51,7 +51,7 @@ protected:
 
 	void draw_hex(const map_location& loc);
 
-	const SDL_Rect& get_clip_rect();
+	const SDL_Rect* get_clip_rect();
 	void draw_sidebar();
 
 	std::set<map_location> brush_locations_;

@@ -50,7 +50,7 @@ private:
  * @note The message _should_ be small enough to fit on the window, the text
  * can contain newlines and will wrap when needed.
  *
- * @param video               The video which contains the surface to draw
+ * @param video               The video which contains the SDL_Surface to draw
  *                            upon.
  * @param title               The title of the dialog.
  * @param message             The message to show in the dialog.
@@ -71,7 +71,7 @@ void show_transient_message(CVideo& video
  * This shows a dialog with a short message which can be dismissed with a
  * single click.
  *
- * @param video               The video which contains the surface to draw
+ * @param video               The video which contains the SDL_Surface to draw
  *                            upon.
  * @param message             The message to show in the dialog.
  * @param image               An image to show in the dialog.

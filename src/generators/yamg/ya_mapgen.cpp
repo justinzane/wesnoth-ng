@@ -246,25 +246,25 @@ const char *bridges[3];
 //===================================== Constructors & Destructors ===================================
 
 ya_mapgen::ya_mapgen() :
-        siz_(0), summits_(NULL), castles_(NULL), snow_limit_(0), riv_(0) {
+        siz_(0), summits_(nullptr), castles_(nullptr), snow_limit_(0), riv_(0) {
 	status_ = YAMG_EMPTY;
-	parms_ = NULL;
-	map_ = NULL;
-	heap_ = NULL;
-	endpoints_ = NULL;
+	parms_ = nullptr;
+	map_ = nullptr;
+	heap_ = nullptr;
+	endpoints_ = nullptr;
 }
 
 ya_mapgen::~ya_mapgen() {
 	//dtor
-	if (parms_ != NULL) {
+	if (parms_ != nullptr) {
 		try {
 			delete parms_;
 		} catch (...) {
 		};
 	}
-	if (map_ != NULL)
+	if (map_ != nullptr)
 		free_map();
-	if (heap_ != NULL)
+	if (heap_ != nullptr)
 		delete heap_;
 }
 
@@ -281,12 +281,12 @@ const char desert_nom[] = "desert";
 const char cust_nom[] = "custom";
 
 ya_mapgen::ya_mapgen(const config& /*cfg*/) :
-        siz_(0), summits_(NULL), castles_(NULL), snow_limit_(0), riv_(0) {
+        siz_(0), summits_(nullptr), castles_(nullptr), snow_limit_(0), riv_(0) {
 	status_ = YAMG_EMPTY;
-	parms_ = NULL;
-	map_ = NULL;
-	heap_ = NULL;
-	endpoints_ = NULL;
+	parms_ = nullptr;
+	map_ = nullptr;
+	heap_ = nullptr;
+	endpoints_ = nullptr;
 }
 
 /**
@@ -314,7 +314,7 @@ std::string ya_mapgen::name() const {
  Returns config name if any.
  */
 std::string ya_mapgen::config_name() const {
-	if (parms_ == NULL)
+	if (parms_ == nullptr)
 		return def_nom;
 	else
 		switch (parms_->type) {
@@ -350,7 +350,7 @@ std::string ya_mapgen::create_map(const std::vector<std::string>& /*args*/) {
 	//TODO
 //	if(n > 0) {
 //		printf(stderr,"Errors in parameters. Execution aborted.");
-//		return NULL;
+//		return nullptr;
 //	}
 	n = create_map(); // do the job
 	n = (par->height * par->width * (YAMG_HEXLONG + 2)) + 100; // allocate buffer for result
@@ -359,7 +359,7 @@ std::string ya_mapgen::create_map(const std::vector<std::string>& /*args*/) {
 	n = get_map(buf); //creates the map in Wesnoth format
 	const std::string result(buf);
 	delete[] buf;
-	buf = NULL;
+	buf = nullptr;
 	return result;
 }
 #endif
@@ -373,16 +373,16 @@ std::string ya_mapgen::create_map(const std::vector<std::string>& /*args*/) {
  Note: this erase all previous configuration including delete parm list if needed.
  */
 void ya_mapgen::reset_map() {
-	if (parms_ != NULL) {
+	if (parms_ != nullptr) {
 		try {
 			delete parms_;
 		} catch (...) {
 		};
-		parms_ = NULL;
+		parms_ = nullptr;
 	}
-	if (map_ != NULL)
+	if (map_ != nullptr)
 		free_map();
-	endpoints_ = NULL;
+	endpoints_ = nullptr;
 	status_ = YAMG_EMPTY;
 }
 
@@ -404,7 +404,7 @@ unsigned int ya_mapgen::set_up(yamg_params *pars) {
 		return n;
 
 	if (pars == parms_)
-		parms_ = NULL; // this to avoid deleting reused parms objects
+		parms_ = nullptr; // this to avoid deleting reused parms objects
 	reset_map();
 	parms_ = pars;
 	status_ = YAMG_CONFIGURED;
@@ -501,7 +501,7 @@ int ya_mapgen::create_map() {
 
 	//------- finish map
 	delete heap_;
-	heap_ = NULL;
+	heap_ = nullptr;
 	status_ = YAMG_LOADED;
 	return YAMG_OK;
 }
@@ -592,7 +592,7 @@ unsigned int ya_mapgen::free_map() {
 		delete map_[i];
 	}
 	delete map_;
-	map_ = NULL;
+	map_ = nullptr;
 	return YAMG_OK;
 }
 
@@ -633,20 +633,20 @@ void ya_mapgen::custom_terrains() {
 	bridges[1] = bridges_dec[1];
 	bridges[2] = bridges_dec[2];
 
-	if (parms_->roads_cust[0] != NULL)
+	if (parms_->roads_cust[0] != nullptr)
 		open_road = parms_->roads_cust[0];
-	if (parms_->roads_cust[1] != NULL)
+	if (parms_->roads_cust[1] != nullptr)
 		forest_road = parms_->roads_cust[1];
-	if (parms_->roads_cust[2] != NULL)
+	if (parms_->roads_cust[2] != nullptr)
 		road_burg = parms_->roads_cust[2];
-	if (parms_->roads_cust[3] != NULL)
+	if (parms_->roads_cust[3] != nullptr)
 		place_burg = parms_->roads_cust[3];
 
-	if (parms_->lilies_cust != NULL)
+	if (parms_->lilies_cust != nullptr)
 		lilies = parms_->lilies_cust;
-	if (parms_->fields_cust != NULL)
+	if (parms_->fields_cust != nullptr)
 		field_over = parms_->fields_cust;
-	if (parms_->bridges_cust != NULL) {
+	if (parms_->bridges_cust != nullptr) {
 		tmp = new char[10];
 		strncpy(tmp, parms_->bridges_cust, 5);
 		strncat(tmp, "|", 6);
@@ -665,22 +665,22 @@ void ya_mapgen::custom_terrains() {
 		return;
 
 	for (i = 0; i < M_NUMLEVEL; i++)
-		if (parms_->base_cust[i] != NULL)
+		if (parms_->base_cust[i] != nullptr)
 			base_cust[i] = parms_->base_cust[i];
 	for (i = 0; i < 12; i++)
-		if (parms_->forest_cust[i] != NULL)
+		if (parms_->forest_cust[i] != nullptr)
 			forest_cust[i] = parms_->forest_cust[i];
 	for (i = 0; i < 14; i++)
-		if (parms_->houses_cust[i] != NULL)
+		if (parms_->houses_cust[i] != nullptr)
 			houses_cust[i] = parms_->houses_cust[i];
 	for (i = 0; i < 10; i++)
-		if (parms_->keeps_castles_cust[i] != NULL)
+		if (parms_->keeps_castles_cust[i] != nullptr)
 			keeps_castles_cust[i] = parms_->keeps_castles_cust[i];
 	for (i = 0; i < 10; i++)
-		if (parms_->hexes_castles_cust[i] != NULL)
+		if (parms_->hexes_castles_cust[i] != nullptr)
 			hexes_castles_cust[i] = parms_->hexes_castles_cust[i];
 	for (i = 0; i < M_NUMLEVEL; i++)
-		if (parms_->base_snow_cust[i] != NULL)
+		if (parms_->base_snow_cust[i] != nullptr)
 			base_snow_cust[i] = parms_->base_snow_cust[i];
 
 }
@@ -888,10 +888,10 @@ void ya_mapgen::set_base_terrains(int /*range*/)
 			}
 		}
 		if (parms_->type == 'd') { // the special case of deserts. Rivers computation creates oasis, sand holes and dry brooks
-			while (summits_ != NULL) {
+			while (summits_ != nullptr) {
 				h = summits_;
 				summits_ = h->next;
-				h->next = NULL;
+				h->next = nullptr;
 				if (h->water > riv_) {
 					h->base = oasis_base;
 					h->over = oasis_water;
@@ -925,7 +925,7 @@ void ya_mapgen::make_rivers() {
 	yamg_hex *h;
 
 	// first, calculate the water flood.
-	summits_ = NULL;
+	summits_ = nullptr;
 
 	for (i = 0; i < parms_->height; i++) {
 		for (j = 0; j < parms_->width; j++) {
@@ -939,14 +939,14 @@ void ya_mapgen::make_rivers() {
 
 	if (parms_->type != 'd') {
 		clear_done_flag();
-		while ((h = heap_->pick_hex()) != NULL) {
+		while ((h = heap_->pick_hex()) != nullptr) {
 			h->next = summits_;
 			summits_ = h;
 		}
-		while (summits_ != NULL) {
+		while (summits_ != nullptr) {
 			h = summits_;
 			summits_ = h->next;
-			h->next = NULL;
+			h->next = nullptr;
 			erode_terrains(h, h->water);
 		}
 	}
@@ -969,23 +969,23 @@ int ya_mapgen::calc_water_contribs(yamg_hex *h) {
 	dest = h;
 
 	// find dest of our water
-	if ((vo.ne != NULL) && (vo.ne->alt < dest->alt))
+	if ((vo.ne != nullptr) && (vo.ne->alt < dest->alt))
 		dest = vo.ne;
-	if ((vo.nw != NULL) && (vo.nw->alt < dest->alt))
+	if ((vo.nw != nullptr) && (vo.nw->alt < dest->alt))
 		dest = vo.nw;
-	if ((vo.no != NULL) && (vo.no->alt < dest->alt))
+	if ((vo.no != nullptr) && (vo.no->alt < dest->alt))
 		dest = vo.no;
-	if ((vo.se != NULL) && (vo.se->alt < dest->alt))
+	if ((vo.se != nullptr) && (vo.se->alt < dest->alt))
 		dest = vo.se;
-	if ((vo.sw != NULL) && (vo.sw->alt < dest->alt))
+	if ((vo.sw != nullptr) && (vo.sw->alt < dest->alt))
 		dest = vo.sw;
-	if ((vo.so != NULL) && (vo.so->alt < dest->alt))
+	if ((vo.so != nullptr) && (vo.so->alt < dest->alt))
 		dest = vo.so;
 
 	if (dest == h) {
 		h->key = h->alt;
 		heap_->add_hex(h);
-		h->list = NULL; // if we can't give this water to another hex, add this hex to the 'summits' list which will be managed in erode()
+		h->list = nullptr; // if we can't give this water to another hex, add this hex to the 'summits' list which will be managed in erode()
 	} else {
 		h->list = dest;
 	}
@@ -993,7 +993,7 @@ int ya_mapgen::calc_water_contribs(yamg_hex *h) {
 	// calc our water value
 	h->water = 1;
 
-	if ((vo.ne != NULL) && (vo.ne->alt > h->alt)) {
+	if ((vo.ne != nullptr) && (vo.ne->alt > h->alt)) {
 		dest = vo.ne;
 		if (!dest->done) {
 			if (dest->water == 0)
@@ -1005,7 +1005,7 @@ int ya_mapgen::calc_water_contribs(yamg_hex *h) {
 		}
 	}
 
-	if ((vo.nw != NULL) && (vo.nw->alt > h->alt)) {
+	if ((vo.nw != nullptr) && (vo.nw->alt > h->alt)) {
 		dest = vo.nw;
 		if (!dest->done) {
 			if (dest->water == 0)
@@ -1017,7 +1017,7 @@ int ya_mapgen::calc_water_contribs(yamg_hex *h) {
 		}
 	}
 
-	if ((vo.no != NULL) && (vo.no->alt > h->alt)) {
+	if ((vo.no != nullptr) && (vo.no->alt > h->alt)) {
 		dest = vo.no;
 		if (!dest->done) {
 			if (dest->water == 0)
@@ -1029,7 +1029,7 @@ int ya_mapgen::calc_water_contribs(yamg_hex *h) {
 		}
 	}
 
-	if ((vo.se != NULL) && (vo.se->alt > h->alt)) {
+	if ((vo.se != nullptr) && (vo.se->alt > h->alt)) {
 		dest = vo.se;
 		if (!dest->done) {
 			if (dest->water == 0)
@@ -1041,7 +1041,7 @@ int ya_mapgen::calc_water_contribs(yamg_hex *h) {
 		}
 	}
 
-	if ((vo.sw != NULL) && (vo.sw->alt > h->alt)) {
+	if ((vo.sw != nullptr) && (vo.sw->alt > h->alt)) {
 		dest = vo.sw;
 		if (!dest->done) {
 			if (dest->water == 0)
@@ -1053,7 +1053,7 @@ int ya_mapgen::calc_water_contribs(yamg_hex *h) {
 		}
 	}
 
-	if ((vo.so != NULL) && (vo.so->alt > h->alt)) {
+	if ((vo.so != nullptr) && (vo.so->alt > h->alt)) {
 		dest = vo.so;
 		if (!dest->done) {
 			if (dest->water == 0)
@@ -1082,7 +1082,7 @@ void ya_mapgen::erode_terrains(yamg_hex *h, int /*report*/)
 	if (h->done)
 		return;
 
-	h->list = NULL;
+	h->list = nullptr;
 	stack = h;
 	lAlt = h->alt;
 	cumul = h->water;
@@ -1093,33 +1093,33 @@ void ya_mapgen::erode_terrains(yamg_hex *h, int /*report*/)
 	while (val > riv_) {
 		// we seek the lower neighbour here, or an existing lake, or the map border
 		get_neighbors(h, &vo);
-		if (vo.no != NULL) {
+		if (vo.no != nullptr) {
 			vo.no->key = vo.no->alt;
 			heap_->add_hex(vo.no);
 		}
-		if (vo.nw != NULL) {
+		if (vo.nw != nullptr) {
 			vo.nw->key = vo.nw->alt;
 			heap_->add_hex(vo.nw);
 		}
-		if (vo.ne != NULL) {
+		if (vo.ne != nullptr) {
 			vo.ne->key = vo.ne->alt;
 			heap_->add_hex(vo.ne);
 		}
-		if (vo.sw != NULL) {
+		if (vo.sw != nullptr) {
 			vo.sw->key = vo.sw->alt;
 			heap_->add_hex(vo.sw);
 		}
-		if (vo.se != NULL) {
+		if (vo.se != nullptr) {
 			vo.se->key = vo.se->alt;
 			heap_->add_hex(vo.se);
 		}
-		if (vo.so != NULL) {
+		if (vo.so != nullptr) {
 			vo.so->key = vo.so->alt;
 			heap_->add_hex(vo.so);
 		}
 
 		nex = heap_->pick_hex(); // get the lower adjacent hex
-		if ((nex == NULL) || (nex->water == 0)) // water == 0 means we are on the lower layers of the map, i.e. the sea
+		if ((nex == nullptr) || (nex->water == 0)) // water == 0 means we are on the lower layers of the map, i.e. the sea
 			break;
 
 		nex->list = stack; // this stack store all the hexes of the future lake
@@ -1134,12 +1134,12 @@ void ya_mapgen::erode_terrains(yamg_hex *h, int /*report*/)
 
 	// When done, update all hexes from the stack to their new altitude and water value (and marking them as done to avoid their reuse)
 	h = stack;
-	while (h != NULL) {
+	while (h != nullptr) {
 		h->water = oldval;
 		h->alt = lAlt;
 		h->done = true;
 		nex = h->list;
-		h->list = NULL;
+		h->list = nullptr;
 		h = nex;
 	}
 }
@@ -1152,7 +1152,7 @@ void ya_mapgen::erode_terrains(yamg_hex *h, int /*report*/)
  */
 
 void ya_mapgen::make_burgs() {
-	yamg_hex *it = NULL;
+	yamg_hex *it = nullptr;
 	int num, n, essais, i, j;
 	burg b;
 	const char **treeTable;
@@ -1216,7 +1216,7 @@ void ya_mapgen::make_burgs() {
 			while ((n-- > 0) && (heap_->last_ > 0)) { // these shall be the houses
 				it->next = heap_->pick_hex();
 				it = it->next;
-				it->next = NULL;
+				it->next = nullptr;
 			}
 			b.center->base = place_burg;
 			b.center->lock = YAMG_STRONGLOCK;
@@ -1236,7 +1236,7 @@ void ya_mapgen::make_burgs() {
 			endpoints_ = b.center;
 
 			// use the list to setup the houses
-			while (it != NULL) {
+			while (it != nullptr) {
 				it->lock = YAMG_LIGHTLOCK; //YAMG_HARDLOCK; // YAMG_LIGHTLOCK;
 				n = (it->alt > snow_limit_) ? 1 : 0;
 				if (it->layer == 4)
@@ -1263,7 +1263,7 @@ void ya_mapgen::make_burgs() {
  Castles are keeps with some castle hexes. They must be adjacent. They should be not too close other castles.
  */
 void ya_mapgen::make_castles() {
-	yamg_hex *ca, *it = NULL;
+	yamg_hex *ca, *it = nullptr;
 	int num, n, k, essais, i, j, miniDist;
 
 	const char **treeTableK;
@@ -1297,7 +1297,7 @@ void ya_mapgen::make_castles() {
 		break;
 	}
 
-	castles_ = NULL;
+	castles_ = nullptr;
 	essais = (parms_->height * parms_->width * parms_->players); // since the random hex selection can result in an endless loop, we set an arbitrary limit
 	num = parms_->players;
 	miniDist = (parms_->width + parms_->height) / (parms_->players + 1);
@@ -1311,7 +1311,7 @@ void ya_mapgen::make_castles() {
 
 		// select only if not too close to another castle
 		ca = castles_;
-		while (ca != NULL) {
+		while (ca != nullptr) {
 			const int dx = ca->x - it->x;
 			const int dy = ca->y - it->y;
 			if ((abs(dx) + abs(dy)) > miniDist) {
@@ -1319,7 +1319,7 @@ void ya_mapgen::make_castles() {
 			} else
 				break;
 		}
-		if (ca != NULL)
+		if (ca != nullptr)
 			continue;
 
 		// select only layer beach - mountains hexes, not already covered with something else
@@ -1352,7 +1352,7 @@ void ya_mapgen::make_castles() {
 
 			while (n > 0) {
 				it = heap_->pick_hex();
-				if (it != NULL) {
+				if (it != nullptr) {
 					if (heap_->last_ < (n - 1)) { // we need some more hexes here
 						store_neighbors(it, it->layer, it->layer + 1);
 					}
@@ -1385,72 +1385,72 @@ void ya_mapgen::store_neighbors(yamg_hex *it, unsigned int layMin,
 	z = parms_->height;
 
 	if (y < 3) {
-		p.no = NULL;
+		p.no = nullptr;
 	} else {
 		p.no = map_[y - 1][x];
 	}
 	if (y >= parms_->height - 2) {
-		p.so = NULL;
+		p.so = nullptr;
 	} else {
 		p.so = map_[y + 1][x];
 	}
 
 	if (x < 3) {
-		p.nw = p.sw = NULL;
+		p.nw = p.sw = nullptr;
 	} else {
 		if(y < m)
-			p.nw =NULL;
+			p.nw =nullptr;
 		else
 			p.nw = map_[y - m][x - 1];
 		if (y >= (z + m))
-			p.sw = NULL;
+			p.sw = nullptr;
 		else
 			p.sw = map_[y - m + 1][x - 1];
 	}
 	if (x >= parms_->width - 2) {
-		p.ne = p.se = NULL;
+		p.ne = p.se = nullptr;
 	} else {
 		if(y < m)
-			p.ne = NULL;
+			p.ne = nullptr;
 		else
 			p.ne = map_[y - m][x + 1];
 		if ( y >= (z + m) )
-			p.se = NULL;
+			p.se = nullptr;
 		else
 			p.se = map_[y - m + 1][x + 1];
 	}
 
-	if ((p.no != NULL) && (p.no->lock < YAMG_LIGHTLOCK)
+	if ((p.no != nullptr) && (p.no->lock < YAMG_LIGHTLOCK)
 			&& (p.no->layer >= layMin) && (p.no->layer < layMax)) {
 		p.no->key = abs(it->alt - p.no->alt);
 		heap_->add_hex(p.no);
 	}
 
-	if ((p.ne != NULL) && (p.ne->lock < YAMG_LIGHTLOCK)
+	if ((p.ne != nullptr) && (p.ne->lock < YAMG_LIGHTLOCK)
 			&& (p.ne->layer >= layMin) && (p.ne->layer < layMax)) {
 		p.ne->key = abs(it->alt - p.ne->alt);
 		heap_->add_hex(p.ne);
 	}
 
-	if ((p.nw != NULL) && (p.nw->lock < YAMG_LIGHTLOCK)
+	if ((p.nw != nullptr) && (p.nw->lock < YAMG_LIGHTLOCK)
 			&& (p.nw->layer >= layMin) && (p.nw->layer < layMax)) {
 		p.nw->key = abs(it->alt - p.nw->alt);
 		heap_->add_hex(p.nw);
 	}
 
-	if ((p.so != NULL) && (p.so->lock < YAMG_LIGHTLOCK)
+	if ((p.so != nullptr) && (p.so->lock < YAMG_LIGHTLOCK)
 			&& (p.so->layer >= layMin) && (p.so->layer < layMax)) {
 		p.so->key = abs(it->alt - p.so->alt);
 		heap_->add_hex(p.so);
 	}
 
-	if ((p.se != NULL) && (p.se->lock < YAMG_LIGHTLOCK)
+	if ((p.se != nullptr) && (p.se->lock < YAMG_LIGHTLOCK)
 			&& (p.se->layer >= layMin) && (p.se->layer < layMax)) {
 		p.se->key = abs(it->alt - p.se->alt);
 		heap_->add_hex(p.se);
 	}
 
-	if ((p.sw != NULL) && (p.sw->lock < YAMG_LIGHTLOCK)
+	if ((p.sw != nullptr) && (p.sw->lock < YAMG_LIGHTLOCK)
 			&& (p.sw->layer >= layMin) && (p.sw->layer < layMax)) {
 		p.sw->key = abs(it->alt - p.sw->alt);
 		heap_->add_hex(p.sw);
@@ -1463,7 +1463,7 @@ void ya_mapgen::store_neighbors(yamg_hex *it, unsigned int layMin,
  First we define the overlays to use, and next choose an hex at random and flood its neighbours till count is over.
  */
 void ya_mapgen::make_forests() {
-	yamg_hex *it = NULL;
+	yamg_hex *it = nullptr;
 	int num, n, essais, i, j;
 	const char **treeTable;
 	switch (parms_->type) {
@@ -1568,37 +1568,37 @@ int ya_mapgen::fill_with(const char *over[], yamg_hex *h, int numb) {
 
 		get_neighbors(it, &v);
 
-		if ((v.no != NULL) && (v.no->lock < YAMG_LIGHTLOCK) && (v.no->alt >= lb)
+		if ((v.no != nullptr) && (v.no->lock < YAMG_LIGHTLOCK) && (v.no->alt >= lb)
 				&& (v.no->alt < ls)) {
 			v.no->key = abs(it->alt - v.no->alt);
 			heap_->add_hex(v.no);
 		}
 
-		if ((v.ne != NULL) && (v.ne->lock < YAMG_LIGHTLOCK) && (v.ne->alt >= lb)
+		if ((v.ne != nullptr) && (v.ne->lock < YAMG_LIGHTLOCK) && (v.ne->alt >= lb)
 				&& (v.ne->alt < ls)) {
 			v.ne->key = abs(it->alt - v.ne->alt);
 			heap_->add_hex(v.ne);
 		}
 
-		if ((v.nw != NULL) && (v.nw->lock < YAMG_LIGHTLOCK) && (v.nw->alt >= lb)
+		if ((v.nw != nullptr) && (v.nw->lock < YAMG_LIGHTLOCK) && (v.nw->alt >= lb)
 				&& (v.nw->alt < ls)) {
 			v.nw->key = abs(it->alt - v.nw->alt);
 			heap_->add_hex(v.nw);
 		}
 
-		if ((v.so != NULL) && (v.so->lock < YAMG_LIGHTLOCK) && (v.so->alt >= lb)
+		if ((v.so != nullptr) && (v.so->lock < YAMG_LIGHTLOCK) && (v.so->alt >= lb)
 				&& (v.so->alt < ls)) {
 			v.so->key = abs(it->alt - v.so->alt);
 			heap_->add_hex(v.so);
 		}
 
-		if ((v.se != NULL) && (v.se->lock < YAMG_LIGHTLOCK) && (v.se->alt >= lb)
+		if ((v.se != nullptr) && (v.se->lock < YAMG_LIGHTLOCK) && (v.se->alt >= lb)
 				&& (v.se->alt < ls)) {
 			v.se->key = abs(it->alt - v.se->alt);
 			heap_->add_hex(v.se);
 		}
 
-		if ((v.sw != NULL) && (v.sw->lock < YAMG_LIGHTLOCK) && (v.sw->alt >= lb)
+		if ((v.sw != nullptr) && (v.sw->lock < YAMG_LIGHTLOCK) && (v.sw->alt >= lb)
 				&& (v.sw->alt < ls)) {
 			v.sw->key = abs(it->alt - v.sw->alt);
 			heap_->add_hex(v.sw);
@@ -1616,7 +1616,7 @@ int ya_mapgen::fill_with(const char *over[], yamg_hex *h, int numb) {
  */
 
 void ya_mapgen::make_houses() {
-	yamg_hex *it = NULL;
+	yamg_hex *it = nullptr;
 	int num, n, essais, i, j, incx, incy;
 	const char **treeTable;
 	switch (parms_->type) {
@@ -1718,8 +1718,8 @@ void ya_mapgen::make_roads() {
 
 	//1- select the start points and road parts to create the loop. This can be done using a road flag: 0 is nothing, 1 is road, 2 is stop point and more counts the hits.
 	it = endpoints_;
-	while (it != NULL) {
-		it->road = NULL;
+	while (it != nullptr) {
+		it->road = nullptr;
 		it->key = 0;
 		it->road_type = R_STOP;
 		it->lock = YAMG_STRONGLOCK;
@@ -1739,10 +1739,10 @@ void ya_mapgen::make_roads() {
 	while (nStop > 0) {
 		// search a root point in the 'endpoints' list
 		it = endpoints_;
-		while ((it->road_type != R_STOP) && (it->list != NULL))
+		while ((it->road_type != R_STOP) && (it->list != nullptr))
 			it = it->list;
 
-		if (it->list == NULL)
+		if (it->list == nullptr)
 			return;
 
 		//2- put the root point into the heap with key = 0
@@ -1756,7 +1756,7 @@ void ya_mapgen::make_roads() {
 			it = heap_->pick_hex();
 			l = sel_neigh(it); // and the next candidate leaves
 
-			while (l != NULL) { // for each one
+			while (l != nullptr) { // for each one
 				//
 				switch (l->road_type) {
 
@@ -1799,7 +1799,7 @@ void ya_mapgen::make_roads() {
 						cost = costW;
 
 					// if 'it' is a bridge, we must align it, it->road and l to get a good looking result
-					if (bFlag && (it->road != NULL) && (it->water_flag)) {
+					if (bFlag && (it->road != nullptr) && (it->water_flag)) {
 						if (((l->y - it->road->y) == 0)
 								|| (abs(static_cast<int>(l->x) - static_cast<int>(it->road->x)) == 1)) {
 							cost = costW * 10000; // discard this point
@@ -1816,14 +1816,14 @@ void ya_mapgen::make_roads() {
 				case R_ROAD: // we are on a road already opened
 					l->road_type = R_HIT;
 					ro = it;
-					while (ro != NULL) { // creates the road back to root point.
+					while (ro != nullptr) { // creates the road back to root point.
 
 						// Bridges creation.
 						// It can't work in all situation because bridges can connect two (ore more) hexes correctly only if they are aligned.
 
 						if (ro->water_flag) { // test if bridges are needed when base terrain is water and bridges are requested
 							if (bFlag) {
-								if (ro->road == NULL)
+								if (ro->road == nullptr)
 									break;
 								if (ro->x == ro->road->x) {
 									ro->over = bridges[0];
@@ -1870,10 +1870,10 @@ void ya_mapgen::make_roads() {
  *** sel_neigh:
  Get the usable neighbours for roads and castles
  -> the source hex
- <- a list built with the 'next' pointer, NULL if no result
+ <- a list built with the 'next' pointer, nullptr if no result
  */
 yamg_hex *ya_mapgen::sel_neigh(yamg_hex *h) {
-	yamg_hex *it, *l, *res = NULL;
+	yamg_hex *it, *l, *res = nullptr;
 	unsigned int x, y, m;
 
 	x = h->x - 1;
@@ -1882,12 +1882,12 @@ yamg_hex *ya_mapgen::sel_neigh(yamg_hex *h) {
 
 	if (y > 2) {
 		it = map_[y - 1][x];
-		if ((it->road == NULL) && (it->lock < YAMG_HARDLOCK)) {
+		if ((it->road == nullptr) && (it->lock < YAMG_HARDLOCK)) {
 			it->next = res;
 			res = it;
 		}
 		it = map_[y + 1][x];
-		if ((it->road == NULL) && (it->lock < YAMG_HARDLOCK)) {
+		if ((it->road == nullptr) && (it->lock < YAMG_HARDLOCK)) {
 			it->next = res;
 			res = it;
 		}
@@ -1895,29 +1895,29 @@ yamg_hex *ya_mapgen::sel_neigh(yamg_hex *h) {
 
 	if ((x > 2) && (y > 1)) {
 		it = map_[y - m][x - 1];
-		if ((it->road == NULL) && (it->lock < YAMG_HARDLOCK)) {
+		if ((it->road == nullptr) && (it->lock < YAMG_HARDLOCK)) {
 			it->next = res;
 			res = it;
 		}
 		it = map_[y - m][x + 1];
-		if ((it->road == NULL) && (it->lock < YAMG_HARDLOCK)) {
+		if ((it->road == nullptr) && (it->lock < YAMG_HARDLOCK)) {
 			it->next = res;
 			res = it;
 		}
  		it = map_[y - m + 1][x - 1];
-		if ((it->road == NULL) && (it->lock < YAMG_HARDLOCK)) {
+		if ((it->road == nullptr) && (it->lock < YAMG_HARDLOCK)) {
 			it->next = res;
 			res = it;
 		}
 		it = map_[y - m + 1][x + 1];
-		if ((it->road == NULL) && (it->lock < YAMG_HARDLOCK)) {
+		if ((it->road == nullptr) && (it->lock < YAMG_HARDLOCK)) {
 			it->next = res;
 			res = it;
 		}
 	}
 	it = res; // check limits
-	l = NULL;
-	while (it != NULL) {
+	l = nullptr;
+	while (it != nullptr) {
 		if ((it->x < 1) || (it->x >= parms_->width) || (it->y < 1)
 		        || (it->y >= parms_->height)) {
 			if (it == res)
@@ -1962,37 +1962,37 @@ void ya_mapgen::get_neighbors(yamg_hex *h, neighbors *p) {
 	z = static_cast<int>(parms_->height);
 
 	if (y < 1) {
-		p->no = NULL;
+		p->no = nullptr;
 	} else {
 		p->no = map_[y - 1][x];
 	}
 	if (y >= parms_->height - 2) {
-		p->so = NULL;
+		p->so = nullptr;
 	} else {
 		p->so = map_[y + 1][x];
 	}
 
 	if (x < 1) {
-		p->nw = p->sw = NULL;
+		p->nw = p->sw = nullptr;
 	} else {
 		if (k < 0)
-			p->nw = NULL;
+			p->nw = nullptr;
 		else
 			p->nw = map_[y - m][x - 1];
 		if (k >= z)
-			p->sw = NULL;
+			p->sw = nullptr;
 		else
 			p->sw = map_[y - m + 1][x - 1];
 	}
 	if (x >= parms_->width - 2) {
-		p->ne = p->se = NULL;
+		p->ne = p->se = nullptr;
 	} else {
 		if (k < 0)
-			p->ne = NULL;
+			p->ne = nullptr;
 		else
 			p->ne = map_[y - m][x + 1];
 		if (k >= z)
-			p->se = NULL;
+			p->se = nullptr;
 		else
 			p->se = map_[y - m + 1][x + 1];
 	}

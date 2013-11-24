@@ -141,7 +141,7 @@ SDL_Rect slider::slider_area() const
 
 void slider::draw_contents()
 {
-	surface image;
+	SDL_Surface image;
 
 	switch (state_) {
 		case NORMAL:
@@ -155,7 +155,7 @@ void slider::draw_contents()
 			break;
 	}
 
-	assert(image != NULL);
+	assert(image != nullptr);
 
 	SDL_Color line_color = line_color_;
 	if (!enabled()) {
@@ -167,14 +167,14 @@ void slider::draw_contents()
 	if (image->w >= loc.w)
 		return;
 
-	surface screen = video().getSurface();
+	SDL_Surface screen = video().getSurface();
 
 	SDL_Rect line_rect = create_rect(loc.x + image->w / 2
 			, loc.y + loc.h / 2
 			, loc.w - image->w
 			, 1);
 
-	sdl_fill_rect(screen, &line_rect, SDL_MapRGB(screen->format,
+	SDL_FillRect(screen, &line_rect, SDL_MapRGBA(screen->format,
 		line_color.r, line_color.g, line_color.b));
 
 	SDL_Rect const &slider = slider_area();
@@ -196,7 +196,7 @@ void slider::set_slider_position(int x)
 void slider::mouse_motion(const SDL_MouseMotionEvent& event)
 {
 	if (state_ == NORMAL || state_ == ACTIVE) {
-		bool on = point_in_rect(event.x, event.y, location());
+		bool on = is_point_in_rect(event.x, event.y, location());
 		state_ = on ? ACTIVE : NORMAL;
 	} else if (state_ == CLICKED || state_ == DRAGGED) {
 		state_ = DRAGGED;
@@ -213,11 +213,11 @@ void slider::mouse_motion(const SDL_MouseMotionEvent& event)
 
 void slider::mouse_down(const SDL_MouseButtonEvent& event)
 {
-	if (event.button != SDL_BUTTON_LEFT || !point_in_rect(event.x, event.y, location()))
+	if (event.button != SDL_BUTTON_LEFT || !is_point_in_rect(event.x, event.y, location()))
 		return;
 
 	state_ = CLICKED;
-	if (point_in_rect(event.x, event.y, slider_area())) {
+	if (is_point_in_rect(event.x, event.y, slider_area())) {
 		sound::play_UI_sound(game_config::sounds::button_press);
 	} else {
 		bool prev_change = value_change_;
@@ -237,7 +237,7 @@ bool slider::requires_event_focus(const SDL_Event* event) const
 	if(!focus_ || !enabled() || hidden()) {
 		return false;
 	}
-	if(event == NULL) {
+	if(event == nullptr) {
 		//when event is not specified, signal that focus may be desired later
 		return true;
 	}
@@ -266,7 +266,7 @@ void slider::handle_event(const SDL_Event& event)
 	switch(event.type) {
 	case SDL_MOUSEBUTTONUP:
 		if (!mouse_locked()) {
-			bool on = point_in_rect(event.button.x, event.button.y, slider_area());
+			bool on = is_point_in_rect(event.button.x, event.button.y, slider_area());
 			state_ = on ? ACTIVE : NORMAL;
 		}
 		break;

@@ -283,7 +283,7 @@ unit* move::get_unit() const
 	if (itor.valid())
 		return &*itor;
 	else
-		return NULL;
+		return nullptr;
 }
 
 map_location move::get_source_hex() const
@@ -464,7 +464,7 @@ action::error move::check_validity() const
 	}
 
 	//If the path has at least two hexes (it can have less with the attack subclass), ensure destination hex is free
-	if(get_route().steps.size() >= 2 && get_visible_unit(get_dest_hex(),resources::teams->at(viewer_team())) != NULL) {
+	if(get_route().steps.size() >= 2 && get_visible_unit(get_dest_hex(),resources::teams->at(viewer_team())) != nullptr) {
 		return LOCATION_OCCUPIED;
 	}
 

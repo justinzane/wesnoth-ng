@@ -206,7 +206,7 @@ void tlobby_main::send_chat_message(const std::string& message, bool /*allies_on
 	msg["sender"] = preferences::login();
 	data.add_child("message", msg);
 
-	add_chat_message(time(NULL), preferences::login(), 0, message); //local echo
+	add_chat_message(time(nullptr), preferences::login(), 0, message); //local echo
 	network::send_data(data, 0);
 }
 
@@ -356,21 +356,21 @@ tlobby_main::tlobby_main(const config& game_config
 		, display& disp)
 	: legacy_result_(QUIT)
 	, game_config_(game_config)
-	, gamelistbox_(NULL)
-	, userlistbox_(NULL)
-	, roomlistbox_(NULL)
-	, chat_log_container_(NULL)
-	, chat_input_(NULL)
-	, window_(NULL)
+	, gamelistbox_(nullptr)
+	, userlistbox_(nullptr)
+	, roomlistbox_(nullptr)
+	, chat_log_container_(nullptr)
+	, chat_input_(nullptr)
+	, window_(nullptr)
 	, lobby_info_(info)
-	, preferences_callback_(NULL)
+	, preferences_callback_(nullptr)
 	, open_windows_()
 	, active_window_(0)
-	, filter_friends_(NULL)
-	, filter_ignored_(NULL)
-	, filter_slots_(NULL)
-	, filter_invert_(NULL)
-	, filter_text_(NULL)
+	, filter_friends_(nullptr)
+	, filter_ignored_(nullptr)
+	, filter_slots_(nullptr)
+	, filter_invert_(nullptr)
+	, filter_text_(nullptr)
 	, selected_game_id_()
 	, player_list_()
 	, player_list_dirty_(false)
@@ -447,7 +447,7 @@ static bool fullscreen(CVideo& video)
 	preferences::set_fullscreen(video , !preferences::fullscreen());
 
 	// Setting to fullscreen doesn't seem to generate a resize event.
-	const SDL_Rect& rect = screen_area();
+	const SDL_Rect* rect = screen_area();
 
 	SDL_Event event;
 	event.type = SDL_VIDEORESIZE;
@@ -510,9 +510,9 @@ void modify_grid_with_data(tgrid* grid, const std::map<std::string, string_map>&
 		const std::string& key = v.first;
 		const string_map& strmap = v.second;
 		twidget* w = grid->find(key, false);
-		if (w == NULL) continue;
+		if (w == nullptr) continue;
 		tcontrol* c = dynamic_cast<tcontrol*>(w);
-		if (c == NULL) continue;
+		if (c == nullptr) continue;
 		FOREACH(const AUTO& vv, strmap) {
 			if (vv.first == "label") {
 				c->set_label(vv.second);
@@ -828,7 +828,7 @@ void tlobby_main::update_playerlist()
 	FOREACH(AUTO userptr, lobby_info_.users_sorted())
 	{
 		user_info& user = *userptr;
-		tsub_player_list* target_list(NULL);
+		tsub_player_list* target_list(nullptr);
 		std::map<std::string, string_map> data;
 		std::stringstream icon_ss;
 		std::string name = user.name;
@@ -1078,7 +1078,7 @@ void tlobby_main::pre_show(CVideo& /*video*/, twindow& window)
 
 void tlobby_main::post_show(twindow& /*window*/)
 {
-	window_ = NULL;
+	window_ = nullptr;
 	remove_timer(lobby_update_timer_);
 	lobby_update_timer_ = 0;
 }
@@ -1086,7 +1086,7 @@ void tlobby_main::post_show(twindow& /*window*/)
 room_info* tlobby_main::active_window_room()
 {
 	const tlobby_chat_window& t = open_windows_[active_window_];
-	if (t.whisper) return NULL;
+	if (t.whisper) return nullptr;
 	return lobby_info_.get_room(t.name);
 }
 
@@ -1129,7 +1129,7 @@ tlobby_chat_window* tlobby_main::search_create_window(const std::string& name, b
 
 		return &open_windows_.back();
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool tlobby_main::whisper_window_active(const std::string& name)
@@ -1577,9 +1577,9 @@ bool tlobby_main::do_game_join(int idx, bool observe)
 	if (join && !observe && game.password_required) {
 		std::string password;
 		//TODO replace with a gui2 dialog
-		const int res = gui::show_dialog(disp_, NULL, _("Password Required"),
+		const int res = gui::show_dialog(disp_, nullptr, _("Password Required"),
 		          _("Joining this game requires a password."),
-		          gui::OK_CANCEL, NULL, NULL, _("Password: "), &password);
+		          gui::OK_CANCEL, nullptr, nullptr, _("Password: "), &password);
 		if (res != 0) {
 			return false;
 		}

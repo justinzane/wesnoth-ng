@@ -41,7 +41,7 @@ namespace font {
 
 const char LARGE_TEXT='*', SMALL_TEXT='`',
 		   BOLD_TEXT='~',  NORMAL_TEXT='{',
-		   NULL_MARKUP='^',
+		   nullptr_MARKUP='^',
 		   BLACK_TEXT='}', GRAY_TEXT='|',
            GOOD_TEXT='@',  BAD_TEXT='#',
            GREEN_TEXT='@', RED_TEXT='#',
@@ -99,7 +99,7 @@ std::string::const_iterator parse_markup(std::string::const_iterator i1,
 		case BOLD_TEXT:
 			if (style) *style |= TTF_STYLE_BOLD;
 			break;
-		case NULL_MARKUP:
+		case nullptr_MARKUP:
 			return i1+1;
 		case COLOR_TEXT:
 			{
@@ -165,7 +165,7 @@ std::string del_tags(const std::string& text){
 	return utils::join(lines, "\n");
 }
 
-std::string color2markup(const SDL_Color &color)
+std::string color2markup(const SDL_Color* color)
 {
 	std::stringstream markup;
 	// The RGB of SDL_Color are Uint8, we need to cast them to int.
@@ -177,14 +177,14 @@ std::string color2markup(const SDL_Color &color)
 	return markup.str();
 }
 
-std::string color2hexa(const SDL_Color &color)
+std::string color2hexa(const SDL_Color* color)
 {
 	char buf[7];
 	sprintf(buf, "%02x%02x%02x", color.r, color.g, color.b);
 	return buf;
 }
 
-std::string span_color(const SDL_Color &color)
+std::string span_color(const SDL_Color* color)
 {
 	return "<span foreground=\"#" + font::color2hexa(color) + "\">";
 }
@@ -192,11 +192,11 @@ std::string span_color(const SDL_Color &color)
 SDL_Rect text_area(const std::string& text, int size, int style)
 {
 	const SDL_Rect area = {0,0,10000,10000};
-	return draw_text(NULL, area, size, font::NORMAL_COLOR, text, 0, 0, false, style);
+	return draw_text(nullptr, area, size, font::NORMAL_COLOR, text, 0, 0, false, style);
 }
 
-SDL_Rect draw_text(surface dst, const SDL_Rect& area, int size,
-                   const SDL_Color& color, const std::string& txt,
+SDL_Rect draw_text(SDL_Surface dst, const SDL_Rect* area, int size,
+                   const SDL_Color* color, const std::string& txt,
                    int x, int y, bool use_tooltips, int style)
 {
 	// Make sure there's always at least a space,
@@ -242,11 +242,11 @@ SDL_Rect draw_text(surface dst, const SDL_Rect& area, int size,
 	return res;
 }
 
-SDL_Rect draw_text(CVideo* gui, const SDL_Rect& area, int size,
-                   const SDL_Color& color, const std::string& txt,
+SDL_Rect draw_text(CVideo* gui, const SDL_Rect* area, int size,
+                   const SDL_Color* color, const std::string& txt,
                    int x, int y, bool use_tooltips, int style)
 {
-	return draw_text(gui != NULL ? gui->getSurface() : NULL, area, size, color, txt, x, y, use_tooltips, style);
+	return draw_text(gui != nullptr ? gui->getSurface() : nullptr, area, size, color, txt, x, y, use_tooltips, style);
 }
 
 bool is_format_char(char c)
@@ -260,7 +260,7 @@ bool is_format_char(char c)
 	case BLACK_TEXT:
 	case GRAY_TEXT:
 	case BOLD_TEXT:
-	case NULL_MARKUP:
+	case nullptr_MARKUP:
 		return true;
 	default:
 		return false;
@@ -558,8 +558,8 @@ std::string word_wrap_text(const std::string& unwrapped_text, int font_size,
 	return wrapped_text;
 }
 
-SDL_Rect draw_wrapped_text(CVideo* gui, const SDL_Rect& area, int font_size,
-		     const SDL_Color& color, const std::string& text,
+SDL_Rect draw_wrapped_text(CVideo* gui, const SDL_Rect* area, int font_size,
+		     const SDL_Color* color, const std::string& text,
 		     int x, int y, int max_width)
 {
 	std::string wrapped_text = word_wrap_text(text, font_size, max_width);

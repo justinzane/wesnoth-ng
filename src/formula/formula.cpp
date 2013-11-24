@@ -830,7 +830,7 @@ expression_ptr parse_expression(const token* i1, const token* i2, function_symbo
 				++i1;
 			}
 			const std::string precond = "";
-			if(symbols == NULL) {
+			if(symbols == nullptr) {
 				throw formula_error("Function symbol table required but not present", "",*i1->filename, i1->line_number);
 			}
 			symbols->add_formula_function(formula_name,
@@ -847,7 +847,7 @@ expression_ptr parse_expression(const token* i1, const token* i2, function_symbo
 	}
 
 	int parens = 0;
-	const token* op = NULL;
+	const token* op = nullptr;
 	bool operator_group = false;
 	for(const token* i = i1; i != i2; ++i) {
 		if(i->type == TOKEN_LPARENS || i->type == TOKEN_LSQUARE) {
@@ -855,7 +855,7 @@ expression_ptr parse_expression(const token* i1, const token* i2, function_symbo
 		} else if(i->type == TOKEN_RPARENS || i->type == TOKEN_RSQUARE) {
 			--parens;
 		} else if(parens == 0 && i->type == TOKEN_OPERATOR) {
-			if( ( !operator_group ) && (op == NULL || operator_precedence(*op) >=
+			if( ( !operator_group ) && (op == nullptr || operator_precedence(*op) >=
 							 operator_precedence(*i)) ) {
 				op = i;
 			}
@@ -865,7 +865,7 @@ expression_ptr parse_expression(const token* i1, const token* i2, function_symbo
 		}
 	}
 
-	if(op == NULL) {
+	if(op == nullptr) {
 		if(i1->type == TOKEN_LPARENS && (i2-1)->type == TOKEN_RPARENS) {
 			return parse_expression(i1+1,i2-1,symbols);
 		} else if( (i2-1)->type == TOKEN_RSQUARE) { //check if there is [ ] : either a list/map definition, or a operator
@@ -1208,7 +1208,7 @@ class mock_party : public formula_callable {
 
 int main()
 {
-	srand(time(NULL));
+	srand(time(nullptr));
 	try {
 		mock_char c;
 		mock_party p;

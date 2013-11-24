@@ -27,7 +27,7 @@
 #include "gui/audio/sound_music_track.hpp"
 #include "util.hpp"
 
-#include "SDL_mixer.h"
+#include "SDL2/SDL_mixer.h"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>
@@ -91,7 +91,7 @@ static void increment_chunk_usage(Mix_Chunk* mcp) {
 }
 
 static void decrement_chunk_usage(Mix_Chunk* mcp) {
-	if(mcp == NULL) return;
+	if(mcp == nullptr) return;
 	std::map< Mix_Chunk*, int >::iterator this_usage = chunk_usage.find(mcp);
 	assert(this_usage != chunk_usage.end());
 	if(--(this_usage->second) == 0) {
@@ -104,7 +104,7 @@ namespace {
 
 class sound_cache_chunk {
 public:
-	sound_cache_chunk(const std::string& f) : group(sound::NULL_CHANNEL), file(f), data_(NULL) {}
+	sound_cache_chunk(const std::string& f) : group(sound::nullptr_CHANNEL), file(f), data_(nullptr) {}
 	sound_cache_chunk(const sound_cache_chunk& scc)
 		: group(scc.group), file(scc.file), data_(scc.data_)
 	{
@@ -294,7 +294,7 @@ namespace sound {
 // Removes channel-chunk and channel-id mapping
 static void channel_finished_hook(int channel)
 {
-	channel_chunks[channel] = NULL;
+	channel_chunks[channel] = nullptr;
 	channel_ids[channel] = -1;
 }
 
@@ -316,7 +316,7 @@ bool init_sound() {
 		Mix_ReserveChannels(n_reserved_channels);
 
 		channel_chunks.clear();
-		channel_chunks.resize(n_of_channels, NULL);
+		channel_chunks.resize(n_of_channels, nullptr);
 		channel_ids.resize(n_of_channels, -1);
 
 		Mix_GroupChannel(bell_channel, SOUND_BELL);
@@ -485,7 +485,7 @@ static void play_new_music()
 	if(itor == music_cache.end()) {
 		LOG_AUDIO << "attempting to insert track '" << filename << "' into cache\n";
 		Mix_Music* const music = Mix_LoadMUS(filename.c_str());
-		if(music == NULL) {
+		if(music == nullptr) {
 			ERR_AUDIO << "Could not load music file '" << filename << "': "
 					  << Mix_GetError() << "\n";
 			return;
@@ -671,7 +671,7 @@ static Mix_Chunk* load_chunk(const std::string& file, channel_group group)
 	if (it != it_end) {
 		if(it->group != group) {
 			// cached item has been used in multiple sound groups
-			it->group = NULL_CHANNEL;
+			it->group = nullptr_CHANNEL;
 		}
 
 		//splice the most recently used chunk to the front of the cache
@@ -701,7 +701,7 @@ static Mix_Chunk* load_chunk(const std::string& file, channel_group group)
 			throw chunk_load_exception();
 		}
 
-		if (temp_chunk.get_data() == NULL) {
+		if (temp_chunk.get_data() == nullptr) {
 			ERR_AUDIO << "Could not load sound file '" << filename << "': "
 				<< Mix_GetError() << "\n";
 			throw chunk_load_exception();

@@ -18,7 +18,7 @@
 #ifndef SLIDER_HPP_INCLUDED
 #define SLIDER_HPP_INCLUDED
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 #include "../sdl_utils.hpp"
 
@@ -52,7 +52,7 @@ public:
 	virtual void set_location(SDL_Rect const &rect);
 
 protected:
-	bool requires_event_focus(const SDL_Event *event=NULL) const;
+	bool requires_event_focus(const SDL_Event *event=nullptr) const;
 	virtual void handle_event(const SDL_Event& event);
 	virtual void draw_contents();
 
@@ -61,7 +61,7 @@ private:
 	void mouse_down(const SDL_MouseButtonEvent& event);
 	void set_slider_position(int x);
 	SDL_Rect slider_area() const;
-	surface image_, pressedImage_, activeImage_, disabledImage_;
+	SDL_Surface image_, pressedImage_, activeImage_, disabledImage_;
 	SDL_Color line_color_;
 
 	int min_;

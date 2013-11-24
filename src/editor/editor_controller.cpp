@@ -67,17 +67,17 @@ editor_controller::editor_controller(const config &game_config, CVideo& video)
 	: controller_base(SDL_GetTicks(), game_config, video)
 	, mouse_handler_base()
 	, active_menu_(editor::MAP)
-	, rng_(NULL)
-	, rng_setter_(NULL)
-	, gui_(new editor_display(NULL, video, NULL, NULL, get_theme(game_config, "editor"), config()))
+	, rng_(nullptr)
+	, rng_setter_(nullptr)
+	, gui_(new editor_display(nullptr, video, nullptr, nullptr, get_theme(game_config, "editor"), config()))
 	, tods_()
 	, context_manager_(new context_manager(*gui_.get(), game_config_))
-	, toolkit_(NULL)
-	, prefs_disp_manager_(NULL)
+	, toolkit_(nullptr)
+	, prefs_disp_manager_(nullptr)
 	, tooltip_manager_(video)
-	, floating_label_manager_(NULL)
-	, halo_manager_(NULL)
-	, help_manager_(NULL)
+	, floating_label_manager_(nullptr)
+	, halo_manager_(nullptr)
+	, help_manager_(nullptr)
 	, do_quit_(false)
 	, quit_mode_(EXIT_ERROR)
 	, music_tracks_()
@@ -161,11 +161,11 @@ void editor_controller::init_music(const config& game_config)
 
 editor_controller::~editor_controller()
 {
-	resources::game_map = NULL;
-	resources::units = NULL;
-	resources::tod_manager = NULL;
-	resources::teams = NULL;
-	resources::state_of_game = NULL;
+	resources::game_map = nullptr;
+	resources::units = nullptr;
+	resources::tod_manager = nullptr;
+	resources::teams = nullptr;
+	resources::state_of_game = nullptr;
 }
 
 EXIT_STATUS editor_controller::main_loop()
@@ -242,7 +242,7 @@ bool editor_controller::can_execute_command(const hotkey::hotkey_command& cmd, i
 {
 	using namespace hotkey; //reduce hotkey:: clutter
 	switch (cmd.id) {
-		case HOTKEY_NULL:
+		case HOTKEY_nullptr:
 			if (index >= 0) {
 				unsigned i = static_cast<unsigned>(index);
 
@@ -482,7 +482,7 @@ hotkey::ACTION_STATE editor_controller::get_action_state(hotkey::HOTKEY_COMMAND 
 		return gui_->get_draw_coordinates() ? ACTION_ON : ACTION_OFF;
 	case HOTKEY_EDITOR_DRAW_TERRAIN_CODES:
 		return gui_->get_draw_terrain_codes() ? ACTION_ON : ACTION_OFF;
-	case HOTKEY_NULL:
+	case HOTKEY_nullptr:
 		switch (active_menu_) {
 		case editor::MAP:
 			return index == context_manager_->current_context_index()
@@ -523,7 +523,7 @@ bool editor_controller::execute_command(const hotkey::hotkey_command& cmd, int i
 	SCOPE_ED;
 	using namespace hotkey;
 	switch (command) {
-		case HOTKEY_NULL:
+		case HOTKEY_nullptr:
 			switch (active_menu_) {
 			case MAP:
 				if (index >= 0) {
@@ -644,7 +644,7 @@ bool editor_controller::execute_command(const hotkey::hotkey_command& cmd, int i
 			toolkit_->get_palette_manager()->active_palette().swap();
 			return true;
 		case HOTKEY_EDITOR_PARTIAL_UNDO:
-			if (dynamic_cast<const editor_action_chain*>(context_manager_->get_map_context().last_undo_action()) != NULL) {
+			if (dynamic_cast<const editor_action_chain*>(context_manager_->get_map_context().last_undo_action()) != nullptr) {
 				context_manager_->get_map_context().partial_undo();
 				context_manager_->refresh_after_action();
 			} else {
@@ -864,7 +864,7 @@ void editor_controller::show_menu(const std::vector<std::string>& items_arg, int
 
 		if ( ( can_execute_command(command) 
 			&& (!context_menu || in_context_menu(command.id)) )
-			|| command.id == hotkey::HOTKEY_NULL) {
+			|| command.id == hotkey::HOTKEY_nullptr) {
 			items.push_back(*i);
 		}
 		++i;
@@ -1060,20 +1060,20 @@ void editor_controller::mouse_motion(int x, int y, const bool /*browse*/,
 	if (mouse_handler_base::mouse_motion_default(x, y, update)) return;
 	map_location hex_clicked = gui().hex_clicked_on(x, y);
 	if (context_manager_->get_map().on_board_with_border(drag_from_hex_) && is_dragging()) {
-		editor_action* a = NULL;
+		editor_action* a = nullptr;
 		bool partial = false;
 		editor_action* last_undo = context_manager_->get_map_context().last_undo_action();
-		if (dragging_left_ && (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(1)) != 0) {
+		if (dragging_left_ && (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(1)) != 0) {
 			if (!context_manager_->get_map().on_board_with_border(hex_clicked)) return;
 			a = toolkit_->get_mouse_action()->drag_left(*gui_, x, y, partial, last_undo);
-		} else if (dragging_right_ && (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(3)) != 0) {
+		} else if (dragging_right_ && (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(3)) != 0) {
 			if (!context_manager_->get_map().on_board_with_border(hex_clicked)) return;
 			a = toolkit_->get_mouse_action()->drag_right(*gui_, x, y, partial, last_undo);
 		}
 		//Partial means that the mouse action has modified the
 		//last undo action and the controller shouldn't add
 		//anything to the undo stack (hence a different perform_ call)
-		if (a != NULL) {
+		if (a != nullptr) {
 			boost::scoped_ptr<editor_action> aa(a);
 			if (partial) {
 				context_manager_->get_map_context().perform_partial_action(*a);

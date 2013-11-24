@@ -57,7 +57,7 @@ struct tviewport_implementation
 		 * First test whether the mouse is at the pane.
 		 */
 		if(viewport->twidget::find_at(coordinate, must_be_active) != viewport) {
-			return NULL;
+			return nullptr;
 		}
 
 		/*
@@ -134,7 +134,7 @@ void tviewport::layout_initialise(const bool full_initialisation)
 }
 
 void tviewport::impl_draw_children(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {
@@ -200,7 +200,7 @@ iterator::twalker_* tviewport::create_walker()
 	/**
 	 * @todo Implement properly.
 	 */
-	return NULL;
+	return nullptr;
 }
 
 } // namespace gui2

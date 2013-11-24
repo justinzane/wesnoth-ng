@@ -95,7 +95,7 @@ class unit_map {
 	struct unit_pod {
 
 		unit_pod()
-			: unit(NULL)
+			: unit(nullptr)
 			, ref_count()
 			, deleted_uid(0)
 		{
@@ -107,7 +107,7 @@ class unit_map {
 		unsigned deleted_uid;  ///UID of the deleted, moved, added, or otherwise invalidated iterator to facilitate a new lookup.
 	};
 
-	/// A list pointing to unit and their reference counters.  Dead units have a unit pointer equal to NULL.
+	/// A list pointing to unit and their reference counters.  Dead units have a unit pointer equal to nullptr.
 	/// The list element is remove iff the reference counter equals zero and there are no more
 	///iterators pointing to this unit.
 	typedef std::list<unit_pod> t_ilist;
@@ -146,7 +146,7 @@ public:
 
 		~iterator_base()	{ dec(); }
 
-		iterator_base(): i_(), tank_(NULL) { }
+		iterator_base(): i_(), tank_(nullptr) { }
 
 		iterator_base(iterator_type i, container_type *m) : i_(i), tank_(m) {
 			inc();
@@ -196,9 +196,9 @@ public:
 #if 0
 			// debug!
 			if(!valid()){
-				if(!tank_){std::cerr<<"tank is NULL"<<"\n";}
+				if(!tank_){std::cerr<<"tank is nullptr"<<"\n";}
 				if(i_==the_end()){std::cerr<<"i_ is the end"<<"\n";}
-				if(i_->unit==NULL){std::cerr<<"i_ unit is NULL with uid="<<i_->deleted_uid<<"\n";}
+				if(i_->unit==nullptr){std::cerr<<"i_ unit is nullptr with uid="<<i_->deleted_uid<<"\n";}
 			}
 #endif
 			assert(valid());
@@ -210,7 +210,7 @@ public:
 			iterator_type new_i(i_);
 			do{
 				++new_i;
-			}while ((new_i->unit == NULL) && (new_i != the_end() )) ;
+			}while ((new_i->unit == nullptr) && (new_i != the_end() )) ;
 			dec();
 			i_ = new_i;
 			inc();
@@ -231,7 +231,7 @@ public:
 			dec();
 			do {
 				--i_ ;
-			}while(i_ != begin && (i_->unit ==  NULL));
+			}while(i_ != begin && (i_->unit ==  nullptr));
 			inc();
 
 			valid_exit();
@@ -246,9 +246,9 @@ public:
 
 		bool valid() const {
 			if(valid_for_dereference()) {
-				if(i_->unit == NULL){
+				if(i_->unit == nullptr){
 					recover_unit_iterator(); }
-				return  i_->unit != NULL;
+				return  i_->unit != nullptr;
 			}
 			return false; }
 
@@ -260,10 +260,10 @@ public:
 		template<typename Y> friend struct iterator_base;
 
 	private:
-		bool valid_for_dereference() const { return (tank_ != NULL) && (i_ != the_end()); }
-		bool valid_entry() const { return  ((tank_ != NULL) && (i_ != the_end())) ; }
+		bool valid_for_dereference() const { return (tank_ != nullptr) && (i_ != the_end()); }
+		bool valid_entry() const { return  ((tank_ != nullptr) && (i_ != the_end())) ; }
 		void valid_exit() const {
-			if(tank_ != NULL) {
+			if(tank_ != nullptr) {
 				assert(!the_list().empty());
 				assert(i_ != the_list().end());
 				if(i_ != the_end()){
@@ -272,7 +272,7 @@ public:
 					assert(i_->ref_count == 1);
 				}
 			}}
-		bool valid_ref_count() const { return (tank_ != NULL) && (i_ != the_end()) ; }
+		bool valid_ref_count() const { return (tank_ != nullptr) && (i_ != the_end()) ; }
 
 		///Increment the reference counter
 		void inc() { if(valid_ref_count()) { ++(i_->ref_count); } }
@@ -283,7 +283,7 @@ public:
 		void dec() {
 			if( valid_ref_count() ){
 				assert(i_->ref_count != 0);
-				if( (--(i_->ref_count) == 0)  && (i_->unit == NULL) ){
+				if( (--(i_->ref_count) == 0)  && (i_->unit == nullptr) ){
 					if(tank_->umap_.erase(i_->deleted_uid) != 1){
 						tank_->error_recovery_externally_changed_uid(i_); }
 					i_ = the_list().erase(i_);
@@ -424,7 +424,7 @@ public:
 	/**
 	 * Is the unit in the map?
 	 *
-	 * @pre                       @p u != @c NULL
+	 * @pre                       @p u != @c nullptr
 	 *
 	 * @param u                   Pointer to the unit to find.
 	 *
@@ -437,7 +437,7 @@ private:
 	void init_end(){
 		assert(ilist_.empty());
 		unit_pod upod;
-		upod.unit = NULL;
+		upod.unit = nullptr;
 		upod.deleted_uid = 0;
 		++upod.ref_count; //dummy count
 		ilist_.push_front(upod);
@@ -447,11 +447,11 @@ private:
 	t_ilist::iterator begin_core() const ;
 
 	bool is_valid(const t_ilist::const_iterator &i) const {
-		return i != the_end_  && is_found(i) && (i->unit !=  NULL); }
+		return i != the_end_  && is_found(i) && (i->unit !=  nullptr); }
 	bool is_valid(const t_umap::const_iterator &i) const {
-		return is_found(i) && (i->second->unit != NULL); }
+		return is_found(i) && (i->second->unit != nullptr); }
 	bool is_valid(const t_lmap::const_iterator &i) const {
-		return is_found(i) && (i->second->unit != NULL); }
+		return is_found(i) && (i->second->unit != nullptr); }
 
 	bool is_found(const t_ilist::const_iterator &i) const { return i != ilist_.end(); }
 	bool is_found(const t_umap::const_iterator &i) const { return i != umap_.end() ; }

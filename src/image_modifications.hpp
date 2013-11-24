@@ -103,7 +103,7 @@ public:
 	virtual ~modification() {}
 
 	///Applies the image-path modification on the specified surface
-	virtual surface operator()(const surface& src) const = 0;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const = 0;
 
 	/// Specifies the priority of the modification
 	virtual int priority() const { return 0; }
@@ -131,7 +131,7 @@ public:
 	rc_modification(const std::map<Uint32, Uint32>& recolor_map)
 		: rc_map_(recolor_map)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 
 	// The rc modification has a higher priority
 	virtual int priority() const { return 1; }
@@ -160,7 +160,7 @@ public:
 		: horiz_(horiz)
 		, vert_(vert)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 
 	void set_horiz(bool val)  { horiz_ = val; }
 	void set_vert(bool val)   { vert_ = val; }
@@ -205,7 +205,7 @@ public:
 	rotate_modification(int degrees = 90, int zoom = 16, int offset = 8)
 		: degrees_(degrees), zoom_(zoom), offset_(offset)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 
 	bool no_op() const { return degrees_ % 360 == 0; }
 
@@ -221,7 +221,7 @@ private:
 class gs_modification : public modification
 {
 public:
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 };
 
 /**
@@ -230,12 +230,12 @@ public:
 class crop_modification : public modification
 {
 public:
-	crop_modification(const SDL_Rect& slice)
+	crop_modification(const SDL_Rect* slice)
 		: slice_(slice)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 
-	const SDL_Rect& get_slice() const;
+	const SDL_Rect* get_slice() const;
 
 private:
 	SDL_Rect slice_;
@@ -248,17 +248,17 @@ private:
 class blit_modification : public modification
 {
 public:
-	blit_modification(const surface& surf, int x, int y)
+	blit_modification(const SDL_Surface& surf, int x, int y)
 		: surf_(surf), x_(x), y_(y)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 
-	const surface& get_surface() const;
+	const SDL_Surface& get_surface() const;
 	int get_x() const;
 	int get_y() const;
 
 private:
-	surface surf_;
+	SDL_Surface surf_;
 	int x_;
 	int y_;
 };
@@ -270,17 +270,17 @@ private:
 class mask_modification : public modification
 {
 public:
-	mask_modification(const surface& mask, int x, int y)
+	mask_modification(const SDL_Surface& mask, int x, int y)
 		: mask_(mask), x_(x), y_(y)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 
-	const surface& get_mask() const;
+	const SDL_Surface& get_mask() const;
 	int get_x() const;
 	int get_y() const;
 
 private:
-	surface mask_;
+	SDL_Surface mask_;
 	int x_;
 	int y_;
 };
@@ -292,15 +292,15 @@ private:
 class light_modification : public modification
 {
 public:
-	light_modification(const surface& surf)
+	light_modification(const SDL_Surface& surf)
 		: surf_(surf)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 
-	const surface& get_surface() const;
+	const SDL_Surface& get_surface() const;
 
 private:
-	surface surf_;
+	SDL_Surface surf_;
 };
 
 /**
@@ -312,7 +312,7 @@ public:
 	scale_modification(int width, int height)
 		: w_(width), h_(height)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 	int get_w() const;
 	int get_h() const;
 
@@ -329,7 +329,7 @@ public:
 	o_modification(float opacity)
 		: opacity_(opacity)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 	float get_opacity() const;
 
 private:
@@ -345,7 +345,7 @@ public:
 	cs_modification(int r, int g, int b)
 		: r_(r), g_(g), b_(b)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 	int get_r() const;
 	int get_g() const;
 	int get_b() const;
@@ -363,7 +363,7 @@ public:
 	blend_modification(int r, int g, int b, float a)
 		: r_(r), g_(g), b_(b), a_(a)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 	int get_r() const;
 	int get_g() const;
 	int get_b() const;
@@ -383,7 +383,7 @@ public:
 	bl_modification(int depth)
 		: depth_(depth)
 	{}
-	virtual surface operator()(const surface& src) const;
+	virtual SDL_Surface operator()(const SDL_Surface& src) const;
 	int get_depth() const;
 
 private:
@@ -395,7 +395,7 @@ private:
  */
 struct brighten_modification : modification
 {
-	virtual surface operator()(const surface &src) const;
+	virtual SDL_Surface operator()(const SDL_Surface &src) const;
 };
 
 /**
@@ -403,7 +403,7 @@ struct brighten_modification : modification
  */
 struct darken_modification : modification
 {
-	virtual surface operator()(const surface &src) const;
+	virtual SDL_Surface operator()(const SDL_Surface &src) const;
 };
 
 /**
@@ -412,8 +412,8 @@ struct darken_modification : modification
 struct background_modification : modification
 {
 	background_modification(SDL_Color const &c): color_(c) {}
-	virtual surface operator()(const surface &src) const;
-	const SDL_Color& get_color() const;
+	virtual SDL_Surface operator()(const SDL_Surface &src) const;
+	const SDL_Color* get_color() const;
 
 private:
 	SDL_Color color_;

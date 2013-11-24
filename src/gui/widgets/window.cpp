@@ -72,7 +72,7 @@ public:
 	{
 	}
 
-	twidget* build() const { return NULL; }
+	twidget* build() const { return nullptr; }
 };
 
 } // namespace implementation
@@ -116,8 +116,8 @@ static Uint32 draw_timer(Uint32, void*)
 
 	data.type = DRAW_EVENT;
 	data.code = 0;
-	data.data1 = NULL;
-	data.data2 = NULL;
+	data.data1 = nullptr;
+	data.data2 = nullptr;
 
 	event.type = DRAW_EVENT;
 	event.user = data;
@@ -167,8 +167,8 @@ static bool helptip()
 
 	data.type = SHOW_HELPTIP_EVENT;
 	data.code = 0;
-	data.data1 = NULL;
-	data.data2 = NULL;
+	data.data1 = nullptr;
+	data.data2 = nullptr;
 
 	event.type = SHOW_HELPTIP_EVENT;
 	event.user = data;
@@ -256,7 +256,7 @@ twindow* tmanager::window(const unsigned id)
 	std::map<unsigned, twindow*>::iterator itor = windows_.find(id);
 
 	if(itor == windows_.end()) {
-		return NULL;
+		return nullptr;
 	} else {
 		return itor->second;
 	}
@@ -589,7 +589,7 @@ int twindow::show(const bool restore, const unsigned auto_close_timeout)
 		{
 			if(interval_ == 0) {
 				draw_interval = 30;
-				SDL_AddTimer(draw_interval, draw_timer, NULL);
+				SDL_AddTimer(draw_interval, draw_timer, nullptr);
 
 				// There might be some time between creation and showing so
 				// reupdate the sizes.
@@ -633,8 +633,8 @@ int twindow::show(const bool restore, const unsigned auto_close_timeout)
 
 		data.type = CLOSE_WINDOW_EVENT;
 		data.code = tmanager::instance().get_id(*this);
-		data.data1 = NULL;
-		data.data2 = NULL;
+		data.data1 = nullptr;
+		data.data2 = nullptr;
 
 		event.type = CLOSE_WINDOW_EVENT;
 		event.user = data;
@@ -661,7 +661,7 @@ int twindow::show(const bool restore, const unsigned auto_close_timeout)
 				 * return the proper button state. When initializing here all
 				 * works fine.
 				 */
-				mouse_button_state_ = SDL_GetMouseState(NULL, NULL);
+				mouse_button_state_ = SDL_GetMouseState(nullptr, nullptr);
 				mouse_button_state_initialised = true;
 			}
 
@@ -680,7 +680,7 @@ int twindow::show(const bool restore, const unsigned auto_close_timeout)
 		// restore area
 		if(restore) {
 			SDL_Rect rect = get_rectangle();
-			sdl_blit(restorer_, 0, video_.getSurface(), &rect);
+			SDL_BlitSurface(restorer_, 0, video_.getSurface(), &rect);
 			update_rect(get_rectangle());
 			font::undraw_floating_labels(video_.getSurface());
 		}
@@ -692,7 +692,7 @@ int twindow::show(const bool restore, const unsigned auto_close_timeout)
 	// restore area
 	if(restore) {
 		SDL_Rect rect = get_rectangle();
-		sdl_blit(restorer_, 0, video_.getSurface(), &rect);
+		SDL_BlitSurface(restorer_, 0, video_.getSurface(), &rect);
 		update_rect(get_rectangle());
 		font::undraw_floating_labels(video_.getSurface());
 	}
@@ -708,7 +708,7 @@ void twindow::draw()
 		return;
 	}
 
-	surface frame_buffer = video_.getSurface();
+	SDL_Surface frame_buffer = video_.getSurface();
 
 	/***** ***** Layout and get dirty list ***** *****/
 	if(need_layout_) {
@@ -717,7 +717,7 @@ void twindow::draw()
 		// doesn't work yet we need to undraw the window.
 		if(restorer_) {
 			SDL_Rect rect = get_rectangle();
-			sdl_blit(restorer_, 0, frame_buffer, &rect);
+			SDL_BlitSurface(restorer_, 0, frame_buffer, &rect);
 			// Since the old area might be bigger as the new one, invalidate
 			// it.
 			update_rect(rect);
@@ -725,7 +725,7 @@ void twindow::draw()
 
 		layout();
 
-		// Get new surface for restoring
+		// Get new SDL_Surface for restoring
 		SDL_Rect rect = get_rectangle();
 		// We want the labels underneath the window so draw them and use them
 		// as restore point.
@@ -753,7 +753,7 @@ void twindow::draw()
 
 	if(dirty_list_.empty()) {
 		if(preferences::use_color_cursors() || sunset_) {
-			surface frame_buffer = get_video_surface();
+			SDL_Surface frame_buffer = get_video_surface();
 
 			if(sunset_) {
 				/** @todo should probably be moved to event::thandler::draw. */
@@ -830,7 +830,7 @@ void twindow::draw()
 
 		// Restore.
 		SDL_Rect rect = get_rectangle();
-		sdl_blit(restorer_, 0, frame_buffer, &rect);
+		SDL_BlitSurface(restorer_, 0, frame_buffer, &rect);
 
 		/**
 		 * @todo Remove the if an always use the true branch.
@@ -903,7 +903,7 @@ void twindow::undraw()
 {
 	if(restorer_) {
 		SDL_Rect rect = get_rectangle();
-		sdl_blit(restorer_, 0, video_.getSurface(), &rect);
+		SDL_BlitSurface(restorer_, 0, video_.getSurface(), &rect);
 		// Since the old area might be bigger as the new one, invalidate
 		// it.
 		update_rect(rect);
@@ -1023,7 +1023,7 @@ void twindow::layout()
 			: h_(variables_);
 
 	/***** Handle click dismiss status. *****/
-	tbutton* click_dismiss_button = NULL;
+	tbutton* click_dismiss_button = nullptr;
 	if((click_dismiss_button
 			= find_widget<tbutton>(this, "click_dismiss", false, false))) {
 
@@ -1214,7 +1214,7 @@ const std::string& twindow::get_control_type() const
 	return type;
 }
 
-void twindow::draw(surface& /*surf*/, const bool /*force*/,
+void twindow::draw(SDL_Surface* /*surf*/, const bool /*force*/,
 		const bool /*invalidate_background*/)
 {
 	assert(false);
@@ -1234,7 +1234,7 @@ void swap_grid(tgrid* grid,
 	widget->set_id(id);
 
 	// Get the container containing the wanted widget.
-	tgrid* parent_grid = NULL;
+	tgrid* parent_grid = nullptr;
 	if(grid) {
 		parent_grid = find_widget<tgrid>(grid, id, false, false);
 	}
@@ -1261,7 +1261,7 @@ void swap_grid(tgrid* grid,
 
 void twindow::finalize(const boost::intrusive_ptr<tbuilder_grid>& content_grid)
 {
-	swap_grid(NULL, &grid(), content_grid->build(), "_window_content_grid");
+	swap_grid(nullptr, &grid(), content_grid->build(), "_window_content_grid");
 }
 
 #ifdef DEBUG_WINDOW_LAYOUT_GRAPHS

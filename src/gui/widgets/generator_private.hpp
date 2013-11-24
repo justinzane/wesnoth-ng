@@ -205,7 +205,7 @@ struct thorizontal_list
 	 *
 	 * @param rectangle           The visible rectangle.
 	 */
-	void set_visible_rectangle(const SDL_Rect& rectangle);
+	void set_visible_rectangle(const SDL_Rect* rectangle);
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
@@ -280,7 +280,7 @@ struct tvertical_list
 	virtual void set_origin(const tpoint& origin) OVERRIDE;
 
 	/** See @ref thorizontal_list::set_visible_rectangle(). */
-	void set_visible_rectangle(const SDL_Rect& rectangle);
+	void set_visible_rectangle(const SDL_Rect* rectangle);
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
@@ -372,7 +372,7 @@ struct tmatrix
 	}
 
 	/** See @ref thorizontal_list::set_visible_rectangle(). */
-	void set_visible_rectangle(const SDL_Rect& /*rectangle*/ )
+	void set_visible_rectangle(const SDL_Rect* /*rectangle*/ )
 		{ ERROR_LOG(false); }
 
 	/** See @ref twidget::find_at. */
@@ -442,7 +442,7 @@ struct tindependent
 	virtual void set_origin(const tpoint& origin) OVERRIDE;
 
 	/** See @ref thorizontal_list::set_visible_rectangle(). */
-	void set_visible_rectangle(const SDL_Rect& rectangle);
+	void set_visible_rectangle(const SDL_Rect* rectangle);
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
@@ -539,7 +539,7 @@ struct tshow
 	 *                            the new item. No widgets with id == "" are
 	 *                            allowed.
 	 * @param callback            The callback function is not used and
-	 *                            should be NULL.
+	 *                            should be nullptr.
 	 */
 	void init(tgrid* grid
 			, const std::map<std::string /* widget id */, string_map>& data
@@ -821,13 +821,13 @@ public:
 	}
 
 	/** See @ref twidget::set_visible_rectangle. */
-	virtual void set_visible_rectangle(const SDL_Rect& rectangle) OVERRIDE
+	virtual void set_visible_rectangle(const SDL_Rect* rectangle) OVERRIDE
 	{
 		placement::set_visible_rectangle(rectangle);
 	}
 
 	/** See @ref twidget::impl_draw_children. */
-	virtual void impl_draw_children(surface& frame_buffer) OVERRIDE
+	virtual void impl_draw_children(SDL_Surface& frame_buffer) OVERRIDE
 	{
 		assert(this->get_visible() == twidget::tvisible::visible);
 
@@ -842,7 +842,7 @@ public:
 
 	/** See @ref twidget::impl_draw_children. */
 	virtual void impl_draw_children(
-			  surface& frame_buffer
+			  SDL_Surface& frame_buffer
 			, int x_offset
 			, int y_offset) OVERRIDE
 	{
@@ -900,7 +900,7 @@ public:
 	 *
 	 * @todo Implement properly.
 	 */
-	virtual iterator::twalker_* create_walker() OVERRIDE { return NULL; }
+	virtual iterator::twalker_* create_walker() OVERRIDE { return nullptr; }
 
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/
 

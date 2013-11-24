@@ -40,7 +40,7 @@ map_generator* create_map_generator(const std::string& name, const config &cfg)
 	} else if(name == "yamg") {
 		return new ya_mapgen(cfg);
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -52,7 +52,7 @@ std::string random_generate_map(const std::string& parms, const config &cfg)
 	//that are arguments to the generator
 	std::vector<std::string> parameters = utils::split(parms, ' ');
 	util::scoped_ptr<map_generator> generator(create_map_generator(parameters.front(),cfg));
-	if(generator == NULL) {
+	if(generator == nullptr) {
 		ERR_CF << "could not find map generator '" << parameters.front() << "'\n";
 		return std::string();
 	}
@@ -67,7 +67,7 @@ config random_generate_scenario(const std::string& parms, const config &cfg)
 	//that are arguments to the generator
 	std::vector<std::string> parameters = utils::split(parms, ' ');
 	util::scoped_ptr<map_generator> generator(create_map_generator(parameters.front(),cfg));
-	if(generator == NULL) {
+	if(generator == nullptr) {
 		ERR_CF << "could not find map generator '" << parameters.front() << "'\n";
 		return config();
 	}

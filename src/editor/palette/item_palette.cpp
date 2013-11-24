@@ -63,9 +63,9 @@ void item_palette::setup(const config& cfg)
 	}
 }
 
-void item_palette::draw_item(const overlay& item, surface& image, std::stringstream& tooltip_text) {
+void item_palette::draw_item(const overlay& item, SDL_Surface& image, std::stringstream& tooltip_text) {
 
-	surface screen = gui_.video().getSurface();
+	SDL_Surface screen = gui_.video().getSurface();
 
 	std::stringstream filename;
 	filename << item.image;
@@ -73,11 +73,11 @@ void item_palette::draw_item(const overlay& item, surface& image, std::stringstr
 		filename << item.halo;
 
 	image = image::get_image(filename.str());
-	if(image == NULL) {
+	if(image == nullptr) {
 		tooltip_text << "IMAGE NOT FOUND\n";
 		ERR_ED << "image for item type: '" << filename.str() << "' not found\n";
 		image = image::get_image(game_config::images::missing);
-		if (image == NULL) {
+		if (image == nullptr) {
 			ERR_ED << "Placeholder image not found\n";
 			return;
 		}

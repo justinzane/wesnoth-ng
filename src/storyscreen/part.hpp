@@ -47,7 +47,7 @@ public:
 	struct render_input
 	{
 		SDL_Rect rect;	/**< Corrected rectangle for rendering surf. */
-		surface image;	/**< Surface, scaled if required. */
+		SDL_Surface image;	/**< Surface, scaled if required. */
 	};
 
 	/**
@@ -104,7 +104,7 @@ public:
 	 * Gets a render_input object for use by the rendering code after applying
 	 * any geometric transformations required.
 	 */
-	render_input get_render_input(double xscale, double yscale, SDL_Rect& dst_rect) const;
+	render_input get_render_input(double xscale, double yscale, SDL_Rect* dst_rect) const;
 
 private:
 	std::string file_;

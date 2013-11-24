@@ -38,13 +38,13 @@ textbox::textbox(CVideo &video, int width, const std::string& text, bool editabl
 	   : scrollarea(video, auto_join), max_size_(max_size), text_(utils::string_to_wstring(text)),
 	     cursor_(text_.size()), selstart_(-1), selend_(-1),
 	     grabmouse_(false), text_pos_(0), editable_(editable),
-	     show_cursor_(true), show_cursor_at_(0), text_image_(NULL),
+	     show_cursor_(true), show_cursor_at_(0), text_image_(nullptr),
 	     wrap_(false), line_height_(0), yscroll_(0), alpha_(alpha),
 	     alpha_focus_(alpha_focus),
-	     edit_target_(NULL)
+	     edit_target_(nullptr)
 {
 	// static const SDL_Rect area = d.screen_area();
-	// const int height = font::draw_text(NULL,area,font_size,font::NORMAL_COLOR,"ABCD",0,0).h;
+	// const int height = font::draw_text(nullptr,area,font_size,font::NORMAL_COLOR,"ABCD",0,0).h;
 	set_measurements(width, font::get_max_height(font_size));
 	set_scroll_rate(font::get_max_height(font_size) / 2);
 	update_text_cache(true);
@@ -69,7 +69,7 @@ const std::string textbox::text() const
 }
 
 // set_text does not respect max_size_
-void textbox::set_text(const std::string& text, const SDL_Color& color)
+void textbox::set_text(const std::string& text, const SDL_Color* color)
 {
 	text_ = utils::string_to_wstring(text);
 	cursor_ = text_.size();
@@ -81,9 +81,9 @@ void textbox::set_text(const std::string& text, const SDL_Color& color)
 	handle_text_changed(text_);
 }
 
-void textbox::append_text(const std::string& text, bool auto_scroll, const SDL_Color& color)
+void textbox::append_text(const std::string& text, bool auto_scroll, const SDL_Color* color)
 {
-	if(text_image_.get() == NULL) {
+	if(text_image_.get() == nullptr) {
 		set_text(text, color);
 		return;
 	}
@@ -95,20 +95,20 @@ void textbox::append_text(const std::string& text, bool auto_scroll, const SDL_C
 	const bool is_at_bottom = get_position() == get_max_position();
 	const wide_string& wtext = utils::string_to_wstring(text);
 
-	const surface new_text = add_text_line(wtext, color);
-	surface new_surface = create_compatible_surface(text_image_,std::max<size_t>(text_image_->w,new_text->w),text_image_->h+new_text->h);
+	const SDL_Surface new_text = add_text_line(wtext, color);
+	SDL_Surface new_surface = create_compatible_surface(text_image_,std::max<size_t>(text_image_->w,new_text->w),text_image_->h+new_text->h);
 
 	SDL_SetAlpha(new_text.get(),0,0);
 	SDL_SetAlpha(text_image_.get(),0,0);
 
-	sdl_blit(text_image_,NULL,new_surface,NULL);
+	SDL_BlitSurface(text_image_,nullptr,new_surface,nullptr);
 
 	SDL_Rect target = create_rect(0
 			, text_image_->h
 			, new_text->w
 			, new_text->h);
 
-	sdl_blit(new_text,NULL,new_surface,&target);
+	SDL_BlitSurface(new_text,nullptr,new_surface,&target);
 	text_image_.assign(new_surface);
 
 	text_.resize(text_.size() + wtext.size());
@@ -141,8 +141,8 @@ void textbox::draw_cursor(int pos, CVideo &video) const
 				, 1
 				, location().h);
 
-		surface frame_buffer = video.getSurface();
-		sdl_fill_rect(frame_buffer,&rect,SDL_MapRGB(frame_buffer->format,255,255,255));
+		SDL_Surface frame_buffer = video.getSurface();
+		SDL_FillRect(frame_buffer,&rect,SDL_MapRGBA(frame_buffer->format,255,255,255));
 	}
 }
 
@@ -150,17 +150,17 @@ void textbox::draw_contents()
 {
 	SDL_Rect const &loc = inner_location();
 
-	surface surf = video().getSurface();
+	SDL_Surface surf = video().getSurface();
 	draw_solid_tinted_rectangle(loc.x,loc.y,loc.w,loc.h,0,0,0,
-				    focus(NULL) ? alpha_focus_ : alpha_, surf);
+				    focus(nullptr) ? alpha_focus_ : alpha_, surf);
 
 	SDL_Rect src;
 
-	if(text_image_ == NULL) {
+	if(text_image_ == nullptr) {
 		update_text_cache(true);
 	}
 
-	if(text_image_ != NULL) {
+	if(text_image_ != nullptr) {
 		src.y = yscroll_;
 		src.w = std::min<size_t>(loc.w,text_image_->w);
 		src.h = std::min<size_t>(loc.h,text_image_->h);
@@ -191,7 +191,7 @@ void textbox::draw_contents()
 
 				const clip_rect_setter clipper(surf, &loc);
 
-				Uint32 color = SDL_MapRGB(surf->format, 0, 0, 160);
+				Uint32 color = SDL_MapRGBA(surf->format, 0, 0, 160);
 				fill_rect_alpha(rect, color, 140, surf);
 
 				starty += int(line_height_);
@@ -200,13 +200,13 @@ void textbox::draw_contents()
 		}
 
 		if(enabled()) {
-			sdl_blit(text_image_, &src, surf, &dest);
+			SDL_BlitSurface(text_image_, &src, surf, &dest);
 		} else {
 			// HACK: using 30% opacity allows white text to look as though it is grayed out,
 			// while not changing any applicable non-grayscale AA. Actual colored text will
 			// not look as good, but this is not currently a concern since GUI1 textboxes
 			// are not used much nowadays, and they will eventually all go away.
-			sdl_blit(adjust_surface_alpha(text_image_, ftofxp(0.3)), &src, surf, &dest);
+			SDL_BlitSurface(adjust_surface_alpha(text_image_, ftofxp(0.3)), &src, surf, &dest);
 		}
 	}
 
@@ -245,7 +245,7 @@ void textbox::scroll(unsigned int pos)
 	set_dirty(true);
 }
 
-surface textbox::add_text_line(const wide_string& text, const SDL_Color& color)
+SDL_Surface textbox::add_text_line(const wide_string& text, const SDL_Color* color)
 {
 	line_height_ = font::get_max_height(font_size);
 
@@ -305,13 +305,13 @@ surface textbox::add_text_line(const wide_string& text, const SDL_Color& color)
 	}
 
 	const std::string s = utils::wstring_to_string(wrapped_text);
-	const surface res(font::get_rendered_text(s, font_size, color));
+	const SDL_Surface res(font::get_rendered_text(s, font_size, color));
 
 	return res;
 }
 
 
-void textbox::update_text_cache(bool changed, const SDL_Color& color)
+void textbox::update_text_cache(bool changed, const SDL_Color* color)
 {
 	if(changed) {
 		char_x_.clear();
@@ -366,7 +366,7 @@ bool textbox::requires_event_focus(const SDL_Event* event) const
 	if(!focus_ || hidden() || !enabled()) {
 		return false;
 	}
-	if(event == NULL) {
+	if(event == nullptr) {
 		//when event is not specified, signal that focus may be desired later
 		return true;
 	}
@@ -424,7 +424,7 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded)
 	SDL_Rect const &loc = inner_location();
 	bool clicked_inside = !mouse_locked() && (event.type == SDL_MOUSEBUTTONDOWN
 					   && (mousebuttons & SDL_BUTTON(1))
-					   && point_in_rect(mousex, mousey, loc));
+					   && is_point_in_rect(mousex, mousey, loc));
 	if(clicked_inside) {
 		set_focus(true);
 	}
@@ -467,7 +467,7 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded)
 	//if we don't have the focus, then see if we gain the focus,
 	//otherwise return
 	if(!was_forwarded && focus(&event) == false) {
-		if (!mouse_locked() && event.type == SDL_MOUSEMOTION && point_in_rect(mousex, mousey, loc))
+		if (!mouse_locked() && event.type == SDL_MOUSEMOTION && is_point_in_rect(mousex, mousey, loc))
 			events::focus_handler(this);
 
 		return;
@@ -623,7 +623,7 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded)
 	show_cursor_at_ = SDL_GetTicks();
 
 	if(changed || old_cursor != cursor_ || old_selstart != selstart_ || old_selend != selend_) {
-		text_image_ = NULL;
+		text_image_ = nullptr;
 		handle_text_changed(text_);
 	}
 

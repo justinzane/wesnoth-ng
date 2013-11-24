@@ -85,30 +85,30 @@ static lg::log_domain log_enginerefac("enginerefac");
 	 */
 	void conv_ansi_utf8(std::string &name, bool a2u) {
 		int wlen = MultiByteToWideChar(a2u ? CP_ACP : CP_UTF8, 0,
-									   name.c_str(), -1, NULL, 0);
+									   name.c_str(), -1, nullptr, 0);
 		if (wlen == 0) return;
 		WCHAR *wc = new WCHAR[wlen];
-		if (wc == NULL) return;
+		if (wc == nullptr) return;
 		if (MultiByteToWideChar(a2u ? CP_ACP : CP_UTF8, 0, name.c_str(), -1,
 								wc, wlen) == 0) {
 			delete [] wc;
 			return;
 		}
 		int alen = WideCharToMultiByte(!a2u ? CP_ACP : CP_UTF8, 0, wc, wlen,
-									   NULL, 0, NULL, NULL);
+									   nullptr, 0, nullptr, nullptr);
 		if (alen == 0) {
 			delete [] wc;
 			return;
 		}
 		CHAR *ac = new CHAR[alen];
-		if (ac == NULL) {
+		if (ac == nullptr) {
 			delete [] wc;
 			return;
 		}
 		WideCharToMultiByte(!a2u ? CP_ACP : CP_UTF8, 0, wc, wlen,
-							ac, alen, NULL, NULL);
+							ac, alen, nullptr, nullptr);
 		delete [] wc;
-		if (ac == NULL) {
+		if (ac == nullptr) {
 			return;
 		}
 		name = ac;
@@ -268,7 +268,7 @@ private:
 
 class create_save_info {
 public:
-	create_save_info(const std::string* d = NULL) : dir(d ? *d : get_saves_dir()) {
+	create_save_info(const std::string* d = nullptr) : dir(d ? *d : get_saves_dir()) {
 	}
 	save_info operator()(const std::string& filename) const {
 		std::string name = filename;
@@ -327,16 +327,16 @@ std::string save_info::format_time_local() const
 std::string save_info::format_time_summary() const
 {
 	time_t t = modified();
-	time_t curtime = time(NULL);
+	time_t curtime = time(nullptr);
 	const struct tm* timeptr = localtime(&curtime);
-	if(timeptr == NULL) {
+	if(timeptr == nullptr) {
 		return "";
 	}
 
 	const struct tm current_time = *timeptr;
 
 	timeptr = localtime(&t);
-	if(timeptr == NULL) {
+	if(timeptr == nullptr) {
 		return "";
 	}
 
@@ -488,7 +488,7 @@ void remove_old_auto_saves(const int autosavemax, const int infinite_auto_saves)
 	if (countdown == infinite_auto_saves)
 		return;
 
-	std::vector<save_info> games = get_saves_list(NULL, &auto_save);
+	std::vector<save_info> games = get_saves_list(nullptr, &auto_save);
 	for (std::vector<save_info>::iterator i = games.begin(); i != games.end(); ++i) {
 		if (countdown-- <= 0) {
 			LOG_SAVE << "Deleting savegame '" << i->name() << "'\n";
@@ -962,7 +962,7 @@ bool savegame::save_game(CVideo* video, const std::string& filename)
 		LOG_SAVE << "Setting parent of '" << filename_<< "' to " << gamestate_.classification().parent << "\n";
 
 		write_game_to_disk(filename_);
-		if (resources::persist != NULL) {
+		if (resources::persist != nullptr) {
 			resources::persist->end_transaction();
 			resources::persist ->start_transaction();
 		}
@@ -973,12 +973,12 @@ bool savegame::save_game(CVideo* video, const std::string& filename)
 		end = SDL_GetTicks();
 		LOG_SAVE << "Milliseconds to save " << filename_ << ": " << end - start << "\n";
 
-		if (video != NULL && show_confirmation_)
+		if (video != nullptr && show_confirmation_)
 			gui2::show_message(*video, _("Saved"), _("The game has been saved"));
 		return true;
 	} catch(game::save_game_failed& e) {
 		ERR_SAVE << error_message_ << e.message;
-		if (video != NULL){
+		if (video != nullptr){
 			gui2::show_error_message(*video, error_message_ + e.message);
 			//do not bother retrying, since the user can just try to save the game again
 			//maybe show a yes-no dialog for "disable autosaves now"?

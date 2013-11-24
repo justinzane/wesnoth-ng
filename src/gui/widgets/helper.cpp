@@ -26,7 +26,7 @@
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 
-#include "SDL_ttf.h"
+#include "SDL2/SDL_ttf.h"
 
 namespace gui2 {
 

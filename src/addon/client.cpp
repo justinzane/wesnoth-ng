@@ -44,8 +44,8 @@ addons_client::addons_client(display& disp, const std::string& address)
 	, addr_(address)
 	, host_()
 	, port_()
-	, conn_(NULL)
-	, stat_(NULL)
+	, conn_(nullptr)
+	, stat_(nullptr)
 	, last_error_()
 {
 	const std::vector<std::string>& address_components =
@@ -282,8 +282,8 @@ bool addons_client::update_last_error(config& response_cfg)
 
 void addons_client::check_connected() const
 {
-	assert(conn_ != NULL);
-	if(conn_ == NULL) {
+	assert(conn_ != nullptr);
+	if(conn_ == nullptr) {
 		ERR_ADDONS << "not connected to server\n";
 		throw not_connected_to_server();
 	}

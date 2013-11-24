@@ -21,9 +21,9 @@
 #include "../video.hpp"
 #include "../sdl_utils.hpp"
 
-static surface dummy_screen_surface(NULL);
+static SDL_Surface dummy_screen_surface(nullptr);
 
-surface& CVideo::getSurface()
+SDL_Surface* CVideo::getSurface()
 {
 	return dummy_screen_surface;
 }
@@ -32,13 +32,13 @@ void update_rect(const SDL_Rect&)
 {
 }
 
-surface display_format_alpha(surface)
+SDL_Surface display_format_alpha(surface)
 {
-	return NULL;
+	return nullptr;
 }
 
-surface get_video_surface()
+SDL_Surface get_video_surface()
 {
-	return NULL;
+	return nullptr;
 }
 

@@ -80,20 +80,20 @@ void unit_palette::setup(const config& /*cfg*/)
 	}
 }
 
-void unit_palette::draw_item(const unit_type& u, surface& image, std::stringstream& tooltip_text) {
+void unit_palette::draw_item(const unit_type& u, SDL_Surface& image, std::stringstream& tooltip_text) {
 
-	surface screen = gui_.video().getSurface();
+	SDL_Surface screen = gui_.video().getSurface();
 
 	std::stringstream filename;
 	filename << u.image() << "~RC(" << u.flag_rgb() << '>'
 	    	 << team::get_side_color_index(gui_.viewing_side()) << ')';
 
 	image = image::get_image(filename.str());
-	if(image == NULL) {
+	if(image == nullptr) {
 		tooltip_text << "IMAGE NOT FOUND\n";
 		ERR_ED << "image for unit type: '" << filename.str() << "' not found\n";
 		image = image::get_image(game_config::images::missing);
-		if (image == NULL) {
+		if (image == nullptr) {
 			ERR_ED << "Placeholder image not found\n";
 			return;
 		}

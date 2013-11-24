@@ -100,7 +100,7 @@ manager::~manager()
 #if 0
 static void print_to_chat(const std::string& title, const std::string& message)
 {
-	resources::screen->add_chat_message(time(NULL), title, 0, message,
+	resources::screen->add_chat_message(time(nullptr), title, 0, message,
 			events::chat_handler::MESSAGE_PRIVATE, false);
 }
 #endif
@@ -148,7 +148,7 @@ void manager::print_help_once()
 bool manager::can_modify_game_state() const
 {
 	if(wait_for_side_init_
-					|| resources::teams == NULL
+					|| resources::teams == nullptr
 					|| executing_actions_
 					|| is_observer()
 					|| resources::controller->is_linger_mode())
@@ -335,7 +335,7 @@ void manager::post_delete_action(action_ptr action)
 	side_actions_ptr side_actions = resources::teams->at(action->team_index()).get_side_actions();
 
 	unit *actor = action->get_unit();
-	if(actor != NULL) { // The unit might have died following the execution of an attack
+	if(actor != nullptr) { // The unit might have died following the execution of an attack
 		side_actions::iterator action_it = side_actions->find_last_action_of(*actor);
 		if(action_it != side_actions->end()) {
 			move_ptr move = boost::dynamic_pointer_cast<class move>(*action_it);
@@ -1076,7 +1076,7 @@ bool manager::has_actions() const
 
 bool manager::unit_has_actions(unit const* unit) const
 {
-	assert(unit != NULL);
+	assert(unit != nullptr);
 	assert(resources::teams);
 	return viewer_actions()->unit_has_actions(*unit);
 }

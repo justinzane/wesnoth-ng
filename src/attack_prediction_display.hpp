@@ -68,7 +68,7 @@ private:
 	int units_strings_height_;
 
 	std::string hp_distrib_string_;
-	surface attacker_hp_distrib_, defender_hp_distrib_;
+	SDL_Surface attacker_hp_distrib_, defender_hp_distrib_;
 	int hp_distrib_string_width_;
 	int attacker_hp_distrib_width_, defender_hp_distrib_width_;
 	int attacker_hp_distrib_height_, defender_hp_distrib_height_, hp_distribs_height_;
@@ -100,7 +100,7 @@ private:
 				   const std::vector<std::string>& left_strings,
 				   const std::vector<std::string>& right_strings,
 				   const std::string& label, int label_width,
-				   surface& hp_distrib, int hp_distrib_width);
+				   SDL_Surface& hp_distrib, int hp_distrib_width);
 
 	// This method draws the image of the hitpoints distribution of a
 	// combatant after a fight. The method takes as input the
@@ -110,14 +110,14 @@ private:
 	void get_hp_distrib_surface(const std::vector<std::pair<int, double> >& hp_prob_vector,
 							const battle_context_unit_stats& stats,
 								const battle_context_unit_stats& opp_stats,
-								surface& surf, int& width, int& height);
+								SDL_Surface& surf, int& width, int& height);
 
 	// This method blends a RGB color. The method takes as input a surface,
 	// the RGB color to blend and a value specifying how much blending to
 	// apply. The blended color is returned. Caution: if you use a
 	// transparent color, make sure the resulting color is not equal to the
 	// transparent color.
-	Uint32 blend_rgb(const surface& surf, unsigned char r, unsigned char g, unsigned char b, unsigned char drop);
+	Uint32 blend_rgb(const SDL_Surface& surf, unsigned char r, unsigned char g, unsigned char b, unsigned char drop);
 };
 
 // This class is used when the user clicks on the button

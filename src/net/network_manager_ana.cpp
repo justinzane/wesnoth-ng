@@ -99,7 +99,7 @@ ana_receive_handler::ana_receive_handler( ana_component_set::iterator iterator )
     handler_mutex_(),
     timeout_called_mutex_(),
     error_code_(),
-    receive_timer_( NULL ),
+    receive_timer_( nullptr ),
     finished_( false )
 {
     mutex_.lock();
@@ -145,7 +145,7 @@ void ana_receive_handler::handle_receive(ana::error_code          error_c,
     boost::mutex::scoped_lock lock( handler_mutex_);
 
     delete receive_timer_;
-    receive_timer_ = NULL;
+    receive_timer_ = nullptr;
 
     (*iterator_)->add_buffer( read_buffer, client );
 
@@ -163,7 +163,7 @@ void ana_receive_handler::handle_disconnect(ana::error_code error_c, ana::net_id
     boost::mutex::scoped_lock lock( handler_mutex_);
 
     delete receive_timer_;
-    receive_timer_ = NULL;
+    receive_timer_ = nullptr;
 
     if (! finished_ )
     {
@@ -179,7 +179,7 @@ void ana_receive_handler::handle_timeout(ana::error_code error_code)
     boost::mutex::scoped_lock lock( handler_mutex_ );
 
     delete receive_timer_;
-    receive_timer_ = NULL;
+    receive_timer_ = nullptr;
 
     if (! finished_ )
     {
@@ -202,7 +202,7 @@ ana_multiple_receive_handler::ana_multiple_receive_handler( ana_component_set& c
     error_code_(),
     buffer_(),
     wesnoth_id_(0),
-    receive_timer_( NULL ),
+    receive_timer_( nullptr ),
     finished_( false )
 {
     throw std::runtime_error("Multiple receive handler constructed");
@@ -270,7 +270,7 @@ void ana_multiple_receive_handler::handle_receive(ana::error_code          error
     boost::mutex::scoped_lock lock( handler_mutex_);
 
     delete receive_timer_;
-    receive_timer_ = NULL;
+    receive_timer_ = nullptr;
 
     buffer_ = read_buffer;
     error_code_ = error_c;
@@ -297,7 +297,7 @@ void ana_multiple_receive_handler::handle_disconnect(ana::error_code error_c, an
     boost::mutex::scoped_lock lock( handler_mutex_);
 
     delete receive_timer_;
-    receive_timer_ = NULL;
+    receive_timer_ = nullptr;
 
     error_code_ = error_c;
     if (! finished_ )
@@ -312,7 +312,7 @@ void ana_multiple_receive_handler::handle_timeout(ana::error_code error_code)
     boost::mutex::scoped_lock lock( handler_mutex_ );
 
     delete receive_timer_;
-    receive_timer_ = NULL;
+    receive_timer_ = nullptr;
 
     if (! finished_ )
     {
@@ -583,7 +583,7 @@ network::connection clients_manager::get_pending_connection_id()
 // Begin ana_network_manager implementation -------------------------------------------------------
 
 ana_network_manager::ana_network_manager() :
-    connect_timer_( NULL ),
+    connect_timer_( nullptr ),
     components_(),
     server_manager_(),
     disconnected_components_(),
@@ -724,7 +724,7 @@ const ana::stats* ana_network_manager::get_stats( network::connection connection
             return (*it)->get_stats( type );
         }
         else
-            return NULL;
+            return nullptr;
     }
     else
     {
@@ -743,13 +743,13 @@ const ana::stats* ana_network_manager::get_stats( network::connection connection
                 if ( (*it)->is_server() )
                 {
                     const ana::stats* res = (*it)->server()->get_client_stats(id,ana::ACCUMULATED);
-                    if ( res != NULL )
+                    if ( res != nullptr )
                         return res;
                 }
             }
         }
 
-        return NULL;
+        return nullptr;
     }
 }
 

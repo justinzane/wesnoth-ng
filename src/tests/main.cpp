@@ -27,7 +27,7 @@
 
 #include <fstream>
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 #include "filesystem.hpp"
 #include "game_config.hpp"

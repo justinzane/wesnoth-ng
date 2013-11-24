@@ -44,7 +44,7 @@ public:
 	const mp_game_settings& get_parameters();
 
 protected:
-	virtual void layout_children(const SDL_Rect& rect);
+	virtual void layout_children(const SDL_Rect* rect);
 	virtual void process_event();
 	virtual void hide_children(bool hide=true);
 

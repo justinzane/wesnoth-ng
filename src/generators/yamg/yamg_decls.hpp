@@ -35,8 +35,8 @@
 #define INTERN_RAND ///< uses embedded RNG instead of system RNG. This allow to make the result platform independent.
 
 // ================ Common definitions ===============
-#ifndef NULL
-#define NULL 0L
+#ifndef nullptr
+#define nullptr 0L
 #endif
 
 //-------------- Values limits ---------------

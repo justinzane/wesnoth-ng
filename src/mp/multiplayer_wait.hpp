@@ -41,7 +41,7 @@ public:
 	void start_game();
 
 protected:
-	virtual void layout_children(const SDL_Rect& rect);
+	virtual void layout_children(const SDL_Rect* rect);
 	virtual void hide_children(bool hide=true);
 	virtual void process_network_data(const config& data, const network::connection sock);
 

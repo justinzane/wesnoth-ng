@@ -231,7 +231,7 @@ undo_list::update_shroud_action::~update_shroud_action()
  * Creates an undo_action based on a config.
  * @param  tag  is the tag of this config, which is used for error reporting.
  *              It should be enclosed in square brackets.
- * @return a pointer that must be deleted, or NULL if the @a cfg could not be parsed.
+ * @return a pointer that must be deleted, or nullptr if the @a cfg could not be parsed.
  */
 undo_list::undo_action *
 undo_list::undo_action::create(const config & cfg, const std::string & tag)
@@ -258,17 +258,17 @@ undo_list::undo_action::create(const config & cfg, const std::string & tag)
 			// Bad data.
 			ERR_NG << "Invalid recruit found in " << tag << "; unit type '"
 			       << child["type"] << "' was not found.\n";
-			return NULL;
+			return nullptr;
 		}
 		return new recruit_action(child, *u_type,
-		                          map_location(cfg, NULL),
-		                          map_location(cfg.child_or_empty("leader"), NULL));
+		                          map_location(cfg, nullptr),
+		                          map_location(cfg.child_or_empty("leader"), nullptr));
 	}
 
 	if ( str == "recall" )
 		return new recall_action(cfg.child("unit", tag),
-		                         map_location(cfg, NULL),
-		                         map_location(cfg.child_or_empty("leader"), NULL));
+		                         map_location(cfg, nullptr),
+		                         map_location(cfg.child_or_empty("leader"), nullptr));
 
 	if ( str == "dismiss" )
 		return new dismiss_action(cfg.child("unit", tag));
@@ -281,7 +281,7 @@ undo_list::undo_action::create(const config & cfg, const std::string & tag)
 
 	// Unrecognized type.
 	ERR_NG << "Unrecognized undo action type: " << str << ".\n";
-	return NULL;
+	return nullptr;
 }
 
 

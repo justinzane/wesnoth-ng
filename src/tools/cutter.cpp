@@ -24,7 +24,7 @@
 #include "../game_config.hpp"
 #include "exploder_composer.hpp"
 
-#include "SDL_image.h"
+#include "SDL2/SDL_image.h"
 
 #include <iostream>
 
@@ -78,8 +78,8 @@ int main(int argc, char* argv[])
 		const config conf = cut.load_config(src);
 		cut.load_masks(conf);
 
-		const surface src_surface(make_neutral_surface(IMG_Load(src.c_str())));
-		if(src_surface == NULL)
+		const SDL_Surface src_surface(make_neutral_surface(IMG_Load(src.c_str())));
+		if(src_surface == nullptr)
 			throw exploder_failure("Unable to load the source image " + src);
 
 		const cutter::surface_map surfaces = cut.cut_surface(src_surface, conf);
@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 				itor != surfaces.end(); ++itor) {
 			const cutter::mask &mask = itor->second.mask;
 
-			surface surf = create_compatible_surface(
+			SDL_Surface surf = create_compatible_surface(
 					  itor->second.image
 					, mask.cut.w
 					, mask.cut.h);

@@ -76,7 +76,7 @@ void show_unit_list(display& gui);
 /**
  * Allow user to select the game they want to load. Returns the name of the
  * save they want to load. Stores whether the user wants to show a replay of
- * the game in show_replay. If show_replay is NULL, then the user will not be
+ * the game in show_replay. If show_replay is nullptr, then the user will not be
  * asked if they want to show a replay.
  */
 std::string load_game_dialog(display& disp, const config& terrain_config, bool* select_difficulty, bool* show_replay, bool* cancel_orders);
@@ -93,7 +93,7 @@ public:
 	struct details {
 		details();
 
-		surface image;
+		SDL_Surface image;
 	  	std::string name, type_name, race;
 		int level;
 		std::string alignment, traits;
@@ -105,7 +105,7 @@ public:
 		std::vector<attack_type> attacks;
 	};
 
-	unit_preview_pane(const gui::filter_textbox *filter = NULL,
+	unit_preview_pane(const gui::filter_textbox *filter = nullptr,
 			TYPE type = SHOW_ALL, bool left_side = true);
 
 	bool show_above() const;
@@ -135,10 +135,10 @@ class units_list_preview_pane : public dialogs::unit_preview_pane
 public:
 	units_list_preview_pane(const unit *u, TYPE type = SHOW_ALL, bool left_side = true);
 	units_list_preview_pane(const std::vector<const unit *> &units,
-		const gui::filter_textbox *filter = NULL,
+		const gui::filter_textbox *filter = nullptr,
 		TYPE type = SHOW_ALL, bool left_side = true);
 	units_list_preview_pane(const std::vector<unit> &units,
-		const gui::filter_textbox *filter = NULL,
+		const gui::filter_textbox *filter = nullptr,
 		TYPE type = SHOW_ALL, bool left_side = true);
 
 private:
@@ -154,7 +154,7 @@ class unit_types_preview_pane : public dialogs::unit_preview_pane
 {
 public:
 	unit_types_preview_pane(
-			std::vector<const unit_type*>& unit_types, const gui::filter_textbox* filterbox=NULL,
+			std::vector<const unit_type*>& unit_types, const gui::filter_textbox* filterbox=nullptr,
 			int side = 1, TYPE type=SHOW_ALL, bool left_side=true);
 
 private:

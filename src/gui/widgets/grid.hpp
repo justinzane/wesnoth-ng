@@ -137,11 +137,11 @@ public:
 	 *
 	 * returns                    The widget which got removed (the parent of
 	 *                            the widget is cleared). If no widget found
-	 *                            and thus not replace NULL will returned.
+	 *                            and thus not replace nullptr will returned.
 	 */
 	twidget* swap_child(
 		const std::string& id, twidget* widget, const bool recurse,
-		twidget* new_parent = NULL);
+		twidget* new_parent = nullptr);
 
 	/**
 	 * Removes and frees a widget in a cell.
@@ -244,7 +244,7 @@ public:
 	virtual void set_origin(const tpoint& origin) OVERRIDE;
 
 	/** See @ref twidget::set_visible_rectangle. */
-	virtual void set_visible_rectangle(const SDL_Rect& rectangle) OVERRIDE;
+	virtual void set_visible_rectangle(const SDL_Rect* rectangle) OVERRIDE;
 
 	/** See @ref twidget::layout_children. */
 	virtual void layout_children() OVERRIDE;
@@ -306,7 +306,7 @@ private:
 		tchild() :
 			flags_(0),
 			border_size_(0),
-			widget_(NULL)
+			widget_(nullptr)
 
 			// Fixme make a class where we can store some properties in the cache
 			// regarding size etc.
@@ -435,11 +435,11 @@ private:
 	void layout(const tpoint& origin);
 
 	/** See @ref twidget::impl_draw_children. */
-	virtual void impl_draw_children(surface& frame_buffer) OVERRIDE;
+	virtual void impl_draw_children(SDL_Surface& frame_buffer) OVERRIDE;
 
 	/** See @ref twidget::impl_draw_children. */
 	virtual void impl_draw_children(
-			  surface& frame_buffer
+			  SDL_Surface& frame_buffer
 			, int x_offset
 			, int y_offset) OVERRIDE;
 };

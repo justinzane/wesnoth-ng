@@ -212,7 +212,7 @@ connect_engine::~connect_engine()
 }
 
 config* connect_engine::current_config() {
-	config* cfg_level = NULL;
+	config* cfg_level = nullptr;
 
 	// It might make sense to invent a mechanism of some sort to check
 	// whether a config node contains information
@@ -964,7 +964,7 @@ config side_engine::new_config() const
 		// Find a config where a default leader is and set a new type
 		// and gender values for it.
 		config* leader = &res;
-		if (flg_.default_leader_cfg() != NULL) {
+		if (flg_.default_leader_cfg() != nullptr) {
 			foreach_ng(config& side_unit, res.child_range("unit")) {
 				if (*flg_.default_leader_cfg() == side_unit) {
 					leader = &side_unit;

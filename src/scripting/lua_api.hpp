@@ -45,9 +45,9 @@ class lua_unit
 	lua_unit(lua_unit const &);
 
 public:
-	lua_unit(size_t u): uid(u), ptr(NULL), side(0) {}
+	lua_unit(size_t u): uid(u), ptr(nullptr), side(0) {}
 	lua_unit(unit *u): uid(0), ptr(u), side(0) {}
-	lua_unit(int s, size_t u): uid(u), ptr(NULL), side(s) {}
+	lua_unit(int s, size_t u): uid(u), ptr(nullptr), side(s) {}
 	~lua_unit();
 	bool on_map() const { return !ptr && side == 0; }
 	int on_recall_list() const { return side; }

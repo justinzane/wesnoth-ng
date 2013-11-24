@@ -22,7 +22,7 @@
 #define CLIPBOARD_HPP_INCLUDED
 
 #include <string>
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 /**
  * Copies text to the clipboard.

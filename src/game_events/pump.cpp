@@ -155,7 +155,7 @@ namespace { // Support functions
 
 	inline bool events_init()
 	{
-		return resources::screen != NULL;
+		return resources::screen != nullptr;
 	}
 
 	/**
@@ -330,7 +330,7 @@ namespace { // Support functions
 				msg << " (" << itor->second << ")";
 			}
 
-			resources::screen->add_chat_message(time(NULL), caption, 0, msg.str(),
+			resources::screen->add_chat_message(time(nullptr), caption, 0, msg.str(),
 					events::chat_handler::MESSAGE_PUBLIC, false);
 			if ( to_cerr )
 				std::cerr << caption << ": " << msg.str() << '\n';
@@ -462,7 +462,7 @@ bool pump()
 	// Quick aborts:
 	if(!events_init())
 		return false;
-	assert(resources::lua_kernel != NULL);
+	assert(resources::lua_kernel != nullptr);
 	if ( events_queue.empty() ) {
 		DBG_EH << "Processing queued events, but none found.\n";
 		return false;

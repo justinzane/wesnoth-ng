@@ -48,7 +48,7 @@ tlist::tlist(const bool has_minimum
 		, const tbuilder_grid_const_ptr list_builder)
 	: tcontainer_(2) // FIXME magic number
 	, state_(ENABLED)
-	, generator_(NULL)
+	, generator_(nullptr)
 	, list_builder_(list_builder)
 	, need_layout_(false)
 {
@@ -99,7 +99,7 @@ void tlist::add_row(
 {
 	assert(generator_);
 	tgrid& grid =
-			generator_->create_item(index, list_builder_, data, NULL);
+			generator_->create_item(index, list_builder_, data, nullptr);
 
 	tselectable_* selectable =
 			find_widget<tselectable_>(&grid, "_toggle", false, false);
@@ -216,7 +216,7 @@ void tlist::set_row_shown(const unsigned row, const bool shown)
 	}
 
 	if(selected_row != get_selected_row()) {
-		fire(event::NOTIFY_MODIFIED, *this, NULL);
+		fire(event::NOTIFY_MODIFIED, *this, nullptr);
 	}
 }
 
@@ -250,7 +250,7 @@ void tlist::set_row_shown(const std::vector<bool>& shown)
 	}
 
 	if(selected_row != get_selected_row()) {
-		fire(event::NOTIFY_MODIFIED, *this, NULL);
+		fire(event::NOTIFY_MODIFIED, *this, nullptr);
 	}
 }
 
@@ -299,7 +299,7 @@ void tlist::place(const tpoint& origin, const tpoint& size)
 	const int selected_item = generator_->get_selected_item();
 	if(selected_item != -1) {
 /*
-		const SDL_Rect& visible = content_visible_area();
+		const SDL_Rect* visible = content_visible_area();
 		SDL_Rect rect = generator_->item(selected_item).get_rectangle();
 
 		rect.x = visible.x;
@@ -458,7 +458,7 @@ void tlist::signal_handler_left_button_click(
 	for(size_t i = 0; i < generator_->get_item_count(); ++i) {
 		if(&generator_->item(i) == grid) {
 			generator_->select_item(i);
-			fire(event::NOTIFY_MODIFIED, *this, NULL);
+			fire(event::NOTIFY_MODIFIED, *this, nullptr);
 		}
 	}
 }
@@ -491,7 +491,7 @@ void tlist::signal_handler_sdl_key_down(const event::tevent event
 			/* Do nothing. */
 	}
 	if(handled) {
-		fire(event::NOTIFY_MODIFIED, *this, NULL);
+		fire(event::NOTIFY_MODIFIED, *this, nullptr);
 	}
 }
 

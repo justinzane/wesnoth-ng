@@ -21,19 +21,19 @@
 
 namespace resources
 {
-	game_config_manager  *config_manager = NULL;
-	play_controller      *controller = NULL;
-	game_data            *gamedata = NULL;
-	gamemap              *game_map = NULL;
-	LuaKernel            *lua_kernel = NULL;
-	persist_manager      *persist = NULL;
-	game_display         *screen = NULL;
-	soundsource::manager *soundsources = NULL;
-	game_state           *state_of_game = NULL;
-	std::vector<team>    *teams = NULL;
-	::tod_manager        *tod_manager = NULL;
-	pathfind::manager    *tunnels = NULL;
-	actions::undo_list   *undo_stack = NULL;
-	unit_map             *units = NULL;
-	wb::manager          *whiteboard = NULL;
+	game_config_manager  *config_manager = nullptr;
+	play_controller      *controller = nullptr;
+	game_data            *gamedata = nullptr;
+	gamemap              *game_map = nullptr;
+	LuaKernel            *lua_kernel = nullptr;
+	persist_manager      *persist = nullptr;
+	game_display         *screen = nullptr;
+	soundsource::manager *soundsources = nullptr;
+	game_state           *state_of_game = nullptr;
+	std::vector<team>    *teams = nullptr;
+	::tod_manager        *tod_manager = nullptr;
+	pathfind::manager    *tunnels = nullptr;
+	actions::undo_list   *undo_stack = nullptr;
+	unit_map             *units = nullptr;
+	wb::manager          *whiteboard = nullptr;
 }

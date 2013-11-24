@@ -38,7 +38,7 @@ namespace util {
  * @todo Use a better rng. 2013-11-08 justinzane
  */
 inline std::string get_salt() {
-    srand(time(NULL));
+    srand(time(nullptr));
     char rnd_c[16];
     for (int i = 0; i < 16; i++) {
         rnd_c[i] = (rand() % 10);

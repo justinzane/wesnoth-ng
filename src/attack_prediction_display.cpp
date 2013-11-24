@@ -153,7 +153,7 @@ void battle_prediction_pane::get_unit_strings(const battle_context_unit_stats& s
 	char str_buf[10];
 
 	// With a weapon.
-	if(stats.weapon != NULL) {
+	if(stats.weapon != nullptr) {
 
 		// Set specials context (for safety, it should not have changed normally).
 		const attack_type *weapon = stats.weapon;
@@ -164,7 +164,7 @@ void battle_prediction_pane::get_unit_strings(const battle_context_unit_stats& s
 		unit_abilities::effect dmg_effect(dmg_specials, weapon->damage(), stats.backstab_pos);
 
 		// Get the SET damage modifier, if any.
-		const unit_abilities::individual_effect *set_dmg_effect = NULL;
+		const unit_abilities::individual_effect *set_dmg_effect = nullptr;
 		unit_abilities::effect::const_iterator i;
 		for(i = dmg_effect.begin(); i != dmg_effect.end(); ++i) {
 			if(i->type == unit_abilities::SET) {
@@ -174,7 +174,7 @@ void battle_prediction_pane::get_unit_strings(const battle_context_unit_stats& s
 		}
 
 		// Either user the SET modifier or the base weapon damage.
-		if(set_dmg_effect == NULL) {
+		if(set_dmg_effect == nullptr) {
 			left_strings.push_back(weapon->name());
 			str.str("");
 			str << weapon->damage();
@@ -344,9 +344,9 @@ void battle_prediction_pane::draw_unit(int x_off, int damage_line_skip, int left
 									   const std::vector<std::string>& left_strings,
 									   const std::vector<std::string>& right_strings,
 									   const std::string& label, int label_width,
-									   surface& hp_distrib, int hp_distrib_width)
+									   SDL_Surface& hp_distrib, int hp_distrib_width)
 {
-	surface screen = resources::screen->get_screen_surface();
+	SDL_Surface screen = resources::screen->get_screen_surface();
 	int i;
 
 	// NOTE. A preview pane is not made to be used alone and it is not
@@ -412,7 +412,7 @@ void battle_prediction_pane::draw_unit(int x_off, int damage_line_skip, int left
 void battle_prediction_pane::get_hp_distrib_surface(const std::vector<std::pair<int, double> >& hp_prob_vector,
 													const battle_context_unit_stats& stats,
 													const battle_context_unit_stats& opp_stats,
-													surface& surf, int& width, int& height)
+													SDL_Surface& surf, int& width, int& height)
 {
 	// Font size. If you change this, you must update the separator space.
 	int fs = font::SIZE_SMALL;
@@ -440,26 +440,26 @@ void battle_prediction_pane::get_hp_distrib_surface(const std::vector<std::pair<
 	Uint32 grey_color = SDL_MapRGBA(surf->format, 0xb7, 0xc1, 0xc1, 255);
 
 	Uint32 background_color = SDL_MapRGBA(surf->format, 25, 25, 25, 255);
-	sdl_fill_rect(surf, &clip_rect, background_color);
+	SDL_FillRect(surf, &clip_rect, background_color);
 
 	// Draw the surrounding borders and separators.
 	SDL_Rect top_border_rect = create_rect(0, 0, width, 2);
-	sdl_fill_rect(surf, &top_border_rect, grey_color);
+	SDL_FillRect(surf, &top_border_rect, grey_color);
 
 	SDL_Rect bottom_border_rect = create_rect(0, height - 2, width, 2);
-	sdl_fill_rect(surf, &bottom_border_rect, grey_color);
+	SDL_FillRect(surf, &bottom_border_rect, grey_color);
 
 	SDL_Rect left_border_rect = create_rect(0, 0, 2, height);
-	sdl_fill_rect(surf, &left_border_rect, grey_color);
+	SDL_FillRect(surf, &left_border_rect, grey_color);
 
 	SDL_Rect right_border_rect = create_rect(width - 2, 0, 2, height);
-	sdl_fill_rect(surf, &right_border_rect, grey_color);
+	SDL_FillRect(surf, &right_border_rect, grey_color);
 
 	SDL_Rect hp_sep_rect = create_rect(hp_sep, 0, 2, height);
-	sdl_fill_rect(surf, &hp_sep_rect, grey_color);
+	SDL_FillRect(surf, &hp_sep_rect, grey_color);
 
 	SDL_Rect percent_sep_rect = create_rect(width - percent_sep - 2, 0, 2, height);
-	sdl_fill_rect(surf, &percent_sep_rect, grey_color);
+	SDL_FillRect(surf, &percent_sep_rect, grey_color);
 
 	// Draw the rows (lower HP values are at the bottom).
 	for(int i = 0; i < static_cast<int>(hp_prob_vector.size()); i++) {
@@ -507,16 +507,16 @@ void battle_prediction_pane::get_hp_distrib_surface(const std::vector<std::pair<
 		int bar_len = std::max<int>(static_cast<int>((prob * (bar_space - 4)) + 0.5), 2);
 
 		SDL_Rect bar_rect_1 = create_rect(hp_sep + 4, 6 + (fs + 2) * i, bar_len, 8);
-		sdl_fill_rect(surf, &bar_rect_1, blend_rgb(surf, row_color.r, row_color.g, row_color.b, 100));
+		SDL_FillRect(surf, &bar_rect_1, blend_rgb(surf, row_color.r, row_color.g, row_color.b, 100));
 
 		SDL_Rect bar_rect_2 = create_rect(hp_sep + 4, 7 + (fs + 2) * i, bar_len, 6);
-		sdl_fill_rect(surf, &bar_rect_2, blend_rgb(surf, row_color.r, row_color.g, row_color.b, 66));
+		SDL_FillRect(surf, &bar_rect_2, blend_rgb(surf, row_color.r, row_color.g, row_color.b, 66));
 
 		SDL_Rect bar_rect_3 = create_rect(hp_sep + 4, 8 + (fs + 2) * i, bar_len, 4);
-		sdl_fill_rect(surf, &bar_rect_3, blend_rgb(surf, row_color.r, row_color.g, row_color.b, 33));
+		SDL_FillRect(surf, &bar_rect_3, blend_rgb(surf, row_color.r, row_color.g, row_color.b, 33));
 
 		SDL_Rect bar_rect_4 = create_rect(hp_sep + 4, 9 + (fs + 2) * i, bar_len, 2);
-		sdl_fill_rect(surf, &bar_rect_4, blend_rgb(surf, row_color.r, row_color.g, row_color.b, 0));
+		SDL_FillRect(surf, &bar_rect_4, blend_rgb(surf, row_color.r, row_color.g, row_color.b, 0));
 
 		// Draw probability percentage, aligned right.
 		format_prob(str_buf, prob);
@@ -526,14 +526,14 @@ void battle_prediction_pane::get_hp_distrib_surface(const std::vector<std::pair<
 	}
 }
 
-Uint32 battle_prediction_pane::blend_rgb(const surface& surf, unsigned char r, unsigned char g, unsigned char b, unsigned char drop)
+Uint32 battle_prediction_pane::blend_rgb(const SDL_Surface& surf, unsigned char r, unsigned char g, unsigned char b, unsigned char drop)
 {
 	// We simply decrement each component.
 	if(r < drop) r = 0; else r -= drop;
 	if(g < drop) g = 0; else g -= drop;
 	if(b < drop) b = 0; else b -= drop;
 
-	return SDL_MapRGB(surf->format, r, g, b);
+	return SDL_MapRGBA(surf->format, r, g, b);
 }
 
 attack_prediction_displayer::RESULT attack_prediction_displayer::button_pressed(int selection)
@@ -546,7 +546,7 @@ attack_prediction_displayer::RESULT attack_prediction_displayer::button_pressed(
 		std::vector<gui::preview_pane*> preview_panes;
 		preview_panes.push_back(&battle_pane);
 
-		gui::show_dialog(*resources::screen, NULL, _("Damage Calculations"), "", gui::OK_ONLY, NULL, &preview_panes);
+		gui::show_dialog(*resources::screen, nullptr, _("Damage Calculations"), "", gui::OK_ONLY, nullptr, &preview_panes);
 	}
 
 	return gui::CONTINUE_DIALOG;

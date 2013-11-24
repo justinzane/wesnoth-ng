@@ -223,10 +223,10 @@ class unique_ptr
 	unique_ptr(const unique_ptr &);
 	unique_ptr &operator=(const unique_ptr &);
 public:
-	unique_ptr(T *p = NULL): ptr_(p) {}
+	unique_ptr(T *p = nullptr): ptr_(p) {}
 	~unique_ptr() { delete ptr_; }
 
-	void reset(T *p = NULL)
+	void reset(T *p = nullptr)
 	{
 		delete ptr_;
 		ptr_ = p;
@@ -235,7 +235,7 @@ public:
 	T *release()
 	{
 		T *p = ptr_;
-		ptr_ = NULL;
+		ptr_ = nullptr;
 		return p;
 	}
 

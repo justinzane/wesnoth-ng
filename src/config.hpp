@@ -108,7 +108,7 @@ public:
 	{ return this != &invalid; }
 #else
 	operator safe_bool() const
-	{ return this != &invalid ? &safe_bool_impl::nonnull : NULL; }
+	{ return this != &invalid ? &safe_bool_impl::nonnull : nullptr; }
 #endif
 
 	typedef std::vector<config*> child_list;
@@ -419,7 +419,7 @@ public:
 
 	/**
 	 * Returns a pointer to the attribute with the given @a key
-	 * or NULL if it does not exist.
+	 * or nullptr if it does not exist.
 	 */
 	const attribute_value *get(const std::string &key) const;
 

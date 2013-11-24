@@ -524,7 +524,7 @@ void configure::hide_children(bool hide)
 	options_pane_.hide(hide);
 }
 
-void configure::layout_children(const SDL_Rect& rect)
+void configure::layout_children(const SDL_Rect* rect)
 {
 	DBG_MP << "laying out the children" << std::endl;
 

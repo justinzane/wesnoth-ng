@@ -488,7 +488,7 @@ void connect::hide_children(bool hide)
 	cancel_.hide(hide);
 }
 
-void connect::layout_children(const SDL_Rect& rect)
+void connect::layout_children(const SDL_Rect* rect)
 {
 	ui::layout_children(rect);
 

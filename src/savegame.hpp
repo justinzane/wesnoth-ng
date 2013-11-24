@@ -62,7 +62,7 @@ struct save_info_less_time {
 	bool operator()(const save_info& a, const save_info& b) const;
 };
 
-std::vector<save_info> get_saves_list(const std::string* dir = NULL, const std::string* filter = NULL);
+std::vector<save_info> get_saves_list(const std::string* dir = nullptr, const std::string* filter = nullptr);
 
 /** Read the complete config information out of a savefile. */
 void read_save_file(const std::string& name, config& cfg, std::string* error_log);
@@ -170,7 +170,7 @@ protected:
 		or error messages to appear, you have to provide the gui parameter.
 		The return value denotes, if the save was successful or not.
 	*/
-	bool save_game(CVideo* video = NULL, const std::string& filename = "");
+	bool save_game(CVideo* video = nullptr, const std::string& filename = "");
 
 	/** Sets the filename and removes invalid characters. Don't set the filename directly but
 		use this method instead. */

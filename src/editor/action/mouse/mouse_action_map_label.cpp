@@ -43,10 +43,10 @@ editor_action* mouse_action_map_label::drag_left(editor_display& disp, int x, in
 
 	/* Cursor is still on old hex field */
 	if (hex == last_draged_)
-		return NULL;
+		return nullptr;
 	click_ = false;
 
-	editor_action_chain* chain = NULL;
+	editor_action_chain* chain = nullptr;
 	const terrain_label* label = get_current_labels()->get_label(last_draged_);
 
 
@@ -63,12 +63,12 @@ editor_action* mouse_action_map_label::drag_left(editor_display& disp, int x, in
 
 editor_action* mouse_action_map_label::up_left(editor_display& disp, int x, int y)
 {
-	if (!click_) return NULL;
+	if (!click_) return nullptr;
 	click_ = false;
 
 	const map_location hex = disp.hex_clicked_on(x, y);
 	if (!disp.get_map().on_board(hex)) {
-		return NULL;
+		return nullptr;
 	}
 
 	const terrain_label* old_label = editor::get_current_labels()->get_label(hex);
@@ -80,7 +80,7 @@ editor_action* mouse_action_map_label::up_left(editor_display& disp, int x, int 
 
 	gui2::teditor_edit_label d(label, immutable, visible_fog, visible_shroud);
 
-	editor_action* a = NULL;
+	editor_action* a = nullptr;
 	if(d.show(disp.video())) {
 		a = new editor_action_label(hex, label, team_name, font::NORMAL_COLOR
 				, visible_fog, visible_shroud, immutable);
@@ -91,7 +91,7 @@ editor_action* mouse_action_map_label::up_left(editor_display& disp, int x, int 
 
 editor_action* mouse_action_map_label::click_right(editor_display& /*disp*/, int /*x*/, int /*y*/)
 {
-	return NULL;
+	return nullptr;
 }
 
 editor_action* mouse_action_map_label::up_right(editor_display& disp, int x, int y)
@@ -101,20 +101,20 @@ editor_action* mouse_action_map_label::up_right(editor_display& disp, int x, int
 	//TODO
 //	const terrain_label* clicked_label = disp.map().get_map_labels().get_label(hex);
 	//if (!clicked_label)
-	//	return NULL;
+	//	return nullptr;
 
 	return new editor_action_label_delete(hex);
 }
 
 void mouse_action_map_label::set_mouse_overlay(editor_display& disp)
 {
-	surface image60 = image::get_image("icons/action/editor-tool-label_60.png");
+	SDL_Surface image60 = image::get_image("icons/action/editor-tool-label_60.png");
 
 	//TODO avoid hardcoded hex field size
-	surface image = create_neutral_surface(72,72);
+	SDL_Surface image = create_neutral_surface(72,72);
 
 	SDL_Rect r = create_rect(6, 6, 0, 0);
-	blit_surface(image60, NULL, image, &r);
+	blit_surface(image60, nullptr, image, &r);
 
 	Uint8 alpha = 196;
 	int size = image->w;

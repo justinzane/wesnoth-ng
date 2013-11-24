@@ -142,7 +142,7 @@ std::string chat::format_message(const msg& message)
 	if(message.user == "server"
 	|| message.user.substr(0,29) == "whisper: server message from ") {
 		std::string::const_iterator after_markup =
-			font::parse_markup(message.message.begin(), message.message.end(), NULL, NULL, NULL);
+			font::parse_markup(message.message.begin(), message.message.end(), nullptr, nullptr, nullptr);
 
 		msg_text = std::string(after_markup,message.message.end());
 	}
@@ -160,7 +160,7 @@ SDL_Color chat::color_message(const msg& message) {
 	// Normal users are not allowed to color their messages
 	if(message.user == "server"
 	|| message.user.substr(0,29) == "whisper: server message from ") {
-		font::parse_markup(message.message.begin(), message.message.end(), NULL, &c, NULL);
+		font::parse_markup(message.message.begin(), message.message.end(), nullptr, &c, nullptr);
 	// Highlight private messages too
 	} else if(message.user.substr(0,8) == "whisper:") {
 	    c = font::LABEL_COLOR;
@@ -184,7 +184,7 @@ ui::ui(game_display& disp, const std::string& title, const config& cfg, chat& c,
 	title_(disp.video(), title, font::SIZE_LARGE, font::TITLE_COLOR),
 	entry_textbox_(disp.video(), 100),
 	chat_textbox_(disp.video(), 100, "", false),
-	users_menu_(disp.video(), std::vector<std::string>(), false, -1, -1, NULL, &umenu_style),
+	users_menu_(disp.video(), std::vector<std::string>(), false, -1, -1, nullptr, &umenu_style),
 
 	user_list_(),
 	selected_game_(""),
@@ -280,17 +280,17 @@ void ui::draw_contents()
 {
 	hide_children();
 
-	surface background(image::get_image("misc/lobby.png"));
+	SDL_Surface background(image::get_image("misc/lobby.png"));
 	background = scale_surface(background, video().getx(), video().gety());
-	if(background == NULL)
+	if(background == nullptr)
 		return;
-	sdl_blit(background, NULL, video().getSurface(), NULL);
+	SDL_BlitSurface(background, nullptr, video().getSurface(), nullptr);
 	update_whole_screen();
 
 	hide_children(false);
 }
 
-void ui::set_location(const SDL_Rect& rect)
+void ui::set_location(const SDL_Rect* rect)
 {
 	hide_children();
 	widget::set_location(rect);
@@ -380,7 +380,7 @@ void ui::send_chat_message(const std::string& message, bool /*allies_only*/)
 	msg["sender"] = preferences::login();
 	data.add_child("message", msg);
 
-	add_chat_message(time(NULL), preferences::login(),0, message);	//local echo
+	add_chat_message(time(nullptr), preferences::login(),0, message);	//local echo
 	network::send_data(data, 0);
 }
 
@@ -406,7 +406,7 @@ void ui::handle_key_event(const SDL_KeyboardEvent& event)
 			text.append(line_start ? ": " : " ");
 		} else {
 			std::string completion_list = utils::join(matches, " ");
-			chat_.add_message(time(NULL), "", completion_list);
+			chat_.add_message(time(nullptr), "", completion_list);
 			chat_.update_textbox(chat_textbox_);
 		}
 		entry_textbox_.set_text(text);
@@ -446,7 +446,7 @@ void ui::process_message(const config& msg, const bool whisper) {
 
 	if (!room.empty()) room = room + ": ";
 
-	chat_.add_message(time(NULL), room + prefix, msg["message"]);
+	chat_.add_message(time(nullptr), room + prefix, msg["message"]);
 	chat_.update_textbox(chat_textbox_);
 }
 
@@ -478,19 +478,19 @@ void ui::process_network_data(const config& data, const network::connection /*so
 		}
 	} else if (const config &c = data.child("room_join")) {
 		if (c["player"] == preferences::login()) {
-			chat_.add_message(time(NULL), "server",
+			chat_.add_message(time(nullptr), "server",
 				"You have joined the room '" + c["room"].str() + "'");
 		} else {
-			chat_.add_message(time(NULL), "server",
+			chat_.add_message(time(nullptr), "server",
 				c["player"].str() + " has joined the room '" + c["room"].str() + "'");
 		}
 		chat_.update_textbox(chat_textbox_);
 	} else if (const config &c = data.child("room_part")) {
 		if (c["player"] == preferences::login()) {
-			chat_.add_message(time(NULL), "server",
+			chat_.add_message(time(nullptr), "server",
 				"You have left the room '" + c["room"].str() + "'");
 		} else {
-			chat_.add_message(time(NULL), "server",
+			chat_.add_message(time(nullptr), "server",
 				c["player"].str() + " has left the room '" + c["room"].str() + "'");
 		}
 		chat_.update_textbox(chat_textbox_);
@@ -501,7 +501,7 @@ void ui::process_network_data(const config& data, const network::connection /*so
 			foreach_ng(const config& m, ms.child_range("member")) {
 				ss << m["name"] << " ";
 			}
-			chat_.add_message(time(NULL), "server", ss.str());
+			chat_.add_message(time(nullptr), "server", ss.str());
 			chat_.update_textbox(chat_textbox_);
 		}
 		if (const config &rs = c.child("rooms")) {
@@ -510,7 +510,7 @@ void ui::process_network_data(const config& data, const network::connection /*so
 			foreach_ng(const config& r, rs.child_range("room")) {
 				ss << r["name"].str() << "(" << r["size"].str() << ") ";
 			}
-			chat_.add_message(time(NULL), "server", ss.str());
+			chat_.add_message(time(nullptr), "server", ss.str());
 			chat_.update_textbox(chat_textbox_);
 		}
 	}
@@ -537,7 +537,7 @@ void ui::hide_children(bool hide)
 	users_menu_.hide(hide);
 }
 
-void ui::layout_children(const SDL_Rect& /*rect*/)
+void ui::layout_children(const SDL_Rect* /*rect*/)
 {
 	title_.set_location(xscale(12) + 8, yscale(38) + 8);
 	umenu_style.set_width(xscale(159));

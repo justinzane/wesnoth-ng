@@ -61,11 +61,11 @@ flg_manager::flg_manager(const std::vector<const config*>& era_factions,
 	choosable_factions_(),
 	choosable_leaders_(),
 	choosable_genders_(),
-	current_faction_(NULL),
+	current_faction_(nullptr),
 	current_leader_("null"),
 	current_gender_("null"),
 	default_leader_type_(side_["type"]),
-	default_leader_cfg_(NULL)
+	default_leader_cfg_(nullptr)
 {
 	const std::string& leader_id = side_["id"];
 	if (!leader_id.empty()) {
@@ -74,7 +74,7 @@ flg_manager::flg_manager(const std::vector<const config*>& era_factions,
 		if (*default_leader_cfg_) {
 			default_leader_type_ = (*default_leader_cfg_)["type"].str();
 		} else {
-			default_leader_cfg_ = NULL;
+			default_leader_cfg_ = nullptr;
 		}
 	} else if (default_leader_type_.empty()) {
 		// Find a unit which can recruit.
@@ -88,9 +88,9 @@ flg_manager::flg_manager(const std::vector<const config*>& era_factions,
 	}
 	if (!default_leader_type_.empty() && default_leader_type_ != "random") {
 		const unit_type* unit = unit_types.find(default_leader_type_);
-		if (unit == NULL) {
+		if (unit == nullptr) {
 			default_leader_type_.clear();
-			default_leader_cfg_ = NULL;
+			default_leader_cfg_ = nullptr;
 		}
 	}
 

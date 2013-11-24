@@ -13,9 +13,9 @@ char default_over[] = "";
     This constructor initialize the hexes so createTerrainCode() will never produce invalid values.
 */
 yamg_hex::yamg_hex(unsigned int xcoor, unsigned int ycoor)
-    : next(NULL)
-    , list(NULL)
-    , road(NULL)
+    : next(nullptr)
+    , list(nullptr)
+    , road(nullptr)
     , x(xcoor)
     , y(ycoor)
     , alt(0)
@@ -47,7 +47,7 @@ unsigned int yamg_hex::create_terrain_code(char *ptrwr) {
 //    n = sprintf(ptrwr,"%6u, ",alt);
 //    return n;
 
-    if(base == NULL)
+    if(base == nullptr)
         return 0; // TODO: this skips bad hexes, but the map will be incorrect. Raise an exception instead
     if(player != 0)
         n = sprintf(ptrwr,"%u ",player);

@@ -91,7 +91,7 @@ public:
 	// Copy constructor
 	unit(const unit& u);
 	/** Initializes a unit from a config */
-	unit(const config& cfg, bool use_traits = false, game_state *state = NULL, const vconfig* vcfg = NULL);
+	unit(const config& cfg, bool use_traits = false, game_state *state = nullptr, const vconfig* vcfg = nullptr);
 	/**
 	  * Initializes a unit from a unit type
 	  * only real_unit may have random traits, name and gender
@@ -245,7 +245,7 @@ public:
 	int damage_from(const attack_type& attack,bool attacker,const map_location& loc) const { return resistance_against(attack,attacker,loc); }
 
 	/** A SDL surface, ready for display for place where we need a still-image of the unit. */
-	const surface still_image(bool scaled = false) const;
+	const SDL_Surface still_image(bool scaled = false) const;
 
 	/** draw a unit.  */
 	void redraw_unit();
@@ -341,7 +341,7 @@ public:
 
 	std::string usage() const { return cfg_["usage"]; }
 	unit_type::ALIGNMENT alignment() const { return alignment_; }
-	/// Never returns NULL, but may point to the null race.
+	/// Never returns nullptr, but may point to the null race.
 	const unit_race* race() const { return race_; }
 
 	const unit_animation* choose_animation(const display& disp,
@@ -349,7 +349,7 @@ public:
 		       	const map_location& second_loc = map_location::null_location,
 			const int damage=0,
 			const unit_animation::hit_type hit_type = unit_animation::INVALID,
-			const attack_type* attack=NULL,const attack_type* second_attack = NULL,
+			const attack_type* attack=nullptr,const attack_type* second_attack = nullptr,
 			int swing_num =0) const;
 
 	/**
@@ -367,7 +367,7 @@ public:
 	unit_ability_list get_abilities(const std::string &tag_name) const
 	{ return get_abilities(tag_name, loc_); }
 	/** Tuple of: neutral ability name, gendered ability name, description */
-	std::vector<boost::tuple<t_string,t_string,t_string> > ability_tooltips(std::vector<bool> *active_list=NULL) const;
+	std::vector<boost::tuple<t_string,t_string,t_string> > ability_tooltips(std::vector<bool> *active_list=nullptr) const;
 	std::vector<std::string> get_ability_list() const;
 	bool has_ability_type(const std::string& ability) const;
 
@@ -406,7 +406,7 @@ public:
 	 * @param side                The side the portrait is shown on.
 	 *
 	 * @returns                   The portrait with the wanted size.
-	 * @retval NULL               The wanted portrait doesn't exist.
+	 * @retval nullptr               The wanted portrait doesn't exist.
 	 */
 	const tportrait* portrait(
 		const unsigned size, const tportrait::tside side) const;
@@ -437,9 +437,9 @@ private:
 	map_location loc_;
 
 	std::vector<std::string> advances_to_;
-	const unit_type * type_;/// Never NULL. Adjusted for gender and variation.
+	const unit_type * type_;/// Never nullptr. Adjusted for gender and variation.
 	t_string type_name_;    /// The displayed name of the unit type.
-	const unit_race* race_;	/// Never NULL, but may point to the null race.
+	const unit_race* race_;	/// Never nullptr, but may point to the null race.
 	std::string id_;
 	t_string name_;
 	size_t underlying_id_;

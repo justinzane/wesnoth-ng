@@ -28,7 +28,7 @@
 
 
 ///this module manages the cache of images. With an image name, you can get
-///the surface corresponding to that image.
+///the SDL_Surface corresponding to that image.
 //
 namespace image {
 	const int tile_size = game_config::tile_size;
@@ -113,7 +113,7 @@ namespace image {
 		bool file_exists() const;
 
 		// loads the image it is pointing to from the disk
-		surface load_from_disk() const;
+		SDL_Surface load_from_disk() const;
 
 		template <typename T>
 		bool in_cache(cache_type<T> &cache) const;
@@ -126,8 +126,8 @@ namespace image {
 
 	private:
 
-		surface load_image_file() const;
-		surface load_image_sub_file() const;
+		SDL_Surface load_image_file() const;
+		SDL_Surface load_image_sub_file() const;
 
 		int index_;
 		value val_;
@@ -183,8 +183,8 @@ namespace image {
 
 	///set the team colors used by the TC image modification
 	///use a vector with one string for each team
-	///using NULL will reset to default TC
-	void set_team_colors(const std::vector<std::string>* colors = NULL);
+	///using nullptr will reset to default TC
+	void set_team_colors(const std::vector<std::string>* colors = nullptr);
 
 	const std::vector<std::string>& get_team_colors();
 
@@ -204,18 +204,18 @@ namespace image {
 	/// BRIGHTENED  : same as TOD_COLORED but also brightened
 	enum TYPE { UNSCALED, SCALED_TO_ZOOM, HEXED, SCALED_TO_HEX, TOD_COLORED, BRIGHTENED};
 
-	///function to get the surface corresponding to an image.
-	///note that this surface must be freed by the user by calling
+	///function to get the SDL_Surface corresponding to an image.
+	///note that this SDL_Surface must be freed by the user by calling
 	///SDL_FreeSurface()
-	surface get_image(const locator& i_locator, TYPE type=UNSCALED);
+	SDL_Surface get_image(const locator& i_locator, TYPE type=UNSCALED);
 
-	///function to get the surface corresponding to an image.
+	///function to get the SDL_Surface corresponding to an image.
 	///after applying the lightmap encoded in ls
 	///type should be HEXED or SCALED_TO_HEX
-	surface get_lighted_image(const image::locator& i_locator, const light_string& ls, TYPE type);
+	SDL_Surface get_lighted_image(const image::locator& i_locator, const light_string& ls, TYPE type);
 
 	///function to get the standard hex mask
-	surface get_hexmask();
+	SDL_Surface get_hexmask();
 
 	///function to check if an image fit into an hex
 	///return false if the image has not the standard size.
@@ -228,7 +228,7 @@ namespace image {
 	///function to reverse an image. The image MUST have originally been returned from
 	///an image:: function. Returned images have the same semantics as for get_image()
 	///and must be freed using SDL_FreeSurface()
-	surface reverse_image(const surface &surf);
+	SDL_Surface reverse_image(const SDL_Surface &surf);
 
 	///returns true if the given image actually exists, without loading it.
 	bool exists(const locator& i_locator);

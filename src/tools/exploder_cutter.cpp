@@ -21,7 +21,7 @@
 #include "serdes/parser.hpp"
 #include "serdes/preprocessor.hpp"
 #include "serdes/string_utils.hpp"
-#include "SDL_image.h"
+#include "SDL2/SDL_image.h"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>
@@ -82,20 +82,20 @@ void cutter::load_masks(const config& conf)
 			cur_mask.shift = shift;
 			cur_mask.cut = cut;
 			cur_mask.filename = image;
-			surface tmp(IMG_Load(image.c_str()));
-			if(tmp == NULL)
+			SDL_Surface tmp(IMG_Load(image.c_str()));
+			if(tmp == nullptr)
 				throw exploder_failure("Unable to load mask image " + image);
 
 			cur_mask.image = make_neutral_surface(tmp);
 		}
 
-		if(masks_[name].image == NULL)
+		if(masks_[name].image == nullptr)
 			throw exploder_failure("Unable to load mask image " + image);
 	}
 }
 
 
-cutter::surface_map cutter::cut_surface(surface surf, const config& conf)
+cutter::surface_map cutter::cut_surface(SDL_Surface surf, const config& conf)
 {
 	surface_map res;
 
@@ -124,7 +124,7 @@ std::string cutter::find_configuration(const std::string &file)
 }
 
 
-void cutter::add_sub_image(const surface &surf, surface_map &map, const config* config)
+void cutter::add_sub_image(const SDL_Surface &surf, surface_map &map, const config* config)
 {
 	const std::string name = (*config)["name"];
 	if(name.empty())
@@ -149,9 +149,9 @@ void cutter::add_sub_image(const surface &surf, surface_map &map, const config* 
 
 	typedef std::pair<std::string, positioned_surface> sme;
 
-	positioned_surface ps;
+	positioned_SDL_Surface ps;
 	ps.image = ::cut_surface(surf, cut);
-	if(ps.image == NULL)
+	if(ps.image == nullptr)
 		throw exploder_failure("Unable to cut surface!");
 	ps.name = name;
 	ps.mask = mask;

@@ -39,7 +39,7 @@ public:
 	friend class tnotifier<tfunctor>;
 
 	tnotifiee()
-		: notifier_(NULL)
+		: notifier_(nullptr)
 	{
 	}
 

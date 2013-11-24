@@ -56,7 +56,7 @@ public:
 
 	/** Checks whether the connection's ip address is banned. */
 	bool player_is_banned(const network::connection player) const;
-	bool level_init() const { return level_.child("side") != NULL; }
+	bool level_init() const { return level_.child("side") != nullptr; }
 	bool started() const { return started_; }
 
 	size_t nplayers() const { return players_.size(); }
@@ -154,8 +154,8 @@ public:
 		send_server_message_to_all(message.c_str(), exclude);
 	}
 
-	void send_server_message(const char* message, network::connection sock=0, simple_wml::document* doc=NULL) const;
-	void send_server_message(const std::string& message, network::connection sock=0, simple_wml::document* doc=NULL) const
+	void send_server_message(const char* message, network::connection sock=0, simple_wml::document* doc=nullptr) const;
+	void send_server_message(const std::string& message, network::connection sock=0, simple_wml::document* doc=nullptr) const
 	{
 		send_server_message(message.c_str(), sock, doc);
 	}

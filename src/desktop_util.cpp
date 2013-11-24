@@ -63,7 +63,7 @@ bool open_in_file_manager(const std::string& path)
 		ERR_DE << "open_in_file_manager(): fork() failed\n";
 		return false;
 	} else if(child == 0) {
-		execlp(launcher, launcher, path.c_str(), reinterpret_cast<char*>(NULL));
+		execlp(launcher, launcher, path.c_str(), reinterpret_cast<char*>(nullptr));
 		_exit(1); // This shouldn't happen.
 	} else if(waitpid(child, &child_status, 0) == -1) {
 		ERR_DE << "open_in_file_manager(): waitpid() failed\n";
@@ -88,9 +88,9 @@ bool open_in_file_manager(const std::string& path)
 	LOG_DE << "open_in_file_manager(): on Win32, will use ShellExecute()\n";
 
 	wide_string wpath = utils::string_to_wstring(path);
-	wpath.push_back(wchar_t(0)); // Make wpath NULL-terminated
+	wpath.push_back(wchar_t(0)); // Make wpath nullptr-terminated
 
-	const int res = reinterpret_cast<int>(ShellExecute(NULL, L"open", &wpath.front(), NULL, NULL, SW_SHOW));
+	const int res = reinterpret_cast<int>(ShellExecute(nullptr, L"open", &wpath.front(), nullptr, nullptr, SW_SHOW));
 	if(res <= 32) {
 		ERR_DE << "open_in_file_manager(): ShellExecute() failed (" << res << ")\n";
 		return false;

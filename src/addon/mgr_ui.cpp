@@ -200,9 +200,9 @@ bool do_resolve_addon_dependencies(display& disp, addons_client& client, const a
 		// Add negative sizes to reverse the sort order.
 		sort_sizes.push_back(-addon.size);
 
-		// NOTE: NULL_MARKUP used to escape abuse of formatting chars in add-on titles
+		// NOTE: nullptr_MARKUP used to escape abuse of formatting chars in add-on titles
 		options.push_back(IMAGE_PREFIX + display_icon + sep +
-			font::NULL_MARKUP + display_title + sep + display_version + sep +
+			font::nullptr_MARKUP + display_title + sep + display_version + sep +
 			display_author + sep + display_size + sep +
 			display_type);
 	}
@@ -217,7 +217,7 @@ bool do_resolve_addon_dependencies(display& disp, addons_client& client, const a
 		addon_style.scale_images(font::relative_size(72), font::relative_size(72));
 		gui::menu* addon_menu = new gui::menu(
 			disp.video(), options, false, -1,
-			gui::dialog::max_menu_width, NULL, &addon_style, false);
+			gui::dialog::max_menu_width, nullptr, &addon_style, false);
 		dlg.set_menu(addon_menu);
 
 		cursor_setter.reset();
@@ -361,7 +361,7 @@ public:
 
 	virtual gui::dialog_button_action::RESULT button_pressed(int filter_choice)
 	{
-		assert(filter_ != NULL);
+		assert(filter_ != nullptr);
 
 		const int menu_selection = filter_->get_index(filter_choice);
 		if(menu_selection < 0) { return gui::CONTINUE_DIALOG; }
@@ -456,7 +456,7 @@ struct addon_pointer_list_sorter
 	{}
 
 	inline bool operator()(const addons_list::value_type* a, const addons_list::value_type* b) {
-		assert(a != NULL && b != NULL);
+		assert(a != nullptr && b != nullptr);
 
 		if(dir_ == DIRECTION_DESCENDING) {
 			const addons_list::value_type* c = a;
@@ -688,8 +688,8 @@ void show_addons_manager_dialog(display& disp, addons_client& client, addons_lis
 			}
 		}
 
-		// NOTE: NULL_MARKUP used to escape abuse of formatting chars in add-on titles
-		row = IMAGE_PREFIX + display_icon + display_sep + font::NULL_MARKUP + display_title + "\n" + font::color2markup(font::TITLE_COLOR) + font::SMALL_TEXT + display_status + display_sep;
+		// NOTE: nullptr_MARKUP used to escape abuse of formatting chars in add-on titles
+		row = IMAGE_PREFIX + display_icon + display_sep + font::nullptr_MARKUP + display_title + "\n" + font::color2markup(font::TITLE_COLOR) + font::SMALL_TEXT + display_status + display_sep;
 		if(updates_only) {
 			row += display_old_version + display_sep;
 		}
@@ -781,7 +781,7 @@ void show_addons_manager_dialog(display& disp, addons_client& client, addons_lis
 			_("Description"), gui::button::TYPE_PRESS, gui::CONTINUE_DIALOG, &description_helper);
 		dlg.add_button(description_button, gui::dialog::BUTTON_EXTRA);
 
-		gui::dialog_button* update_all_button = NULL;
+		gui::dialog_button* update_all_button = nullptr;
 		if(updates_only) {
 			update_all_button = new gui::dialog_button(disp.video(), _("Update All"),
 				gui::button::TYPE_PRESS, update_all_value);
@@ -889,8 +889,8 @@ void show_addons_manager_dialog(display& disp, addons_client& client, addons_lis
 		}
 	}
 
-	const char* msg_title = NULL;
-	const char* msg_text = NULL;
+	const char* msg_title = nullptr;
+	const char* msg_text = nullptr;
 
 	if(ids_to_install.size() == 1 && failed_titles.empty()) {
 		utils::string_map syms;

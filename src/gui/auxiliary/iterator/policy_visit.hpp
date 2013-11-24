@@ -51,7 +51,7 @@ public:
 	/**
 	 * Acts like @ref twalker_::get for the level where the policy is used.
 	 */
-	gui2::twidget* get(twalker_&) { return NULL; }
+	gui2::twidget* get(twalker_&) { return nullptr; }
 };
 
 /**

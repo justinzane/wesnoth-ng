@@ -279,7 +279,7 @@ private:
 
 void menu::do_sort()
 {
-	if(sorter_ == NULL || sorter_->column_sortable(sortby_) == false) {
+	if(sorter_ == nullptr || sorter_->column_sortable(sortby_) == false) {
 		return;
 	}
 
@@ -616,7 +616,7 @@ bool menu::requires_event_focus(const SDL_Event* event) const
 	if(!focus_ || height() == 0 || hidden()) {
 		return false;
 	}
-	if(event == NULL) {
+	if(event == nullptr) {
 		//when event is not specified, signal that focus may be desired later
 		return true;
 	}
@@ -702,7 +702,7 @@ void menu::handle_event(const SDL_Event& event)
 		}
 
 
-		if(sorter_ != NULL) {
+		if(sorter_ != nullptr) {
 			const int heading = hit_heading(x,y);
 			if(heading >= 0 && sorter_->column_sortable(heading)) {
 				sort_by(heading);
@@ -806,15 +806,15 @@ SDL_Rect menu::style::item_size(const std::string& item) const {
 		const std::string str = *it;
 		if (!str.empty() && str[0] == IMAGE_PREFIX) {
 			const std::string image_name(str.begin()+1,str.end());
-			surface const img = get_item_image(image_name);
-			if(img != NULL) {
+			SDL_Surface const img = get_item_image(image_name);
+			if(img != nullptr) {
 				res.w += img->w;
 				res.h = std::max<int>(img->h, res.h);
 			}
 		} else {
 			const SDL_Rect area = {0,0,10000,10000};
 			const SDL_Rect font_size =
-				font::draw_text(NULL,area,get_font_size(),font::NORMAL_COLOR,str,0,0);
+				font::draw_text(nullptr,area,get_font_size(),font::NORMAL_COLOR,str,0,0);
 			res.w += font_size.w;
 			res.h = std::max<int>(font_size.h, res.h);
 		}
@@ -822,7 +822,7 @@ SDL_Rect menu::style::item_size(const std::string& item) const {
 	return res;
 }
 
-void menu::style::draw_row_bg(menu& menu_ref, const size_t /*row_index*/, const SDL_Rect& rect, ROW_TYPE type)
+void menu::style::draw_row_bg(menu& menu_ref, const size_t /*row_index*/, const SDL_Rect* rect, ROW_TYPE type)
 {
 	menu_ref.bg_restore(rect);
 
@@ -849,7 +849,7 @@ void menu::style::draw_row_bg(menu& menu_ref, const size_t /*row_index*/, const 
 				    menu_ref.video().getSurface());
 }
 
-void menu::style::draw_row(menu& menu_ref, const size_t row_index, const SDL_Rect& rect, ROW_TYPE type)
+void menu::style::draw_row(menu& menu_ref, const size_t row_index, const SDL_Rect* rect, ROW_TYPE type)
 {
 	if(rect.w == 0 || rect.h == 0) {
 		return;
@@ -909,7 +909,7 @@ void menu::clear_item(int item)
 	bg_restore(rect);
 }
 
-void menu::draw_row(const size_t row_index, const SDL_Rect& rect, ROW_TYPE type)
+void menu::draw_row(const size_t row_index, const SDL_Rect* rect, ROW_TYPE type)
 {
 	//called from style, draws one row's contents in a generic and adaptable way
 	const std::vector<std::string>& row = (type == HEADING_ROW) ? heading_ : items_[row_index].fields;
@@ -940,10 +940,10 @@ void menu::draw_row(const size_t row_index, const SDL_Rect& rect, ROW_TYPE type)
 			str = *it;
 			if (!str.empty() && str[0] == IMAGE_PREFIX) {
 				const std::string image_name(str.begin()+1,str.end());
-				const surface img = style_->get_item_image(image_name);
+				const SDL_Surface img = style_->get_item_image(image_name);
 				const int remaining_width = max_width_ < 0 ? area.w :
 				std::min<int>(max_width_, ((lang_rtl)? xpos - rect.x : rect.x + rect.w - xpos));
-				if(img != NULL && img->w <= remaining_width
+				if(img != nullptr && img->w <= remaining_width
 				&& rect.y + img->h < area.h) {
 					const size_t y = rect.y + (rect.h - img->h)/2;
 					const size_t w = img->w + 5;
@@ -964,21 +964,21 @@ void menu::draw_row(const size_t row_index, const SDL_Rect& rect, ROW_TYPE type)
 					int style = TTF_STYLE_NORMAL;
 					int w = loc.w - (xpos - rect.x) - 2 * style_->get_thickness();
 					std::string::const_iterator i_beg = to_show.begin(), i_end = to_show.end(),
-						i = font::parse_markup(i_beg, i_end, &fs, NULL, &style);
+						i = font::parse_markup(i_beg, i_end, &fs, nullptr, &style);
 					if (i != i_end) {
 						std::string tmp(i, i_end);
 						to_show.erase(i - i_beg, i_end - i_beg);
 						to_show += font::make_text_ellipsis(tmp, fs, w, style);
 					}
 				}
-				const SDL_Rect& text_size = font::text_area(str,style_->get_font_size());
+				const SDL_Rect* text_size = font::text_area(str,style_->get_font_size());
 				const size_t y = rect.y + (rect.h - text_size.h)/2;
 				font::draw_text(&video(),column,style_->get_font_size(),font::NORMAL_COLOR,to_show,xpos,y);
 
 				if(type == HEADING_ROW && sortby_ == int(i)) {
-					const surface sort_img = image::get_image(sortreversed_ ? "buttons/sliders/slider_arrow_blue.png" :
+					const SDL_Surface sort_img = image::get_image(sortreversed_ ? "buttons/sliders/slider_arrow_blue.png" :
 					                                   "buttons/sliders/slider_arrow_blue.png~ROTATE(180)");
-					if(sort_img != NULL && sort_img->w <= widths[i] && sort_img->h <= rect.h) {
+					if(sort_img != nullptr && sort_img->w <= widths[i] && sort_img->h <= rect.h) {
 						const size_t sort_x = xpos + widths[i] - sort_img->w;
 						const size_t sort_y = rect.y + rect.h/2 - sort_img->h/2;
 						video().blit_surface(sort_x,sort_y,sort_img);
@@ -1024,7 +1024,7 @@ void menu::draw()
 				update_rect(heading_rect);
 			} else if(*i >= 0 && *i < int(item_pos_.size())) {
 				const unsigned int pos = item_pos_[*i];
-				const SDL_Rect& rect = get_item_rect(*i);
+				const SDL_Rect* rect = get_item_rect(*i);
 				bg_restore(rect);
 				style_->draw_row(*this,pos,rect,
 					(!out_ && pos == selected_) ? SELECTED_ROW : NORMAL_ROW);
@@ -1041,7 +1041,7 @@ void menu::draw()
 	bg_restore();
 
 	clip_rect_setter clipping_rect =
-			clip_rect_setter(video().getSurface(), clip_rect(), clip_rect() != NULL);
+			clip_rect_setter(video().getSurface(), clip_rect(), clip_rect() != nullptr);
 
 	draw_contents();
 
@@ -1054,7 +1054,7 @@ int menu::hit(int x, int y) const
 	SDL_Rect const &loc = inner_location();
 	if (x >= loc.x  && x < loc.x + loc.w && y >= loc.y && y < loc.y + loc.h) {
 		for(size_t i = 0; i != items_.size(); ++i) {
-			const SDL_Rect& rect = get_item_rect(i);
+			const SDL_Rect* rect = get_item_rect(i);
 			if (y >= rect.y && y < rect.y + rect.h)
 				return i;
 		}
@@ -1093,7 +1093,7 @@ std::pair<int,int> menu::hit_cell(int x, int y) const
 int menu::hit_heading(int x, int y) const
 {
 	const size_t height = heading_height();
-	const SDL_Rect& loc = inner_location();
+	const SDL_Rect* loc = inner_location();
 	if(y >= loc.y && static_cast<size_t>(y) < loc.y + height) {
 		return hit_column(x);
 	} else {
@@ -1122,7 +1122,7 @@ SDL_Rect menu::get_item_rect_internal(size_t item) const
 
 	int y = loc.y + heading_height();
 	if (item != first_item_on_screen) {
-		const SDL_Rect& prev = get_item_rect_internal(item-1);
+		const SDL_Rect* prev = get_item_rect_internal(item-1);
 		y = prev.y + prev.h;
 	}
 

@@ -74,8 +74,8 @@ private:
 
 	struct terrain_filter_cache {
 		terrain_filter_cache() :
-			parsed_terrain(NULL),
-			adjacent_matches(NULL),
+			parsed_terrain(nullptr),
+			adjacent_matches(nullptr),
 			adjacent_match_cache()
 		{
 		}

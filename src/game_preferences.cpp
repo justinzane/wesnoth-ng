@@ -433,7 +433,7 @@ std::string login()
 	const std::string res = preferences::get("login");
 	if(res.empty() || res == EMPTY_WRAPPED_STRING) {
 		char* const login = getenv("USER");
-		if(login != NULL) {
+		if(login != nullptr) {
 			return login;
 		}
 

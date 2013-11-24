@@ -61,7 +61,7 @@ public:
 
 	/** See @ref twidget::impl_draw_children. */
 	virtual void impl_draw_children(
-			  surface& frame_buffer
+			  SDL_Surface& frame_buffer
 			, int x_offset
 			, int y_offset) OVERRIDE;
 

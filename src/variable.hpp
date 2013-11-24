@@ -69,7 +69,7 @@ class vconfig {
         explicit operator bool() const {return !null();}
 
         bool null() const {
-            return cfg_ == NULL;
+            return cfg_ == nullptr;
         }
         void make_safe();
         const config& get_config() const {

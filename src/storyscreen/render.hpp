@@ -88,7 +88,7 @@ private:
 	// (the background layer we align the images to)
 	SDL_Rect base_rect_;
 
-	surface background_;
+	SDL_Surface background_;
 	std::vector< floating_image::render_input > imgs_;
 	bool has_background_;
 

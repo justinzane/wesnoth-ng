@@ -57,7 +57,7 @@ static lg::log_domain log_display("display");
 namespace help {
 
 help_button::help_button(display& disp, const std::string &help_topic)
-	: dialog_button(disp.video(), _("Help")), disp_(disp), topic_(help_topic), help_hand_(NULL)
+	: dialog_button(disp.video(), _("Help")), disp_(disp), topic_(help_topic), help_hand_(nullptr)
 {}
 
 help_button::~help_button() {
@@ -96,7 +96,7 @@ void help_button::leave() {
 
 	//now kill the hotkey handler
 	delete help_hand_;
-	help_hand_ = NULL;
+	help_hand_ = nullptr;
 }
 
 /// Generate the help contents from the configurations given to the
@@ -135,7 +135,7 @@ public:
 	~topic_text();
 	topic_text():
 		parsed_text_(),
-		generator_(NULL)
+		generator_(nullptr)
 	{
 	}
 
@@ -226,7 +226,7 @@ public:
 	has_id(const std::string &id) : id_(id) {}
 	bool operator()(const topic &t) { return t.id == id_; }
 	bool operator()(const section &s) { return s.id == id_; }
-	bool operator()(const section *s) { return s != NULL && s->id == id_; }
+	bool operator()(const section *s) { return s != nullptr && s->id == id_; }
 private:
 	const std::string id_;
 };
@@ -279,7 +279,7 @@ public:
 	void select_topic(const topic &t);
 
 	/// If a topic has been chosen, return that topic, otherwise
-	/// NULL. If one topic is returned, it will not be returned again,
+	/// nullptr. If one topic is returned, it will not be returned again,
 	/// if it is not re-chosen.
 	const topic *chosen_topic();
 
@@ -288,7 +288,7 @@ private:
 	struct visible_item {
 		visible_item(const section *_sec, const std::string &visible_string);
 		visible_item(const topic *_t, const std::string &visible_string);
-		// Invariant, one if these should be NULL. The constructors
+		// Invariant, one if these should be nullptr. The constructors
 		// enforce it.
 		const topic *t;
 		const section *sec;
@@ -359,7 +359,7 @@ public:
 
 protected:
 	virtual void scroll(unsigned int pos);
-	virtual void set_inner_location(const SDL_Rect& rect);
+	virtual void set_inner_location(const SDL_Rect* rect);
 
 private:
 	enum ALIGNMENT {LEFT, MIDDLE, RIGHT, HERE};
@@ -371,17 +371,17 @@ private:
 	/// that should be blitted along with some other information.
 	struct item {
 
-		item(surface surface, int x, int y, const std::string& text="",
+		item(SDL_Surface surface, int x, int y, const std::string& text="",
 			 const std::string& reference_to="", bool floating=false,
 			 bool box=false, ALIGNMENT alignment=HERE);
 
-		item(surface surface, int x, int y,
+		item(SDL_Surface surface, int x, int y,
 			 bool floating, bool box=false, ALIGNMENT=HERE);
 
 		/// Relative coordinates of this item.
 		SDL_Rect rect;
 
-		surface surf;
+		SDL_Surface surf;
 
 		// If this item contains text, this will contain that text.
 		std::string text;
@@ -550,7 +550,7 @@ static std::vector<topic> generate_weapon_special_topics(const bool);
 static std::vector<topic> generate_faction_topics(const bool);
 
 /// Parse a help config, return the top level section. Return an empty
-/// section if cfg is NULL.
+/// section if cfg is nullptr.
 static section parse_config(const config *cfg);
 /// Recursive function used by parse_config.
 static void parse_config_internal(const config *help_cfg, const config *section_cfg,
@@ -564,12 +564,12 @@ static bool section_is_referenced(const std::string &section_id, const config &c
 static bool topic_is_referenced(const std::string &topic_id, const config &cfg);
 
 /// Search for the topic with the specified identifier in the section
-/// and its subsections. Return the found topic, or NULL if none could
+/// and its subsections. Return the found topic, or nullptr if none could
 /// be found.
 static const topic *find_topic(const section &sec, const std::string &id);
 
 /// Search for the section with the specified identifier in the section
-/// and its subsections. Return the found section or NULL if none could
+/// and its subsections. Return the found section or nullptr if none could
 /// be found.
 static const section *find_section(const section &sec, const std::string &id);
 
@@ -604,7 +604,7 @@ static std::string get_first_word(const std::string &s);
 } // namespace help
 
 namespace {
-	const config *game_cfg = NULL;
+	const config *game_cfg = nullptr;
 	// The default toplevel.
 	help::section toplevel;
 	// All sections and topics not referenced from the default toplevel.
@@ -763,8 +763,8 @@ static std::string generate_table(const table_spec &tab, const unsigned int spac
 static unsigned image_width(const std::string &filename)
 	{
 		image::locator loc(filename);
-		surface surf(image::get_image(loc));
-		if (surf != NULL) {
+		SDL_Surface surf(image::get_image(loc));
+		if (surf != nullptr) {
 			return surf->w;
 		}
 		return 0;
@@ -779,7 +779,7 @@ namespace help {
 
 help_manager::help_manager(const config *cfg) //, gamemap *_map)
 {
-	game_cfg = cfg == NULL ? &dummy_cfg : cfg;
+	game_cfg = cfg == nullptr ? &dummy_cfg : cfg;
 //	map = _map;
 }
 
@@ -787,7 +787,7 @@ void generate_contents()
 {
 	toplevel.clear();
 	hidden_sections.clear();
-	if (game_cfg != NULL) {
+	if (game_cfg != nullptr) {
 		const config *help_config = &game_cfg->child("help");
 		if (!*help_config) {
 			help_config = &dummy_cfg;
@@ -805,7 +805,7 @@ void generate_contents()
 			foreach_ng(const config &section, help_config->child_range("section"))
 			{
 				const std::string id = section["id"];
-				if (find_section(toplevel, id) == NULL) {
+				if (find_section(toplevel, id) == nullptr) {
 					// This section does not exist referenced from the
 					// toplevel. Hence, add it to the hidden ones if it
 					// is not referenced from another section.
@@ -822,7 +822,7 @@ void generate_contents()
 			foreach_ng(const config &topic, help_config->child_range("topic"))
 			{
 				const std::string id = topic["id"];
-				if (find_topic(toplevel, id) == NULL) {
+				if (find_topic(toplevel, id) == nullptr) {
 					if (!topic_is_referenced(id, *help_config)) {
 						if (ss.str() != "") {
 							ss << ",";
@@ -848,8 +848,8 @@ void generate_contents()
 
 help_manager::~help_manager()
 {
-	game_cfg = NULL;
-//	map = NULL;
+	game_cfg = nullptr;
+//	map = nullptr;
 	toplevel.clear();
 	hidden_sections.clear();
     // These last numbers must be reset so that the content is regenerated.
@@ -913,7 +913,7 @@ void parse_config_internal(const config *help_cfg, const config *section_cfg,
 		std::cerr << "Maximum section depth has been reached. Maybe circular dependency?"
 				  << std::endl;
 	}
-	else if (section_cfg != NULL) {
+	else if (section_cfg != nullptr) {
 		const std::vector<std::string> sections = utils::quoted_split((*section_cfg)["sections"]);
 		sec.level = level;
 		std::string id = level == 0 ? "toplevel" : (*section_cfg)["id"].str();
@@ -1017,9 +1017,9 @@ void parse_config_internal(const config *help_cfg, const config *section_cfg,
 section parse_config(const config *cfg)
 {
 	section sec;
-	if (cfg != NULL) {
+	if (cfg != nullptr) {
 		config const &toplevel_cfg = cfg->child("toplevel");
-		parse_config_internal(cfg, toplevel_cfg ? &toplevel_cfg : NULL, sec);
+		parse_config_internal(cfg, toplevel_cfg ? &toplevel_cfg : nullptr, sec);
 	}
 	return sec;
 }
@@ -1105,7 +1105,7 @@ const std::vector<std::string>& topic_text::parsed_text() const
 		parsed_text_ = parse_text((*generator_)());
 		if (--generator_->count == 0)
 			delete generator_;
-		generator_ = NULL;
+		generator_ = nullptr;
 	}
 	return parsed_text_;
 }
@@ -1595,7 +1595,7 @@ public:
 		}
 		ss << generate_table(resistance_table);
 
-		if (resources::game_map != NULL) {
+		if (resources::game_map != nullptr) {
 			// Print the terrain modifier table of the unit.
 			ss << "\n\n<header>text='" << escape(_("Terrain Modifiers"))
 			   << "'</header>\n\n";
@@ -2075,12 +2075,12 @@ void section::clear()
 }
 
 help_menu::help_menu(CVideo &video, section const &toplevel, int max_height) :
-	gui::menu(video, empty_string_vector, true, max_height, -1, NULL, &gui::menu::bluebg_style),
+	gui::menu(video, empty_string_vector, true, max_height, -1, nullptr, &gui::menu::bluebg_style),
 	visible_items_(),
 	toplevel_(toplevel),
 	expanded_(),
 	restorer_(),
-	chosen_topic_(NULL),
+	chosen_topic_(nullptr),
 	selected_item_(&toplevel, "")
 {
 	silent_ = true; //silence the default menu sounds
@@ -2211,7 +2211,7 @@ int help_menu::process()
 
 		selected_item_ = visible_items_[res];
 		const section* sec = selected_item_.sec;
-		if (sec != NULL) {
+		if (sec != nullptr) {
 			// Check how we click on the section
 			int x = mousex - menu::location().x;
 
@@ -2231,7 +2231,7 @@ int help_menu::process()
 				// click on title open the topic associated to this section
 				chosen_topic_ = find_topic(toplevel, ".."+sec->id );
 			}
-		} else if (selected_item_.t != NULL) {
+		} else if (selected_item_.t != nullptr) {
 			/// Choose a topic if it is clicked.
 			chosen_topic_ = selected_item_.t;
 		}
@@ -2242,7 +2242,7 @@ int help_menu::process()
 const topic *help_menu::chosen_topic()
 {
 	const topic *ret = chosen_topic_;
-	chosen_topic_ = NULL;
+	chosen_topic_ = nullptr;
 	return ret;
 }
 
@@ -2260,19 +2260,19 @@ void help_menu::display_visible_items()
 }
 
 help_menu::visible_item::visible_item(const section *_sec, const std::string &vis_string) :
-	t(NULL), sec(_sec), visible_string(vis_string) {}
+	t(nullptr), sec(_sec), visible_string(vis_string) {}
 
 help_menu::visible_item::visible_item(const topic *_t, const std::string &vis_string) :
-	t(_t), sec(NULL), visible_string(vis_string) {}
+	t(_t), sec(nullptr), visible_string(vis_string) {}
 
 bool help_menu::visible_item::operator==(const section &_sec) const
 {
-	return sec != NULL && *sec == _sec;
+	return sec != nullptr && *sec == _sec;
 }
 
 bool help_menu::visible_item::operator==(const topic &_t) const
 {
-	return t != NULL && *t == _t;
+	return t != nullptr && *t == _t;
 }
 
 bool help_menu::visible_item::operator==(const visible_item &vis_item) const
@@ -2285,7 +2285,7 @@ help_text_area::help_text_area(CVideo &video, const section &toplevel) :
 	items_(),
 	last_row_(),
 	toplevel_(toplevel),
-	shown_topic_(NULL),
+	shown_topic_(nullptr),
 	title_spacing_(16),
 	curr_loc_(0, 0),
 	min_row_height_(font::get_max_height(normal_font_size)),
@@ -2310,7 +2310,7 @@ void help_text_area::show_topic(const topic &t)
 }
 
 
-help_text_area::item::item(surface surface, int x, int y, const std::string& _text,
+help_text_area::item::item(SDL_Surface surface, int x, int y, const std::string& _text,
 						   const std::string& reference_to, bool _floating,
 						   bool _box, ALIGNMENT alignment) :
 	rect(),
@@ -2326,7 +2326,7 @@ help_text_area::item::item(surface surface, int x, int y, const std::string& _te
 	rect.h = box ? surface->h + box_width * 2 : surface->h;
 }
 
-help_text_area::item::item(surface surface, int x, int y, bool _floating,
+help_text_area::item::item(SDL_Surface surface, int x, int y, bool _floating,
 						   bool _box, ALIGNMENT alignment) :
 	rect(),
 	surf(surface),
@@ -2351,9 +2351,9 @@ void help_text_area::set_items()
 	// Add the title item.
 	const std::string show_title =
 		font::make_text_ellipsis(shown_topic_->title, title_size, inner_location().w);
-	surface surf(font::get_rendered_text(show_title, title_size,
+	SDL_Surface surf(font::get_rendered_text(show_title, title_size,
 					     font::NORMAL_COLOR, TTF_STYLE_BOLD));
-	if (surf != NULL) {
+	if (surf != nullptr) {
 		add_item(item(surf, 0, 0, show_title));
 		curr_loc_.second = title_spacing_;
 		contents_height_ = title_spacing_;
@@ -2417,7 +2417,7 @@ void help_text_area::handle_ref_cfg(const config &cfg)
 		throw parse_error(msg.str());
 	}
 
-	if (find_topic(toplevel_, dst) == NULL && !force) {
+	if (find_topic(toplevel_, dst) == nullptr && !force) {
 		// detect the broken link but quietly silence the hyperlink for normal user
 		add_text_item(text, game_config::debug ? dst : "", true);
 
@@ -2581,7 +2581,7 @@ void help_text_area::add_text_item(const std::string& text, const std::string& r
 		else
 			color = font::YELLOW_COLOR;
 
-		surface surf(font::get_rendered_text(first_part, font_size, color, state));
+		SDL_Surface surf(font::get_rendered_text(first_part, font_size, color, state));
 		if (!surf.null())
 			add_item(item(surf, curr_loc_.first, curr_loc_.second, first_part, ref_dst));
 		if (parts.size() > 1) {
@@ -2612,7 +2612,7 @@ void help_text_area::add_text_item(const std::string& text, const std::string& r
 void help_text_area::add_img_item(const std::string& path, const std::string& alignment,
 								  const bool floating, const bool box)
 {
-	surface surf(image::get_image(path));
+	SDL_Surface surf(image::get_image(path));
 	if (surf.null())
 		return;
 	ALIGNMENT align = str_to_align(alignment);
@@ -2766,7 +2766,7 @@ void help_text_area::draw_contents()
 {
 	SDL_Rect const &loc = inner_location();
 	bg_restore();
-	surface screen = video().getSurface();
+	SDL_Surface screen = video().getSurface();
 	clip_rect_setter clip_rect_set(screen, &loc);
 	for(std::list<item>::const_iterator it = items_.begin(), end = items_.end(); it != end; ++it) {
 		SDL_Rect dst = it->rect;
@@ -2782,7 +2782,7 @@ void help_text_area::draw_contents()
 					++dst.y;
 				}
 			}
-			sdl_blit(it->surf, NULL, screen, &dst);
+			SDL_BlitSurface(it->surf, nullptr, screen, &dst);
 		}
 	}
 	update_rect(loc);
@@ -2797,7 +2797,7 @@ void help_text_area::scroll(unsigned int)
 }
 
 bool help_text_area::item_at::operator()(const item& item) const {
-	return point_in_rect(x_, y_, item.rect);
+	return is_point_in_rect(x_, y_, item.rect);
 }
 
 std::string help_text_area::ref_at(const int x, const int y)
@@ -2830,7 +2830,7 @@ help_browser::help_browser(display &disp, const section &toplevel) :
 	forward_topics_(),
 	back_button_(disp.video(), _(" < Back"), gui::button::TYPE_PRESS),
 	forward_button_(disp.video(), _("Forward >"), gui::button::TYPE_PRESS),
-	shown_topic_(NULL)
+	shown_topic_(nullptr)
 {
 	// Hide the buttons at first since we do not have any forward or
 	// back topics at this point. They will be unhidden when history
@@ -2889,10 +2889,10 @@ void help_browser::process_event()
 	SDL_GetMouseState(&mousex,&mousey);
 
 	/// Fake focus functionality for the menu, only process it if it has focus.
-	if (point_in_rect(mousex, mousey, menu_.location())) {
+	if (is_point_in_rect(mousex, mousey, menu_.location())) {
 		menu_.process();
 		const topic *chosen_topic = menu_.chosen_topic();
-		if (chosen_topic != NULL && chosen_topic != shown_topic_) {
+		if (chosen_topic != nullptr && chosen_topic != shown_topic_) {
 			/// A new topic has been chosen in the menu, display it.
 			show_topic(*chosen_topic);
 		}
@@ -2913,7 +2913,7 @@ void help_browser::move_in_history(std::deque<const topic *> &from,
 	if (!from.empty()) {
 		const topic *to_show = from.back();
 		from.pop_back();
-		if (shown_topic_ != NULL) {
+		if (shown_topic_ != nullptr) {
 			if (to.size() > max_history) {
 				to.pop_front();
 			}
@@ -2935,7 +2935,7 @@ void help_browser::handle_event(const SDL_Event &event)
 			const std::string ref = text_area_.ref_at(mousex, mousey);
 			if (ref != "") {
 				const topic *t = find_topic(toplevel_, ref);
-				if (t == NULL) {
+				if (t == nullptr) {
 					std::stringstream msg;
 					msg << _("Reference to unknown topic: ") << "'" << ref << "'.";
 					gui2::show_transient_message(disp_.video(), "", msg.str());
@@ -2979,11 +2979,11 @@ const topic *find_topic(const section &sec, const std::string &id)
 	section_list::const_iterator sit;
 	for (sit = sec.sections.begin(); sit != sec.sections.end(); ++sit) {
 		const topic *t = find_topic(*(*sit), id);
-		if (t != NULL) {
+		if (t != nullptr) {
 			return t;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 const section *find_section(const section &sec, const std::string &id)
@@ -2995,18 +2995,18 @@ const section *find_section(const section &sec, const std::string &id)
 	}
 	for (sit = sec.sections.begin(); sit != sec.sections.end(); ++sit) {
 		const section *s = find_section(*(*sit), id);
-		if (s != NULL) {
+		if (s != nullptr) {
 			return s;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void help_browser::show_topic(const std::string &topic_id)
 {
 	const topic *t = find_topic(toplevel_, topic_id);
 
-	if (t != NULL) {
+	if (t != nullptr) {
 		show_topic(*t);
 	} else if (topic_id.find(unit_prefix)==0 || topic_id.find(hidden_symbol() + unit_prefix)==0) {
 		show_topic(unknown_unit_topic);
@@ -3022,7 +3022,7 @@ void help_browser::show_topic(const topic &t, bool save_in_history)
 
 	if (save_in_history) {
 		forward_topics_.clear();
-		if (shown_topic_ != NULL) {
+		if (shown_topic_ != nullptr) {
 			if (back_topics_.size() > max_history) {
 				back_topics_.pop_front();
 			}
@@ -3276,7 +3276,7 @@ void show_help(display &disp, const section &toplevel_sec,
 	const resize_lock prevent_resizing;
 
 	CVideo& screen = disp.video();
-	const surface& scr = screen.getSurface();
+	const SDL_Surface& scr = screen.getSurface();
 
 	const int width  = std::min<int>(font::relative_size(900), scr->w - font::relative_size(20));
 	const int height = std::min<int>(font::relative_size(800), scr->h - font::relative_size(150));

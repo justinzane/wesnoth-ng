@@ -25,7 +25,7 @@
 
 #include "global.hpp"
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 #include "log/log.hpp"
 #include "log/log.hpp"
@@ -52,7 +52,7 @@ static std::ostream null_ostream(new null_streambuf);
 static int indent = 0;
 static bool timestamp = true;
 
-static std::ostream *output_stream = NULL;
+static std::ostream *output_stream = nullptr;
 
 static std::ostream& output()
 {
@@ -83,7 +83,7 @@ logger err("error", 0), warn("warning", 1), info("info", 2), debug("debug", 3);
 log_domain general("general");
 
 log_domain::log_domain(char const *name)
-	: domain_(NULL)
+	: domain_(nullptr)
 {
 	// Indirection to prevent initialization depending on link order.
 	if (!domains) domains = new domain_map;
@@ -157,7 +157,7 @@ std::ostream &logger::operator()(log_domain const &domain, bool show_names, bool
 				stream << "  ";
 			}
 		if (timestamp) {
-			stream << get_timestamp(time(NULL));
+			stream << get_timestamp(time(nullptr));
 		}
 		if (show_names) {
 			stream << name_ << ' ' << domain.domain_->first << ": ";
@@ -180,7 +180,7 @@ void scope_logger::do_log_exit()
 	const int ticks = SDL_GetTicks() - ticks_;
 	--indent;
 	do_indent();
-	if (timestamp) (*output_) << get_timestamp(time(NULL));
+	if (timestamp) (*output_) << get_timestamp(time(nullptr));
 	(*output_) << "} END: " << str_ << " (took " << ticks << "ms)\n";
 }
 

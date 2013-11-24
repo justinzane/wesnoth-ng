@@ -148,7 +148,7 @@ bool controller_base::handle_scroll(CKey& key, int mousex, int mousey, int mouse
 	int scroll_threshold = (preferences::mouse_scroll_enabled())
 		? preferences::mouse_scroll_threshold() : 0;
 	foreach_ng(const theme::menu& m, get_display().get_theme().menus()) {
-		if (point_in_rect(mousex, mousey, m.get_location())) {
+		if (is_point_in_rect(mousex, mousey, m.get_location())) {
 			scroll_threshold = 0;
 		}
 	}
@@ -173,8 +173,8 @@ bool controller_base::handle_scroll(CKey& key, int mousex, int mousey, int mouse
 		dx += scroll_speed;
 	}
 	if ((mouse_flags & SDL_BUTTON_MMASK) != 0 && preferences::middle_click_scrolls()) {
-		const SDL_Rect& rect = get_display().map_outside_area();
-		if (point_in_rect(mousex, mousey,rect)) {
+		const SDL_Rect* rect = get_display().map_outside_area();
+		if (is_point_in_rect(mousex, mousey,rect)) {
 			// relative distance from the center to the border
 			// NOTE: the view is a rectangle, so can be more sensible in one direction
 			// but seems intuitive to use and it's useful since you must
@@ -203,15 +203,15 @@ void controller_base::play_slice(bool is_delay_enabled)
 
 	slice_before_scroll();
 	const theme::menu* const m = get_display().menu_pressed();
-	if(m != NULL) {
-		const SDL_Rect& menu_loc = m->location(get_display().screen_area());
+	if(m != nullptr) {
+		const SDL_Rect* menu_loc = m->location(get_display().screen_area());
 		show_menu(m->items(),menu_loc.x+1,menu_loc.y + menu_loc.h + 1,false, get_display());
 
 		return;
 	}
 	const theme::action* const a = get_display().action_pressed();
-	if(a != NULL) {
-		const SDL_Rect& action_loc = a->location(get_display().screen_area());
+	if(a != nullptr) {
+		const SDL_Rect* action_loc = a->location(get_display().screen_area());
 		execute_action(a->items(), action_loc.x+1, action_loc.y + action_loc.h + 1,false);
 
 		return;

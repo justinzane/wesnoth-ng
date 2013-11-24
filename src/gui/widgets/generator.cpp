@@ -192,7 +192,7 @@ void thorizontal_list::set_origin(const tpoint& origin)
 	}
 }
 
-void thorizontal_list::set_visible_rectangle(const SDL_Rect& rectangle)
+void thorizontal_list::set_visible_rectangle(const SDL_Rect* rectangle)
 {
 	/*
 	 * Note for most implementations this function could work only for the
@@ -228,7 +228,7 @@ twidget* thorizontal_list::find_at(
 			return widget;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 const twidget* thorizontal_list::find_at(const tpoint& coordinate,
@@ -252,7 +252,7 @@ const twidget* thorizontal_list::find_at(const tpoint& coordinate,
 			return widget;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void thorizontal_list::handle_key_left_arrow(
@@ -395,7 +395,7 @@ void tvertical_list::set_origin(const tpoint& origin)
 	}
 }
 
-void tvertical_list::set_visible_rectangle(const SDL_Rect& rectangle)
+void tvertical_list::set_visible_rectangle(const SDL_Rect* rectangle)
 {
 	/*
 	 * Note for most implementations this function could work only for the
@@ -432,7 +432,7 @@ twidget* tvertical_list::find_at(
 			return widget;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 const twidget* tvertical_list::find_at(const tpoint& coordinate,
@@ -456,7 +456,7 @@ const twidget* tvertical_list::find_at(const tpoint& coordinate,
 			return widget;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void tvertical_list::handle_key_up_arrow(SDLMod /*modifier*/, bool& handled)
@@ -581,7 +581,7 @@ twidget* tindependent::find_at(const tpoint& coordinate
 
 	const int selected_item = get_selected_item();
 	if(selected_item < 0) {
-		return NULL;
+		return nullptr;
 	}
 
 	tgrid& grid = item(selected_item);
@@ -595,7 +595,7 @@ const twidget* tindependent::find_at(const tpoint& coordinate
 
 	const int selected_item = get_selected_item();
 	if(selected_item < 0) {
-		return NULL;
+		return nullptr;
 	}
 
 	const tgrid& grid = item(selected_item);
@@ -612,7 +612,7 @@ twidget* tindependent::find(
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 const twidget* tindependent::find(
@@ -627,10 +627,10 @@ const twidget* tindependent::find(
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
-void tindependent::set_visible_rectangle(const SDL_Rect& rectangle)
+void tindependent::set_visible_rectangle(const SDL_Rect* rectangle)
 {
 	/*
 	 * Set the visible rectangle for every item.
@@ -814,7 +814,7 @@ tgenerator_* tgenerator_::build(
 		const bool has_minimum, const bool has_maximum,
 		const tplacement placement, const bool select)
 {
-	tgenerator_* result = NULL;
+	tgenerator_* result = nullptr;
 	GENERATE_BODY;
 	return result;
 }

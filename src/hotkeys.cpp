@@ -260,7 +260,7 @@ hotkey_command_temp hotkey_list_[] = {
 	{ hotkey::GLOBAL__HELPTIP, "global__helptip", N_("Show Helptip"), false, hotkey::SCOPE_GENERAL, "" },
 
 	//This list item must stay at the end since it is used as terminator for iterating.
-	{ hotkey::HOTKEY_NULL, "null", N_("Unrecognized Command"), true, hotkey::SCOPE_GENERAL, "" }
+	{ hotkey::HOTKEY_nullptr, "null", N_("Unrecognized Command"), true, hotkey::SCOPE_GENERAL, "" }
 };
 
 
@@ -656,7 +656,7 @@ const std::string get_tooltip(const std::string& command)
 
 bool hotkey_command::null() const
 {
-	if(id == HOTKEY_NULL || command == "null")
+	if(id == HOTKEY_nullptr || command == "null")
 	{
 		hotkey_command& null_cmd = null_command();
 		if(id == null_cmd.id && command == null_cmd.command && scope == null_cmd.scope && description == null_cmd.description)
@@ -671,7 +671,7 @@ bool hotkey_command::null() const
 }
 
 hotkey_command::hotkey_command()
-	: id(HOTKEY_NULL), command(""), description(""), hidden(true), scope(SCOPE_GENERAL), tooltip("")
+	: id(HOTKEY_nullptr), command(""), description(""), hidden(true), scope(SCOPE_GENERAL), tooltip("")
 {
 	ERR_G << "hotkey_command's default constructor called. This shouldn't happen, because all its members are const.";
 }
@@ -705,7 +705,7 @@ hotkey_command& get_hotkey_null()
 
 bool has_hotkey_command(const std::string& id)
 {
-	return get_hotkey_command(id).id != hotkey::HOTKEY_NULL;
+	return get_hotkey_command(id).id != hotkey::HOTKEY_nullptr;
 }
 
 bool has_hotkey_item(const std::string& command)
@@ -965,7 +965,7 @@ void basic_handler::handle_event(const SDL_Event& event)
 {
 	//TODO this code path is never called?
 
-	if (disp_ == NULL) {
+	if (disp_ == nullptr) {
 		return;
 	}
 
@@ -976,21 +976,21 @@ void basic_handler::handle_event(const SDL_Event& event)
 		// If we're not in a dialog we can call the regular key event handler.
 		if (!gui::in_dialog()) {
 			key_event(*disp_, event.key,exec_);
-		} else if (exec_ != NULL) {
+		} else if (exec_ != nullptr) {
 			key_event_execute(*disp_, event.key,exec_);
 		}
 		break;
 	case SDL_JOYBUTTONDOWN:
 		if (!gui::in_dialog()) {
 			jbutton_event(*disp_, event.jbutton,exec_);
-		} else if (exec_ != NULL) {
+		} else if (exec_ != nullptr) {
 			jbutton_event_execute(*disp_, event.jbutton,exec_);
 		}
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 		if (!gui::in_dialog()) {
 			mbutton_event(*disp_, event.button,exec_);
-		} else if (exec_ != NULL) {
+		} else if (exec_ != nullptr) {
 			mbutton_event_execute(*disp_, event.button,exec_);
 		}
 		break;
@@ -1296,7 +1296,7 @@ void execute_command(display& disp, hotkey_command& command, command_executor* e
 	const int zoom_amount = 4;
 	bool map_screenshot = false;
 
-	if (executor != NULL) {
+	if (executor != nullptr) {
 		if (!executor->can_execute_command(command, index)
 				|| executor->execute_command(command, index)) {
 			return;
@@ -1485,7 +1485,7 @@ std::string command_executor::get_menu_image(display& disp, const std::string& c
 	const theme::menu* menu = disp.get_theme().get_menu_item(command);
 	if (menu)
 		return "buttons/fold-arrow.png";
-	//if (hk == hotkey::HOTKEY_NULL)
+	//if (hk == hotkey::HOTKEY_nullptr)
 
 	if (file_exists(game_config::path + "/images/" + base_image_name)) {
 		switch (state) {
@@ -1526,7 +1526,7 @@ std::vector<std::string> command_executor::get_menu_images(display& disp, const 
 			str << IMAGE_PREFIX << img << COLUMN_SEPARATOR;
 		}
 
-		if (hk == hotkey::HOTKEY_NULL) {
+		if (hk == hotkey::HOTKEY_nullptr) {
 			const theme::menu* menu = disp.get_theme().get_menu_item(item);
 			if (menu)
 				str << menu->title();

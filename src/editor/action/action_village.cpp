@@ -37,10 +37,10 @@ editor_action* editor_action_village::perform(map_context& mc) const
 {
 	std::auto_ptr<editor_action> undo;
 
-	if(!mc.get_map().is_village(loc_)) return NULL;
+	if(!mc.get_map().is_village(loc_)) return nullptr;
 	std::vector<team>& teams = mc.get_teams();
-	team *t = unsigned(side_number_) < teams.size() ? &teams[side_number_] : NULL;
-	if (t && t->owns_village(loc_))	return NULL;
+	team *t = unsigned(side_number_) < teams.size() ? &teams[side_number_] : nullptr;
+	if (t && t->owns_village(loc_))	return nullptr;
 
 	undo.reset(new editor_action_village_delete(loc_));
 

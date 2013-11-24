@@ -43,7 +43,7 @@ public:
 	 */
 	taddon_connect(std::string& host_name
 			, const bool allow_remove
-			, display* disp = NULL);
+			, display* disp = nullptr);
 
 private:
 

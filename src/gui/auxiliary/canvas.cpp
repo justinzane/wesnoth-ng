@@ -112,10 +112,10 @@ static void put_pixel(
  * @pre                   The caller needs to make sure the entire line fits on
  *                        the @p surface.
  * @pre                   @p x2 >= @p x1
- * @pre                   The @p surface is locked.
+ * @pre                   The @p SDL_Surface is locked.
  *
  * @param canvas          The canvas to draw upon, the caller should lock the
- *                        surface before calling.
+ *                        SDL_Surface before calling.
  * @param color           The color of the line to draw.
  * @param x1              The start x coordinate of the line to draw.
  * @param y1              The start y coordinate of the line to draw.
@@ -123,7 +123,7 @@ static void put_pixel(
  * @param y2              The end y coordinate of the line to draw.
  */
 static void draw_line(
-		  surface& canvas
+		  SDL_Surface& canvas
 		, Uint32 color
 		, unsigned x1
 		, unsigned y1
@@ -200,17 +200,17 @@ static void draw_line(
  * Draws a circle on a surface.
  *
  * @pre                   The circle must fit on the canvas.
- * @pre                   The @p surface is locked.
+ * @pre                   The @p SDL_Surface is locked.
  *
  * @param canvas          The canvas to draw upon, the caller should lock the
- *                        surface before calling.
+ *                        SDL_Surface before calling.
  * @param color           The color of the circle to draw.
  * @param x_center        The x coordinate of the center of the circle to draw.
  * @param y_center        The y coordinate of the center of the circle to draw.
  * @param radius          The radius of the circle to draw.
  */
 static void draw_circle(
-		  surface& canvas
+		  SDL_Surface& canvas
 		, Uint32 color
 		, const unsigned x_center
 		, const unsigned y_center
@@ -280,7 +280,7 @@ public:
 	explicit tline(const config& cfg);
 
 	/** Implement shape::draw(). */
-	void draw(surface& canvas
+	void draw(SDL_Surface& canvas
 			, const game_logic::map_formula_callable& variables);
 
 private:
@@ -317,7 +317,7 @@ tline::tline(const config& cfg)
  * == Line ==
  * @begin{tag}{name="line"}{min="0"}{max="-1"}
  * Definition of a line. When drawing a line it doesn't get blended on the
- * surface but replaces the pixels instead. A blitting flag might be added later
+ * SDL_Surface but replaces the pixels instead. A blitting flag might be added later
  * if needed.
  *
  * Keys:
@@ -589,7 +589,7 @@ tline::tline(const config& cfg)
 	}
 }
 
-void tline::draw(surface& canvas
+void tline::draw(SDL_Surface& canvas
 		, const game_logic::map_formula_callable& variables)
 {
 	/**
@@ -647,7 +647,7 @@ public:
 	explicit trectangle(const config& cfg);
 
 	/** Implement shape::draw(). */
-	void draw(surface& canvas
+	void draw(SDL_Surface& canvas
 			, const game_logic::map_formula_callable& variables);
 
 private:
@@ -695,7 +695,7 @@ trectangle::trectangle(const config& cfg)
  * @begin{tag}{name="rectangle"}{min="0"}{max="-1"}
  *
  * Definition of a rectangle. When drawing a rectangle it doesn't get blended on
- * the surface but replaces the pixels instead. A blitting flag might be added
+ * the SDL_Surface but replaces the pixels instead. A blitting flag might be added
  * later if needed.
  *
  * Keys:
@@ -729,7 +729,7 @@ trectangle::trectangle(const config& cfg)
 	}
 }
 
-void trectangle::draw(surface& canvas
+void trectangle::draw(SDL_Surface& canvas
 		, const game_logic::map_formula_callable& variables)
 {
 	/**
@@ -811,7 +811,7 @@ public:
 	explicit tcircle(const config& cfg);
 
 	/** Implement shape::draw(). */
-	void draw(surface& canvas
+	void draw(SDL_Surface& canvas
 			, const game_logic::map_formula_callable& variables);
 
 private:
@@ -838,7 +838,7 @@ tcircle::tcircle(const config& cfg)
  * @begin{tag}{name="circle"}{min="0"}{max="-1"}
  *
  * Definition of a circle. When drawing a circle it doesn't get blended on
- * the surface but replaces the pixels instead. A blitting flag might be
+ * the SDL_Surface but replaces the pixels instead. A blitting flag might be
  * added later if needed.
  *
  * Keys:
@@ -865,7 +865,7 @@ tcircle::tcircle(const config& cfg)
 	}
 }
 
-void tcircle::draw(surface& canvas
+void tcircle::draw(SDL_Surface& canvas
 		, const game_logic::map_formula_callable& variables)
 {
 	/**
@@ -927,7 +927,7 @@ public:
 	explicit timage(const config& cfg);
 
 	/** Implement shape::draw(). */
-	void draw(surface& canvas
+	void draw(SDL_Surface& canvas
 			, const game_logic::map_formula_callable& variables);
 
 private:
@@ -941,7 +941,7 @@ private:
 	SDL_Rect src_clip_;
 
 	/** The image is cached in this surface. */
-	surface image_;
+	SDL_Surface image_;
 
 
 
@@ -1047,7 +1047,7 @@ timage::timage(const config& cfg)
 	}
 }
 
-void timage::draw(surface& canvas
+void timage::draw(SDL_Surface& canvas
 		, const game_logic::map_formula_callable& variables)
 {
 	DBG_GUI_D << "Image: draw.\n";
@@ -1065,10 +1065,10 @@ void timage::draw(surface& canvas
 	}
 
 	/*
-	 * The locator might return a different surface for every call so we can't
+	 * The locator might return a different SDL_Surface for every call so we can't
 	 * cache the output, also not if no formula is used.
 	 */
-	surface tmp(image::get_image(image::locator(name)));
+	SDL_Surface tmp(image::get_image(image::locator(name)));
 
 	if(!tmp) {
 		ERR_GUI_D << "Image: '" << name << "' not found and won't be drawn.\n";
@@ -1117,7 +1117,7 @@ void timage::draw(surface& canvas
 	// Copy the data to local variables to avoid overwriting the originals.
 	SDL_Rect src_clip = src_clip_;
 	SDL_Rect dst_clip = ::create_rect(x, y, 0, 0);
-	surface surf;
+	SDL_Surface surf;
 
 	// Test whether we need to scale and do the scaling if needed.
 	if(w || h) {
@@ -1162,7 +1162,7 @@ void timage::draw(surface& canvas
 								, y * image_->h
 								, 0
 								, 0);
-						blit_surface(image_, NULL, surf, &dest);
+						blit_surface(image_, nullptr, surf, &dest);
 					}
 				}
 
@@ -1224,7 +1224,7 @@ public:
 	explicit ttext(const config& cfg);
 
 	/** Implement shape::draw(). */
-	void draw(surface& canvas
+	void draw(SDL_Surface& canvas
 			, const game_logic::map_formula_callable& variables);
 
 private:
@@ -1330,7 +1330,7 @@ ttext::ttext(const config& cfg)
 	}
 }
 
-void ttext::draw(surface& canvas
+void ttext::draw(SDL_Surface& canvas
 		, const game_logic::map_formula_callable& variables)
 {
 	assert(variables.has_key("text"));
@@ -1360,7 +1360,7 @@ void ttext::draw(surface& canvas
 				: PANGO_ELLIPSIZE_END)
 			.set_characters_per_line(characters_per_line_);
 
-	surface surf = text_renderer.render();
+	SDL_Surface surf = text_renderer.render();
 	if(surf->w == 0) {
 		DBG_GUI_D  << "Text: Rendering '"
 				<< text << "' resulted in an empty canvas, leave.\n";
@@ -1453,25 +1453,25 @@ void tcanvas::draw(const bool force)
 	is_dirty_ = false;
 }
 
-void tcanvas::blit(surface& surf, SDL_Rect rect)
+void tcanvas::blit(SDL_Surface& surf, SDL_Rect rect)
 {
 	draw();
 
 	if(blur_depth_) {
 		if(is_neutral(surf)) {
-			blur_surface(surf, rect, blur_depth_);
+			surface_blur(surf, rect, blur_depth_);
 		} else {
-			// Can't directly blur the surface if not 32 bpp.
+			// Can't directly blur the SDL_Surface if not 32 bpp.
 			SDL_Rect r = rect;
 			///@todo we should use: get_surface_portion(surf, r, false)
-			///no need to optimize format, since blur_surface will undo it
-			surface s = get_surface_portion(surf, r, true);
-			s = blur_surface(s, blur_depth_);
-			sdl_blit(s, NULL, surf, &rect);
+			///no need to optimize format, since blur_SDL_Surface will undo it
+			SDL_Surface s = get_surface_portion(surf, r, true);
+			s = surface_blur(s, blur_depth_);
+			SDL_BlitSurface(s, nullptr, surf, &rect);
 		}
 	}
 
-	sdl_blit(canvas_, NULL, surf, &rect);
+	SDL_BlitSurface(canvas_, nullptr, surf, &rect);
 }
 
 void tcanvas::parse_cfg(const config& cfg)

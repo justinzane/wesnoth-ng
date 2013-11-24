@@ -37,7 +37,7 @@ public:
 	tminimap() :
 		tcontrol(1),
 		map_data_(),
-		terrain_(NULL)
+		terrain_(nullptr)
 	{
 	}
 
@@ -84,16 +84,16 @@ private:
 	 * @param w                   The wanted width of the image.
 	 * @param h                   The wanted height of the image.
 	 *
-	 * @returns                   The image, NULL upon error.
+	 * @returns                   The image, nullptr upon error.
 	 */
-	const surface get_image(const int w, const int h) const;
+	const SDL_Surface get_image(const int w, const int h) const;
 
 	/** See @ref twidget::impl_draw_background. */
-	virtual void impl_draw_background(surface& frame_buffer) OVERRIDE;
+	virtual void impl_draw_background(SDL_Surface& frame_buffer) OVERRIDE;
 
 	/** See @ref twidget::impl_draw_background. */
 	virtual void impl_draw_background(
-			  surface& frame_buffer
+			  SDL_Surface& frame_buffer
 			, int x_offset
 			, int y_offset) OVERRIDE;
 

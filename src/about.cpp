@@ -180,8 +180,8 @@ void show_about(display &disp, const std::string &campaign)
 {
 	boost::scoped_ptr<cursor::setter> cur(new cursor::setter(cursor::WAIT));
 	CVideo &video = disp.video();
-	surface screen = video.getSurface();
-	if (screen == NULL) return;
+	SDL_Surface screen = video.getSurface();
+	if (screen == nullptr) return;
 
 	std::vector<std::string> text = about::get_text(campaign);
 	SDL_Rect screen_rect = create_rect(0, 0, screen->w, screen->h);
@@ -197,7 +197,7 @@ void show_about(display &disp, const std::string &campaign)
 		image_list = utils::parenthetical_split(images_default, ',');
 	}
 
-	surface map_image;
+	SDL_Surface map_image;
 
 	if(!image_list.empty()) {
 		map_image = scale_surface(image::get_image(image_list[0]), screen->w, screen->h);
@@ -269,7 +269,7 @@ void show_about(display &disp, const std::string &campaign)
 	CKey key;
 	bool last_escape;
 
-	surface text_surf = create_compatible_surface(screen, text_rect.w, text_rect.h);
+	SDL_Surface text_surf = create_compatible_surface(screen, text_rect.w, text_rect.h);
 	SDL_SetAlpha(text_surf, SDL_RLEACCEL, SDL_ALPHA_OPAQUE);
 
 	int image_count = 0;
@@ -288,27 +288,27 @@ void show_about(display &disp, const std::string &campaign)
 				static_cast<int>(text.size())))){
 
 			image_count++;
-			surface temp=scale_surface(image::get_image(image_list[image_count]), screen->w, screen->h);
+			SDL_Surface temp=scale_surface(image::get_image(image_list[image_count]), screen->w, screen->h);
 			map_image=temp?temp:map_image;
 			redraw_mapimage = true;
 		}
 
 		if (redraw_mapimage) {
 			// draw map to screen, thus erasing all text
-			sdl_blit(map_image, NULL, screen, NULL);
+			SDL_BlitSurface(map_image, nullptr, screen, nullptr);
 			update_rect(screen_rect);
 
 			// redraw the dialog
 			f.draw_background();
 			f.draw_border();
 			// cache the dialog background (alpha blending + blurred map)
-			sdl_blit(screen, &text_rect, text_surf, NULL);
+			SDL_BlitSurface(screen, &text_rect, text_surf, nullptr);
 			redraw_mapimage = false;
 		} else {
 			// redraw the saved part of the dialog where text scrolled
 			// thus erasing all text
 			SDL_Rect modified = create_rect(0, 0, max_text_width, text_rect.h);
-			sdl_blit(text_surf, &modified, screen, &text_rect_blit);
+			SDL_BlitSurface(text_surf, &modified, screen, &text_rect_blit);
 			update_rect(text_rect);
 		}
 
@@ -330,7 +330,7 @@ void show_about(display &disp, const std::string &campaign)
 				// since the real drawing on screen is clipped,
 				// we do a dummy one to get the height of the not clipped line.
 				// (each time because special format characters may change it)
-				const int line_height = font::draw_text(NULL, text_rect, def_size, def_color,
+				const int line_height = font::draw_text(nullptr, text_rect, def_size, def_color,
 										text[line], 0,0).h;
 
 				if(is_new_line) {

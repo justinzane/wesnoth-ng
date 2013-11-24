@@ -149,7 +149,7 @@ public:
 	/**
 	 * Shows the window.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @param auto_close_time     The time in ms after which the dialog will
 	 *                            automatically close, if 0 it doesn't close.
@@ -344,7 +344,7 @@ private:
 	 * Every dialog shows it's own kind of window, this function should return
 	 * the window to show.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @returns                   The window to show.
 	 */
@@ -355,7 +355,7 @@ private:
 	 *
 	 * At this point the registered fields are not yet registered.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @param window              The window just created.
 	 */
@@ -367,7 +367,7 @@ private:
 	 * At this point the registered fields are registered and initialized with
 	 * their initial values.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @param window              The window to be shown.
 	 */

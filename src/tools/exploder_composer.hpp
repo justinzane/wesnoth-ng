@@ -27,7 +27,7 @@ class composer
 public:
 	composer();
 
-	surface compose(const std::string &src, const std::string &dest);
+	SDL_Surface compose(const std::string &src, const std::string &dest);
 
 	void set_interactive(bool value);
 	void set_verbose(bool value);

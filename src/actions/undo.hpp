@@ -69,10 +69,10 @@ class undo_list : boost::noncopyable {
 				view_info(new clearer_info(cfg))
 			{}
 		/// Default constructor.
-		/// This is the only way to get NULL view_info.
+		/// This is the only way to get nullptr view_info.
 		undo_action() :
 				route(),
-				view_info(NULL)
+				view_info(nullptr)
 			{}
 		// Virtual destructor to support derived classes.
 		virtual ~undo_action();
@@ -94,7 +94,7 @@ class undo_list : boost::noncopyable {
 		/// The hexes occupied by the affected unit during this action.
 		std::vector<map_location> route;
 		/// A record of the affected unit's ability to see.
-		/// For derived classes that use this, it must be never NULL.
+		/// For derived classes that use this, it must be never nullptr.
 		clearer_info * const view_info;
 		// This pointer is the reason for deriving from noncopyable (an
 		// alternative would be to implement deep copies, but we have no

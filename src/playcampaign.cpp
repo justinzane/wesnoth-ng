@@ -256,7 +256,7 @@ static LEVEL_RESULT playsingle_scenario(const config& game_config,
 	end_level.write(cfg_end_level);
 
 	if (res == DEFEAT) {
-		if (resources::persist != NULL)
+		if (resources::persist != nullptr)
 			resources::persist->end_transaction();
 		gui2::show_transient_message(disp.video(),
 				    _("Defeat"),
@@ -306,7 +306,7 @@ static LEVEL_RESULT playmp_scenario(const config& game_config,
 		io_type = IO_SERVER;
 
 	if (res == DEFEAT) {
-		if (resources::persist != NULL)
+		if (resources::persist != nullptr)
 			resources::persist->end_transaction();
 		gui2::show_transient_message(disp.video(),
 				    _("Defeat"),
@@ -350,7 +350,7 @@ LEVEL_RESULT play_game(game_display& disp, game_state& gamestate,
 	if(type.empty())
 		type = "scenario";
 
-	config const* scenario = NULL;
+	config const* scenario = nullptr;
 
 	// 'starting_pos' will contain the position we start the game from.
 	config starting_pos;
@@ -381,9 +381,9 @@ LEVEL_RESULT play_game(game_display& disp, game_state& gamestate,
 			scenario = &game_config.find_child(type, "id", sides.next_scenario());
 
 			if(!*scenario){
-				scenario = NULL;
+				scenario = nullptr;
 			}
-			LOG_G << "scenario found: " << (scenario != NULL ? "yes" : "no") << "\n";
+			LOG_G << "scenario found: " << (scenario != nullptr ? "yes" : "no") << "\n";
 
 		}
 	} else {
@@ -405,7 +405,7 @@ LEVEL_RESULT play_game(game_display& disp, game_state& gamestate,
 
 	gamestate.carryover_sides_start = sides.to_config();
 
-	while(scenario != NULL) {
+	while(scenario != nullptr) {
 		// If we are a multiplayer client, tweak the controllers
 		if(io_type == IO_CLIENT) {
 			if(scenario != &starting_pos) {
@@ -564,13 +564,13 @@ LEVEL_RESULT play_game(game_display& disp, game_state& gamestate,
 			scenario = &game_config.find_child(type, "id",
 				gamestate.carryover_sides_start["next_scenario"]);
 			if (!*scenario) {
-				scenario = NULL;
+				scenario = nullptr;
 			} else {
 				starting_pos = *scenario;
 				scenario = &starting_pos;
 			}
 
-			if (io_type == IO_SERVER && scenario != NULL) {
+			if (io_type == IO_SERVER && scenario != nullptr) {
 				mp_game_settings& params = gamestate.mp_settings();
 
 				// A hash have to be generated using an unmodified
@@ -632,7 +632,7 @@ LEVEL_RESULT play_game(game_display& disp, game_state& gamestate,
 			}
 		}
 
-		if(scenario != NULL) {
+		if(scenario != nullptr) {
 			// Update the label
 			if (gamestate.classification().abbrev.empty())
 				gamestate.classification().label = (*scenario)["name"].str();

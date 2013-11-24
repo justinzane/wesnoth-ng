@@ -108,14 +108,14 @@ public:
 	virtual void set_origin(const tpoint& origin) OVERRIDE;
 
 	/** See @ref twidget::set_visible_rectangle. */
-	virtual void set_visible_rectangle(const SDL_Rect& rectangle) OVERRIDE;
+	virtual void set_visible_rectangle(const SDL_Rect* rectangle) OVERRIDE;
 
 	/** See @ref twidget::impl_draw_children. */
-	virtual void impl_draw_children(surface& frame_buffer) OVERRIDE;
+	virtual void impl_draw_children(SDL_Surface& frame_buffer) OVERRIDE;
 
 	/** See @ref twidget::impl_draw_children. */
 	virtual void impl_draw_children(
-			  surface& frame_buffer
+			  SDL_Surface& frame_buffer
 			, int x_offset
 			, int y_offset) OVERRIDE;
 
@@ -160,7 +160,7 @@ public:
 	 *
 	 * @todo Implement properly.
 	 */
-	virtual iterator::twalker_* create_walker() OVERRIDE { return NULL; }
+	virtual iterator::twalker_* create_walker() OVERRIDE { return nullptr; }
 
 	/**
 	 * Initializes and builds the grid.

@@ -31,8 +31,8 @@ static const std::string root = "data/test/test/image";
 
 static void
 compare_image(
-		  const surface& src
-		, const surface& dst
+		  const SDL_Surface& src
+		, const SDL_Surface& dst
 		, const std::string message)
 {
 	BOOST_REQUIRE_MESSAGE(
@@ -79,7 +79,7 @@ compare_image(
 }
 
 static void
-test_blend(const surface& dst, const Uint8 amount, const Uint32 color)
+test_blend(const SDL_Surface& dst, const Uint8 amount, const Uint32 color)
 {
 	std::stringstream sstr;
 	sstr << std::hex << std::setfill('0')
@@ -94,7 +94,7 @@ test_blend(const surface& dst, const Uint8 amount, const Uint32 color)
 
 	BOOST_REQUIRE_EQUAL(image::exists(filename), true);
 
-	const surface& src = image::get_image(filename);
+	const SDL_Surface& src = image::get_image(filename);
 	compare_image(src, dst, sstr.str());
 }
 
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE(test_blend_surface)
 
 	BOOST_REQUIRE_EQUAL(image::exists(root + "/base.png"), true);
 
-	const surface base = image::get_image(root + "/base.png");
+	const SDL_Surface base = image::get_image(root + "/base.png");
 
 	blend_image(base, boost::bind(&test_blend, _1, _2, _3));
 }

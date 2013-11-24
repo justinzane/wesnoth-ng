@@ -71,7 +71,7 @@ bool persist_file_context::clear_var(const std::string &global, bool immediate)
 		load();
 	}
 	config *active = get_node(cfg_, namespace_);
-	if (active == NULL)
+	if (active == nullptr)
 		return false;
 
 	bool ret = active->has_child("variables");
@@ -120,7 +120,7 @@ bool persist_file_context::clear_var(const std::string &global, bool immediate)
 				ret = save_context();
 				cfg_ = bak;
 				active = get_node(cfg_, namespace_);
-				if (active != NULL) {
+				if (active != nullptr) {
 					active->clear_children("variables");
 					active->remove_attribute("variables");
 					if (!bactive.empty())
@@ -133,7 +133,7 @@ bool persist_file_context::clear_var(const std::string &global, bool immediate)
 			if (immediate) {
 				cfg_ = bak;
 				config *active = get_node(cfg_, namespace_);
-				if (active != NULL) {
+				if (active != nullptr) {
 					active->clear_children("variables");
 					active->remove_attribute("variables");
 					if (!bactive.empty())
@@ -148,7 +148,7 @@ bool persist_file_context::clear_var(const std::string &global, bool immediate)
 		active = get_node(cfg_, prev);
 		/// @todo: This assertion replaces a seg fault. Still need to fix the
 		/// real bug (documented as bug #21093).
-		assert(active != NULL);
+		assert(active != nullptr);
 		active->clear_children(namespace_.node_);
 		if (active->has_child("variables") && active->child("variables").empty()) {
 			active->clear_children("variables");

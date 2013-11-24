@@ -36,7 +36,7 @@ tlistbox_definition::tlistbox_definition(const config& cfg)
 
 tlistbox_definition::tresolution::tresolution(const config& cfg)
 	: tresolution_definition_(cfg)
-	, grid(NULL)
+	, grid(nullptr)
 {
 /*WIKI
  * @page = GUIWidgetDefinitionWML

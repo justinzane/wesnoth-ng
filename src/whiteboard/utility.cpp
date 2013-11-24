@@ -79,20 +79,20 @@ unit const* find_backup_leader(unit const& leader)
 				return &unit;
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 unit* find_recruiter(size_t team_index, map_location const& hex)
 {
 	if ( !resources::game_map->is_castle(hex) )
-		return NULL;
+		return nullptr;
 
 	foreach_ng(unit& u, *resources::units)
 		if(u.can_recruit()
 				&& u.side() == static_cast<int>(team_index+1)
 				&& can_recruit_on(u, hex))
 			return &u;
-	return NULL;
+	return nullptr;
 }
 
 unit* future_visible_unit(map_location hex, int viewer_side)
@@ -101,7 +101,7 @@ unit* future_visible_unit(map_location hex, int viewer_side)
 	if(!resources::whiteboard->has_planned_unit_map())
 	{
 		ERR_WB << "future_visible_unit cannot find unit, future unit map failed to build.\n";
-		return NULL;
+		return nullptr;
 	}
 	//use global method get_visible_unit
 	return get_visible_unit(hex, resources::teams->at(viewer_side - 1), false);
@@ -113,7 +113,7 @@ unit* future_visible_unit(int on_side, map_location hex, int viewer_side)
 	if (unit && unit->side() == on_side)
 		return unit;
 	else
-		return NULL;
+		return nullptr;
 }
 
 int path_cost(std::vector<map_location> const& path, unit const& u)

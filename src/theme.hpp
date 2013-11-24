@@ -24,7 +24,7 @@
 #ifndef THEME_HPP_INCLUDED
 #define THEME_HPP_INCLUDED
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include "config.hpp"
 #include "generic_event.hpp"
 
@@ -40,8 +40,8 @@ class theme
 		object(const config& cfg);
 		virtual ~object() { }
 
-		SDL_Rect& location(const SDL_Rect& screen) const;
-		const SDL_Rect& get_location() const { return loc_; }
+		SDL_Rect* location(const SDL_Rect* screen) const;
+		const SDL_Rect* get_location() const { return loc_; }
 		const std::string& get_id() const { return id_; }
 
 		// This supports relocating of theme elements ingame.
@@ -140,7 +140,7 @@ public:
 		const std::string& postfix() const { return postfix_; }
 
 		// If the item has a label associated with it, Show where the label is
-		const label* get_label() const { return label_.empty() ? NULL : &label_; }
+		const label* get_label() const { return label_.empty() ? nullptr : &label_; }
 
 		size_t font_size() const { return font_; }
 		Uint32 font_rgb() const { return font_rgb_; }
@@ -250,8 +250,8 @@ public:
 		std::vector<std::string> items_;
 	};
 
-	explicit theme(const config& cfg, const SDL_Rect& screen);
-	bool set_resolution(const SDL_Rect& screen);
+	explicit theme(const config& cfg, const SDL_Rect* screen);
+	bool set_resolution(const SDL_Rect* screen);
 	void modify(const config &cfg);
 
 	const std::vector<panel>& panels() const { return panels_; }
@@ -261,7 +261,7 @@ public:
 	const std::vector<action>& actions() const { return actions_; }
 
 	const menu* context_menu() const
-		{ return context_.is_context() ? &context_ : NULL; }
+		{ return context_.is_context() ? &context_ : nullptr; }
 
 	//refresh_title2 changes the title of a menu entry, identified by id.
 	//If no menu entry is found, an empty menu object is returned.
@@ -273,13 +273,13 @@ public:
 	const menu *get_menu_item(const std::string &key) const;
 	const action* get_action_item(const std::string &key) const;
 
-	const SDL_Rect& main_map_location(const SDL_Rect& screen) const
+	const SDL_Rect* main_map_location(const SDL_Rect* screen) const
 		{ return main_map_.location(screen); }
-	const SDL_Rect& mini_map_location(const SDL_Rect& screen) const
+	const SDL_Rect* mini_map_location(const SDL_Rect* screen) const
 		{ return mini_map_.location(screen); }
-	const SDL_Rect& unit_image_location(const SDL_Rect& screen) const
+	const SDL_Rect* unit_image_location(const SDL_Rect* screen) const
 		{ return unit_image_.location(screen); }
-	const SDL_Rect& palette_location(const SDL_Rect& screen) const
+	const SDL_Rect* palette_location(const SDL_Rect* screen) const
 		{ return palette_.location(screen); }
 
     static void set_known_themes(const config* cfg);

@@ -807,7 +807,7 @@ static int attack_info(const attack_type &at, config &res, const unit &u, const 
 		// Aliases for readability:
 		const t_string &name = specials[i].first;
 		const t_string &description = specials[i].second;
-		const SDL_Color &details_color = active[i] ? font::weapon_details_color :
+		const SDL_Color* details_color = active[i] ? font::weapon_details_color :
 		                                             font::inactive_details_color;
 
 		str << span_color(details_color) << "  " << name << naps << '\n';
@@ -864,7 +864,7 @@ static config unit_weapons(const unit *attacker, const map_location &attacker_po
 	for (unsigned int i = 0; i < attacker->attacks().size(); i++) {
 		// skip weapons with attack_weight=0
 		if (attacker->attacks()[i].attack_weight() > 0) {
-			battle_context weapon(*resources::units, attacker_pos, defender->get_location(), i, -1, 0.0, NULL, attacker);
+			battle_context weapon(*resources::units, attacker_pos, defender->get_location(), i, -1, 0.0, nullptr, attacker);
 			weapons.push_back(weapon);
 		}
 	}
@@ -1463,7 +1463,7 @@ REPORT_GENERATOR(editor_tool_hint)
 
 REPORT_GENERATOR(report_clock)
 {
-	time_t t = std::time(NULL);
+	time_t t = std::time(nullptr);
 	struct tm *lt = std::localtime(&t);
 	if (!lt) return report();
 	char temp[15];

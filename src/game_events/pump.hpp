@@ -94,7 +94,7 @@ namespace game_events
 	private:
 		static event_context * current_context_;
 		static bool rebuild_screen_;
-		/// A default value used to avoid NULL pointers.
+		/// A default value used to avoid nullptr pointers.
 		static event_context default_context_;
 	};
 

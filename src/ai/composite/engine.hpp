@@ -127,7 +127,7 @@ public:
 
 	static factory_map& get_list() {
 		static factory_map *engine_factories;
-		if (engine_factories==NULL) {
+		if (engine_factories==nullptr) {
 			engine_factories = new factory_map;
 		}
 		return *engine_factories;

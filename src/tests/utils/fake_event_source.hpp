@@ -22,7 +22,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <queue>
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 #include "events.hpp"
 

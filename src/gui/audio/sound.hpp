@@ -27,7 +27,7 @@ class config;
 namespace sound {
 
 enum channel_group {
-	NULL_CHANNEL = -1,
+	nullptr_CHANNEL = -1,
 	SOUND_SOURCES = 0,
 	SOUND_BELL,
 	SOUND_TIMER,

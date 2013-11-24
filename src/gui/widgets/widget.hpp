@@ -198,7 +198,7 @@ public:
 	 * Get the parent window.
 	 *
 	 * @returns                   Pointer to parent window.
-	 * @retval NULL               No parent window found.
+	 * @retval nullptr               No parent window found.
 	 */
 	twindow* get_window();
 
@@ -216,7 +216,7 @@ public:
 	 * function will be removed.
 	 *
 	 * @returns                   The top-level dialogue.
-	 * @retval NULL               No top-level window or the top-level window is
+	 * @retval nullptr               No top-level window or the top-level window is
 	 *                            not owned by a dialogue.
 	 */
 	tdialog* dialog();
@@ -234,7 +234,7 @@ private:
 	 * The parent widget.
 	 *
 	 * If the widget has a parent it contains a pointer to the parent, else it
-	 * is set to @c NULL.
+	 * is set to @c nullptr.
 	 */
 	twidget* parent_;
 
@@ -555,14 +555,14 @@ public:
 	 * Derived should override @ref impl_draw_background instead of changing
 	 * this function.
 	 *
-	 * @param frame_buffer        The surface to draw upon.
+	 * @param frame_buffer        The SDL_Surface to draw upon.
 	 * @param x_offset            The offset in the x-direction in the
 	 *                            @p frame_buffer to draw.
 	 * @param y_offset            The offset in the y-direction in the
 	 *                            @p frame_buffer to draw.
 	 */
-	void draw_background(surface& frame_buffer, int x_offset, int y_offset);
-	void draw_background(surface& frame_buffer);
+	void draw_background(SDL_Surface& frame_buffer, int x_offset, int y_offset);
+	void draw_background(SDL_Surface& frame_buffer);
 
 	/**
 	 * Draws the children of a widget.
@@ -572,14 +572,14 @@ public:
 	 * Derived should override @ref impl_draw_children instead of changing
 	 * this function.
 	 *
-	 * @param frame_buffer        The surface to draw upon.
+	 * @param frame_buffer        The SDL_Surface to draw upon.
 	 * @param x_offset            The offset in the x-direction in the
 	 *                            @p frame_buffer to draw.
 	 * @param y_offset            The offset in the y-direction in the
 	 *                            @p frame_buffer to draw.
 	 */
-	void draw_children(surface& frame_buffer, int x_offset, int y_offset);
-	void draw_children(surface& frame_buffer);
+	void draw_children(SDL_Surface& frame_buffer, int x_offset, int y_offset);
+	void draw_children(SDL_Surface& frame_buffer);
 
 	/**
 	 * Draws the foreground of the widget.
@@ -590,39 +590,39 @@ public:
 	 * Derived should override @ref impl_draw_foreground instead of changing
 	 * this function.
 	 *
-	 * @param frame_buffer        The surface to draw upon.
+	 * @param frame_buffer        The SDL_Surface to draw upon.
 	 * @param x_offset            The offset in the x-direction in the
 	 *                            @p frame_buffer to draw.
 	 * @param y_offset            The offset in the y-direction in the
 	 *                            @p frame_buffer to draw.
 	 */
-	void draw_foreground(surface& frame_buffer, int x_offset, int y_offset);
-	void draw_foreground(surface& frame_buffer);
+	void draw_foreground(SDL_Surface& frame_buffer, int x_offset, int y_offset);
+	void draw_foreground(SDL_Surface& frame_buffer);
 
 private:
 
 	/** See @ref draw_background. */
-	virtual void impl_draw_background(surface& /*frame_buffer*/) {}
+	virtual void impl_draw_background(SDL_Surface* /*frame_buffer*/) {}
 	virtual void impl_draw_background(
-			  surface& /*frame_buffer*/
+			  SDL_Surface* /*frame_buffer*/
 			, int /*x_offset*/
 			, int /*y_offset*/)
 	{
 	}
 
 	/** See @ref draw_children. */
-	virtual void impl_draw_children(surface& /*frame_buffer*/) {}
+	virtual void impl_draw_children(SDL_Surface* /*frame_buffer*/) {}
 	virtual void impl_draw_children(
-			surface& /*frame_buffer*/
+			SDL_Surface* /*frame_buffer*/
 			, int /*x_offset*/
 			, int /*y_offset*/)
 	{
 	}
 
 	/** See @ref draw_foreground. */
-	virtual void impl_draw_foreground(surface& /*frame_buffer*/) {}
+	virtual void impl_draw_foreground(SDL_Surface* /*frame_buffer*/) {}
 	virtual void impl_draw_foreground(
-			  surface& /*frame_buffer*/
+			  SDL_Surface* /*frame_buffer*/
 			, int /*x_offset*/
 			, int /*y_offset*/)
 	{
@@ -685,7 +685,7 @@ public:
 	 *
 	 * @param rectangle           The visible rectangle in screen coordinates.
 	 */
-	virtual void set_visible_rectangle(const SDL_Rect& rectangle);
+	virtual void set_visible_rectangle(const SDL_Rect* rectangle);
 
 	/*** *** *** *** *** *** Setters and getters. *** *** *** *** *** ***/
 
@@ -747,13 +747,13 @@ private:
 	/** The colour for the debug border. */
 	unsigned debug_border_colour_;
 
-	void draw_debug_border(surface& frame_buffer);
-	void draw_debug_border(surface& frame_buffer, int x_offset, int y_offset);
+	void draw_debug_border(SDL_Surface& frame_buffer);
+	void draw_debug_border(SDL_Surface& frame_buffer, int x_offset, int y_offset);
 
 #else
 
-	void draw_debug_border(surface&) {}
-	void draw_debug_border(surface&, int, int) {}
+	void draw_debug_border(SDL_Surface*) {}
+	void draw_debug_border(SDL_Surface*, int, int) {}
 
 #endif
 
@@ -772,7 +772,7 @@ public:
 	 *                            flag.
 	 *
 	 * @returns                   The widget with the id.
-	 * @retval NULL               No widget at the wanted coordinate found (or
+	 * @retval nullptr               No widget at the wanted coordinate found (or
 	 *                            not active if must_be_active was set).
 	 */
 	virtual twidget* find_at(
@@ -796,7 +796,7 @@ public:
 	 *                            flag.
 	 *
 	 * @returns                   The widget with the id.
-	 * @retval NULL               No widget with the id found (or not active if
+	 * @retval nullptr               No widget with the id found (or not active if
 	 *                            must_be_active was set).
 	 */
 	virtual twidget* find(

@@ -31,14 +31,14 @@
 
 namespace {
 
-CVideo* video_ = NULL;
+CVideo* video_ = nullptr;
 
 static const int font_size = font::SIZE_SMALL;
 static const int text_width = 400;
 
 struct tooltip
 {
-	tooltip(const SDL_Rect& r, const std::string& msg, const std::string& act = "", bool use_markup = false)
+	tooltip(const SDL_Rect* r, const std::string& msg, const std::string& act = "", bool use_markup = false)
 	: rect(r), message(msg), action(act), markup(use_markup)
 	{}
 	SDL_Rect rect;
@@ -52,7 +52,7 @@ std::vector<tooltip>::const_iterator current_tooltip = tips.end();
 
 int tooltip_handle = 0;
 
-surface current_background = NULL;
+SDL_Surface current_background = nullptr;
 
 }
 
@@ -66,7 +66,7 @@ static void clear_tooltip()
 
 static void show_tooltip(const tooltip& tip)
 {
-	if(video_ == NULL) {
+	if(video_ == nullptr) {
 		return;
 	}
 
@@ -119,7 +119,7 @@ manager::manager(CVideo& video)
 manager::~manager()
 {
 	clear_tooltips();
-	video_ = NULL;
+	video_ = nullptr;
 }
 
 void clear_tooltips()
@@ -129,7 +129,7 @@ void clear_tooltips()
 	current_tooltip = tips.end();
 }
 
-void clear_tooltips(const SDL_Rect& rect)
+void clear_tooltips(const SDL_Rect* rect)
 {
 	for(std::vector<tooltip>::iterator i = tips.begin(); i != tips.end(); ) {
 		if(rects_overlap(i->rect,rect)) {
@@ -144,7 +144,7 @@ void clear_tooltips(const SDL_Rect& rect)
 	}
 }
 
-void add_tooltip(const SDL_Rect& rect, const std::string& message, const std::string& action, bool use_markup)
+void add_tooltip(const SDL_Rect* rect, const std::string& message, const std::string& action, bool use_markup)
 {
 	for(std::vector<tooltip>::iterator i = tips.begin(); i != tips.end(); ++i) {
 		if(rects_overlap(i->rect,rect)) {
@@ -178,7 +178,7 @@ void process(int mousex, int mousey)
 bool click(int mousex, int mousey)
 {
 	foreach_ng(tooltip tip, tips) {
-		if(!tip.action.empty() && point_in_rect(mousex, mousey, tip.rect)) {
+		if(!tip.action.empty() && is_point_in_rect(mousex, mousey, tip.rect)) {
 			display* disp = resources::screen;
 			help::show_help(*disp, tip.action);
 			return true;

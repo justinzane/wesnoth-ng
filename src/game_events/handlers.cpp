@@ -329,7 +329,7 @@ void remove_wmi_change(const std::string & id)
 			continue;
 		}
 		delete wcc->second;
-		wcc->second = NULL;
+		wcc->second = nullptr;
 		wcc = wmi_command_changes.erase(wcc);
 	}
 }
@@ -352,7 +352,7 @@ manager::manager(const config& cfg)
 
 	// Guard against a memory leak (now) / memory corruption (when this is deleted).
 	// This is why creating multiple manager objects is prohibited.
-	assert(resources::lua_kernel == NULL);
+	assert(resources::lua_kernel == nullptr);
 	resources::lua_kernel = new LuaKernel(cfg);
 
 	wml_action::map::const_iterator action_end = wml_action::end();
@@ -379,7 +379,7 @@ manager::~manager() {
 	hotkey::delete_all_wml_hotkeys();
 	reports::reset_generators();
 	delete resources::lua_kernel;
-	resources::lua_kernel = NULL;
+	resources::lua_kernel = nullptr;
 	unit_wml_ids.clear();
 	used_items.clear();
 }
@@ -526,7 +526,7 @@ void write_events(config& cfg)
 	if (resources::soundsources)
 		resources::soundsources->write_sourcespecs(cfg);
 
-	assert(resources::lua_kernel != NULL);
+	assert(resources::lua_kernel != nullptr);
 	resources::lua_kernel->save_game(cfg);
 }
 

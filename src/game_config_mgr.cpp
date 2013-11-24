@@ -64,7 +64,7 @@ game_config_manager::game_config_manager(
 
 game_config_manager::~game_config_manager()
 {
-	resources::config_manager = NULL;
+	resources::config_manager = nullptr;
 }
 
 bool game_config_manager::init_game_config(FORCE_RELOAD_CONFIG force_reload)
@@ -109,7 +109,7 @@ void game_config_manager::load_game_config(FORCE_RELOAD_CONFIG force_reload,
 		return;
 	}
 
-	loadscreen::global_loadscreen_manager loadscreen_manager(disp_.video());
+	loadscreen::loadscreen_mgr loadscreen_manager(disp_.video());
 	cursor::setter cur(cursor::WAIT);
 
 	// The loadscreen will erase the titlescreen.
@@ -140,7 +140,7 @@ void game_config_manager::load_game_config(FORCE_RELOAD_CONFIG force_reload,
 		// If multiplayer campaign is being loaded, [scenario] tags should
 		// become [multiplayer] tags and campaign's id should be added to them
 		// to allow to recognize which scenarios belongs to a loaded campaign.
-		if (classification != NULL) {
+		if (classification != nullptr) {
 			if (classification->campaign_type == "multiplayer" &&
 				!classification->campaign_define.empty()) {
 

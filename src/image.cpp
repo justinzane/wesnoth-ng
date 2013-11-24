@@ -36,7 +36,7 @@
 #include "gettext.hpp"
 #include "serdes/string_utils.hpp"
 
-#include "SDL_image.h"
+#include "SDL2/SDL_image.h"
 
 #include <boost/functional/hash.hpp>
 #include "global.hpp"
@@ -439,9 +439,9 @@ static std::string get_localized_path (const std::string& file, const std::strin
 }
 
 // Load overlay image and compose it with the original surface.
-static void add_localized_overlay (const std::string& ovr_file, surface &orig_surf)
+static void add_localized_overlay (const std::string& ovr_file, SDL_Surface &orig_surf)
 {
-	surface ovr_surf = IMG_Load(ovr_file.c_str());
+	SDL_Surface ovr_surf = IMG_Load(ovr_file.c_str());
 	if (ovr_surf.null()) {
 		return;
 	}
@@ -450,12 +450,12 @@ static void add_localized_overlay (const std::string& ovr_file, surface &orig_su
 	area.y = 0;
 	area.w = ovr_surf->w;
 	area.h = ovr_surf->h;
-	sdl_blit(ovr_surf, 0, orig_surf, &area);
+	SDL_BlitSurface(ovr_surf, 0, orig_surf, &area);
 }
 
-surface locator::load_image_file() const
+SDL_Surface locator::load_image_file() const
 {
-	surface res;
+	SDL_Surface res;
 
 	std::string location = get_binary_file_location("images", val_.filename_);
 
@@ -502,7 +502,7 @@ light_string get_light_string(int op, int r, int g, int b){
 	return ls;
 }
 
-static surface apply_light(surface surf, const light_string& ls){
+static SDL_Surface apply_light(SDL_Surface surf, const light_string& ls){
 	// atomic lightmap operation are handled directly (important to end recursion)
 	if(ls.size() == 4){
 		//if no lightmap (first char = -1) then we need the initial value
@@ -512,7 +512,7 @@ static surface apply_light(surface surf, const light_string& ls){
 	}
 
 	// check if the lightmap is already cached or need to be generated
-	surface lightmap = NULL;
+	SDL_Surface lightmap = nullptr;
 	lit_variants::iterator i = lightmaps_.find(ls);
 	if(i != lightmaps_.end()) {
 		lightmap = i->second;
@@ -531,13 +531,13 @@ static surface apply_light(surface surf, const light_string& ls){
 			//get the corresponding image and apply the lightmap operation to it
 			//This allows to also cache lightmap parts.
 			//note that we avoid infinite recursion by using only atomic operation
-			surface lts = image::get_lighted_image(lm_img[sls[0]], sls, HEXED);
+			SDL_Surface lts = image::get_lighted_image(lm_img[sls[0]], sls, HEXED);
 			//first image will be the base where we blit the others
-			if(lightmap == NULL) {
+			if(lightmap == nullptr) {
 				//copy the cached image to avoid modifying the cache
 				lightmap = make_neutral_surface(lts);
 			} else{
-				blit_surface(lts, NULL, lightmap, NULL);
+				blit_surface(lts, nullptr, lightmap, nullptr);
 			}
 		}
 		//cache the result
@@ -547,11 +547,11 @@ static surface apply_light(surface surf, const light_string& ls){
 	return light_surface(surf, lightmap);
 }
 
-surface locator::load_image_sub_file() const
+SDL_Surface locator::load_image_sub_file() const
 {
-	surface surf = get_image(val_.filename_, UNSCALED);
-	if(surf == NULL)
-		return NULL;
+	SDL_Surface surf = get_image(val_.filename_, UNSCALED);
+	if(surf == nullptr)
+		return nullptr;
 
 	modification_queue mods = modification::decode(val_.modifications_);
 
@@ -583,7 +583,7 @@ surface locator::load_image_sub_file() const
 		}
 
 		// cut and hex mask, but also check and cache if empty result
-		surface cut(cut_surface(surf, srcrect));
+		SDL_Surface cut(cut_surface(surf, srcrect));
 		bool is_empty = false;
 		surf = mask_surface(cut, get_hexmask(), &is_empty);
 		// discard empty images to free memory
@@ -591,7 +591,7 @@ surface locator::load_image_sub_file() const
 			// Safe because those images are only used by terrain rendering
 			// and it filters them out.
 			// A safer and more general way would be to keep only one copy of it
-			surf = NULL;
+			surf = nullptr;
 		}
 		add_to_cache(is_empty_hex_, is_empty);
 	}
@@ -604,7 +604,7 @@ bool locator::file_exists() const
 	return !get_binary_file_location("images", val_.filename_).empty();
 }
 
-surface locator::load_from_disk() const
+SDL_Surface locator::load_from_disk() const
 {
 	switch(val_.type_) {
 		case FILE:
@@ -612,7 +612,7 @@ surface locator::load_from_disk() const
 		case SUB_FILE:
 			return load_image_sub_file();
 		default:
-			return surface(NULL);
+			return surface(nullptr);
 	}
 }
 
@@ -628,7 +628,7 @@ SDL_PixelFormat last_pixel_format;
 
 void set_pixel_format(SDL_PixelFormat* format)
 {
-	assert(format != NULL);
+	assert(format != nullptr);
 
 	SDL_PixelFormat &f = *format;
 	SDL_PixelFormat &l = last_pixel_format;
@@ -688,7 +688,7 @@ void color_adjustment_resetter::reset()
 
 void set_team_colors(const std::vector<std::string>* colors)
 {
-	if (colors == NULL)
+	if (colors == nullptr)
 		team_colors.clear();
 	else {
 		team_colors = *colors;
@@ -720,45 +720,45 @@ void set_zoom(int amount)
 	}
 }
 
-static surface get_hexed(const locator& i_locator)
+static SDL_Surface get_hexed(const locator& i_locator)
 {
-	surface image(get_image(i_locator, UNSCALED));
+	SDL_Surface image(get_image(i_locator, UNSCALED));
 	// hex cut tiles, also check and cache if empty result
 	bool is_empty = false;
-	surface res = mask_surface(image, get_hexmask(), &is_empty, i_locator.get_filename());
+	SDL_Surface res = mask_surface(image, get_hexmask(), &is_empty, i_locator.get_filename());
 	i_locator.add_to_cache(is_empty_hex_, is_empty);
 	return res;
 }
 
-static surface get_scaled_to_hex(const locator& i_locator)
+static SDL_Surface get_scaled_to_hex(const locator& i_locator)
 {
-	surface img = get_image(i_locator, HEXED);
+	SDL_Surface img = get_image(i_locator, HEXED);
 	return scale_surface(img, zoom, zoom);
 }
 
-static surface get_tod_colored(const locator& i_locator)
+static SDL_Surface get_tod_colored(const locator& i_locator)
 {
-	surface img = get_image(i_locator, SCALED_TO_HEX);
+	SDL_Surface img = get_image(i_locator, SCALED_TO_HEX);
 	return adjust_surface_color(img, red_adjust, green_adjust, blue_adjust);
 }
 
-static surface get_scaled_to_zoom(const locator& i_locator)
+static SDL_Surface get_scaled_to_zoom(const locator& i_locator)
 {
 	assert(zoom != tile_size);
 	assert(tile_size != 0);
 
-	surface res(get_image(i_locator, UNSCALED));
+	SDL_Surface res(get_image(i_locator, UNSCALED));
 	// For some reason haloes seems to have invalid images, protect against crashing
 	if(!res.null()) {
 		return scale_surface(res, ((res.get()->w * zoom) / tile_size), ((res.get()->h * zoom) / tile_size));
 	} else {
-		return surface(NULL);
+		return surface(nullptr);
 	}
 }
 
-static surface get_brightened(const locator& i_locator)
+static SDL_Surface get_brightened(const locator& i_locator)
 {
-	surface image(get_image(i_locator, TOD_COLORED));
+	SDL_Surface image(get_image(i_locator, TOD_COLORED));
 	return brighten_image(image, ftofxp(game_config::hex_brightening));
 }
 
@@ -797,9 +797,9 @@ static TYPE simplify_type(const image::locator& i_locator, TYPE type){
 }
 
 
-surface get_image(const image::locator& i_locator, TYPE type)
+SDL_Surface get_image(const image::locator& i_locator, TYPE type)
 {
-	surface res;
+	SDL_Surface res;
 
 	if(i_locator.is_void())
 		return res;
@@ -839,7 +839,7 @@ surface get_image(const image::locator& i_locator, TYPE type)
 	tmp=i_locator.in_cache(*imap);
 
 	if(tmp) {
-		surface result;
+		SDL_Surface result;
 #ifdef _OPENMP
 #pragma omp critical(image_cache)
 #endif //_OPENMP
@@ -872,7 +872,7 @@ surface get_image(const image::locator& i_locator, TYPE type)
 		return res;
 	}
 
-	// Optimizes surface before storing it
+	// Optimizes SDL_Surface before storing it
 	if(res)
 		res = create_optimized_surface(res);
 
@@ -884,9 +884,9 @@ surface get_image(const image::locator& i_locator, TYPE type)
 	return res;
 }
 
-surface get_lighted_image(const image::locator& i_locator, const light_string& ls, TYPE type)
+SDL_Surface get_lighted_image(const image::locator& i_locator, const light_string& ls, TYPE type)
 {
-	surface res;
+	SDL_Surface res;
 	if(i_locator.is_void())
 		return res;
 
@@ -928,16 +928,16 @@ surface get_lighted_image(const image::locator& i_locator, const light_string& l
 		;
 	}
 
-	// Optimizes surface before storing it
+	// Optimizes SDL_Surface before storing it
 	res = create_optimized_surface(res);
-	// record the lighted surface in the corresponding variants cache
+	// record the lighted SDL_Surface in the corresponding variants cache
 	i_locator.access_in_cache(*imap)[ls] = res;
 
 	return res;
 }
 
 
-surface get_hexmask()
+SDL_Surface get_hexmask()
 {
 	static const image::locator terrain_mask(game_config::images::terrain_mask);
 	return get_image(terrain_mask, UNSCALED);
@@ -953,7 +953,7 @@ bool is_in_hex(const locator& i_locator)
 	if(i_locator.in_cache(in_hex_info_)) {
 		result= i_locator.locate_in_cache(in_hex_info_);
 	} else {
-		const surface image(get_image(i_locator, UNSCALED));
+		const SDL_Surface image(get_image(i_locator, UNSCALED));
 
 		bool res = in_mask_surface(image, get_hexmask());
 
@@ -971,7 +971,7 @@ bool is_in_hex(const locator& i_locator)
 bool is_empty_hex(const locator& i_locator)
 {
 	if(!i_locator.in_cache(is_empty_hex_)) {
-		const surface surf = get_image(i_locator, HEXED);
+		const SDL_Surface surf = get_image(i_locator, HEXED);
 		// emptiness of terrain image is checked during hex cut
 		// so, maybe in cache now, let's recheck
 		if(!i_locator.in_cache(is_empty_hex_)) {
@@ -987,10 +987,10 @@ bool is_empty_hex(const locator& i_locator)
 }
 
 
-surface reverse_image(const surface& surf)
+SDL_Surface reverse_image(const SDL_Surface& surf)
 {
-	if(surf == NULL) {
-		return surface(NULL);
+	if(surf == nullptr) {
+		return surface(nullptr);
 	}
 
 	const std::map<surface,surface>::iterator itor = reversed_images_.find(surf);
@@ -999,9 +999,9 @@ surface reverse_image(const surface& surf)
 		return itor->second;
 	}
 
-	const surface rev(flip_surface(surf));
-	if(rev == NULL) {
-		return surface(NULL);
+	const SDL_Surface rev(flip_surface(surf));
+	if(rev == nullptr) {
+		return surface(nullptr);
 	}
 
 	reversed_images_.insert(std::pair<surface,surface>(surf,rev));

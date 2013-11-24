@@ -53,7 +53,7 @@ void palette_manager::set_group(size_t index)
 void palette_manager::adjust_size()
 {
 	scroll_top();
-	const SDL_Rect& rect = gui_.palette_area();
+	const SDL_Rect* rect = gui_.palette_area();
 	set_location(rect);
 	palette_start_ = rect.y;
 	bg_register(rect);
@@ -67,7 +67,7 @@ void palette_manager::scroll_down()
 
 	if (scrolled) {
 
-//		const SDL_Rect& rect = gui_.palette_area();
+//		const SDL_Rect* rect = gui_.palette_area();
 //		bg_restore(rect);
 		set_dirty();
 		draw();
@@ -124,7 +124,7 @@ void palette_manager::draw_contents()
 	//	return;
 	//}
 
-	const SDL_Rect &loc = location();
+	const SDL_Rect* loc = location();
 
 	tooltips::clear_tooltips(loc);
 
@@ -160,7 +160,7 @@ void palette_manager::handle_event(const SDL_Event& event) {
 
 	if (event.type == SDL_MOUSEMOTION) {
 		// If the mouse is inside the palette, give it focus.
-		if (point_in_rect(event.button.x, event.button.y, location())) {
+		if (is_point_in_rect(event.button.x, event.button.y, location())) {
 			if (!focus(&event)) set_focus(true);
 		}
 		// If the mouse is outside, remove focus.

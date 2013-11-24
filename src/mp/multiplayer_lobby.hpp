@@ -70,7 +70,7 @@ public:
 		{
 		}
 
-		surface mini_map;
+		SDL_Surface mini_map;
 		std::string id;
 		std::string map_data;
 		std::string name;
@@ -99,12 +99,12 @@ public:
 	gamebrowser(CVideo& video, const config &map_hashes);
 	void scroll(unsigned int pos);
 	void handle_event(const SDL_Event& event);
-	void set_inner_location(const SDL_Rect& rect);
+	void set_inner_location(const SDL_Rect* rect);
 	void set_item_height(unsigned int height);
 	void set_game_items(const config& cfg, const config& game_config);
 	void draw();
 	void draw_contents();
-	void draw_row(const size_t row_index, const SDL_Rect& rect, ROW_TYPE type);
+	void draw_row(const size_t row_index, const SDL_Rect* rect, ROW_TYPE type);
 	SDL_Rect get_item_rect(size_t index) const;
 	bool empty() const { return games_.empty(); }
 	bool selection_is_joinable() const
@@ -154,7 +154,7 @@ public:
 
 protected:
 	virtual void hide_children(bool hide=true);
-	virtual void layout_children(const SDL_Rect& rect);
+	virtual void layout_children(const SDL_Rect* rect);
 	virtual void process_network_data(const config& data, const network::connection sock);
 
 	virtual void gamelist_updated(bool silent=true);

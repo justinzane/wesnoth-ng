@@ -90,8 +90,8 @@ void dialog_view_callback(twidget& caller)
 class tmp_change_control::model {
 public:
 	model()
-		: sides_list(NULL)
-		, nicks_list(NULL)
+		: sides_list(nullptr)
+		, nicks_list(nullptr)
 		, sides()
 		, nicks()
 	{

@@ -194,7 +194,7 @@ void cave_map_generator::generate_chambers()
 		build_chamber(new_chamber.center,new_chamber.locs,chamber_size,jagged_edges);
 
 		const config &items = ch.child("items");
-		new_chamber.items = items ? &items : NULL;
+		new_chamber.items = items ? &items : nullptr;
 
 		const std::string &id = ch["id"];
 		if (!id.empty()) {
@@ -225,14 +225,14 @@ void cave_map_generator::place_chamber(const chamber& c)
 		set_terrain(*i,clear_);
 	}
 
-	if (c.items == NULL || c.locs.empty()) return;
+	if (c.items == nullptr || c.locs.empty()) return;
 
 	size_t index = 0;
 	foreach_ng(const config::any_child &it, c.items->all_children_range())
 	{
 		config cfg = it.cfg;
 		config &filter = cfg.child("filter");
-		config* object_filter = NULL;
+		config* object_filter = nullptr;
 		if (config &object = cfg.child("object")) {
 			if (config &of = object.child("filter"))
 				object_filter = &of;

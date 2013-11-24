@@ -36,10 +36,10 @@ editor_toolkit::editor_toolkit(editor_display& gui, const CKey& key,
 	: gui_(gui)
 	, key_(key)
 	, palette_manager_()
-	, mouse_action_(NULL)
+	, mouse_action_(nullptr)
 	, mouse_actions_()
 	, mouse_action_hints_()
-	, brush_(NULL)
+	, brush_(nullptr)
 	, brushes_()
 {
 	init_brushes(game_config);

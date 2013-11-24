@@ -76,7 +76,7 @@ private:
 	variant execute(const formula_callable& variables, formula_debugger *fdb) const {
 		boost::shared_ptr<formula_debugger> fdbp;
 		bool need_wrapper = false;
-		if (fdb==NULL) {
+		if (fdb==nullptr) {
 			fdbp = boost::shared_ptr<formula_debugger>(new formula_debugger());
 			fdb = &*fdbp;
 			need_wrapper = true;
@@ -288,13 +288,13 @@ private:
 
 		if( args().size() == 1)
 		{
-			str1 = var1.to_debug_string(NULL, true);
+			str1 = var1.to_debug_string(nullptr, true);
 			LOG_SF << str1 << std::endl;
 			return var1;
 		} else {
 			str1 = var1.string_cast();
 			const variant var2 = args()[1]->evaluate(variables,fdb);
-			str2 = var2.to_debug_string(NULL, true);
+			str2 = var2.to_debug_string(nullptr, true);
 			LOG_SF << str1 << str2 << std::endl;
 			return var2;
 		}

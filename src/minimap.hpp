@@ -26,8 +26,8 @@ class team;
 
 namespace image {
 	///function to create the minimap for a given map
-	///the surface returned must be freed by the user
-	surface getMinimap(int w, int h, const gamemap &map_, const team *vm = NULL);
+	///the SDL_Surface returned must be freed by the user
+	SDL_Surface getMinimap(int w, int h, const gamemap &map_, const team *vm = nullptr);
 }
 
 #endif

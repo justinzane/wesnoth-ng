@@ -142,7 +142,7 @@ private:
  * Normally the dialog won't have a button only when the text doesn't fit in
  * the dialog and a scrollbar is used the button will be shown.
  *
- * @param video               The video which contains the surface to draw upon.
+ * @param video               The video which contains the SDL_Surface to draw upon.
  * @param title               The title of the dialog.
  * @param message             The message to show in the dialog.
  * @param button_caption      The caption of the close button.
@@ -160,7 +160,7 @@ void show_message(CVideo& video, const std::string& title,
  * @note this function is rather untested, and the API might change in the
  * near future.
  *
- * @param video               The video which contains the surface to draw
+ * @param video               The video which contains the SDL_Surface to draw
  *                            upon.
  * @param title               The title of the dialog.
  * @param message             The message to show in the dialog.
@@ -178,7 +178,7 @@ int show_message(CVideo& video, const std::string& title,
 /**
  * Shows an error message to the user.
  *
- * @param video               The video which contains the surface to draw
+ * @param video               The video which contains the SDL_Surface to draw
  *                            upon.
  * @param message             The message to show in the dialog.
  * @param message_use_markup  Use markup for the message?

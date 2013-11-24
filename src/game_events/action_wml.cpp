@@ -268,7 +268,7 @@ namespace { // Support functions
 
 		unit_race::GENDER gender = string_gender(cfg["gender"]);
 		const unit_type *ut = unit_types.find(type);
-		if (!ut) return NULL;
+		if (!ut) return nullptr;
 		game_display::fake_unit * fake_unit = new game_display::fake_unit(*ut, side_num, gender);
 
 		if(!variation.empty()) {
@@ -1523,7 +1523,7 @@ WML_HANDLER_FUNCTION(print, /*event_info*/, cfg)
 	int lifetime = cfg["duration"].to_int(50);
 	SDL_Color color = create_color(cfg["red"], cfg["green"], cfg["blue"]);
 
-	const SDL_Rect& rect = resources::screen->map_outside_area();
+	const SDL_Rect* rect = resources::screen->map_outside_area();
 
 	font::floating_label flabel(text);
 	flabel.set_font_size(size);
@@ -1572,7 +1572,7 @@ WML_HANDLER_FUNCTION(recall, /*event_info*/, cfg)
 				DBG_NG << u->id() << " matched the filter...\n";
 				const unit to_recruit(*u);
 				const unit* pass_check = &to_recruit;
-				if(!cfg["check_passability"].to_bool(true)) pass_check = NULL;
+				if(!cfg["check_passability"].to_bool(true)) pass_check = nullptr;
 				const map_location cfg_loc = cfg_to_loc(cfg);
 
 				/// @todo fendrin: comment this monster
@@ -2171,12 +2171,12 @@ WML_HANDLER_FUNCTION(set_variables, /*event_info*/, cfg)
 
 		bool remove_empty = split_element["remove_empty"].to_bool();
 
-		char* separator = separator_string.empty() ? NULL : &separator_string[0];
+		char* separator = separator_string.empty() ? nullptr : &separator_string[0];
 
 		std::vector<std::string> split_vector;
 
 		//if no separator is specified, explode the string
-		if(separator == NULL)
+		if(separator == nullptr)
 		{
 			for(std::string::iterator i=split_string.begin(); i!=split_string.end(); ++i)
 			{
@@ -2268,7 +2268,7 @@ WML_HANDLER_FUNCTION(teleport, event_info, cfg)
 	const map_location dst = cfg_to_loc(cfg);
 	if (dst == u->get_location() || !resources::game_map->on_board(dst)) return;
 
-	const unit* pass_check = NULL;
+	const unit* pass_check = nullptr;
 	if (cfg["check_passability"].to_bool(true))
 		pass_check = &*u;
 	const map_location vacant_dst = find_vacant_tile(dst, pathfind::VACANT_ANY, pass_check);
@@ -2457,7 +2457,7 @@ WML_HANDLER_FUNCTION(unstore_unit, /*event_info*/, cfg)
 		const bool advance = cfg["advance"].to_bool(true);
 		if(resources::game_map->on_board(loc)) {
 			if (cfg["find_vacant"].to_bool()) {
-				const unit* pass_check = NULL;
+				const unit* pass_check = nullptr;
 				if (cfg["check_passability"].to_bool(true)) pass_check = &u;
 				loc = pathfind::find_vacant_tile(
 						loc,

@@ -81,7 +81,7 @@ static bool less_campaigns_rank(const config &a, const config &b) {
 
 game_controller::game_controller(const commandline_options& cmdline_opts, const char *appname) :
 	cmdline_opts_(cmdline_opts),
-	disp_(NULL),
+	disp_(nullptr),
 	video_(),
 	thread_manager(),
 	font_manager_(),
@@ -281,8 +281,8 @@ game_controller::game_controller(const commandline_options& cmdline_opts, const 
 
 game_display& game_controller::disp()
 {
-	if(disp_.get() == NULL) {
-		if(get_video_surface() == NULL) {
+	if(disp_.get() == nullptr) {
+		if(get_video_surface() == nullptr) {
 			throw CVideo::error();
 		}
 		disp_.assign(game_display::create_dummy_display(video_));
@@ -343,7 +343,7 @@ bool game_controller::init_language()
 	if(!cmdline_opts_.nogui) {
 		std::string wm_title_string = _("The Battle for Wesnoth");
 		wm_title_string += " - " + game_config::revision;
-		SDL_WM_SetCaption(wm_title_string.c_str(), NULL);
+		SDL_WM_SetCaption(wm_title_string.c_str(), nullptr);
 	}
 
 	return true;
@@ -362,10 +362,10 @@ bool game_controller::init_video()
 	}
 
 #if !(defined(__APPLE__))
-	surface icon(image::get_image("game-icon.png", image::UNSCALED));
-	if(icon != NULL) {
+	SDL_Surface icon(image::get_image("game-icon.png", image::UNSCALED));
+	if(icon != nullptr) {
 		///must be called after SDL_Init() and before setting video mode
-		SDL_WM_SetIcon(icon,NULL);
+		SDL_WM_SetIcon(icon,nullptr);
 	}
 #endif
 
@@ -930,7 +930,7 @@ bool game_controller::change_language()
 	if (!cmdline_opts_.nogui) {
 		std::string wm_title_string = _("The Battle for Wesnoth");
 		wm_title_string += " - " + game_config::revision;
-		SDL_WM_SetCaption(wm_title_string.c_str(), NULL);
+		SDL_WM_SetCaption(wm_title_string.c_str(), nullptr);
 	}
 
 	return true;
@@ -947,7 +947,7 @@ void game_controller::show_preferences()
 
 void game_controller::launch_game(RELOAD_GAME_DATA reload)
 {
-	loadscreen::global_loadscreen_manager loadscreen_manager(disp().video());
+	loadscreen::loadscreen_mgr loadscreen_manager(disp().video());
 	loadscreen::start_stage("load data");
 	if(reload == RELOAD_DATA) {
 		try {

@@ -93,7 +93,7 @@ int get_last_seed();
  */
 void set_new_seed_callback(boost::function<void (int)> f);
 
-/** @return true if the seed callback is not NULL */
+/** @return true if the seed callback is not nullptr */
 bool has_new_seed_callback();
 
 /**

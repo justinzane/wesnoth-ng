@@ -46,11 +46,11 @@ tristate_button::tristate_button(CVideo& video,
 		std::string button_image_name,
 		const bool auto_join) :
 				widget(video, auto_join),
-				baseImage_(NULL), touchedBaseImage_(NULL), activeBaseImage_(NULL),
-				itemImage_(NULL),
-				pressedDownImage_(NULL), pressedUpImage_(NULL), pressedBothImage_(NULL),
-				pressedBothActiveImage_(NULL), pressedDownActiveImage_(NULL), pressedUpActiveImage_(NULL),
-				touchedDownImage_(NULL), touchedUpImage_(NULL), touchedBothImage_(NULL),
+				baseImage_(nullptr), touchedBaseImage_(nullptr), activeBaseImage_(nullptr),
+				itemImage_(nullptr),
+				pressedDownImage_(nullptr), pressedUpImage_(nullptr), pressedBothImage_(nullptr),
+				pressedBothActiveImage_(nullptr), pressedDownActiveImage_(nullptr), pressedUpActiveImage_(nullptr),
+				touchedDownImage_(nullptr), touchedUpImage_(nullptr), touchedBothImage_(nullptr),
 				state_(NORMAL), pressed_(false),
 				base_height_(0), base_width_(0),
 				palette_(palette), item_id_()
@@ -167,10 +167,10 @@ void tristate_button::enable(bool new_val) {
 
 void tristate_button::draw_contents() {
 
-	surface image(NULL);
+	SDL_Surface image(nullptr);
 
-	surface overlay(NULL);
-	surface base = baseImage_;
+	SDL_Surface overlay(nullptr);
+	SDL_Surface base = baseImage_;
 
 	int offset = 0;
 	switch (state_) {
@@ -237,21 +237,21 @@ void tristate_button::draw_contents() {
 
 	SDL_Color button_color = font::BUTTON_COLOR;
 
-	surface scalled_item;
+	SDL_Surface scalled_item;
 	scalled_item.assign(scale_surface(itemImage_,
 			36, 36));
 
-	// blit_surface want neutral surfaces
-	surface nitem = make_neutral_surface(scalled_item);
-	surface nbase = make_neutral_surface(base);
+	// blit_SDL_Surface want neutral surfaces
+	SDL_Surface nitem = make_neutral_surface(scalled_item);
+	SDL_Surface nbase = make_neutral_surface(base);
 
 	//TODO avoid magic numbers
 	SDL_Rect r = create_rect(1, 1, 0, 0);
-	blit_surface(nitem, NULL, nbase, &r);
+	blit_surface(nitem, nullptr, nbase, &r);
 
 	if (!overlay.null()) {
-		surface noverlay = make_neutral_surface(overlay);
-		blit_surface(noverlay, NULL, nbase, NULL);
+		SDL_Surface noverlay = make_neutral_surface(overlay);
+		blit_surface(noverlay, nullptr, nbase, nullptr);
 	}
 
 //  TODO for later reference
@@ -276,7 +276,7 @@ void tristate_button::draw_contents() {
 
 //TODO move to widget
 bool tristate_button::hit(int x, int y) const {
-	return point_in_rect(x, y, location());
+	return is_point_in_rect(x, y, location());
 }
 
 void tristate_button::mouse_motion(SDL_MouseMotionEvent const &event) {

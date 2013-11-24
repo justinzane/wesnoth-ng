@@ -74,7 +74,7 @@ formula_ai::formula_ai(readonly_context &context, const config &cfg)
 	:
 	readonly_context_proxy(),
 	game_logic::formula_callable(),
-	ai_ptr_(NULL),
+	ai_ptr_(nullptr),
 	cfg_(cfg),
 	recursion_counter_(context.get_recursion_count()),
 	keeps_cache_(),
@@ -109,7 +109,7 @@ void formula_ai::handle_exception(game_logic::formula_error& e, const std::strin
 
 void formula_ai::display_message(const std::string& msg) const
 {
-	resources::screen->add_chat_message(time(NULL), "fai", get_side(), msg,
+	resources::screen->add_chat_message(time(nullptr), "fai", get_side(), msg,
 				events::chat_handler::MESSAGE_PUBLIC, false);
 
 }
@@ -141,7 +141,7 @@ std::string formula_ai::evaluate(const std::string& formula_str)
 		callable.add_ref();
 
 		//formula_debugger fdb;
-		const variant v = f.evaluate(callable,NULL);
+		const variant v = f.evaluate(callable,nullptr);
 
 		if (ai_ptr_) {
 			variant var = execute_variant(v, *ai_ptr_, true );
@@ -485,7 +485,7 @@ variant formula_ai::execute_variant(const variant& var, ai_context &ai_, bool co
 				ERR_AI << "ERROR #" << 5001 << " while executing 'continue' formula keyword\n";
 
 				if( safe_call )
-					error = variant(new safe_call_result(NULL, 5001));
+					error = variant(new safe_call_result(nullptr, 5001));
 			}
 		} else if( action.is_string() && (action.as_string() == "end_turn" || action.as_string() == "end" )  ) {
 			return variant();
@@ -553,7 +553,7 @@ void formula_ai::add_formula_function(const std::string& name, const_formula_ptr
 namespace {
 template<typename Container>
 variant villages_from_set(const Container& villages,
-				          const std::set<map_location>* exclude=NULL) {
+				          const std::set<map_location>* exclude=nullptr) {
 	std::vector<variant> vars;
 	foreach_ng(const map_location& loc, villages) {
 		if(exclude && exclude->count(loc)) {

@@ -59,7 +59,7 @@ public:
 	/**
 	 * Shows the window.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @param allow_interaction   Does the dialog allow interaction?
 	 *                            * true a non modal window is shown
@@ -97,7 +97,7 @@ private:
 	 * Every dialog shows it's own kind of window, this function should return
 	 * the window to show.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @returns                   The window to show.
 	 */
@@ -106,7 +106,7 @@ private:
 	/**
 	 * Actions to be taken directly after the window is build.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @param window              The window just created.
 	 */
@@ -115,7 +115,7 @@ private:
 	/**
 	 * Actions to be taken before showing the window.
 	 *
-	 * @param video               The video which contains the surface to draw
+	 * @param video               The video which contains the SDL_Surface to draw
 	 *                            upon.
 	 * @param window              The window to be shown.
 	 */

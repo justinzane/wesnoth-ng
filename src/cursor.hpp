@@ -21,7 +21,7 @@
 #ifndef CURSOR_HPP_INCLUDED
 #define CURSOR_HPP_INCLUDED
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 struct surface;
 
 namespace cursor
@@ -43,8 +43,8 @@ void set(CURSOR_TYPE type = NUM_CURSORS);
 void set_dragging(bool drag);
 CURSOR_TYPE get();
 
-void draw(surface screen);
-void undraw(surface screen);
+void draw(SDL_Surface screen);
+void undraw(SDL_Surface screen);
 
 void set_focus(bool focus);
 

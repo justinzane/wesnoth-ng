@@ -58,7 +58,7 @@ map_context::map_context(const editor_map& map, const display& disp)
 	, changed_locations_()
 	, everything_changed_(false)
 	, active_area_(1)
-	, labels_(disp, NULL)
+	, labels_(disp, nullptr)
 	, units_()
 	, teams_()
 	, tod_manager_(new tod_manager)
@@ -82,10 +82,10 @@ map_context::map_context(const config& game_config, const std::string& filename,
 	, changed_locations_()
 	, everything_changed_(false)
 	, active_area_(0)
-	, labels_(disp, NULL)
+	, labels_(disp, nullptr)
 	, units_()
 	, teams_()
-	, tod_manager_(NULL)
+	, tod_manager_(nullptr)
 	, state_()
 	, music_tracks_()
 {
@@ -175,7 +175,7 @@ map_context::map_context(const config& game_config, const std::string& filename,
 
 		teams_.push_back(t);
 		foreach_ng(const config &a_unit, side.child_range("unit")) {
-			map_location loc(a_unit, NULL);
+			map_location loc(a_unit, nullptr);
 			units_.add(loc,
 					unit(a_unit, true, &state_) );
 		}
@@ -402,7 +402,7 @@ void map_context::perform_partial_action(const editor_action& action)
 		throw editor_logic_exception("Empty undo stack in perform_partial_action()");
 	}
 	editor_action_chain* undo_chain = dynamic_cast<editor_action_chain*>(last_undo_action());
-	if (undo_chain == NULL) {
+	if (undo_chain == nullptr) {
 		throw editor_logic_exception("Last undo action not a chain in perform_partial_action()");
 	}
 	editor_action* undo = action.perform(*this);
@@ -432,22 +432,22 @@ bool map_context::can_redo() const
 
 editor_action* map_context::last_undo_action()
 {
-	return undo_stack_.empty() ? NULL : undo_stack_.back();
+	return undo_stack_.empty() ? nullptr : undo_stack_.back();
 }
 
 editor_action* map_context::last_redo_action()
 {
-	return redo_stack_.empty() ? NULL : redo_stack_.back();
+	return redo_stack_.empty() ? nullptr : redo_stack_.back();
 }
 
 const editor_action* map_context::last_undo_action() const
 {
-	return undo_stack_.empty() ? NULL : undo_stack_.back();
+	return undo_stack_.empty() ? nullptr : undo_stack_.back();
 }
 
 const editor_action* map_context::last_redo_action() const
 {
-	return redo_stack_.empty() ? NULL : redo_stack_.back();
+	return redo_stack_.empty() ? nullptr : redo_stack_.back();
 }
 
 void map_context::undo()
@@ -481,7 +481,7 @@ void map_context::partial_undo()
 		throw editor_logic_exception("Empty undo stack in partial_undo()");
 	}
 	editor_action_chain* undo_chain = dynamic_cast<editor_action_chain*>(last_undo_action());
-	if (undo_chain == NULL) {
+	if (undo_chain == nullptr) {
 		throw editor_logic_exception("Last undo action not a chain in partial undo");
 	}
 	//a partial undo performs the first action form the current action's action_chain that would be normally performed

@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE( track_real_unit_by_underlying_id ) {
 	}
 
 	unit_map.insert(extracted_unit);
-	extracted_unit = NULL;
+	extracted_unit = nullptr;
 
 	{
 		unit_map::unit_iterator ui = unit_map.find(underlying_id);
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE( track_fake_unit_by_underlying_id ) {
 	}
 
 	unit_map.insert(extracted_unit);
-	extracted_unit = NULL;
+	extracted_unit = nullptr;
 
 	{
 		unit_map::unit_iterator ui = unit_map.find(underlying_id);

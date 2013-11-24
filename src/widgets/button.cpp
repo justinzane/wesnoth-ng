@@ -48,9 +48,9 @@ button::button(CVideo& video, const std::string& label, button::TYPE type,
                std::string button_image_name, SPACE_CONSUMPTION spacing,
                const bool auto_join, std::string overlay_image)
 	: widget(video, auto_join), type_(type), label_(label),
-	  image_(NULL), pressedImage_(NULL), activeImage_(NULL), pressedActiveImage_(NULL),
-	  disabledImage_(NULL), pressedDisabledImage_(NULL),
-	  overlayImage_(NULL), overlayPressedImage_(NULL), overlayActiveImage_(NULL),
+	  image_(nullptr), pressedImage_(nullptr), activeImage_(nullptr), pressedActiveImage_(nullptr),
+	  disabledImage_(nullptr), pressedDisabledImage_(nullptr),
+	  overlayImage_(nullptr), overlayPressedImage_(nullptr), overlayActiveImage_(nullptr),
 	  state_(NORMAL), pressed_(false),
 	  spacing_(spacing), base_height_(0), base_width_(0),
 	  button_image_name_(), button_overlay_image_name_(overlay_image)
@@ -98,13 +98,13 @@ void button::load_images() {
 			break;
 	}
 
-	surface button_image(image::get_image(button_image_name_ + ".png"));
-	surface pressed_image(image::get_image(button_image_name_ + "-pressed.png"));
-	surface active_image(image::get_image(button_image_name_ + "-active.png"));
-	surface disabled_image;
+	SDL_Surface button_image(image::get_image(button_image_name_ + ".png"));
+	SDL_Surface pressed_image(image::get_image(button_image_name_ + "-pressed.png"));
+	SDL_Surface active_image(image::get_image(button_image_name_ + "-active.png"));
+	SDL_Surface disabled_image;
 	if (file_exists(game_config::path + "/images/" + button_image_name_ + "-disabled.png"))
 		disabled_image.assign((image::get_image(button_image_name_ + "-disabled.png")));
-	surface pressed_disabled_image, pressed_active_image, touched_image;
+	SDL_Surface pressed_disabled_image, pressed_active_image, touched_image;
 
 	if (!button_overlay_image_name_.empty()) {
 		overlayImage_.assign(image::get_image(button_overlay_image_name_ + size_postfix + ".png"));
@@ -123,10 +123,10 @@ void button::load_images() {
 		if (overlayPressedDisabledImage_.null())
 			overlayPressedDisabledImage_ = image::get_image(button_overlay_image_name_ + size_postfix + "-pressed.png~GS()");
 	} else {
-		overlayImage_.assign(NULL);
+		overlayImage_.assign(nullptr);
 	}
 
-	if (disabled_image == NULL) {
+	if (disabled_image == nullptr) {
 		disabled_image = image::get_image(button_image_name_ + ".png~GS()");
 	}
 
@@ -208,7 +208,7 @@ void button::calculate_size()
 			int fs = font_size;
 			int style = TTF_STYLE_NORMAL;
 			std::string::const_iterator i_beg = label_.begin(), i_end = label_.end(),
-				i = font::parse_markup(i_beg, i_end, &fs, NULL, &style);
+				i = font::parse_markup(i_beg, i_end, &fs, nullptr, &style);
 			if (i != i_end) {
 				std::string tmp(i, i_end);
 				label_.erase(i - i_beg, i_end - i_beg);
@@ -218,7 +218,7 @@ void button::calculate_size()
 	}
 
 	if (type_ != TYPE_IMAGE){
-		textRect_ = font::draw_text(NULL, screen_area(), font_size,
+		textRect_ = font::draw_text(nullptr, screen_area(), font_size,
 		                            font::BUTTON_COLOR, label_, 0, 0);
 	}
 
@@ -290,7 +290,7 @@ void button::enable(bool new_val)
 
 void button::draw_contents()
 {
-	surface image = image_;
+	SDL_Surface image = image_;
 	const int image_w = image_->w;
 
 	int offset = 0;
@@ -339,7 +339,7 @@ void button::draw_contents()
 
 	if (!overlayImage_.null()) {
 
-		surface noverlay = make_neutral_surface(
+		SDL_Surface noverlay = make_neutral_surface(
 				enabled() ? overlayImage_ : overlayDisabledImage_);
 
 		if (!overlayPressedImage_.null()) {
@@ -360,8 +360,8 @@ void button::draw_contents()
 			}
 		}
 
-		surface nimage = make_neutral_surface(image);
-		blit_surface(noverlay, NULL, nimage, NULL);
+		SDL_Surface nimage = make_neutral_surface(image);
+		blit_surface(noverlay, nullptr, nimage, nullptr);
 		image = nimage;
 	}
 
@@ -379,7 +379,7 @@ void button::draw_contents()
 
 bool button::hit(int x, int y) const
 {
-	return point_in_rect(x,y,location());
+	return is_point_in_rect(x,y,location());
 }
 
 static bool not_image(const std::string& str) { return !str.empty() && str[0] != IMAGE_PREFIX; }

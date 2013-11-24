@@ -35,11 +35,11 @@ static bool use_color_cursors()
 	return game_config::editor == false && preferences::use_color_cursors();
 }
 
-static SDL_Cursor* create_cursor(surface surf)
+static SDL_Cursor* create_cursor(SDL_Surface surf)
 {
-	const surface nsurf(make_neutral_surface(surf));
-	if(nsurf == NULL) {
-		return NULL;
+	const SDL_Surface nsurf(make_neutral_surface(surf));
+	if(nsurf == nullptr) {
+		return nullptr;
 	}
 
 	// The width must be a multiple of 8 (SDL requirement)
@@ -83,7 +83,7 @@ static SDL_Cursor* create_cursor(surface surf)
 
 namespace {
 
-SDL_Cursor* cache[cursor::NUM_CURSORS] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+SDL_Cursor* cache[cursor::NUM_CURSORS] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 
 // This array must have members corresponding to cursor::CURSOR_TYPE enum members
 // Apple need 16x16 b&w cursors
@@ -102,7 +102,7 @@ const int shift_y[cursor::NUM_CURSORS] = {0, 0, 0, 0, 0, 20, 22, 0};
 cursor::CURSOR_TYPE current_cursor = cursor::NORMAL;
 
 int cursor_x = -1, cursor_y = -1;
-surface cursor_buf = NULL;
+SDL_Surface cursor_buf = nullptr;
 bool have_focus = true;
 bool color_ready = false;
 
@@ -110,9 +110,9 @@ bool color_ready = false;
 
 static SDL_Cursor* get_cursor(cursor::CURSOR_TYPE type)
 {
-	if(cache[type] == NULL) {
+	if(cache[type] == nullptr) {
 		static const std::string prefix = "cursors-bw/";
-		const surface surf(image::get_image(prefix + bw_images[type]));
+		const SDL_Surface surf(image::get_image(prefix + bw_images[type]));
 		cache[type] = create_cursor(surf);
 	}
 
@@ -122,14 +122,14 @@ static SDL_Cursor* get_cursor(cursor::CURSOR_TYPE type)
 static void clear_cache()
 {
 	for(size_t n = 0; n != cursor::NUM_CURSORS; ++n) {
-		if(cache[n] != NULL) {
+		if(cache[n] != nullptr) {
 			SDL_FreeCursor(cache[n]);
-			cache[n] = NULL;
+			cache[n] = nullptr;
 		}
 	}
 
-	if(cursor_buf != NULL) {
-		cursor_buf = NULL;
+	if(cursor_buf != nullptr) {
+		cursor_buf = nullptr;
 	}
 }
 
@@ -164,7 +164,7 @@ void set(CURSOR_TYPE type)
 	SDL_Cursor * cursor_image = get_cursor(new_cursor);
 
 	// Causes problem on Mac:
-	//if (cursor_image != NULL && cursor_image != SDL_GetCursor())
+	//if (cursor_image != nullptr && cursor_image != SDL_GetCursor())
 		SDL_SetCursor(cursor_image);
 
     SDL_ShowCursor(SDL_ENABLE);
@@ -214,7 +214,7 @@ setter::~setter()
 	set(old_);
 }
 
-void draw(surface screen)
+void draw(SDL_Surface screen)
 {
 	if(use_color_cursors() == false) {
 		return;
@@ -225,7 +225,7 @@ void draw(surface screen)
 	}
 
 	if(have_focus == false) {
-		cursor_buf = NULL;
+		cursor_buf = nullptr;
 		return;
 	}
 
@@ -238,22 +238,22 @@ void draw(surface screen)
 	}
 
 	/** @todo FIXME: don't parse the file path every time */
-	const surface surf(image::get_image("cursors/" + color_images[current_cursor]));
-	if(surf == NULL) {
+	const SDL_Surface surf(image::get_image("cursors/" + color_images[current_cursor]));
+	if(surf == nullptr) {
 		// Fall back to b&w cursors
 		std::cerr << "could not load color cursors. Falling back to hardware cursors\n";
 		preferences::set_color_cursors(false);
 		return;
 	}
 
-	if(cursor_buf != NULL && (cursor_buf->w != surf->w || cursor_buf->h != surf->h)) {
-		cursor_buf = NULL;
+	if(cursor_buf != nullptr && (cursor_buf->w != surf->w || cursor_buf->h != surf->h)) {
+		cursor_buf = nullptr;
 	}
 
-	if(cursor_buf == NULL) {
+	if(cursor_buf == nullptr) {
 		cursor_buf = create_compatible_surface(surf);
-		if(cursor_buf == NULL) {
-			std::cerr << "Could not allocate surface for mouse cursor\n";
+		if(cursor_buf == nullptr) {
+			std::cerr << "Could not allocate SDL_Surface for mouse cursor\n";
 			return;
 		}
 	}
@@ -269,23 +269,23 @@ void draw(surface screen)
 			, cursor_y - shift_y[current_cursor]
 			, surf->w
 			, surf->h);
-	sdl_blit(screen,&area,cursor_buf,NULL);
+	SDL_BlitSurface(screen,&area,cursor_buf,nullptr);
 
 	// Blit the surface
-	sdl_blit(surf,NULL,screen,&area);
+	SDL_BlitSurface(surf,nullptr,screen,&area);
 
 	if(must_update) {
 		update_rect(area);
 	}
 }
 
-void undraw(surface screen)
+void undraw(SDL_Surface screen)
 {
 	if(use_color_cursors() == false) {
 		return;
 	}
 
-	if(cursor_buf == NULL) {
+	if(cursor_buf == nullptr) {
 		return;
 	}
 
@@ -293,7 +293,7 @@ void undraw(surface screen)
 			, cursor_y - shift_y[current_cursor]
 			, cursor_buf->w
 			, cursor_buf->h);
-	sdl_blit(cursor_buf,NULL,screen,&area);
+	SDL_BlitSurface(cursor_buf,nullptr,screen,&area);
 	update_rect(area);
 }
 

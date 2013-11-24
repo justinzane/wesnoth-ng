@@ -113,7 +113,7 @@ public:
 	bool visible_in_shroud() const;
 	bool immutable() const;
 	const map_location& location() const;
-	const SDL_Color& color() const;
+	const SDL_Color* color() const;
 
 	void set_text(const t_string&);
 

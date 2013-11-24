@@ -60,7 +60,7 @@ attack_type::attack_type(const config& cfg) :
 	self_loc_(),
 	other_loc_(),
 	is_attacker_(false),
-	other_attack_(NULL),
+	other_attack_(nullptr),
 	cfg_(cfg),
 	description_(cfg["description"].t_str()),
 	id_(cfg["name"]),
@@ -247,7 +247,7 @@ bool attack_type::apply_modification(const config& cfg,std::string* description)
 		}
 		cfg_["damage"] = damage_;
 
-		if(description != NULL) {
+		if(description != nullptr) {
 			int inc_damage = lexical_cast<int>(increase_damage);
 			desc << utils::signed_value(inc_damage) << " "
 				 << _n("damage","damage", inc_damage);
@@ -258,7 +258,7 @@ bool attack_type::apply_modification(const config& cfg,std::string* description)
 		num_attacks_ = utils::apply_modifier(num_attacks_, increase_attacks, 1);
 		cfg_["number"] = num_attacks_;
 
-		if(description != NULL) {
+		if(description != nullptr) {
 			int inc_attacks = lexical_cast<int>(increase_attacks);
 			desc << utils::signed_value(inc_attacks) << " "
 				 << _n("strike", "strikes", inc_attacks);
@@ -269,7 +269,7 @@ bool attack_type::apply_modification(const config& cfg,std::string* description)
 		accuracy_ = utils::apply_modifier(accuracy_, increase_accuracy, 1);
 		cfg_["accuracy"] = accuracy_;
 
-		if(description != NULL) {
+		if(description != nullptr) {
 			int inc_acc = lexical_cast<int>(increase_accuracy);
 			// Help xgettext with a directive to recognize the string as a non C printf-like string
 			// xgettext:no-c-format
@@ -281,7 +281,7 @@ bool attack_type::apply_modification(const config& cfg,std::string* description)
 		parry_ = utils::apply_modifier(parry_, increase_parry, 1);
 		cfg_["parry"] = parry_;
 
-		if(description != NULL) {
+		if(description != nullptr) {
 			int inc_parry = lexical_cast<int>(increase_parry);
 			// xgettext:no-c-format
 			desc << utils::signed_value(inc_parry) << _("% parry");
@@ -298,7 +298,7 @@ bool attack_type::apply_modification(const config& cfg,std::string* description)
 		cfg_["defense_weight"] = defense_weight_;
 	}
 
-	if(description != NULL) {
+	if(description != nullptr) {
 		*description = desc.str();
 	}
 
@@ -327,7 +327,7 @@ bool attack_type::describe_modification(const config& cfg,std::string* descripti
 	std::stringstream desc;
 
 	if(increase_damage.empty() == false) {
-		if(description != NULL) {
+		if(description != nullptr) {
 			int inc_damage = lexical_cast<int>(increase_damage);
 			desc << utils::signed_value(inc_damage) << " "
 				 << _n("damage","damage", inc_damage);
@@ -335,14 +335,14 @@ bool attack_type::describe_modification(const config& cfg,std::string* descripti
 	}
 
 	if(increase_attacks.empty() == false) {
-		if(description != NULL) {
+		if(description != nullptr) {
 			int inc_attacks = lexical_cast<int>(increase_attacks);
 			desc << utils::signed_value(inc_attacks) << " "
 				 << _n("strike", "strikes", inc_attacks);
 		}
 	}
 
-	if(description != NULL) {
+	if(description != nullptr) {
 		*description = desc.str();
 	}
 
@@ -398,8 +398,8 @@ unit_type::unit_type(const unit_type& o) :
     build_status_(o.build_status_),
 	portraits_(o.portraits_)
 {
-	gender_types_[0] = o.gender_types_[0] != NULL ? new unit_type(*o.gender_types_[0]) : NULL;
-	gender_types_[1] = o.gender_types_[1] != NULL ? new unit_type(*o.gender_types_[1]) : NULL;
+	gender_types_[0] = o.gender_types_[0] != nullptr ? new unit_type(*o.gender_types_[0]) : nullptr;
+	gender_types_[1] = o.gender_types_[1] != nullptr ? new unit_type(*o.gender_types_[1]) : nullptr;
 
 	for(variations_map::const_iterator i = o.variations_.begin(); i != o.variations_.end(); ++i) {
 		variations_[i->first] = new unit_type(*i->second);
@@ -454,8 +454,8 @@ unit_type::unit_type(const config &cfg, const std::string & parent_id) :
 	build_status_(NOT_BUILT),
 	portraits_()
 {
-	gender_types_[0] = NULL;
-	gender_types_[1] = NULL;
+	gender_types_[0] = nullptr;
+	gender_types_[1] = nullptr;
 }
 
 unit_type::~unit_type()
@@ -678,9 +678,9 @@ void unit_type::build_created(const movement_type_map &mv_types,
 		return;
 	// There is no preceding build level (other than being constructed).
 
-	// These should still be NULL from the constructor.
-	assert(gender_types_[0] == NULL);
-	assert(gender_types_[1] == NULL);
+	// These should still be nullptr from the constructor.
+	assert(gender_types_[0] == nullptr);
+	assert(gender_types_[1] == nullptr);
 
 	if ( const config &male_cfg = cfg_.child("male") ) {
 		gender_types_[0] = new unit_type(male_cfg, id_);
@@ -757,7 +757,7 @@ const unit_type& unit_type::get_gender_unit_type(unit_race::GENDER gender) const
 {
 	const size_t i = gender;
 	if(i < sizeof(gender_types_)/sizeof(*gender_types_)
-	&& gender_types_[i] != NULL) {
+	&& gender_types_[i] != nullptr) {
 		return *gender_types_[i];
 	}
 
@@ -916,8 +916,8 @@ void unit_type::add_advancement(const unit_type &to_unit,int xp)
 
 	// Add advancements to gendered subtypes, if supported by to_unit
 	for(int gender=0; gender<=1; ++gender) {
-		if(gender_types_[gender] == NULL) continue;
-		if(to_unit.gender_types_[gender] == NULL) {
+		if(gender_types_[gender] == nullptr) continue;
+		if(to_unit.gender_types_[gender] == nullptr) {
 			WRN_CF << to_unit.log_id() << " does not support gender " << gender << "\n";
 			continue;
 		}
@@ -1142,7 +1142,7 @@ unit_type_data::unit_type_data() :
 	hide_help_all_(false),
 	hide_help_type_(),
 	hide_help_race_(),
-	unit_cfg_(NULL),
+	unit_cfg_(nullptr),
 	build_status_(unit_type::NOT_BUILT)
 {
 }
@@ -1346,7 +1346,7 @@ void unit_type_data::set_config(config &cfg)
  */
 const unit_type *unit_type_data::find(const std::string& key, unit_type::BUILD_STATUS status) const
 {
-	if (key.empty() || key == "random") return NULL;
+	if (key.empty() || key == "random") return nullptr;
 
 	DBG_CF << "trying to find " << key  << " in unit_type list (unit_type_data.unit_types)\n";
     const unit_type_map::iterator itor = types_.find(key);
@@ -1357,7 +1357,7 @@ const unit_type *unit_type_data::find(const std::string& key, unit_type::BUILD_S
         for (unit_type_map::const_iterator ut = types_.begin(); ut != types_.end(); ut++)
             DBG_UT << "Known unit_types: key = '" << ut->first << "', id = '" << ut->second.log_id() << "'\n";
         */
-		return NULL;
+		return nullptr;
     }
 
     // Make sure the unit_type is built to the requested level.
@@ -1390,7 +1390,7 @@ void unit_type_data::build_all(unit_type::BUILD_STATUS status)
 	// Nothing to do if already built to the requested level.
 	if ( status <= build_status_ )
 		return;
-	assert(unit_cfg_ != NULL);
+	assert(unit_cfg_ != nullptr);
 
 	for (unit_type_map::iterator u = types_.begin(), u_end = types_.end(); u != u_end; ++u) {
 		build_unit_type(u->second, status);
@@ -1478,7 +1478,7 @@ void unit_type_data::add_advancement(unit_type& to_unit) const
 const unit_race *unit_type_data::find_race(const std::string &key) const
 {
 	race_map::const_iterator i = races_.find(key);
-	return i != races_.end() ? &i->second : NULL;
+	return i != races_.end() ? &i->second : nullptr;
 }
 
 unit_type_data unit_types;

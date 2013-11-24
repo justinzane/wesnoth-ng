@@ -61,7 +61,7 @@ static lg::log_domain log_random("random");
 #define ERR_RND LOG_STREAM(err, log_random)
 
 namespace {
-  rand_rng::rng *random_generator = NULL ;
+  rand_rng::rng *random_generator = nullptr ;
   int last_seed;
   bool seed_valid = false;
   boost::function<void (int)> new_seed_callback;
@@ -70,28 +70,28 @@ namespace {
 
 int get_random()
 {
-  assert(random_generator!=NULL);
+  assert(random_generator!=nullptr);
   int r = random_generator->get_random();
   return r ;
 }
 
 int get_random_nocheck()
 {
-  assert(random_generator!=NULL);
+  assert(random_generator!=nullptr);
   int r = random_generator->get_random_nocheck();
   return r ;
 }
 
 const config* get_random_results()
 {
-  assert(random_generator!=NULL);
+  assert(random_generator!=nullptr);
   return random_generator->get_random_results();
 }
 
 
 void set_random_results(const config& cfg)
 {
-  assert(random_generator!=NULL);
+  assert(random_generator!=nullptr);
   random_generator->set_random_results(cfg);
 }
 
@@ -102,7 +102,7 @@ namespace rand_rng
 void set_seed(int seed)
 {
 	LOG_RND << "set_seed with " << seed << "\n";
-	assert(random_generator!=NULL);
+	assert(random_generator!=nullptr);
 	last_seed = seed;
 	seed_valid = true;
 	random_generator->set_seed(seed);
@@ -115,7 +115,7 @@ void set_seed(int seed)
 void invalidate_seed()
 {
 	LOG_RND << "invalidate_seed\n";
-	assert(random_generator!=NULL);
+	assert(random_generator!=nullptr);
 	last_seed = rand() & 0x7FFFFFFF;
 	if (has_valid_seed()) { //aka SRNG is disabled
 		random_generator->set_seed(last_seed);
@@ -142,18 +142,18 @@ void set_new_seed_callback(boost::function<void (int)> f)
 
 bool has_new_seed_callback()
 {
-	return new_seed_callback != NULL;
+	return new_seed_callback != nullptr;
 }
 
 void clear_new_seed_callback()
 {
 	DBG_RND << "clear_new_seed_callback\n";
-	new_seed_callback = NULL;
+	new_seed_callback = nullptr;
 }
 
 
 
-rng::rng() : random_(NULL), random_child_(0), generator_()
+rng::rng() : random_(nullptr), random_child_(0), generator_()
 {
 }
 
@@ -200,16 +200,16 @@ int rng::get_random_private(bool check)
 
 const config* rng::get_random_results()
 {
-	assert(random_ != NULL);
+	assert(random_ != nullptr);
 
-	if (random_child_ <= 0 ||random_child_ > random_->child_count("random")) return NULL;
+	if (random_child_ <= 0 ||random_child_ > random_->child_count("random")) return nullptr;
 	const config &res = random_->child("random", random_child_ - 1).child("results");
-	return res ? &res : NULL;
+	return res ? &res : nullptr;
 }
 
 void rng::set_random_results(const config& cfg)
 {
-	assert(random_ != NULL);
+	assert(random_ != nullptr);
 
 	if (random_child_ <= 0 ||random_child_ > random_->child_count("random")) return;
 	config &r = random_->child("random", random_child_ - 1);

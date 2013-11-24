@@ -101,15 +101,15 @@ private:
  * Makes it so the village at the given location is owned by the given side.
  * Returns true if getting the village triggered a mutating event.
  */
-bool get_village(const map_location& loc, int side, int *time_bonus = NULL);
+bool get_village(const map_location& loc, int side, int *time_bonus = nullptr);
 
 /// Moves a unit across the board.
 size_t move_unit(const std::vector<map_location> &steps,
                  replay* move_recorder, undo_list* undo_stack,
                  bool continued_move = false, bool show_move = true,
-                 bool* interrupted = NULL,
-                 move_unit_spectator* move_spectator = NULL,
-                 const map_location* replay_dest = NULL);
+                 bool* interrupted = nullptr,
+                 move_unit_spectator* move_spectator = nullptr,
+                 const map_location* replay_dest = nullptr);
 
 /**
  * Will return true iff the unit @a u has any possible moves

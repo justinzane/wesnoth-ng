@@ -595,13 +595,13 @@ void unit_frame::redraw(const int frame_time,bool on_start_time,bool in_scope_of
 		image_loc = image::locator(current_data.image,current_data.image_mod);
 	}
 
-	surface image;
+	SDL_Surface image;
 	if(!image_loc.is_void() && image_loc.get_filename() != "") { // invalid diag image, or not diagonal
 		image=image::get_image(image_loc, image::SCALED_TO_ZOOM);
 	}
 	const int x = static_cast<int>(tmp_offset * xdst + (1.0-tmp_offset) * xsrc) + d2;
 	const int y = static_cast<int>(tmp_offset * ydst + (1.0-tmp_offset) * ysrc) + d2;
-	if (image != NULL) {
+	if (image != nullptr) {
 #ifdef LOW_MEM
 		bool facing_west = false;
 #else
@@ -734,13 +734,13 @@ std::set<map_location> unit_frame::get_overlaped_hex(const int frame_time,const 
 #pragma omp critical(frame_surface) // with the way surfaces work it's hard to lock the refcount within sdl_utils
 #endif //_OPENMP
 		{
-			surface image;
+			SDL_Surface image;
 			if(!image_loc.is_void() && image_loc.get_filename() != "") { // invalid diag image, or not diagonal
 				image=image::get_image(image_loc,
 						image::SCALED_TO_ZOOM
 						);
 			}
-			if(image != NULL) {
+			if(image != nullptr) {
 				w = image->w;
 				h = image->h;
 			}

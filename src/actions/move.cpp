@@ -143,7 +143,7 @@ void move_unit_spectator::set_unit(const unit_map::const_iterator &u)
 bool get_village(const map_location& loc, int side, int *action_timebonus)
 {
 	std::vector<team> &teams = *resources::teams;
-	team *t = unsigned(side - 1) < teams.size() ? &teams[side - 1] : NULL;
+	team *t = unsigned(side - 1) < teams.size() ? &teams[side - 1] : nullptr;
 	if (t && t->owns_village(loc)) {
 		return false;
 	}
@@ -175,7 +175,7 @@ bool get_village(const map_location& loc, int side, int *action_timebonus)
 	}
 
 	if(has_leader) {
-		if (resources::screen != NULL) {
+		if (resources::screen != nullptr) {
 			resources::screen->invalidate(loc);
 		}
 		return t->get_village(loc, old_owner_side);
@@ -237,7 +237,7 @@ namespace { // Private helpers for move_unit()
 		                    const route_iterator & current,
 	                        const route_iterator & other);
 		/// AI moves are supposed to not change the "goto" order.
-		bool is_ai_move() const	{ return spectator_ != NULL; }
+		bool is_ai_move() const	{ return spectator_ != nullptr; }
 		/// Checks how far it appears we can move this turn.
 		route_iterator plot_turn(const route_iterator & start,
 		                         const route_iterator & stop);
@@ -347,7 +347,7 @@ namespace { // Private helpers for move_unit()
 	                       move_unit_spectator *move_spectator,
 	                       bool skip_sightings, const map_location *replay_dest) :
 		spectator_(move_spectator),
-		is_replay_(replay_dest != NULL),
+		is_replay_(replay_dest != nullptr),
 		replay_dest_(is_replay_ ? *replay_dest : route.back()),
 		skip_sighting_(is_replay_ || skip_sightings),
 		playing_team_is_viewing_(resources::screen->playing_team() ==
@@ -535,7 +535,7 @@ namespace { // Private helpers for move_unit()
 	                                   bool new_animation)
 	{
 		// Clear the fog.
-		if ( clearer_.clear_unit(hex, *move_it_, *current_team_, NULL,
+		if ( clearer_.clear_unit(hex, *move_it_, *current_team_, nullptr,
 		                         &enemy_count_, &friend_count_, spectator_,
 		                         !new_animation) )
 		{
@@ -649,7 +649,7 @@ namespace { // Private helpers for move_unit()
 		}
 
 		// Update the shroud clearer.
-		clearer_.cache_units(current_uses_fog_ ? current_team_ : NULL);
+		clearer_.cache_units(current_uses_fog_ ? current_team_ : nullptr);
 
 
 		// Abort for null routes.
@@ -1183,7 +1183,7 @@ namespace { // Private helpers for move_unit()
  * @param[in]  show_move            Controls whether or not the movement is animated for the player.
  * @param[out] interrupted          If supplied, then this is set to true if information was uncovered that warrants interrupting a chain of actions (and set to false otherwise).
  * @param[out] move_spectator       If supplied, this will be given the information uncovered by the move (and the unit's "goto" instruction will be preserved).
- * @param[in]  replay_dest          If not NULL, then this move is assumed to be a replay that expects the unit to be moved to here. Several normal considerations are ignored in a replay.
+ * @param[in]  replay_dest          If not nullptr, then this move is assumed to be a replay that expects the unit to be moved to here. Several normal considerations are ignored in a replay.
  *
  * @returns The number of hexes entered. This can safely be used as an index
  *          into @a steps to get the location where movement ended, provided

@@ -48,7 +48,7 @@
 
 namespace preferences {
 
-display* disp = NULL;
+display* disp = nullptr;
 
 display_manager::display_manager(display* d)
 {
@@ -66,7 +66,7 @@ display_manager::display_manager(display* d)
 
 display_manager::~display_manager()
 {
-	disp = NULL;
+	disp = nullptr;
 }
 
 bool detect_video_settings(CVideo& video, std::pair<int,int>& resolution, int& bpp, int& video_flags)
@@ -76,7 +76,7 @@ bool detect_video_settings(CVideo& video, std::pair<int,int>& resolution, int& b
 
 	int DefaultBPP = 24;
 	const SDL_VideoInfo* const video_info = SDL_GetVideoInfo();
-	if(video_info != NULL && video_info->vfmt != NULL) {
+	if(video_info != nullptr && video_info->vfmt != nullptr) {
 		DefaultBPP = video_info->vfmt->BitsPerPixel;
 	}
 
@@ -143,7 +143,7 @@ void set_fullscreen(bool ison)
 {
 	_set_fullscreen(ison);
 
-	if(disp != NULL) {
+	if(disp != nullptr) {
 		set_fullscreen(disp->video(), ison);
 	}
 }
@@ -202,7 +202,7 @@ void set_turbo(bool ison)
 {
 	_set_turbo(ison);
 
-	if(disp != NULL) {
+	if(disp != nullptr) {
 		disp->set_turbo(ison);
 	}
 }
@@ -211,7 +211,7 @@ void set_turbo_speed(double speed)
 {
 	save_turbo_speed(speed);
 
-	if(disp != NULL) {
+	if(disp != nullptr) {
 		disp->set_turbo_speed(speed);
 	}
 }
@@ -225,7 +225,7 @@ void set_grid(bool ison)
 {
 	_set_grid(ison);
 
-	if(disp != NULL) {
+	if(disp != nullptr) {
 		disp->set_grid(ison);
 	}
 }
@@ -239,14 +239,14 @@ void set_color_cursors(bool value)
 
 void set_idle_anim(bool ison) {
 	_set_idle_anim(ison);
-	if(disp != NULL) {
+	if(disp != nullptr) {
 		disp->set_idle_anim(ison);
 	}
 }
 
 void set_idle_anim_rate(int rate) {
 	_set_idle_anim_rate(rate);
-	if(disp != NULL) {
+	if(disp != nullptr) {
 		disp->set_idle_anim_rate(rate);
 	}
 }
@@ -320,11 +320,11 @@ bool show_video_mode_dialog(display& disp)
 			&scr_modes[11],
 			&scr_modes[12],
 			&scr_modes[13],
-			NULL
+			nullptr
 		};
 
 		modes = scr_modes_list;
-	} else if(modes == NULL) {
+	} else if(modes == nullptr) {
 		std::cerr << "No modes supported\n";
 		gui2::show_transient_message(disp.video(),"",_("There are no alternative video modes available"));
 		return false;
@@ -332,7 +332,7 @@ bool show_video_mode_dialog(display& disp)
 
 	std::vector<std::pair<int,int> > resolutions;
 
-	for(int i = 0; modes[i] != NULL; ++i) {
+	for(int i = 0; modes[i] != nullptr; ++i) {
 		if(modes[i]->w >= min_allowed_width() && modes[i]->h >= min_allowed_height()) {
 			resolutions.push_back(std::pair<int,int>(modes[i]->w,modes[i]->h));
 		}

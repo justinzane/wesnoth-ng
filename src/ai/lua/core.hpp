@@ -49,7 +49,7 @@ private:
 public:
 	~lua_ai_context();
 	lua_ai_context()
-		: L(NULL)
+		: L(nullptr)
 		, num_(0)
 		, side_(0)
 	{

@@ -48,7 +48,7 @@ public:
 	virtual void enable(bool new_val = true);
 	bool enabled() const;
 
-	void set_clip_rect(const SDL_Rect& rect);
+	void set_clip_rect(const SDL_Rect* rect);
 
 	//Function to set the widget to draw in 'volatile' mode.
 	//When in 'volatile' mode, instead of using the normal

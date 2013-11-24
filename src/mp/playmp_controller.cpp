@@ -50,7 +50,7 @@ playmp_controller::playmp_controller(const config& level,
 		bool skip_replay, bool is_host) :
 	playsingle_controller(level, state_of_game, ticks, num_turns,
 		game_config, video, skip_replay),
-	turn_data_(NULL),
+	turn_data_(nullptr),
 	beep_warning_time_(0),
 	network_processing_stopped_(false)
 {
@@ -353,7 +353,7 @@ void playmp_controller::wait_for_upload()
 	// upload the next scenario.
 	assert(!is_host_);
 
-	const bool set_turn_data = (turn_data_ == NULL);
+	const bool set_turn_data = (turn_data_ == nullptr);
 	if(set_turn_data) {
 		init_turn_data();
 	}
@@ -380,7 +380,7 @@ void playmp_controller::wait_for_upload()
 
 	if(set_turn_data) {
 		delete turn_data_;
-		turn_data_ = NULL;
+		turn_data_ = nullptr;
 	}
 }
 
@@ -398,7 +398,7 @@ void playmp_controller::after_human_turn(){
 	LOG_NG << "playmp::after_human_turn...\n";
 
 	//ensure that turn_data_ is constructed before it is used.
-	if (turn_data_ == NULL) init_turn_data();
+	if (turn_data_ == nullptr) init_turn_data();
 
 	// Normal post-processing for human turns (clear undos, end the turn, etc.)
 	playsingle_controller::after_human_turn();
@@ -408,7 +408,7 @@ void playmp_controller::after_human_turn(){
 	// Release turn_data_.
 	turn_data_->host_transfer().detach_handler(this);
 	delete turn_data_;
-	turn_data_ = NULL;
+	turn_data_ = nullptr;
 }
 
 void playmp_controller::finish_side_turn(){
@@ -416,7 +416,7 @@ void playmp_controller::finish_side_turn(){
 
 	//just in case due to an exception turn_data_ has not been deleted in after_human_turn
 	delete turn_data_;
-	turn_data_ = NULL;
+	turn_data_ = nullptr;
 
 	//halt and cancel the countdown timer
 	reset_countdown();

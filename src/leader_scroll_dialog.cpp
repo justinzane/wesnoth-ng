@@ -142,7 +142,7 @@ void status_table(display& gui, int selected)
                 }
 		str << COLUMN_SEPARATOR
 			<< data.units << COLUMN_SEPARATOR << data.upkeep << COLUMN_SEPARATOR
-			<< (data.net_income < 0 ? font::BAD_TEXT : font::NULL_MARKUP) << utils::signed_value(data.net_income);
+			<< (data.net_income < 0 ? font::BAD_TEXT : font::nullptr_MARKUP) << utils::signed_value(data.net_income);
 		total_villages += data.villages;
 		items.push_back(str.str());
 	}

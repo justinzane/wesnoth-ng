@@ -111,7 +111,7 @@ public:
 protected:
 	virtual void process_event();
 
-	virtual void layout_children(const SDL_Rect& rect);
+	virtual void layout_children(const SDL_Rect* rect);
 	virtual void hide_children(bool hide = true);
 
 	virtual void process_network_data(const config& data,

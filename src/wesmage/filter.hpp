@@ -30,7 +30,7 @@
 #include <vector>
 
 void
-filter_apply(surface& surf, const std::string& filter);
+filter_apply(SDL_Surface& surf, const std::string& filter);
 
 /**
  * Helper structure to describe what a filter does.

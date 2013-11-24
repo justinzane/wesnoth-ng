@@ -70,19 +70,19 @@ static lg::log_domain log_enginerefac("enginerefac");
 
 static void clear_resources()
 {
-	resources::controller = NULL;
-	resources::gamedata = NULL;
-	resources::game_map = NULL;
-	resources::persist = NULL;
-	resources::screen = NULL;
-	resources::soundsources = NULL;
-	resources::state_of_game = NULL;
-	resources::teams = NULL;
-	resources::tod_manager = NULL;
-	resources::tunnels = NULL;
-	resources::undo_stack = NULL;
-	resources::units = NULL;
-	resources::whiteboard = NULL;
+	resources::controller = nullptr;
+	resources::gamedata = nullptr;
+	resources::game_map = nullptr;
+	resources::persist = nullptr;
+	resources::screen = nullptr;
+	resources::soundsources = nullptr;
+	resources::state_of_game = nullptr;
+	resources::teams = nullptr;
+	resources::tod_manager = nullptr;
+	resources::tunnels = nullptr;
+	resources::undo_stack = nullptr;
+	resources::units = nullptr;
+	resources::whiteboard = nullptr;
 }
 
 
@@ -100,8 +100,8 @@ play_controller::play_controller(const config& level, game_state& state_of_game,
 	halo_manager_(),
 	labels_manager_(),
 	help_manager_(&game_config),
-	mouse_handler_(NULL, teams_, units_, map_),
-	menu_handler_(NULL, units_, teams_, level, map_, game_config, state_of_game),
+	mouse_handler_(nullptr, teams_, units_, map_),
+	menu_handler_(nullptr, units_, teams_, level, map_, game_config, state_of_game),
 	soundsources_manager_(),
 	tod_manager_(level, num_turns),
 	pathfind_manager_(),
@@ -169,11 +169,11 @@ play_controller::~play_controller()
 }
 
 void play_controller::init(CVideo& video){
-	util::scoped_resource<loadscreen::global_loadscreen_manager*, util::delete_item> scoped_loadscreen_manager;
-	loadscreen::global_loadscreen_manager* loadscreen_manager = loadscreen::global_loadscreen_manager::get();
+	util::scoped_resource<loadscreen::loadscreen_mgr*, util::delete_item> scoped_loadscreen_manager;
+	loadscreen::loadscreen_mgr* loadscreen_manager = loadscreen::loadscreen_mgr::get();
 	if (!loadscreen_manager)
 	{
-		scoped_loadscreen_manager.assign(new loadscreen::global_loadscreen_manager(video));
+		scoped_loadscreen_manager.assign(new loadscreen::loadscreen_mgr(video));
 		loadscreen_manager = scoped_loadscreen_manager.get();
 	}
 
@@ -836,7 +836,7 @@ bool play_controller::execute_command(const hotkey::hotkey_command& cmd, int ind
 			// Load the game by throwing load_game_exception
 			throw game::load_game_exception(savenames_[i],false,false,false,"");
 
-		} else if (i < wml_commands_.size() && wml_commands_[i] != NULL) {
+		} else if (i < wml_commands_.size() && wml_commands_[i] != nullptr) {
 			fire_wml_menu_item_event(*wml_commands_[i]);
 			return true;
 		}
@@ -877,7 +877,7 @@ bool play_controller::can_execute_command(const hotkey::hotkey_command& cmd, int
 	if(index >= 0) {
 		unsigned i = static_cast<unsigned>(index);
 		if((i < savenames_.size() && !savenames_[i].empty())
-		|| (i < wml_commands_.size() && wml_commands_[i] != NULL)) {
+		|| (i < wml_commands_.size() && wml_commands_[i] != nullptr)) {
 			return true;
 		}
 	}
@@ -1243,7 +1243,7 @@ void play_controller::expand_wml_commands(std::vector<std::string>& items)
 			items.insert(items.begin()+i, newitems.begin(), newitems.end());
 			break;
 		}
-		wml_commands_.push_back(NULL);
+		wml_commands_.push_back(nullptr);
 	}
 }
 
@@ -1328,7 +1328,7 @@ std::string play_controller::get_action_image(hotkey::HOTKEY_COMMAND command, in
 {
 	if(index >= 0 && index < static_cast<int>(wml_commands_.size())) {
 		const wml_menu_item* const wmi = wml_commands_[index];
-		if(wmi != NULL) {
+		if(wmi != nullptr) {
 			return wmi->image();
 		}
 	}

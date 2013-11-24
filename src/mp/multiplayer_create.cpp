@@ -92,7 +92,7 @@ create::create(game_display& disp, const config& cfg, game_state& state,
 	filter_num_players_slider_(disp.video()),
 	description_(disp.video(), 100, "", false),
 	filter_name_(disp.video(), 100, "", true),
-	image_restorer_(NULL),
+	image_restorer_(nullptr),
 	image_rect_(null_rect),
 	available_level_types_(),
 	available_mods_(),
@@ -429,14 +429,14 @@ void create::draw_level_image()
 	boost::scoped_ptr<surface> image(
 		engine_.current_level().create_image_surface(image_rect_));
 
-	if (image.get() != NULL) {
+	if (image.get() != nullptr) {
 		SDL_Color back_color = {0,0,0,255};
 		draw_centered_on_background(*image, image_rect_, back_color,
 			video().getSurface());
 	} else {
-		surface display(disp_.get_screen_surface());
-		sdl_fill_rect(display, &image_rect_,
-			SDL_MapRGB(display->format, 0, 0, 0));
+		SDL_Surface display(disp_.get_screen_surface());
+		SDL_FillRect(display, &image_rect_,
+			SDL_MapRGBA(display->format, 0, 0, 0));
 		update_rect(image_rect_);
 
 	}
@@ -516,7 +516,7 @@ void create::hide_children(bool hide)
 	filter_name_.hide(hide);
 
 	if (hide) {
-		image_restorer_.assign(NULL);
+		image_restorer_.assign(nullptr);
 	} else {
 		image_restorer_.assign(new surface_restorer(&video(), image_rect_));
 
@@ -525,7 +525,7 @@ void create::hide_children(bool hide)
 	}
 }
 
-void create::layout_children(const SDL_Rect& rect)
+void create::layout_children(const SDL_Rect* rect)
 {
 	DBG_MP << "laying out the children" << std::endl;
 

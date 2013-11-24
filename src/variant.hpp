@@ -56,7 +56,7 @@ struct type_error : public game::error {
 class variant {
 public:
 
-	enum TYPE { TYPE_NULL, TYPE_INT, TYPE_DECIMAL, TYPE_CALLABLE, TYPE_LIST, TYPE_STRING, TYPE_MAP };
+	enum TYPE { TYPE_nullptr, TYPE_INT, TYPE_DECIMAL, TYPE_CALLABLE, TYPE_LIST, TYPE_STRING, TYPE_MAP };
 
 	enum DECIMAL_VARIANT_TYPE { DECIMAL_VARIANT };
 
@@ -80,11 +80,11 @@ public:
 	variant get_member(const std::string& str) const;
 
 	bool is_string() const { return type_ == TYPE_STRING; }
-	bool is_null() const { return type_ == TYPE_NULL; }
+	bool is_null() const { return type_ == TYPE_nullptr; }
 	bool is_int() const { return type_ == TYPE_INT; }
 	bool is_decimal() const { return type_ == TYPE_DECIMAL; }
 	bool is_map() const { return type_ == TYPE_MAP; }
-	int as_int() const { if(type_ == TYPE_NULL) { return 0; } must_be(TYPE_INT); return int_value_; }
+	int as_int() const { if(type_ == TYPE_nullptr) { return 0; } must_be(TYPE_INT); return int_value_; }
 
 	//this function returns variant's internal representation of decimal number:
 	//for example number 1.234 is represented as 1234
@@ -105,7 +105,7 @@ public:
 	template<typename T>
 	T* try_convert() const {
 		if(!is_callable()) {
-			return NULL;
+			return nullptr;
 		}
 
 		return dynamic_cast<T*>(mutable_callable());
@@ -154,7 +154,7 @@ public:
 
 	std::string string_cast() const;
 
-	std::string to_debug_string(std::vector<const game_logic::formula_callable*>* seen=NULL, bool verbose = false) const;
+	std::string to_debug_string(std::vector<const game_logic::formula_callable*>* seen=nullptr, bool verbose = false) const;
 
 private:
 	void must_be(TYPE t) const;
@@ -184,7 +184,7 @@ private:
 class variant_iterator {
 public:
 	/**
-	 * Constructor for a TYPE_NULL variant.
+	 * Constructor for a TYPE_nullptr variant.
 	 */
 	variant_iterator();
 
@@ -215,7 +215,7 @@ public:
 	bool operator==(const variant_iterator& that) const;
 	bool operator!=(const variant_iterator& that) const;
 
-	enum TYPE { TYPE_NULL, TYPE_LIST, TYPE_MAP };
+	enum TYPE { TYPE_nullptr, TYPE_LIST, TYPE_MAP };
 private:
 	TYPE type_;
 	std::vector<variant>::iterator list_iterator_;
@@ -236,7 +236,7 @@ T* convert_variant(const variant& v) {
 template<typename T>
 T* try_convert_variant(const variant& v) {
 	if(!v.is_callable()) {
-		return NULL;
+		return nullptr;
 	}
 
 	return dynamic_cast<T*>(v.mutable_callable());

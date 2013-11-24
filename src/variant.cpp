@@ -34,7 +34,7 @@
 namespace {
 std::string variant_type_to_string(variant::TYPE type) {
 	switch(type) {
-	case variant::TYPE_NULL:
+	case variant::TYPE_nullptr:
 		return "null";
 	case variant::TYPE_INT:
 		return "int";
@@ -87,7 +87,7 @@ type_error::type_error(const std::string& str) : game::error(str) {
 }
 
 variant_iterator::variant_iterator()
-	: type_(TYPE_NULL)
+	: type_(TYPE_nullptr)
 	, list_iterator_()
 	, map_iterator_()
 {
@@ -107,7 +107,7 @@ variant_iterator::variant_iterator(const variant_iterator& iter)
 			map_iterator_ = iter.map_iterator_;
 			break;
 
-		case TYPE_NULL:
+		case TYPE_nullptr:
 			/* DO NOTHING */
 			break;
 	}
@@ -184,7 +184,7 @@ variant_iterator& variant_iterator::operator=(const variant_iterator& that)
 			map_iterator_ = that.map_iterator_;
 			break;
 
-		case TYPE_NULL:
+		case TYPE_nullptr:
 			/* DO NOTHING */
 			break;
 	}
@@ -204,7 +204,7 @@ bool variant_iterator::operator==(const variant_iterator& that) const
 		if (that.type_ != TYPE_MAP)
 			return false;
 		return map_iterator_ == that.map_iterator_;
-	} else if (type_ == TYPE_NULL &&  that.type_ == TYPE_NULL )
+	} else if (type_ == TYPE_nullptr &&  that.type_ == TYPE_nullptr )
 		return true;
 	else
 		return false;
@@ -222,7 +222,7 @@ bool variant_iterator::operator!=(const variant_iterator& that) const
 		if (that.type_ != TYPE_MAP)
 			return true;
 		return map_iterator_ != that.map_iterator_;
-	} else if (type_ == TYPE_NULL &&  that.type_ == TYPE_NULL )
+	} else if (type_ == TYPE_nullptr &&  that.type_ == TYPE_nullptr )
 		return false;
 	else
 		return true;
@@ -278,7 +278,7 @@ void variant::increment_refcount()
 		break;
 
 	// These are not used here, add them to silence a compiler warning.
-	case TYPE_NULL:
+	case TYPE_nullptr:
 	case TYPE_DECIMAL:
 	case TYPE_INT :
 		break;
@@ -308,14 +308,14 @@ void variant::release()
 		break;
 
 	// These are not used here, add them to silence a compiler warning.
-	case TYPE_NULL:
+	case TYPE_nullptr:
 	case TYPE_DECIMAL:
 	case TYPE_INT :
 		break;
 	}
 }
 
-variant::variant() : type_(TYPE_NULL), int_value_(0)
+variant::variant() : type_(TYPE_nullptr), int_value_(0)
 {}
 
 variant::variant(int n) : type_(TYPE_INT), int_value_(n)
@@ -466,7 +466,7 @@ variant_iterator variant::end() const
 
 bool variant::is_empty() const
 {
-	if(type_ == TYPE_NULL) {
+	if(type_ == TYPE_nullptr) {
 		return true;
 	} else if (type_ == TYPE_LIST) {
 		assert(list_);
@@ -518,7 +518,7 @@ int variant::as_decimal() const
 		return decimal_value_;
 	} else if( type_ == TYPE_INT ) {
 		return int_value_*1000;
-	} else if( type_ == TYPE_NULL) {
+	} else if( type_ == TYPE_nullptr) {
 		return 0;
 	} else {
 		throw type_error((formatter() << "type error: "
@@ -531,14 +531,14 @@ int variant::as_decimal() const
 bool variant::as_bool() const
 {
 	switch(type_) {
-	case TYPE_NULL:
+	case TYPE_nullptr:
 		return false;
 	case TYPE_INT:
 		return int_value_ != 0;
 	case TYPE_DECIMAL:
 		return decimal_value_ != 0;
 	case TYPE_CALLABLE:
-		return callable_ != NULL;
+		return callable_ != nullptr;
 	case TYPE_LIST:
 		return !list_->elements.empty();
 	case TYPE_MAP:
@@ -712,7 +712,7 @@ bool variant::operator==(const variant& v) const
 	}
 
 	switch(type_) {
-	case TYPE_NULL: {
+	case TYPE_nullptr: {
 		return v.is_null();
 	}
 
@@ -771,7 +771,7 @@ bool variant::operator<=(const variant& v) const
 	}
 
 	switch(type_) {
-	case TYPE_NULL: {
+	case TYPE_nullptr: {
 		return true;
 	}
 
@@ -912,7 +912,7 @@ void variant::must_be(variant::TYPE t) const
 void variant::serialize_to_string(std::string& str) const
 {
 	switch(type_) {
-	case TYPE_NULL:
+	case TYPE_nullptr:
 		str += "null()";
 	case TYPE_INT:
 		str += boost::lexical_cast<std::string>(int_value_);
@@ -1013,7 +1013,7 @@ int variant::refcount() const
 std::string variant::string_cast() const
 {
 	switch(type_) {
-	case TYPE_NULL:
+	case TYPE_nullptr:
 		return "0";
 	case TYPE_INT:
 		return boost::lexical_cast<std::string>(int_value_);
@@ -1083,7 +1083,7 @@ std::string variant::to_debug_string(std::vector<const game_logic::formula_calla
 
 	std::ostringstream s;
 	switch(type_) {
-	case TYPE_NULL:
+	case TYPE_nullptr:
 		s << "(null)";
 	case TYPE_INT:
 		s << int_value_;

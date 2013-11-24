@@ -228,7 +228,7 @@ protected:
 	game_data gamedata_;
 	gamemap map_;
 	unit_map units_;
-	/// undo_stack_ is never NULL. It is implemented as a pointer so that
+	/// undo_stack_ is never nullptr. It is implemented as a pointer so that
 	/// undo_list can be an incomplete type at this point (which reduces the
 	/// number of files that depend on actions/undo.hpp).
 	boost::scoped_ptr<actions::undo_list> undo_stack_;

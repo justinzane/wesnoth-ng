@@ -31,7 +31,7 @@
 #include "gui/widgets/panel.hpp"
 
 #include "events.hpp"
-#include "SDL.h"
+#include "SDL2/SDL.h"
 
 #include <string>
 #include <boost/function.hpp>
@@ -95,7 +95,7 @@ public:
 	 *
 	 * @param handle              The instance id of the window.
 	 *
-	 * @returns                   The window or NULL.
+	 * @returns                   The window or nullptr.
 	 */
 	static twindow* window_instance(const unsigned handle);
 
@@ -461,8 +461,8 @@ private:
 	/** Avoid drawing the window.  */
 	bool suspend_drawing_;
 
-	/** When the window closes this surface is used to undraw the window. */
-	surface restorer_;
+	/** When the window closes this SDL_Surface is used to undraw the window. */
+	SDL_Surface restorer_;
 
 	/** Do we wish to place the widget automatically? */
 	const bool automatic_placement_;
@@ -625,7 +625,7 @@ private:
 	 *
 	 * Don't call this function it's only asserts.
 	 */
-	void draw(surface& surface, const bool force = false,
+	void draw(SDL_Surface& surface, const bool force = false,
 			const bool invalidate_background = false);
 
 	/**

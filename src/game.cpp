@@ -162,7 +162,7 @@ static void handle_preprocess_command(const commandline_options& cmdline_opts)
 		int read = 0;
 
 		// use static preproc_define::read_pair(config) to make a object
-		foreach_ng( const config::any_child &value, cfg.all_children_range() ) {
+		BOOST_FOREACH( const config::any_child &value, cfg.all_children_range() ) {
 			const preproc_map::value_type def = preproc_define::read_pair( value.cfg );
 			input_macros[def.first] = def.second;
 			++read;
@@ -411,7 +411,7 @@ static void init_locale() {
  */
 static int do_gameloop(int argc, char** argv)
 {
-	srand(time(NULL));
+	srand(time(nullptr));
 
 	commandline_options cmdline_opts = commandline_options(argc,argv);
 	game_config::wesnoth_program_dir = directory_name(argv[0]);
@@ -462,7 +462,7 @@ static int do_gameloop(int argc, char** argv)
 	const cursor::manager cursor_manager;
 	cursor::set(cursor::WAIT);
 
-	loadscreen::global_loadscreen_manager loadscreen_manager(game->disp().video());
+	loadscreen::loadscreen_mgr loadscreen_manager(game->disp().video());
 
 	loadscreen::start_stage("init gui");
 	gui2::init();
@@ -511,7 +511,7 @@ static int do_gameloop(int argc, char** argv)
 			    config_manager.game_config().child("titlescreen_music");
 			if (cfg) {
 	            sound::play_music_repeatedly(game_config::title_music);
-				foreach_ng(const config &i, cfg.child_range("music")) {
+				BOOST_FOREACH(const config &i, cfg.child_range("music")) {
 					sound::play_music_config(i);
 				}
 				sound::commit_music_changes();
@@ -623,7 +623,7 @@ static int do_gameloop(int argc, char** argv)
 			}
 			continue;
 		} else if(res == gui2::ttitle_screen::RELOAD_GAME_DATA) {
-			loadscreen::global_loadscreen_manager loadscreen(game->disp().video());
+			loadscreen::loadscreen_mgr loadscreen(game->disp().video());
 			config_manager.reload_changed_game_config();
 			image::flush_cache();
 			continue;
@@ -682,7 +682,7 @@ int main(int argc, char** argv)
 
 	try {
 		std::cerr << "Battle for Wesnoth v" << game_config::revision << '\n';
-		const time_t t = time(NULL);
+		const time_t t = time(nullptr);
 		std::cerr << "Started on " << ctime(&t) << "\n";
 
 		const std::string exe_dir = get_exe_dir();

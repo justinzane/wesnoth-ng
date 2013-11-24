@@ -19,8 +19,8 @@
 #ifndef THREAD_HPP_INCLUDED
 #define THREAD_HPP_INCLUDED
 
-#include "SDL.h"
-#include "SDL_thread.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_thread.h"
 
 #include <list>
 
@@ -57,8 +57,8 @@ public:
 	// \param f the function at which the thread should start executing
 	// \param data passed to f
 	//
-	// \pre f != NULL
-	explicit thread(int (*f)(void*), void* data=NULL);
+	// \pre f != nullptr
+	explicit thread(int (*f)(void*), void* data=nullptr);
 
 	// Destroy the thread object. This is done by waiting on the
 	// thread with the join() operation, thus blocking until the

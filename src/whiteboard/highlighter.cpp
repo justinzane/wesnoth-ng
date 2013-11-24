@@ -53,8 +53,8 @@ highlighter::highlighter(unit_map& unit_map, side_actions_ptr side_actions)
 	: unit_map_(unit_map)
 	, mouseover_hex_()
 	, exclusive_display_hexes_()
-	, owner_unit_(NULL)
-	, selection_candidate_(NULL)
+	, owner_unit_(nullptr)
+	, selection_candidate_(nullptr)
 	, selected_action_()
 	, main_highlight_()
 	, secondary_highlights_()
@@ -124,7 +124,7 @@ void highlighter::clear()
 {
 	unhighlight();
 	main_highlight_.reset();
-	owner_unit_ = NULL;
+	owner_unit_ = nullptr;
 	secondary_highlights_.clear();
 	selected_action_.reset();
 }
@@ -221,7 +221,7 @@ void highlighter::find_secondary_highlights()
 	assert(owner_unit_);
 	assert(secondary_highlights_.empty());
 
-	if(owner_unit_ == NULL) {
+	if(owner_unit_ == nullptr) {
 		return;
 	}
 

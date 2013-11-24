@@ -47,8 +47,8 @@ ttree_view_node::ttree_view_node(const std::string& id
 	, grid_()
 	, children_()
 	, node_definitions_(node_definitions)
-	, icon_(NULL)
-	, label_(NULL)
+	, icon_(nullptr)
+	, label_(nullptr)
 {
 	grid_.set_parent(this);
 	set_parent(&parent_tree_view);
@@ -112,7 +112,7 @@ ttree_view_node::ttree_view_node(const std::string& id
 ttree_view_node::~ttree_view_node()
 {
 	if(/*tree_view() &&*/ tree_view().selected_item_ == this) {
-		tree_view().selected_item_ = NULL;
+		tree_view().selected_item_ = nullptr;
 	}
 }
 
@@ -257,7 +257,7 @@ private:
 				return widget;
 			}
 		}
-		return NULL;
+		return nullptr;
 	}
 
 public:
@@ -275,7 +275,7 @@ public:
 		}
 
 		if(tree_view_node.is_folded()) {
-			return NULL;
+			return nullptr;
 		}
 
 		return find_at_aux<W>(tree_view_node.children_.begin(),
@@ -495,7 +495,7 @@ unsigned ttree_view_node::place(
 	return origin.y - offset;
 }
 
-void ttree_view_node::set_visible_rectangle(const SDL_Rect& rectangle)
+void ttree_view_node::set_visible_rectangle(const SDL_Rect* rectangle)
 {
 	log_scope2(log_gui_layout, LOG_SCOPE_HEADER);
 	DBG_GUI_L << LOG_HEADER << " rectangle " << rectangle << ".\n";
@@ -511,7 +511,7 @@ void ttree_view_node::set_visible_rectangle(const SDL_Rect& rectangle)
 	}
 }
 
-void ttree_view_node::impl_draw_children(surface& frame_buffer)
+void ttree_view_node::impl_draw_children(SDL_Surface& frame_buffer)
 {
 	grid_.draw_children(frame_buffer);
 
@@ -525,7 +525,7 @@ void ttree_view_node::impl_draw_children(surface& frame_buffer)
 }
 
 void ttree_view_node::impl_draw_children(
-		  surface& frame_buffer
+		  SDL_Surface& frame_buffer
 		, int x_offset
 		, int y_offset)
 {

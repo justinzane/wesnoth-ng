@@ -58,13 +58,13 @@ bool tspacer::disable_click_dismiss() const
 	return false;
 }
 
-void tspacer::impl_draw_background(surface& /*frame_buffer*/)
+void tspacer::impl_draw_background(SDL_Surface* /*frame_buffer*/)
 {
 	/* DO NOTHING */
 }
 
 void tspacer::impl_draw_background(
-		  surface& /*frame_buffer*/
+		  SDL_Surface* /*frame_buffer*/
 		, int /*x_offset*/
 		, int /*y_offset*/)
 {

@@ -74,8 +74,8 @@ namespace {
 	void blur_area(CVideo& video, int y, int h)
 	{
 		SDL_Rect blur_rect = create_rect(0, y, screen_area().w, h);
-		surface blur = get_surface_portion(video.getSurface(), blur_rect);
-		blur = blur_surface(blur, 1, false);
+		SDL_Surface blur = get_surface_portion(video.getSurface(), blur_rect);
+		blur = surface_blur(blur, 1, false);
 		video.blit_surface(0, y, blur);
 	}
 #endif
@@ -96,7 +96,7 @@ part_ui::part_ui(part &p, display &disp, gui::button &next_button,
 	, x_scale_factor_(1.0)
 	, y_scale_factor_(1.0)
 	, base_rect_()
-	, background_(NULL)
+	, background_(nullptr)
 	, imgs_()
 	, has_background_(false)
 	, text_x_(200)
@@ -119,7 +119,7 @@ void part_ui::prepare_background()
 	
 	// Build background surface
 	foreach_ng(const background_layer& bl, p_.get_background_layers()) {
-		surface layer;
+		SDL_Surface layer;
 		
 		if(bl.file().empty() != true) {
 			layer.assign( image::get_image(bl.file()) );
@@ -180,7 +180,7 @@ void part_ui::prepare_background()
 		}
 
 		blit_surface(layer, &srect, background_, &drect);
-		ASSERT_LOG(layer.null() == false, "Oops: a storyscreen part background layer got NULL");
+		ASSERT_LOG(layer.null() == false, "Oops: a storyscreen part background layer got nullptr");
 
 		if (bl.is_base_layer() || no_base_yet) {
 			x_scale_factor_ = x_scale_factor;
@@ -241,7 +241,7 @@ void part_ui::render_background()
 		0, 0, video_.getx(), video_.gety(), 0, 0, 0, 1.0,
 		video_.getSurface()
 	);
-	sdl_blit(background_, NULL, video_.getSurface(), NULL);
+	SDL_BlitSurface(background_, nullptr, video_.getSurface(), nullptr);
 }
 
 bool part_ui::render_floating_images()
@@ -257,7 +257,7 @@ bool part_ui::render_floating_images()
 		const floating_image& fi = p_.get_floating_images()[fi_n];
 
 		if(!ri.image.null()) {
-			sdl_blit(ri.image, NULL, video_.getSurface(), &ri.rect);
+			SDL_BlitSurface(ri.image, nullptr, video_.getSurface(), &ri.rect);
 			update_rect(ri.rect);
 		}
 
@@ -306,7 +306,7 @@ void part_ui::render_title_box()
 		 .set_foreground_color(titlebox_font_color)
 		 .set_maximum_width(titlebox_max_w)
 		 .set_maximum_height(titlebox_max_h, true);
-	surface txtsurf = t.render();
+	SDL_Surface txtsurf = t.render();
 
 	if(txtsurf.null()) {
 		ERR_NG << "storyscreen titlebox rendering resulted in a null surface\n";
@@ -348,16 +348,16 @@ void part_ui::render_title_box()
 }
 
 #ifdef LOW_MEM
-void part_ui::render_story_box_borders(SDL_Rect& /*update_area*/)
+void part_ui::render_story_box_borders(SDL_Rect* /*update_area*/)
 {}
 #else
-void part_ui::render_story_box_borders(SDL_Rect& update_area)
+void part_ui::render_story_box_borders(SDL_Rect* update_area)
 {
 	const part::BLOCK_LOCATION tbl = p_.story_text_location();
 
 	if(has_background_) {
-		surface border_top = NULL;
-		surface border_bottom = NULL;
+		SDL_Surface border_top = nullptr;
+		SDL_Surface border_bottom = nullptr;
 
 		if(tbl == part::BLOCK_BOTTOM || tbl == part::BLOCK_MIDDLE) {
 			border_top = image::get_image(storybox_top_border_path);
@@ -375,7 +375,7 @@ void part_ui::render_story_box_borders(SDL_Rect& update_area)
 
 		if(border_top.null() != true) {
 			if((border_top = scale_surface(border_top, screen_area().w, border_top->h)).null()) {
-				WARN_NG << "storyscreen got a null top border surface after rescaling\n";
+				WARN_NG << "storyscreen got a null top border SDL_Surface after rescaling\n";
 			}
 			else {
 				update_area.y -= border_top->h;
@@ -387,7 +387,7 @@ void part_ui::render_story_box_borders(SDL_Rect& update_area)
 
 		if(border_bottom.null() != true) {
 			if((border_bottom = scale_surface(border_bottom, screen_area().w, border_bottom->h)).null()) {
-				WARN_NG << "storyscreen got a null bottom border surface after rescaling\n";
+				WARN_NG << "storyscreen got a null bottom border SDL_Surface after rescaling\n";
 			}
 			else {
 				blur_area(video_, update_area.h, border_bottom->h);
@@ -428,7 +428,7 @@ void part_ui::render_story_box()
 		 .set_foreground_color(storybox_font_color)
 		 .set_maximum_width(max_width)
 		 .set_maximum_height(max_height, true);
-	surface txtsurf = t.render();
+	SDL_Surface txtsurf = t.render();
 
 	if(txtsurf.null()) {
 		ERR_NG << "storyscreen text area rendering resulted in a null surface\n";
@@ -497,7 +497,7 @@ void part_ui::render_story_box()
 	const int scan_height = 1, scan_width = txtsurf->w;
 	SDL_Rect scan = create_rect(0, 0, scan_width, scan_height);
 	SDL_Rect dstrect = create_rect(text_x_, 0, scan_width, scan_height);
-	surface scan_dst = video_.getSurface();
+	SDL_Surface scan_dst = video_.getSurface();
 	bool scan_finished = false;
 	while(true) {
 		scan_finished = scan.y >= txtsurf->h;

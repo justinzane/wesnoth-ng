@@ -119,7 +119,7 @@ public:
 
 	void draw_bar(const std::string& image, int xpos, int ypos,
 			const map_location& loc, size_t height, double filled,
-			const SDL_Color& col, fixed_t alpha);
+			const SDL_Color* col, fixed_t alpha);
 
 	/**
 	 * Check the overlay_map for proper team-specific overlays to be
@@ -188,8 +188,8 @@ public:
 	/** Gets the underlying screen object. */
 	CVideo& video() { return screen_; }
 
-	/** return the screen surface or the surface used for map_screenshot. */
-	surface get_screen_surface() { return map_screenshot_ ? map_screenshot_surf_ : screen_.getSurface();}
+	/** return the screen SDL_Surface or the SDL_Surface used for map_screenshot. */
+	SDL_Surface get_screen_surface() { return map_screenshot_ ? map_screenshot_surf_ : screen_.getSurface();}
 
 	virtual bool in_game() const { return false; }
 	virtual bool in_editor() const { return false; }
@@ -201,11 +201,11 @@ public:
 	 */
 	int w() const { return screen_.getx(); }	/**< width */
 	int h() const { return screen_.gety(); }	/**< height */
-	const SDL_Rect& minimap_area() const
+	const SDL_Rect* minimap_area() const
 		{ return theme_.mini_map_location(screen_area()); }
-	const SDL_Rect& palette_area() const
+	const SDL_Rect* palette_area() const
 		{ return theme_.palette_location(screen_area()); }
-	const SDL_Rect& unit_image_area() const
+	const SDL_Rect* unit_image_area() const
 		{ return theme_.unit_image_location(screen_area()); }
 
 	SDL_Rect screen_area() const
@@ -215,23 +215,23 @@ public:
 	 * Returns the maximum area used for the map
 	 * regardless to resolution and view size
 	 */
-	const SDL_Rect& max_map_area() const;
+	const SDL_Rect* max_map_area() const;
 
 	/**
 	 * Returns the area used for the map
 	 */
-	const SDL_Rect& map_area() const;
+	const SDL_Rect* map_area() const;
 
 	/**
 	 * Returns the available area for a map, this may differ
 	 * from the above. This area will get the background area
 	 * applied to it.
 	 */
-	const SDL_Rect& map_outside_area() const { return map_screenshot_ ?
+	const SDL_Rect* map_outside_area() const { return map_screenshot_ ?
 		max_map_area() : theme_.main_map_location(screen_area()); }
 
 	/** Check if the bbox of the hex at x,y has pixels outside the area rectangle. */
-	bool outside_area(const SDL_Rect& area, const int x,const int y) const;
+	bool outside_area(const SDL_Rect* area, const int x,const int y) const;
 
 	/**
 	 * Function which returns the width of a hex in pixels,
@@ -322,7 +322,7 @@ public:
 	};
 
 	/** Return the rectangular area of hexes overlapped by r (r is in screen coordinates) */
-	const rect_of_hexes hexes_under_rect(const SDL_Rect& r) const;
+	const rect_of_hexes hexes_under_rect(const SDL_Rect* r) const;
 
 	/** Returns the rectangular area of visible hexes */
 	const rect_of_hexes get_visible_hexes() const {return hexes_under_rect(map_area());};
@@ -369,7 +369,7 @@ public:
 	/**
 	 * Retrieves a pointer to a theme UI button.
 	 *
-	 * @note The returned pointer may either be NULL, meaning the button
+	 * @note The returned pointer may either be nullptr, meaning the button
 	 *       isn't defined by the current theme, or point to a valid
 	 *       gui::button object. However, the objects retrieved will be
 	 *       destroyed and recreated by draw() method calls. Do *NOT* store
@@ -384,7 +384,7 @@ public:
 	void create_buttons();
 	void invalidate_theme() { panelsDrawn_ = false; }
 
-	void refresh_report(std::string const &report_name, const config * new_cfg=NULL);
+	void refresh_report(std::string const &report_name, const config * new_cfg=nullptr);
 
 	void draw_minimap_units();
 
@@ -403,8 +403,8 @@ public:
 	bool propagate_invalidation(const std::set<map_location>& locs);
 
 	/** invalidate all hexes under the rectangle rect (in screen coordinates) */
-	bool invalidate_locations_in_rect(const SDL_Rect& rect);
-	bool invalidate_visible_locations_in_rect(const SDL_Rect& rect);
+	bool invalidate_locations_in_rect(const SDL_Rect* rect);
+	bool invalidate_visible_locations_in_rect(const SDL_Rect* rect);
 
 	/**
 	 * Function to invalidate animated terrains and units which may have changed.
@@ -428,11 +428,11 @@ public:
 	 * mouseover_hex_overlay_ require a prerendered surface
 	 * and is drawn underneath the mouse's location
 	 */
-	void set_mouseover_hex_overlay(const surface& image)
+	void set_mouseover_hex_overlay(const SDL_Surface& image)
 		{ mouseover_hex_overlay_ = image; }
 
 	void clear_mouseover_hex_overlay()
-		{ mouseover_hex_overlay_ = NULL; }
+		{ mouseover_hex_overlay_ = nullptr; }
 
 	/**
 	 * Debug function to toggle the "sunset" mode.
@@ -585,13 +585,13 @@ public:
 
 	/** Announce a message prominently. */
 	void announce(const std::string& msg,
-		       const SDL_Color& color = font::GOOD_COLOR);
+		       const SDL_Color* color = font::GOOD_COLOR);
 
 	/**
 	 * Schedule the minimap for recalculation.
 	 * Useful if any terrain in the map has changed.
 	 */
-	void recalculate_minimap() {minimap_ = NULL; redrawMinimap_ = true; };
+	void recalculate_minimap() {minimap_ = nullptr; redrawMinimap_ = true; };
 
 	/**
 	 * Schedule the minimap to be redrawn.
@@ -617,7 +617,7 @@ private:
 	 *
 	 * White pixels are substituted for the color of the energy.
 	 */
-	const SDL_Rect& calculate_energy_bar(surface surf);
+	const SDL_Rect* calculate_energy_bar(SDL_Surface surf);
 
 
 protected:
@@ -650,7 +650,7 @@ protected:
 	 * Get the clipping rectangle for drawing.
 	 * Virtual since the editor might use a slightly different approach.
 	 */
-	virtual const SDL_Rect& get_clip_rect();
+	virtual const SDL_Rect* get_clip_rect();
 
 	/**
 	 * Only called when there's actual redrawing to do. Loops through
@@ -706,7 +706,7 @@ protected:
 
 	std::vector<surface> get_fog_shroud_images(const map_location& loc, image::TYPE image_type);
 
-	void draw_image_for_report(surface& img, SDL_Rect& rect);
+	void draw_image_for_report(SDL_Surface& img, SDL_Rect* rect);
 
 	void scroll_to_xy(int screenxpos, int screenypos, SCROLL_TYPE scroll_type,bool force = true);
 
@@ -726,7 +726,7 @@ protected:
 	int zoom_;
 	static int last_zoom_;
 	boost::scoped_ptr<terrain_builder> builder_;
-	surface minimap_;
+	SDL_Surface minimap_;
 	SDL_Rect minimap_location_;
 	bool redrawMinimap_;
 	bool redraw_background_;
@@ -763,10 +763,10 @@ protected:
 	std::vector<gui::slider> sliders_;
 	std::set<map_location> invalidated_;
 	std::set<map_location> previous_invalidated_;
-	surface mouseover_hex_overlay_;
+	SDL_Surface mouseover_hex_overlay_;
 	// If we're transitioning from one time of day to the next,
 	// then we will use these two masks on top of all hexes when we blit.
-	surface tod_hex_mask1, tod_hex_mask2;
+	SDL_Surface tod_hex_mask1, tod_hex_mask2;
 	std::vector<std::string> fog_images_;
 	std::vector<std::string> shroud_images_;
 
@@ -782,8 +782,8 @@ protected:
 
 private:
 
-	// This surface must be freed by the caller
-	surface get_flag(const map_location& loc);
+	// This SDL_Surface must be freed by the caller
+	SDL_Surface get_flag(const map_location& loc);
 
 	/** Animated flags for each team */
 	std::vector<animated<image::locator> > flags_;
@@ -855,7 +855,7 @@ public:
 	 *            (presumably under water) and thus shouldn't be drawn
 	 */
 	void render_image(int x, int y, const display::tdrawing_layer drawing_layer,
-			const map_location& loc, surface image,
+			const map_location& loc, SDL_Surface image,
 			bool hreverse=false, bool greyscale=false,
 			fixed_t alpha=ftofxp(1.0), Uint32 blendto=0,
 			double blend_ratio=0, double submerged=0.0,bool vreverse =false);
@@ -919,15 +919,15 @@ protected:
 	{
 	public:
 		tblit(const tdrawing_layer layer, const map_location& loc,
-				const int x, const int y, const surface& surf,
-				const SDL_Rect& clip)
+				const int x, const int y, const SDL_Surface& surf,
+				const SDL_Rect* clip)
 			: x_(x), y_(y), surf_(1, surf), clip_(clip),
 			key_(loc, layer)
 		{}
 
 		tblit(const tdrawing_layer layer, const map_location& loc,
 				const int x, const int y, const std::vector<surface>& surf,
-				const SDL_Rect& clip)
+				const SDL_Rect* clip)
 			: x_(x), y_(y), surf_(surf), clip_(clip),
 			key_(loc, layer)
 		{}
@@ -935,7 +935,7 @@ protected:
 		int x() const { return x_; }
 		int y() const { return y_; }
 		const std::vector<surface> &surf() const { return surf_; }
-		const SDL_Rect &clip() const { return clip_; }
+		const SDL_Rect* clip() const { return clip_; }
 
 		bool operator<(const tblit &rhs) const { return key_ < rhs.key_; }
 
@@ -964,13 +964,13 @@ public:
 	 * @param blit               The structure to blit.
 	 */
 	void drawing_buffer_add(const tdrawing_layer layer,
-			const map_location& loc, int x, int y, const surface& surf,
-			const SDL_Rect &clip = SDL_Rect());
+			const map_location& loc, int x, int y, const SDL_Surface& surf,
+			const SDL_Rect* clip = SDL_Rect());
 
 	void drawing_buffer_add(const tdrawing_layer layer,
 			const map_location& loc, int x, int y,
 			const std::vector<surface> &surf,
-			const SDL_Rect &clip = SDL_Rect());
+			const SDL_Rect* clip = SDL_Rect());
 
 protected:
 
@@ -1019,7 +1019,7 @@ private:
 	bool idle_anim_;
 	double idle_anim_rate_;
 
-	surface map_screenshot_surf_;
+	SDL_Surface map_screenshot_surf_;
 
 	std::vector<boost::function<void(display&)> > redraw_observers_;
 

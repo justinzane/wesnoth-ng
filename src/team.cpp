@@ -66,8 +66,8 @@ const char * const team::attributes[] = {
 	"faction_from_recruit", "faction_name", "gold_lock", "income_lock",
 	"leader", "random_leader", "team_lock", "terrain_liked",
 	"user_description", "default_recruit", "controller_lock",
-	// Terminate the list with NULL.
-	NULL };
+	// Terminate the list with nullptr.
+	nullptr };
 
 
 const std::vector<team>& teams_manager::get_teams()
@@ -233,7 +233,7 @@ char const *team::team_info::controller_string() const
 	case NETWORK: return "network";
 	case NETWORK_AI: return "network_ai";
 	case EMPTY: return "null";
-	default: assert(false); return NULL;
+	default: assert(false); return nullptr;
 	}
 }
 
@@ -443,7 +443,7 @@ int team::minimum_recruit_price() const
 
 bool team::calculate_enemies(size_t index) const
 {
-	if(teams == NULL || index >= teams->size()) {
+	if(teams == nullptr || index >= teams->size()) {
 		return false;
 	}
 
@@ -526,7 +526,7 @@ void team::change_team(const std::string &name, const t_string &user_name)
 
 void team::clear_caches(){
 	// Reset the cache of allies for all teams
-	if(teams != NULL) {
+	if(teams != nullptr) {
 		for(std::vector<team>::const_iterator i = teams->begin(); i != teams->end(); ++i) {
 			i->enemies_.clear();
 			i->ally_shroud_.clear();
@@ -643,7 +643,7 @@ void team::remove_fog_override(const std::set<map_location> &hexes)
 
 int team::nteams()
 {
-	if(teams == NULL) {
+	if(teams == nullptr) {
 		return 0;
 	} else {
 		return teams->size();
@@ -652,7 +652,7 @@ int team::nteams()
 
 bool is_observer()
 {
-	if(teams == NULL) {
+	if(teams == nullptr) {
 		return true;
 	}
 
@@ -666,7 +666,7 @@ bool is_observer()
 
 void validate_side(int side)
 {
-	if(teams == NULL) {
+	if(teams == nullptr) {
 		return;
 	}
 
@@ -850,7 +850,7 @@ std::string team::get_side_color_index(int side)
 {
 	size_t index = size_t(side-1);
 
-	if(teams != NULL && index < teams->size()) {
+	if(teams != nullptr && index < teams->size()) {
 		const std::string side_map = (*teams)[index].color();
 		if(!side_map.empty()) {
 			return side_map;

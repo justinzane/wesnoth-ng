@@ -130,7 +130,7 @@ static int move_unit_between(const map_location& a, const map_location& b,
 	disp.invalidate(a);
 	temp_unit.set_facing(a.get_relative_dir(b));
 	animator.replace_anim_if_invalid(&temp_unit,"movement",a,b,step_num,
-			false,"",0,unit_animation::INVALID,NULL,NULL,step_left);
+			false,"",0,unit_animation::INVALID,nullptr,nullptr,step_left);
 	animator.start_animations();
 	animator.pause_animation();
 	disp.scroll_to_tiles(a, b, game_display::ONSCREEN, true, 0.0, false);
@@ -167,10 +167,10 @@ unit_mover::unit_mover(const std::vector<map_location>& path, bool animate, bool
 	force_scroll_(force_scroll),
 	animator_(),
 	wait_until_(INT_MIN),
-	shown_unit_(NULL),
+	shown_unit_(nullptr),
 	path_(path),
 	current_(0),
-	temp_unit_ptr_(NULL),
+	temp_unit_ptr_(nullptr),
 	// Somewhat arbitrary default values.
 	was_hidden_(false),
 	is_enemy_(true)
@@ -206,7 +206,7 @@ unit_mover::~unit_mover()
  */
 void unit_mover::replace_temporary(unit & u)
 {
-	if ( disp_ == NULL )
+	if ( disp_ == nullptr )
 		// No point in creating a temp unit with no way to display it.
 		return;
 
@@ -214,7 +214,7 @@ void unit_mover::replace_temporary(unit & u)
 	was_hidden_ = u.get_hidden();
 
 	// Make our temporary unit mostly match u...
-	if ( temp_unit_ptr_ == NULL ) {
+	if ( temp_unit_ptr_ == nullptr ) {
 		temp_unit_ptr_ = new game_display::fake_unit(u);
 		temp_unit_ptr_->place_on_game_display(disp_);
 	}
@@ -236,11 +236,11 @@ void unit_mover::replace_temporary(unit & u)
  */
 void unit_mover::update_shown_unit()
 {
-	if ( shown_unit_ != NULL ) {
+	if ( shown_unit_ != nullptr ) {
 		// Switch the display back to the real unit.
 		shown_unit_->set_hidden(was_hidden_);
 		temp_unit_ptr_->set_hidden(true);
-		shown_unit_ = NULL;
+		shown_unit_ = nullptr;
 	}
 }
 
@@ -323,7 +323,7 @@ void unit_mover::proceed_to(unit& u, size_t path_index, bool update, bool wait)
 	// Handle pending visibility issues before introducing new ones.
 	wait_for_anims();
 
-	if ( update  ||  temp_unit_ptr_ == NULL )
+	if ( update  ||  temp_unit_ptr_ == nullptr )
 		// Replace the temp unit (which also hides u and shows our temporary).
 		replace_temporary(u);
 	else
@@ -793,8 +793,8 @@ void wml_animation_internal(unit_animator &animator, const vconfig &cfg, const m
 	// We have found a unit that matches the filter
 	if (u.valid() && !resources::screen->fogged(u->get_location()))
 	{
-		attack_type *primary = NULL;
-		attack_type *secondary = NULL;
+		attack_type *primary = nullptr;
+		attack_type *secondary = nullptr;
 		Uint32 text_color;
 		unit_animation::hit_type hits=  unit_animation::INVALID;
 		std::vector<attack_type> attacks = u->attacks();

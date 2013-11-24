@@ -84,7 +84,7 @@ mouse_handler::mouse_handler(game_display* gui, std::vector<team>& teams,
 mouse_handler::~mouse_handler()
 {
 	rand_rng::clear_new_seed_callback();
-	singleton_ = NULL;
+	singleton_ = nullptr;
 }
 
 void mouse_handler::set_side(int side_number)
@@ -151,7 +151,7 @@ void mouse_handler::mouse_motion(int x, int y, const bool browse, bool update, m
 		// we do it before cursor selection, because it uses current_paths_
 		if( !resources::game_map->on_board(new_hex) ) {
 			current_route_.steps.clear();
-			gui().set_route(NULL);
+			gui().set_route(nullptr);
 			resources::whiteboard->erase_temp_move();
 		}
 
@@ -162,7 +162,7 @@ void mouse_handler::mouse_motion(int x, int y, const bool browse, bool update, m
 		} else if(over_route_) {
 			over_route_ = false;
 			current_route_.steps.clear();
-			gui().set_route(NULL);
+			gui().set_route(nullptr);
 			resources::whiteboard->erase_temp_move();
 		}
 
@@ -233,7 +233,7 @@ void mouse_handler::mouse_motion(int x, int y, const bool browse, bool update, m
 
 			if(dest == selected_hex_ || dest_un != units_.end()) {
 				current_route_.steps.clear();
-				gui().set_route(NULL);
+				gui().set_route(nullptr);
 				resources::whiteboard->erase_temp_move();
 			}
 			else if (!current_paths_.destinations.empty() &&
@@ -255,7 +255,7 @@ void mouse_handler::mouse_motion(int x, int y, const bool browse, bool update, m
 			if (iter != units_.end())
 				un = &*iter;
 			else
-				un = NULL;
+				un = nullptr;
 		} //end planned unit map scope
 
 		if (un && current_paths_.destinations.empty() &&
@@ -440,7 +440,7 @@ bool mouse_handler::right_click_show_menu(int x, int y, const bool browse)
 		select_hex(map_location(), browse);
 		return false;
 	} else {
-		return point_in_rect(x, y, gui().map_area());
+		return is_point_in_rect(x, y, gui().map_area());
 	}
 }
 
@@ -565,7 +565,7 @@ bool mouse_handler::left_click(int x, int y, const bool browse)
 				selected_hex_ = map_location();
 				gui().select_hex(map_location());
 				gui().clear_attack_indicator();
-				gui().set_route(NULL);
+				gui().set_route(nullptr);
 				show_partial_move_ = false;
 				gui().unhighlight_reach();
 				current_paths_ = pathfind::paths();
@@ -603,7 +603,7 @@ void mouse_handler::select_hex(const map_location& hex, const bool browse, const
 	selected_hex_ = hex;
 	gui().select_hex(hex);
 	gui().clear_attack_indicator();
-	gui().set_route(NULL);
+	gui().set_route(nullptr);
 	show_partial_move_ = false;
 
 	wb::future_map_if_active planned_unit_map; //lasts for whole method
@@ -624,7 +624,7 @@ void mouse_handler::select_hex(const map_location& hex, const bool browse, const
 		// the highlight now comes from selection
 		// and not from the mouseover on an enemy
 		enemy_paths_ = false;
-		gui().set_route(NULL);
+		gui().set_route(nullptr);
 
 		// selection have impact only if we are not observing and it's our unit
 		if ((!commands_disabled || resources::whiteboard->is_active()) && u->side() == gui().viewing_side()) {
@@ -666,7 +666,7 @@ bool mouse_handler::move_unit_along_current_route()
 	const std::vector<map_location> steps = current_route_.steps;
 
 	// do not show footsteps during movement
-	gui().set_route(NULL);
+	gui().set_route(nullptr);
 	gui().unhighlight_reach();
 
 	// do not keep the hex highlighted that we started from
@@ -773,7 +773,7 @@ void mouse_handler::save_whiteboard_attack(const map_location& attacker_loc, con
 		gui().clear_attack_indicator();
 
 		// remove footsteps if any - useless for whiteboard as of now
-		gui().set_route(NULL);
+		gui().set_route(nullptr);
 
 		// do not keep the hex that we started from highlighted
 		selected_hex_ = map_location();
@@ -909,9 +909,9 @@ int mouse_handler::show_attack_dialog(const map_location& attacker_loc, const ma
 		preview_panes.push_back(&attacker_preview);
 		preview_panes.push_back(&defender_preview);
 
-		gui::show_dialog(gui(), NULL, _("Attack Enemy"),
-				_("No usable weapon"), gui::CANCEL_ONLY, NULL,
-				&preview_panes, "", NULL, -1, NULL, -1, -1, NULL, NULL);
+		gui::show_dialog(gui(), nullptr, _("Attack Enemy"),
+				_("No usable weapon"), gui::CANCEL_ONLY, nullptr,
+				&preview_panes, "", nullptr, -1, nullptr, -1, -1, nullptr, nullptr);
 		return -1;
 	}
 
@@ -927,10 +927,10 @@ int mouse_handler::show_attack_dialog(const map_location& attacker_loc, const ma
 		preview_panes.push_back(&attacker_preview);
 		preview_panes.push_back(&defender_preview);
 
-		res = gui::show_dialog(gui(),NULL,_("Attack Enemy"),
+		res = gui::show_dialog(gui(),nullptr,_("Attack Enemy"),
 				_("Choose weapon:")+std::string("\n"),
-				gui::OK_CANCEL,&items,&preview_panes,"",NULL,-1,NULL,-1,-1,
-				NULL,&buttons);
+				gui::OK_CANCEL,&items,&preview_panes,"",nullptr,-1,nullptr,-1,-1,
+				nullptr,&buttons);
 	}
 	cursor::set(cursor::NORMAL);
 
@@ -1152,9 +1152,9 @@ void mouse_handler::set_current_paths(const pathfind::paths & new_paths) {
 	gui().unhighlight_reach();
 	current_paths_ = new_paths;
 	current_route_.steps.clear();
-	gui().set_route(NULL);
+	gui().set_route(nullptr);
 	resources::whiteboard->erase_temp_move();
 }
 
-mouse_handler *mouse_handler::singleton_ = NULL;
+mouse_handler *mouse_handler::singleton_ = nullptr;
 }

@@ -19,7 +19,7 @@
 #ifndef EVENTS_HPP_INCLUDED
 #define EVENTS_HPP_INCLUDED
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include <vector>
 
 //our user-defined double-click event type
@@ -50,7 +50,7 @@ public:
 	virtual void volatile_draw() {}
 	virtual void volatile_undraw() {}
 
-	virtual bool requires_event_focus(const SDL_Event * = NULL) const { return false; }
+	virtual bool requires_event_focus(const SDL_Event * = nullptr) const { return false; }
 
 	virtual void process_help_string(int /*mousex*/, int /*mousey*/) {}
 	virtual void process_tooltip_string(int /*mousex*/, int /*mousey*/) {}
@@ -97,7 +97,7 @@ void pump();
 struct pump_info {
 	pump_info() : resize_dimensions(), ticks_(0) {}
 	std::pair<int,int> resize_dimensions;
-	int ticks(unsigned *refresh_counter=NULL, unsigned refresh_rate=1);
+	int ticks(unsigned *refresh_counter=nullptr, unsigned refresh_rate=1);
 private:
 	int ticks_; //0 if not calculated
 };

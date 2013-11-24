@@ -74,7 +74,7 @@ void scrollpane::hide(bool value)
 
 void scrollpane::add_widget(widget* w, int x, int y, int z_order)
 {
-	if (w == NULL)
+	if (w == nullptr)
 		return;
 
 	widget_map::iterator itor = std::find_if(content_.begin(), content_.end(), widget_finder(w));
@@ -102,7 +102,7 @@ void scrollpane::remove_widget(widget* w)
 	update_content_size();
 }
 
-void scrollpane::set_inner_location(const SDL_Rect& /*rect*/)
+void scrollpane::set_inner_location(const SDL_Rect* /*rect*/)
 {
 	for(widget_map::iterator itor = content_.begin(); itor != content_.end(); ++itor) {
 		itor->second.w->set_clip_rect(client_area());

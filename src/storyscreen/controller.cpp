@@ -59,7 +59,7 @@ controller::controller(display& disp, const vconfig& data, const std::string& sc
 	, segment_index_(segment_index)
 	, parts_()
 {
-	ASSERT_LOG(resources::state_of_game != NULL, "Ouch: gamestate is NULL when initializing storyscreen controller");
+	ASSERT_LOG(resources::state_of_game != nullptr, "Ouch: gamestate is nullptr when initializing storyscreen controller");
 	resolve_wml(data);
 }
 
@@ -147,7 +147,7 @@ STORY_RESULT controller::show(START_POSITION startpos)
 #ifndef LOW_MEM
 	std::vector< render_pointer_type > uis_;
 	foreach_ng(part_pointer_type p, parts_) {
-		ASSERT_LOG( p != NULL, "Ouch: hit NULL storyscreen part in collection" );
+		ASSERT_LOG( p != nullptr, "Ouch: hit nullptr storyscreen part in collection" );
 		render_pointer_type const rpt(new part_ui(*p, disp_, next_button, back_button, play_button));
 		uis_.push_back(rpt);
 	}

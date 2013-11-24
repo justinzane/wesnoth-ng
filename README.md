@@ -14,7 +14,8 @@ some is future oriented code that will hopefully be merged back into mainline.
 
 - Convert Wesnoth fully to c++11 compliant and optimized code. With c++14 being a year away and 
 support for c++11 in two free, open source compilers (g++ and clang++); there is little reason 
-to hang on to the c++98 standard. 
+to hang on to the c++98 standard. Additionally, significant code clarity benefits can be 
+obtained by using constructs like range-based for loops, std::atomic types, std::tuples, etc.
 
 - Convert Wesnoth to use common FOSS libraries where practical. The benefit of dependency 
 reduction should be weighed against the burden of code maintenance in a project where all work 
@@ -25,18 +26,47 @@ is voluntary and bit-rot is common.
     providing Wesnoth with good performance on various platforms without the burden of 
     dealing with various parallelization strategies that are architecture dependent.
     
-    - OpenSSL: Use openssl's crypto for hash functions and encryption. 
-    
-    - jsoncpp: Use JSON as a serialization and persistance language. Initially supplement WML 
-    and potentially replace it. There are a huge number of reasons why switching to a very 
+    - jsoncpp/bsoncpp: Use JSON as a serialization and persistance language. Initially supplement 
+    WML  and potentially replace it. There are a huge number of reasons why switching to a very 
     common, widely used "markup" language would be beneficial. There is also a tremendous 
     investment, practically and emotionally in WML in the Wesnoth community. This is a very
     contentious proposal, and not one to be addressed in the near term.
+    
+    - libgcrypt: Use hashing functionality provided by a well engineered and documented library 
+    that is widely available.
+    
+    - ZeroMQ: Use message passing facilities provided by ZMQ to enable clean and efficient 
+    separation of separate executable functions. This immediately provides greater maintainability
+    through the separation of the massive Wesnoth codebase into independent subprojects. It also
+    provides the capability of greater functional flexibility within the game. 
+    
+    An example of the potential flexibility is allowing players with mobile devices (Android, 
+    iOS, Tizen, Ubuntu Mobile, etc.) to have simultaneous display on their device and on a large
+    screen like TV.
+    
+    - MessagePack: A serialization adjunct to ZMQ that provides relatively easy to comprehend 
+    and implement, efficient binary serialization of game "objects" especially those that exist 
+    as standard library class instances or C types.
 
 - Convert Wesnoth to use the new SDL2 libraries instead of SDL1.2. This is clearly an accepted
 goal of the project; but, because the changes to SDL2 are extensive and intrusive, they cannot 
 immediately be addressed in mainline. Additionally, it will take some time before SDL2 becomes 
 available on more conservative platforms like Debian.
+
+    - For SDL2, **ALL** surfaces will be in ARGB8888 format. Please use the macros 
+    `BPP, RMASK, GMASK, BMASK, AMASK` as the last 5 parameters to `SDL_CreateSurface`.
+    
+    - For SDL2, which has a very elegant C API, almost all wrapper classes from sdl_utils 
+    have been removed. The reason for this change is that the existing wrappers were poorly 
+    and inconsistently named and often logically unsuitable for SDL2.
+    
+    - For SDL2 and Wesnoth-NG, the goals is to abandon the BlitSurface paradigm and move to 
+    providing the Renderer with Textures (in GPU RAM) and manipulating them through GL-based 
+    functionality as provided by SDL2.
+    
+    - For the period of extreme refactoring while getting SDL2 basically implemented, 
+    non-ideal headers will be used. That is to say, overbroad includes will be common and 
+    optimizations like forward declares will be removed. The immediate goal is code clarity.
 
 - Clean and organize Wesnoth's codebase. As one would expect from any mature project, there is 
 a ton of detritous from the past. Some of this can be removed without consequence. Other bits 
@@ -58,6 +88,11 @@ drastic cleanups.
     does widget_generator really add anything to widget_gen? No! Just imagine having to type 
     "gnu_stream_editor" all day instead of "sed" or "gnu_global_regular_expression_printer" 
     instead of "grep".
+    
+    - Remove archaic platforms like AmigaOS, Solaris, OS/2, etc. 
+    
+    - Attempt to isolate, to the degree practical, OS or ISA specific code to within the 
+    src/arch_dep/ path.
     
 ## Limitations
 
@@ -98,6 +133,9 @@ Wesnoth:
     - scons >= 0.98.3
     - gettext
     - OpenCV >= 2.0
+    - zmq
+    - msgpack
+    - gcrypt
     
 2. SCons Build: Simply type 'scons' in the top-level directory to build the game with the
 server. It is possible to select individual targets by naming them as arguments, including 

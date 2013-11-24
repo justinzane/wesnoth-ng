@@ -52,8 +52,8 @@ namespace gui {
 
 scrollbar::scrollbar(CVideo &video)
 	: widget(video)
-	, mid_scaled_(NULL)
-	, groove_scaled_(NULL)
+	, mid_scaled_(nullptr)
+	, groove_scaled_(nullptr)
 	, uparrow_(video, "", button::TYPE_TURBO, "button_square/button_square_25"
 			, gui::button::DEFAULT_SPACE, true,"icons/arrows/arrows_ornate_up_25")
 	, downarrow_(video, "", button::TYPE_TURBO, "button_square/button_square_25"
@@ -66,9 +66,9 @@ scrollbar::scrollbar(CVideo &video)
 	, full_height_(0)
 	, scroll_rate_(1)
 {
-	static const surface img(image::get_image(scrollbar_mid));
+	static const SDL_Surface img(image::get_image(scrollbar_mid));
 
-	if (img != NULL) {
+	if (img != nullptr) {
 		set_width(img->w);
 		// this is a bit rough maybe
 		minimum_grip_height_ = 2 * img->h;
@@ -234,9 +234,9 @@ SDL_Rect scrollbar::grip_area() const
 
 void scrollbar::draw_contents()
 {
-	surface mid_img;
-	surface bottom_img;
-	surface top_img;
+	SDL_Surface mid_img;
+	SDL_Surface bottom_img;
+	SDL_Surface top_img;
 
 	switch (state_) {
 
@@ -263,12 +263,12 @@ void scrollbar::draw_contents()
 		break;
 	}
 
-	const surface top_grv(image::get_image(groove_top));
-	const surface mid_grv(image::get_image(groove_mid));
-	const surface bottom_grv(image::get_image(groove_bottom));
+	const SDL_Surface top_grv(image::get_image(groove_top));
+	const SDL_Surface mid_grv(image::get_image(groove_mid));
+	const SDL_Surface bottom_grv(image::get_image(groove_bottom));
 
-	if (mid_img == NULL || bottom_img == NULL || top_img == NULL
-	 || top_grv == NULL || bottom_grv == NULL || mid_grv == NULL) {
+	if (mid_img == nullptr || bottom_img == nullptr || top_img == nullptr
+	 || top_grv == nullptr || bottom_grv == nullptr || mid_grv == nullptr) {
 		std::cerr << "Failure to load scrollbar image.\n";
 		return;
 	}
@@ -306,7 +306,7 @@ void scrollbar::draw_contents()
 		return;
 	}
 
-	surface const screen = video().getSurface();
+	SDL_Surface const screen = video().getSurface();
 
 	// Draw scrollbar "groove"
 	video().blit_surface(groove.x, groove.y, top_grv);
@@ -335,15 +335,15 @@ void scrollbar::handle_event(const SDL_Event& event)
 	case SDL_MOUSEBUTTONUP:
 	{
 		SDL_MouseButtonEvent const &e = event.button;
-		bool on_grip = point_in_rect(e.x, e.y, grip);
+		bool on_grip = is_point_in_rect(e.x, e.y, grip);
 		new_state = on_grip ? ACTIVE : NORMAL;
 		break;
 	}
 	case SDL_MOUSEBUTTONDOWN:
 	{
 		SDL_MouseButtonEvent const &e = event.button;
-		bool on_grip = point_in_rect(e.x, e.y, grip);
-		bool on_groove = point_in_rect(e.x, e.y, groove);
+		bool on_grip = is_point_in_rect(e.x, e.y, grip);
+		bool on_groove = is_point_in_rect(e.x, e.y, groove);
 		if (on_groove && e.button == SDL_BUTTON_WHEELDOWN) {
 			move_position(scroll_rate_);
 		} else if (on_groove && e.button == SDL_BUTTON_WHEELUP) {
@@ -367,7 +367,7 @@ void scrollbar::handle_event(const SDL_Event& event)
 	{
 		SDL_MouseMotionEvent const &e = event.motion;
 		if (state_ == NORMAL || state_ == ACTIVE) {
-			bool on_grip = point_in_rect(e.x, e.y, grip);
+			bool on_grip = is_point_in_rect(e.x, e.y, grip);
 			new_state = on_grip ? ACTIVE : NORMAL;
 		} else if (state_ == DRAGGED && groove.h != grip.h) {
 			int y_dep = e.y - grip.y - mousey_on_grip_;
@@ -383,7 +383,7 @@ void scrollbar::handle_event(const SDL_Event& event)
 
 	if (new_state != state_) {
 		set_dirty();
-		mid_scaled_.assign(NULL);
+		mid_scaled_.assign(nullptr);
 		state_ = new_state;
 	}
 }
