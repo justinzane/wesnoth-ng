@@ -118,7 +118,7 @@ opts.AddVariables(
      ""),
     ('extra_flags_release',
      'Extra compiler and linker flags to use for release builds',
-     "-O4 -fslp-vectorize -fslp-vectorize-aggressive"),
+     "-O3 -fvectorize -fslp-vectorize -fslp-vectorize-aggressive -flto -emit-llvm"),
     ('extra_flags_debug',
      'Extra compiler and linker flags to use for debug builds',
      "-O0 -g"),
@@ -302,8 +302,8 @@ else:
     setup_cross_compile(env)
 
 if env['cxxtool'] in ("clang++", "clang", "llvm"):
-    env['CC'] = 'clang'
-    env['CXX'] = "clang++"
+    env['CC'] = '/usr/local/bin/clang'
+    env['CXX'] = "/usr/local/bin/clang++"
     env.Tool('llvm')
     env.Append(LINKFLAGS="-Wl,-plugin,/usr/lib/LLVMgold.so")
 elif env['cxxtool'] in (None, "", "g++"):
