@@ -24,7 +24,7 @@
 #include "stage_fallback.hpp"
 
 #include "../configuration.hpp"
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../composite/ai.hpp"
 #include "../../log/log.hpp"
 #include "../../log/log.hpp"

@@ -24,7 +24,7 @@
 #include "goal.hpp"
 #include "serdes/wml_exception.hpp"
 #include "../lua/core.hpp"
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../../log/log.hpp"
 #include "../../log/log.hpp"
 #include "../lua/lua_object.hpp"

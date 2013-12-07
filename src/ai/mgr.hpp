@@ -1,5 +1,5 @@
 /**
- * @file src/ai/manager.hpp
+ * @file src/ai/mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -27,7 +27,7 @@
 #define AI_MANAGER_HPP_INCLUDED
 
 #include "../config.hpp"
-#include "../generic_event.hpp"
+#include "../generic_sdl2/sdl2_evt_mgr.hpp"
 
 #include "game_info.hpp"
 

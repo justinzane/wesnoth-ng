@@ -23,7 +23,7 @@
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "gamestatus.hpp"
-#include "game_config_manager.hpp"
+#include "game_config_mgr.hpp"
 #include "gettext.hpp"
 #include "log/log.hpp"
 #include "log/log.hpp"
@@ -31,7 +31,7 @@
 #include "mp/mp_options.hpp"
 #include "replay.hpp"
 #include "savegame.hpp"
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 #include "unit/unit_id.hpp"
 #include "unit/unit_id.hpp"
 

@@ -66,7 +66,7 @@ public:
 	 *
 	 * This will normally be the playing team.
 	 */
-	void scroll_to_leader(unit_map& units, int side, SCROLL_TYPE scroll_type = ONSCREEN,bool force = true);
+	void scroll_to_leader(unit_map& units, int side, scroll_type_t scroll_type = ONSCREEN,bool force = true);
 
 	/**
 	 * Function to display a location as selected.
@@ -254,7 +254,7 @@ public:
 
 
 	/** The playing team is the team whose turn it is. */
-	int playing_side() const { return activeTeam_ + 1; }
+	int playing_side() const { return active_team_ + 1; }
 
 
 	std::string current_team_name() const;

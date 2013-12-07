@@ -25,7 +25,7 @@
 #include "font.hpp"
 #include "image.hpp"
 #include "sound.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 
 namespace {
@@ -243,7 +243,7 @@ bool slider::requires_event_focus(const SDL_Event* event) const
 	}
 
 	if(event->type == SDL_KEYDOWN) {
-		SDLKey key = event->key.keysym.sym;
+		SDL_Keymod key = event->key.keysym.sym;
 		switch(key) {
 		case SDLK_LEFT:
 		case SDLK_RIGHT:

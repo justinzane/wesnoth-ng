@@ -30,7 +30,7 @@
 #include "actions/undo.hpp"
 #include "actions/vision.hpp"
 #include "builder.hpp"
-#include "ai/manager.hpp"
+#include "ai/mgr.hpp"
 #include "dialogs.hpp"
 #include "formatter.hpp"
 #include "filechooser.hpp"
@@ -72,7 +72,7 @@
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "scripting/lua.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 #include "widgets/combo.hpp"
 
 #include "global.hpp"

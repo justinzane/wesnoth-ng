@@ -21,7 +21,7 @@
 #include "../action_label.hpp"
 
 #include "../../editor_display.hpp"
-#include "../../map/context_manager.hpp"
+#include "../../map/context_mgr.hpp"
 
 #include "gui/dialogs/editor/editor_edit_label.hpp"
 

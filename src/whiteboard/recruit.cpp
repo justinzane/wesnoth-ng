@@ -22,7 +22,7 @@
 
 #include "recruit.hpp"
 
-#include "manager.hpp"
+#include "mgr.hpp"
 #include "side_actions.hpp"
 #include "utility.hpp"
 #include "visitor.hpp"

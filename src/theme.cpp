@@ -540,11 +540,11 @@ theme::menu::menu(const config &cfg):
 	items_(utils::split(cfg["items"]))
 {
 	if (cfg["auto_tooltip"].to_bool() && tooltip_.empty() && items_.size() == 1) {
-		tooltip_ = hotkey::get_description(items_[0])
-		+ hotkey::get_names(items_[0]) +  "\n" + hotkey::get_tooltip(items_[0]);
+		tooltip_ = get_description(items_[0])
+		+ get_names(items_[0]) +  "\n" + get_tooltip(items_[0]);
 	} else if (cfg["tooltip_name_prepend"].to_bool() && items_.size() == 1) {
-		tooltip_ = hotkey::get_description(items_[0])
-		+ hotkey::get_names(items_[0]) + "\n" + tooltip_;
+		tooltip_ = get_description(items_[0])
+		+ get_names(items_[0]) + "\n" + tooltip_;
 	}
 }
 
@@ -574,14 +574,14 @@ const std::string theme::action::tooltip(size_t index) const {
 
 	std::stringstream result;
 	if (auto_tooltip_ && tooltip_.empty() && items_.size() > index) {
-		result << hotkey::get_description(items_[index]);
-		if (!hotkey::get_names(items_[index]).empty())
-			result << "\n" << N_("Hotkey(s): ") << hotkey::get_names(items_[index]);
-		result << "\n" << hotkey::get_tooltip(items_[index]);
+		result << get_description(items_[index]);
+		if (!get_names(items_[index]).empty())
+			result << "\n" << N_("Hotkey(s): ") << get_names(items_[index]);
+		result << "\n" << get_tooltip(items_[index]);
 	} else if (tooltip_name_prepend_ && items_.size() == 1) {
-		result << hotkey::get_description(items_[index]);
-		if (!hotkey::get_names(items_[index]).empty())
-			result << "\n" << N_("Hotkey(s): ") << hotkey::get_names(items_[index]);
+		result << get_description(items_[index]);
+		if (!get_names(items_[index]).empty())
+			result << "\n" << N_("Hotkey(s): ") << get_names(items_[index]);
 	    result << "\n" << tooltip_;
 	}
 

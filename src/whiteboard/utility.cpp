@@ -26,7 +26,7 @@
 
 #include "utility.hpp"
 
-#include "manager.hpp"
+#include "mgr.hpp"
 #include "side_actions.hpp"
 
 #include "actions/create.hpp"

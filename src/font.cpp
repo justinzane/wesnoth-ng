@@ -30,7 +30,7 @@
 #include "marked-up_text.hpp"
 #include "text.hpp"
 #include "tooltips.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 #include "serdes/parser.hpp"
 #include "serdes/preprocessor.hpp"
 #include "serdes/string_utils.hpp"

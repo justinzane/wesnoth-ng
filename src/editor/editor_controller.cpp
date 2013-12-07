@@ -19,7 +19,7 @@
 
 #include "widgets/slider.hpp"
 
-#include "editor/map/context_manager.hpp"
+#include "editor/map/context_mgr.hpp"
 
 #include "asserts.hpp"
 #include "editor/action/action.hpp"
@@ -238,9 +238,9 @@ void editor_controller::custom_tods_dialog()
 	context_manager_->refresh_all();
 }
 
-bool editor_controller::can_execute_command(const hotkey::hotkey_command& cmd, int index) const
+bool editor_controller::can_execute_command(const hotkey_cmd_t& cmd, int index) const
 {
-	using namespace hotkey; //reduce hotkey:: clutter
+	using namespace hotkey; //reduce  clutter
 	switch (cmd.id) {
 		case HOTKEY_nullptr:
 			if (index >= 0) {
@@ -285,7 +285,7 @@ bool editor_controller::can_execute_command(const hotkey::hotkey_command& cmd, i
 		case HOTKEY_QUIT_GAME:
 			return true; //general hotkeys we can always do
 
-		case hotkey::HOTKEY_UNIT_LIST:
+		case HOTKEY_UNIT_LIST:
 			return context_manager_->get_map_context().get_units().size() != 0;
 
 		case HOTKEY_STATUS_TABLE:
@@ -414,7 +414,7 @@ bool editor_controller::can_execute_command(const hotkey::hotkey_command& cmd, i
 	}
 }
 
-hotkey::ACTION_STATE editor_controller::get_action_state(hotkey::HOTKEY_COMMAND command, int index) const {
+ACTION_STATE editor_controller::get_action_state(hotkey_cmd_t command, int index) const {
 	using namespace hotkey;
 	switch (command) {
 
@@ -516,10 +516,10 @@ hotkey::ACTION_STATE editor_controller::get_action_state(hotkey::HOTKEY_COMMAND 
 	}
 }
 
-bool editor_controller::execute_command(const hotkey::hotkey_command& cmd, int index)
+bool editor_controller::execute_command(const hotkey_cmd_t& cmd, int index)
 {
 	const int zoom_amount = 4;
-	hotkey::HOTKEY_COMMAND command = cmd.id;
+	hotkey_cmd_t command = cmd.id;
 	SCOPE_ED;
 	using namespace hotkey;
 	switch (command) {
@@ -860,11 +860,11 @@ void editor_controller::show_menu(const std::vector<std::string>& items_arg, int
 	while(i != items_arg.end())
 	{
 
-		hotkey::hotkey_command& command = hotkey::get_hotkey_command(*i);
+		hotkey_cmd_t& command = get_hotkey_cmd_t(*i);
 
 		if ( ( can_execute_command(command) 
 			&& (!context_menu || in_context_menu(command.id)) )
-			|| command.id == hotkey::HOTKEY_nullptr) {
+			|| command.id == HOTKEY_nullptr) {
 			items.push_back(*i);
 		}
 		++i;

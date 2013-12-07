@@ -36,7 +36,7 @@
 #include "serdes/string_utils.hpp"
 #include "util.hpp"
 #include "variable.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 namespace storyscreen {
 

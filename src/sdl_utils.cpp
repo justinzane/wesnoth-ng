@@ -15,39 +15,16 @@
  */
 
 #include "sdl_utils.hpp"
-#include "floating_point_emulation.hpp"
-#include "global.hpp"
-#include "scoped_resource.hpp"
-#include "util.hpp"
-#include "video.hpp"
-#include "arch_dep/neon.hpp"
-
-#include <boost/math/constants/constants.hpp>
-#include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/core/types_c.h>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <SDL2/SDL.h>
-#include <math.h>
-#include <stdint.h>
-#include <algorithm>
-#include <cassert>
-#include <cstdlib>
-#include <cstring>
-#include <iosfwd>
-#include <iostream>
-#include <map>
-#include <string>
 
 // Event Handling Utilities -------------------------------------------------------------------
 
-SDLKey sdl_keysym_from_name(std::string const &keyname) {
+SDL_Keymod sdl_keysym_from_name(std::string const &keyname) {
     static bool initialized = false;
-    typedef std::map<std::string const, SDLKey> keysym_map_t;
+    typedef std::map<std::string const, SDL_Keymod> keysym_map_t;
     static keysym_map_t keysym_map;
 
     if ( !initialized) {
-        for (SDLKey i = SDLK_FIRST; i < SDLK_LAST; i = SDLKey(int(i) + 1)) {
+        for (SDL_Keymod i = SDLK_FIRST; i < SDLK_LAST; i = SDL_Keymod(int(i) + 1)) {
             std::string name = SDL_GetKeyName(i);
             if ( !name.empty()) keysym_map[name] = i;
         }

@@ -19,7 +19,7 @@
 
 #include "global.hpp"
 
-#include "addon/manager.hpp"
+#include "addon/mgr.hpp"
 #include "addon/manager_ui.hpp"
 #include "dialogs.hpp"
 #include "filesystem.hpp"

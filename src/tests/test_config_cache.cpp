@@ -27,7 +27,7 @@
 #include "language.hpp"
 #include "version.hpp"
 
-#include "tests/utils/game_config_manager.hpp"
+#include "tests/utils/game_config_mgr.hpp"
 
 #include <boost/bind.hpp>
 

@@ -70,8 +70,8 @@ typedef boost::function<
          const tevent event,
          bool& handled,
          bool& halt,
-         const SDLKey key,
-         const SDLMod modifier,
+         const SDL_Keysym key,
+         const SDL_Keymod modifier,
          const Uint16 unicode)> tsignal_keyboard_function;
 
 /**
@@ -97,7 +97,7 @@ typedef boost::function<
          tmessage& message)> tsignal_message_function;
 
 /** Hotkey function handler signature. */
-typedef boost::function<bool(tdispatcher& dispatcher, hotkey::HOTKEY_COMMAND id)> thotkey_function;
+typedef boost::function<bool(tdispatcher& dispatcher, hotkey_cmd_t id)> thotkey_function;
 
 /**
  * Base class for event handling.
@@ -174,8 +174,8 @@ class tdispatcher {
          */
         bool fire(const tevent event,
                   twidget& target,
-                  const SDLKey key,
-                  const SDLMod modifier,
+                  const SDL_Keysym key,
+                  const SDL_Keymod modifier,
                   const Uint16 unicode);
 
         /**
@@ -593,7 +593,7 @@ class tdispatcher {
          * @param id                  The hotkey to register.
          * @param function            The callback function to call.
          */
-        void register_hotkey(const hotkey::HOTKEY_COMMAND id, const thotkey_function& function);
+        void register_hotkey(const hotkey_cmd_t id, const thotkey_function& function);
 
         /**
          * Executes a hotkey.
@@ -603,7 +603,7 @@ class tdispatcher {
          * @returns                   true if the hotkey is handled, false
          *                            otherwise.
          */
-        bool execute_hotkey(const hotkey::HOTKEY_COMMAND id);
+        bool execute_hotkey(const hotkey_cmd_t id);
 
     private:
 
@@ -641,7 +641,7 @@ class tdispatcher {
         bool connected_;
 
         /** The registered hotkeys for this dispatcher. */
-        std::map<hotkey::HOTKEY_COMMAND, thotkey_function> hotkeys_;
+        std::map<hotkey_cmd_t, thotkey_function> hotkeys_;
 };
 
 /***** ***** ***** ***** ***** Common helpers  ***** ***** ***** ***** *****/

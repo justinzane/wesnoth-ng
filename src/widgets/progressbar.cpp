@@ -24,7 +24,7 @@
 
 #include "font.hpp"
 #include "marked-up_text.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 namespace gui {
 

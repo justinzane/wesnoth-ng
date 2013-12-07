@@ -48,7 +48,7 @@ class terrain_builder
 {
 public:
 	/** Used as a parameter for the get_terrain_at function. */
-	enum TERRAIN_TYPE {
+	enum terr_type_t {
 			BACKGROUND,	/**<
 						* Represents terrains which are to be
 						* drawn behind unit sprites
@@ -121,7 +121,7 @@ public:
 	 *              to the parameters, or nullptr if there is none.
 	 */
 	const imagelist *get_terrain_at(const map_location &loc,
-			const std::string &tod, TERRAIN_TYPE const terrain_type);
+			const std::string &tod, terr_type_t const terrain_type);
 
 	/** Updates the animation at a given tile.
 	 * Returns true if something has changed, and must be redrawn.

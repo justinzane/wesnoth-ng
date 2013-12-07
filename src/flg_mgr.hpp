@@ -1,5 +1,5 @@
 /**
- * @file src/flg_manager.hpp
+ * @file src/flg_mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 

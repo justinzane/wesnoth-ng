@@ -332,7 +332,7 @@ void dialog_frame::draw()
 
 namespace {
 
-struct help_handler : public hotkey::command_executor
+struct help_handler : public command_executor
 {
 	help_handler(display& disp, const std::string& topic) : disp_(disp), topic_(topic)
 	{}
@@ -345,10 +345,10 @@ private:
 		}
 	}
 
-	bool can_execute_command(const hotkey::hotkey_command& cmd, int /*index*/) const
+	bool can_execute_command(const hotkey_cmd_t& cmd, int /*index*/) const
 	{
-		hotkey::HOTKEY_COMMAND command = cmd.id;
-		return (topic_.empty() == false && command == hotkey::HOTKEY_HELP) || command == hotkey::HOTKEY_SCREENSHOT;
+		hotkey_cmd_t command = cmd.id;
+		return (topic_.empty() == false && command == HOTKEY_HELP) || command == HOTKEY_SCREENSHOT;
 	}
 
 	display& disp_;

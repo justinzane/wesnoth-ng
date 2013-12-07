@@ -184,34 +184,34 @@ static bool fullscreen(CVideo& video)
 void ttitle_screen::post_build(CVideo& video, twindow& window)
 {
 	/** @todo Should become a title screen hotkey. */
-	window.register_hotkey(hotkey::TITLE_SCREEN__RELOAD_WML
+	window.register_hotkey(TITLE_SCREEN__RELOAD_WML
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, RELOAD_GAME_DATA));
 
-	window.register_hotkey(hotkey::HOTKEY_FULLSCREEN
+	window.register_hotkey(HOTKEY_FULLSCREEN
 			, boost::bind(fullscreen, boost::ref(video)));
 
-	window.register_hotkey(hotkey::HOTKEY_LANGUAGE
+	window.register_hotkey(HOTKEY_LANGUAGE
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, CHANGE_LANGUAGE));
 
-	window.register_hotkey(hotkey::HOTKEY_LOAD_GAME
+	window.register_hotkey(HOTKEY_LOAD_GAME
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, LOAD_GAME));
 
-	window.register_hotkey(hotkey::HOTKEY_HELP
+	window.register_hotkey(HOTKEY_HELP
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, SHOW_HELP));
 
-	window.register_hotkey(hotkey::HOTKEY_PREFERENCES
+	window.register_hotkey(HOTKEY_PREFERENCES
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
@@ -223,7 +223,7 @@ void ttitle_screen::post_build(CVideo& video, twindow& window)
 			, boost::ref(window)
 			, true);
 
-	window.register_hotkey(hotkey::TITLE_SCREEN__NEXT_TIP
+	window.register_hotkey(TITLE_SCREEN__NEXT_TIP
 			, boost::bind(function_wrapper<bool, boost::function<void()> >
 				, true
 				, boost::cref(next_tip_wrapper)));
@@ -234,48 +234,48 @@ void ttitle_screen::post_build(CVideo& video, twindow& window)
 			, boost::ref(window)
 			, false);
 
-	window.register_hotkey(hotkey::TITLE_SCREEN__PREVIOUS_TIP
+	window.register_hotkey(TITLE_SCREEN__PREVIOUS_TIP
 			, boost::bind(function_wrapper<bool, boost::function<void()> >
 				, true
 				, boost::cref(previous_tip_wrapper)));
 
-	window.register_hotkey(hotkey::TITLE_SCREEN__TUTORIAL
+	window.register_hotkey(TITLE_SCREEN__TUTORIAL
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, TUTORIAL));
 
-	window.register_hotkey(hotkey::TITLE_SCREEN__CAMPAIGN
+	window.register_hotkey(TITLE_SCREEN__CAMPAIGN
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, NEW_CAMPAIGN));
 
-	window.register_hotkey(hotkey::TITLE_SCREEN__MULTIPLAYER
+	window.register_hotkey(TITLE_SCREEN__MULTIPLAYER
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, MULTIPLAYER));
 
-	window.register_hotkey(hotkey::TITLE_SCREEN__ADDONS
+	window.register_hotkey(TITLE_SCREEN__ADDONS
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, GET_ADDONS));
 
-	window.register_hotkey(hotkey::TITLE_SCREEN__EDITOR
+	window.register_hotkey(TITLE_SCREEN__EDITOR
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, START_MAP_EDITOR));
 
-	window.register_hotkey(hotkey::TITLE_SCREEN__CREDITS
+	window.register_hotkey(TITLE_SCREEN__CREDITS
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)
 					, SHOW_ABOUT));
 
-	window.register_hotkey(hotkey::HOTKEY_QUIT_GAME
+	window.register_hotkey(HOTKEY_QUIT_GAME
 				, boost::bind(
 					  &hotkey
 					, boost::ref(window)

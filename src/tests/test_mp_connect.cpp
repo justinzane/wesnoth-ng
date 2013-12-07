@@ -20,7 +20,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "game_config_manager.hpp"
+#include "game_config_mgr.hpp"
 #include "game_display.hpp"
 #include "mp/multiplayer_connect.hpp"
 #include "mp/multiplayer_connect.hpp"

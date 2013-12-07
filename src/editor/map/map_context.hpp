@@ -23,7 +23,7 @@
 #include "gamestatus.hpp"
 #include "map_label.hpp"
 #include "sound_music_track.hpp"
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"
 #include "overlay.hpp"

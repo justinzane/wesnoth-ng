@@ -21,7 +21,7 @@
 
 #include <string>
 #include "config.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 #include "gui/widgets/widget.hpp"
 #include "gui/widgets/window.hpp"
 

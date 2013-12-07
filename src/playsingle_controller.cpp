@@ -25,7 +25,7 @@
 #include "playsingle_controller.hpp"
 
 #include "actions/undo.hpp"
-#include "ai/manager.hpp"
+#include "ai/mgr.hpp"
 #include "ai/game_info.hpp"
 #include "ai/testing.hpp"
 #include "dialogs.hpp"
@@ -48,7 +48,7 @@
 #include "save_blocker.hpp"
 #include "soundsource.hpp"
 #include "storyscreen/interface.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 #include "util.hpp"
 
 #include "global.hpp"
@@ -224,7 +224,7 @@ void playsingle_controller::whiteboard_toggle() {
 	resources::whiteboard->set_active(!resources::whiteboard->is_active());
 
 	if (resources::whiteboard->is_active()) {
-		std::string hk = hotkey::get_names(hotkey::HOTKEY_WB_TOGGLE);
+		std::string hk = get_names(HOTKEY_WB_TOGGLE);
 		utils::string_map symbols;
 		symbols["hotkey"] = hk;
 
@@ -828,11 +828,11 @@ void playsingle_controller::end_turn_enable(bool enable)
 	set_button_state(*gui_);
 }
 
-hotkey::ACTION_STATE playsingle_controller::get_action_state(hotkey::HOTKEY_COMMAND command, int index) const
+ACTION_STATE playsingle_controller::get_action_state(hotkey_cmd_t command, int index) const
 {
 	switch(command) {
-	case hotkey::HOTKEY_WB_TOGGLE:
-		return resources::whiteboard->is_active() ? hotkey::ACTION_ON : hotkey::ACTION_OFF;
+	case HOTKEY_WB_TOGGLE:
+		return resources::whiteboard->is_active() ? ACTION_ON : ACTION_OFF;
 	default:
 		return play_controller::get_action_state(command, index);
 	}
@@ -930,45 +930,45 @@ void playsingle_controller::check_time_over(){
 	}
 }
 
-bool playsingle_controller::can_execute_command(const hotkey::hotkey_command& cmd, int index) const
+bool playsingle_controller::can_execute_command(const hotkey_cmd_t& cmd, int index) const
 {
-	hotkey::HOTKEY_COMMAND command = cmd.id;
+	hotkey_cmd_t command = cmd.id;
 	bool res = true;
 	switch (command){
 
-		case hotkey::HOTKEY_WML:
+		case HOTKEY_WML:
 			//code mixed from play_controller::show_menu and code here
 			return (gui_->viewing_team() == gui_->playing_team()) && !events::commands_disabled && teams_[gui_->viewing_team()].is_human() && !linger_ && !browse_;
-		case hotkey::HOTKEY_UNIT_HOLD_POSITION:
-		case hotkey::HOTKEY_END_UNIT_TURN:
+		case HOTKEY_UNIT_HOLD_POSITION:
+		case HOTKEY_END_UNIT_TURN:
 			return !browse_ && !linger_ && !events::commands_disabled;
-		case hotkey::HOTKEY_RECRUIT:
-		case hotkey::HOTKEY_REPEAT_RECRUIT:
-		case hotkey::HOTKEY_RECALL:
+		case HOTKEY_RECRUIT:
+		case HOTKEY_REPEAT_RECRUIT:
+		case HOTKEY_RECALL:
 			return (!browse_ || resources::whiteboard->is_active()) && !linger_ && !events::commands_disabled;
-		case hotkey::HOTKEY_ENDTURN:
+		case HOTKEY_ENDTURN:
 			return (!browse_ || linger_) && !events::commands_disabled;
 
-		case hotkey::HOTKEY_DELAY_SHROUD:
+		case HOTKEY_DELAY_SHROUD:
 			return !linger_ && (teams_[gui_->viewing_team()].uses_fog() || teams_[gui_->viewing_team()].uses_shroud())
 			&& !events::commands_disabled;
-		case hotkey::HOTKEY_UPDATE_SHROUD:
+		case HOTKEY_UPDATE_SHROUD:
 			return !linger_
 				&& player_number_ == gui_->viewing_side()
 				&& !events::commands_disabled
 				&& teams_[gui_->viewing_team()].auto_shroud_updates() == false;
 
 		// Commands we can only do if in debug mode
-		case hotkey::HOTKEY_CREATE_UNIT:
-		case hotkey::HOTKEY_CHANGE_SIDE:
-		case hotkey::HOTKEY_KILL_UNIT:
+		case HOTKEY_CREATE_UNIT:
+		case HOTKEY_CHANGE_SIDE:
+		case HOTKEY_KILL_UNIT:
 			return !events::commands_disabled && game_config::debug && map_.on_board(mouse_handler_.get_last_hex());
 
-		case hotkey::HOTKEY_CLEAR_LABELS:
+		case HOTKEY_CLEAR_LABELS:
 			res = !is_observer();
 			break;
-		case hotkey::HOTKEY_LABEL_TEAM_TERRAIN:
-		case hotkey::HOTKEY_LABEL_TERRAIN: {
+		case HOTKEY_LABEL_TEAM_TERRAIN:
+		case HOTKEY_LABEL_TERRAIN: {
 			const terrain_label *label = resources::screen->labels().get_label(mouse_handler_.get_last_hex());
 			res = !events::commands_disabled && map_.on_board(mouse_handler_.get_last_hex())
 				&& !gui_->shrouded(mouse_handler_.get_last_hex())
@@ -976,7 +976,7 @@ bool playsingle_controller::can_execute_command(const hotkey::hotkey_command& cm
 				&& (!label || !label->immutable());
 			break;
 		}
-		case hotkey::HOTKEY_CONTINUE_MOVE: {
+		case HOTKEY_CONTINUE_MOVE: {
 			if(browse_ || events::commands_disabled)
 				return false;
 
@@ -987,17 +987,17 @@ bool playsingle_controller::can_execute_command(const hotkey::hotkey_command& cm
 			if (i == units_.end()) return false;
 			return i->move_interrupted();
 		}
-		case hotkey::HOTKEY_WB_TOGGLE:
+		case HOTKEY_WB_TOGGLE:
 			return !is_observer();
-		case hotkey::HOTKEY_WB_EXECUTE_ACTION:
-		case hotkey::HOTKEY_WB_EXECUTE_ALL_ACTIONS:
+		case HOTKEY_WB_EXECUTE_ACTION:
+		case HOTKEY_WB_EXECUTE_ALL_ACTIONS:
 			return resources::whiteboard->can_enable_execution_hotkeys();
-		case hotkey::HOTKEY_WB_DELETE_ACTION:
+		case HOTKEY_WB_DELETE_ACTION:
 			return resources::whiteboard->can_enable_modifier_hotkeys();
-		case hotkey::HOTKEY_WB_BUMP_UP_ACTION:
-		case hotkey::HOTKEY_WB_BUMP_DOWN_ACTION:
+		case HOTKEY_WB_BUMP_UP_ACTION:
+		case HOTKEY_WB_BUMP_DOWN_ACTION:
 			return resources::whiteboard->can_enable_reorder_hotkeys();
-		case hotkey::HOTKEY_WB_SUPPOSE_DEAD:
+		case HOTKEY_WB_SUPPOSE_DEAD:
 		{
 			//@todo re-enable this once we figure out a decent UI for suppose_dead
 			return false;

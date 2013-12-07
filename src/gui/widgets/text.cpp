@@ -204,7 +204,7 @@ void ttext_::set_state(const tstate state)
 	}
 }
 
-void ttext_::handle_key_left_arrow(SDLMod modifier, bool& handled)
+void ttext_::handle_key_left_arrow(SDL_KeyModmodifier, bool& handled)
 {
 	/** @todo implement the ctrl key. */
 	DBG_GUI_E << LOG_SCOPE_HEADER << '\n';
@@ -216,7 +216,7 @@ void ttext_::handle_key_left_arrow(SDLMod modifier, bool& handled)
 	}
 }
 
-void ttext_::handle_key_right_arrow(SDLMod modifier, bool& handled)
+void ttext_::handle_key_right_arrow(SDL_KeyModmodifier, bool& handled)
 {
 	/** @todo implement the ctrl key. */
 	DBG_GUI_E << LOG_SCOPE_HEADER << '\n';
@@ -228,7 +228,7 @@ void ttext_::handle_key_right_arrow(SDLMod modifier, bool& handled)
 	}
 }
 
-void ttext_::handle_key_home(SDLMod modifier, bool& handled)
+void ttext_::handle_key_home(SDL_KeyModmodifier, bool& handled)
 {
 	DBG_GUI_E << LOG_SCOPE_HEADER << '\n';
 
@@ -240,7 +240,7 @@ void ttext_::handle_key_home(SDLMod modifier, bool& handled)
 	}
 }
 
-void ttext_::handle_key_end(SDLMod modifier, bool& handled)
+void ttext_::handle_key_end(SDL_KeyModmodifier, bool& handled)
 {
 	DBG_GUI_E << LOG_SCOPE_HEADER << '\n';
 
@@ -252,7 +252,7 @@ void ttext_::handle_key_end(SDLMod modifier, bool& handled)
 	}
 }
 
-void ttext_::handle_key_backspace(SDLMod /*modifier*/, bool& handled)
+void ttext_::handle_key_backspace(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	DBG_GUI_E << LOG_SCOPE_HEADER << '\n';
 
@@ -265,7 +265,7 @@ void ttext_::handle_key_backspace(SDLMod /*modifier*/, bool& handled)
 	fire(event::NOTIFY_MODIFIED, *this, nullptr);
 }
 
-void ttext_::handle_key_delete(SDLMod /*modifier*/, bool& handled)
+void ttext_::handle_key_delete(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	DBG_GUI_E << LOG_SCOPE_HEADER << '\n';
 
@@ -279,7 +279,7 @@ void ttext_::handle_key_delete(SDLMod /*modifier*/, bool& handled)
 }
 
 void ttext_::handle_key_default(
-		bool& handled, SDLKey /*key*/, SDLMod /*modifier*/, Uint16 unicode)
+		bool& handled, SDL_Keymod /*key*/, SDL_KeyMod/*modifier*/, Uint16 unicode)
 {
 	DBG_GUI_E << LOG_SCOPE_HEADER << '\n';
 
@@ -302,8 +302,8 @@ void ttext_::signal_handler_middle_button_click(
 
 void ttext_::signal_handler_sdl_key_down(const event::tevent event
 		, bool& handled
-		, const SDLKey key
-		, SDLMod modifier
+		, const SDL_Keymod key
+		, SDL_KeyModmodifier
 		, const Uint16 unicode)
 {
 

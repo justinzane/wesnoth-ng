@@ -30,7 +30,7 @@
 #include "mp/multiplayer_ui.hpp"
 #include "mp/mp_game_utils.hpp"
 #include "mp/mp_game_utils.hpp"
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>

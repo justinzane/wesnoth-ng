@@ -34,7 +34,7 @@
 #include "sound.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>
@@ -529,21 +529,21 @@ void playmp_controller::handle_generic_event(const std::string& name){
 	}
 }
 
-bool playmp_controller::can_execute_command(const hotkey::hotkey_command& cmd, int index) const
+bool playmp_controller::can_execute_command(const hotkey_cmd_t& cmd, int index) const
 {
-	hotkey::HOTKEY_COMMAND command = cmd.id;
+	hotkey_cmd_t command = cmd.id;
 	bool res = true;
 	switch (command){
-		case hotkey::HOTKEY_SPEAK:
-		case hotkey::HOTKEY_SPEAK_ALLY:
-		case hotkey::HOTKEY_SPEAK_ALL:
+		case HOTKEY_SPEAK:
+		case HOTKEY_SPEAK_ALLY:
+		case HOTKEY_SPEAK_ALL:
 			res = network::nconnections() > 0;
 			break;
-		case hotkey::HOTKEY_START_NETWORK:
-		case hotkey::HOTKEY_STOP_NETWORK:
+		case HOTKEY_START_NETWORK:
+		case HOTKEY_STOP_NETWORK:
 			res = is_observer();
 			break;
-		case hotkey::HOTKEY_STOP_REPLAY:
+		case HOTKEY_STOP_REPLAY:
 			if (is_observer()){
 				network_processing_stopped_ = true;
 				LOG_NG << "network processing stopped";

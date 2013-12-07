@@ -956,7 +956,7 @@ void tscrollbar_container::scroll_horizontal_scrollbar(
 	scrollbar_moved();
 }
 
-void tscrollbar_container::handle_key_home(SDLMod /*modifier*/, bool& handled)
+void tscrollbar_container::handle_key_home(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	assert(vertical_scrollbar_ && horizontal_scrollbar_);
 
@@ -967,7 +967,7 @@ void tscrollbar_container::handle_key_home(SDLMod /*modifier*/, bool& handled)
 	handled = true;
 }
 
-void tscrollbar_container::handle_key_end(SDLMod /*modifier*/, bool& handled)
+void tscrollbar_container::handle_key_end(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	assert(vertical_scrollbar_);
 
@@ -978,7 +978,7 @@ void tscrollbar_container::handle_key_end(SDLMod /*modifier*/, bool& handled)
 }
 
 void tscrollbar_container::
-		handle_key_page_up(SDLMod /*modifier*/, bool& handled)
+		handle_key_page_up(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	assert(vertical_scrollbar_);
 
@@ -989,7 +989,7 @@ void tscrollbar_container::
 }
 
 void tscrollbar_container::
-		handle_key_page_down(SDLMod /*modifier*/, bool& handled)
+		handle_key_page_down(SDL_KeyMod/*modifier*/, bool& handled)
 
 {
 	assert(vertical_scrollbar_);
@@ -1001,7 +1001,7 @@ void tscrollbar_container::
 }
 
 void tscrollbar_container::
-		handle_key_up_arrow(SDLMod /*modifier*/, bool& handled)
+		handle_key_up_arrow(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	assert(vertical_scrollbar_);
 
@@ -1012,7 +1012,7 @@ void tscrollbar_container::
 }
 
 void tscrollbar_container::
-		handle_key_down_arrow( SDLMod /*modifier*/, bool& handled)
+		handle_key_down_arrow( SDL_KeyMod/*modifier*/, bool& handled)
 {
 	assert(vertical_scrollbar_);
 
@@ -1023,7 +1023,7 @@ void tscrollbar_container::
 }
 
 void tscrollbar_container
-		::handle_key_left_arrow(SDLMod /*modifier*/, bool& handled)
+		::handle_key_left_arrow(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	assert(horizontal_scrollbar_);
 
@@ -1034,7 +1034,7 @@ void tscrollbar_container
 }
 
 void tscrollbar_container
-		::handle_key_right_arrow(SDLMod /*modifier*/, bool& handled)
+		::handle_key_right_arrow(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	assert(horizontal_scrollbar_);
 
@@ -1082,8 +1082,8 @@ const std::string& tscrollbar_container::get_control_type() const
 void tscrollbar_container::signal_handler_sdl_key_down(
 		const event::tevent event
 		, bool& handled
-		, const SDLKey key
-		, SDLMod modifier)
+		, const SDL_Keymod key
+		, SDL_KeyModmodifier)
 {
 	DBG_GUI_E << LOG_HEADER << event << ".\n";
 

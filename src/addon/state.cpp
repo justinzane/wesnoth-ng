@@ -18,7 +18,7 @@
 
 #include "addon/state.hpp"
 
-#include "addon/manager.hpp"
+#include "addon/mgr.hpp"
 #include "font.hpp"
 #include "log/log.hpp"
 #include "log/log.hpp"

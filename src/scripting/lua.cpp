@@ -37,7 +37,7 @@
 #include "scripting/lua_api.hpp"
 
 #include "actions/attack.hpp"
-#include "ai/manager.hpp"
+#include "ai/mgr.hpp"
 #include "ai/composite/component.hpp"
 #include "ai/composite/engine_lua.hpp"
 #include "ai/testing/stage_rca.hpp"

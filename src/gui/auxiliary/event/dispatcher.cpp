@@ -223,8 +223,8 @@ bool tdispatcher::fire(const tevent event
 class ttrigger_keyboard
 {
 public:
-	ttrigger_keyboard(const SDLKey key
-			, const SDLMod modifier
+	ttrigger_keyboard(const SDL_Keymod key
+			, const SDL_KeyModmodifier
 			, const Uint16 unicode)
 		: key_(key)
 		, modifier_(modifier)
@@ -242,15 +242,15 @@ public:
 	}
 
 private:
-	SDLKey key_;
-	SDLMod modifier_;
+	SDL_Keymod key_;
+	SDL_KeyModmodifier_;
 	Uint16 unicode_;
 };
 
 bool tdispatcher::fire(const tevent event
 		, twidget& target
-		, const SDLKey key
-		, const SDLMod modifier
+		, const SDL_Keymod key
+		, const SDL_KeyModmodifier
 		, const Uint16 unicode)
 {
 	assert(find<tset_event_keyboard>(event, tevent_in_set()));
@@ -317,15 +317,15 @@ bool tdispatcher::fire(const tevent event, twidget& target, tmessage& message)
 			, ttrigger_message(message));
 }
 
-void tdispatcher::register_hotkey(const hotkey::HOTKEY_COMMAND id
+void tdispatcher::register_hotkey(const hotkey_cmd_t id
 		, const thotkey_function& function)
 {
 	hotkeys_[id] = function;
 }
 
-bool tdispatcher::execute_hotkey(const hotkey::HOTKEY_COMMAND id)
+bool tdispatcher::execute_hotkey(const hotkey_cmd_t id)
 {
-	std::map<hotkey::HOTKEY_COMMAND, thotkey_function>::iterator
+	std::map<hotkey_cmd_t, thotkey_function>::iterator
 			itor = hotkeys_.find(id);
 
 	if(itor == hotkeys_.end()) {

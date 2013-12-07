@@ -1,5 +1,5 @@
 /**
- * @file src/tests/utils/game_config_manager.hpp
+ * @file src/tests/utils/game_config_mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 

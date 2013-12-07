@@ -47,9 +47,9 @@ Growl_Delegate growl_obj;
 #include "marked-up_text.hpp"
 #include "reports.hpp"
 #include "resources.hpp"
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 #include "sound.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 #ifdef _WIN32
 #include "windows_tray_notification.hpp"
 #endif
@@ -214,7 +214,7 @@ void game_display::invalidate_unit_after_move(const map_location& src, const map
 	}
 }
 
-void game_display::scroll_to_leader(unit_map& units, int side, SCROLL_TYPE scroll_type,bool force)
+void game_display::scroll_to_leader(unit_map& units, int side, scroll_type_t scroll_type,bool force)
 {
 	unit_map::const_iterator leader = units.find_leader(side);
 
@@ -222,7 +222,7 @@ void game_display::scroll_to_leader(unit_map& units, int side, SCROLL_TYPE scrol
 		// YogiHH: I can't see why we need another key_handler here,
 		// therefore I will comment it out :
 		/*
-		const hotkey::basic_handler key_events_handler(gui_);
+		const basic_handler key_events_handler(gui_);
 		*/
 		scroll_to_tile(leader->get_location(), scroll_type, true, force);
 	}
@@ -285,7 +285,7 @@ void game_display::draw_hex(const map_location& loc)
 	}
 
 	if(on_map && loc == mouseoverHex_) {
-		tdrawing_layer hex_top_layer = LAYER_MOUSEOVER_BOTTOM;
+		drawing_layer_t hex_top_layer = LAYER_MOUSEOVER_BOTTOM;
 		const unit *u = get_visible_unit(loc, (*teams_)[viewing_team()] );
 		if( u != nullptr ) {
 			hex_top_layer = LAYER_MOUSEOVER_TOP;
@@ -1045,7 +1045,7 @@ void game_display::set_team(size_t teamindex, bool show_everything)
 void game_display::set_playing_team(size_t teamindex)
 {
 	assert(teamindex < teams_->size());
-	activeTeam_ = teamindex;
+	active_team_ = teamindex;
 	invalidate_game_status();
 }
 

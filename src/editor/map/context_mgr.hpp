@@ -1,5 +1,5 @@
 /**
- * @file src/editor/map/context_manager.hpp
+ * @file src/editor/map/context_mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 

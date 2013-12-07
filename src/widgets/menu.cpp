@@ -28,7 +28,7 @@
 #include "image.hpp"
 #include "marked-up_text.hpp"
 #include "sound.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 #include "serdes/wml_separators.hpp"
 
 #include <numeric>
@@ -577,7 +577,7 @@ void menu::reset_selection()
 	set_selection_pos(0, true);
 }
 
-void menu::key_press(SDLKey key)
+void menu::key_press(SDL_Keymod key)
 {
 	if (!click_selects_) {
 		switch(key) {
@@ -622,7 +622,7 @@ bool menu::requires_event_focus(const SDL_Event* event) const
 	}
 
 	if(event->type == SDL_KEYDOWN) {
-		SDLKey key = event->key.keysym.sym;
+		SDL_Keymod key = event->key.keysym.sym;
 		if (!click_selects_) {
 			switch(key) {
 			case SDLK_UP:

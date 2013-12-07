@@ -54,9 +54,9 @@ namespace test {
 
 	BOOST_FIXTURE_TEST_SUITE( save_dialog , save_dialog_fixture)
 
-		SDLKey fake_input_keys[] =  {SDLK_KP_ENTER, SDLK_RETURN, SDLK_ESCAPE, SDLK_a};
+		SDL_Keymod fake_input_keys[] =  {SDLK_KP_ENTER, SDLK_RETURN, SDLK_ESCAPE, SDLK_a};
 
-		WESNOTH_PARAMETERIZED_TEST_CASE( test_fake_input, SDLKey,fake_input_keys, keyid)
+		WESNOTH_PARAMETERIZED_TEST_CASE( test_fake_input, SDL_Keymod,fake_input_keys, keyid)
 		{
 			test_utils::event_node_ptr new_keypress = source.press_key(2, keyid);
 			test_utils::event_node_ptr new_keyrelease = source.release_key(4,keyid);
@@ -83,9 +83,9 @@ namespace test {
 			}
 		}
 
-		SDLKey dialog_get_save_name_enter_pressed[] =  {SDLK_KP_ENTER, SDLK_RETURN};
+		SDL_Keymod dialog_get_save_name_enter_pressed[] =  {SDLK_KP_ENTER, SDLK_RETURN};
 
-		WESNOTH_PARAMETERIZED_TEST_CASE( test_dialog_get_save_name_enter_pressed, SDLKey, dialog_get_save_name_enter_pressed, keyid )
+		WESNOTH_PARAMETERIZED_TEST_CASE( test_dialog_get_save_name_enter_pressed, SDL_Keymod, dialog_get_save_name_enter_pressed, keyid )
 		{
 			// fill in events to be used in test
 			test_utils::event_node_ptr press_return_before = source.press_key(0, keyid);

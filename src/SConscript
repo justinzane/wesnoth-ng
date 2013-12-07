@@ -37,7 +37,10 @@ libwesnoth_core_sources = Split("""
     tools/schema/tag.cpp
     """)
 
-libwesnoth_core_sources.extend(env.Object("net/network_worker.cpp", EXTRA_DEFINE=env['raw_sockets'] and "NETWORK_USE_RAW_SOCKETS" or None))
+libwesnoth_core_sources.extend(env.Object("net/network_worker.cpp",
+                                          EXTRA_DEFINE=env['raw_sockets'] and
+                                          "NETWORK_USE_RAW_SOCKETS" or
+                                          None))
 
 game_config_env = env.Clone()
 filesystem_env = env.Clone()
@@ -111,7 +114,6 @@ libwesnoth_sources = Split("""
     text.cpp
     time_of_day.cpp
     tooltips.cpp
-    video.cpp
     theme.cpp
     widgets/button.cpp
     widgets/file_menu.cpp
@@ -144,7 +146,12 @@ libcampaignd_sources = Split("""
 libcampaignd = env.Library("campaignd", libcampaignd_sources, OBJPREFIX="campaignd_")
 
 libwesnoth_sdl_sources = Split("""
+    sld2/sdl2_evt_mgr.cpp
+    sdl2/sdl2_evt_hndlr.cpp
+    sld2/sdl2_rndr_mgr.cpp
+    sdl2/win_evt_hndlr.cpp
     sdl_utils.cpp
+    img.cpp
     tracer.cpp
     """)
 libwesnoth_sdl = client_env.Library("wesnoth_sdl", libwesnoth_sdl_sources)

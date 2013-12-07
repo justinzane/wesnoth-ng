@@ -28,7 +28,7 @@
 #include "side_filter.hpp"
 #include "team.hpp"
 #include "terrain_filter.hpp"
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 #include "variable.hpp"
 
 #include "global.hpp"

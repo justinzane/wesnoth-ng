@@ -26,7 +26,7 @@
 #define AI_CONTEXTS_HPP_INCLUDED
 
 #include "game_info.hpp"
-#include "../generic_event.hpp"
+#include "../generic_sdl2/sdl2_evt_mgr.hpp"
 #include "../config.hpp"
 #include "lua/unit_advancements_aspect.hpp"
 

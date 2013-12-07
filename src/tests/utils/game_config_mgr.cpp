@@ -18,7 +18,7 @@
 
 #define GETTEXT_DOMAIN "wesnoth-test"
 
-#include "tests/utils/game_config_manager.hpp"
+#include "tests/utils/game_config_mgr.hpp"
 
 #include "config.hpp"
 #include "config_cache.hpp"
@@ -46,7 +46,7 @@ namespace test_utils {
 	class game_config_manager {
 		config cfg_;
 		binary_paths_manager paths_manager_;
-		const hotkey::manager hotkey_manager_;
+		const manager hotkey_manager_;
 		font::manager font_manager_;
 
 		static game_config_manager* manager;
@@ -96,11 +96,11 @@ namespace test_utils {
 			}
 
 			game_config::load_config(cfg_.child("game_config"));
-			hotkey::deactivate_all_scopes();
-			hotkey::set_scope_active(hotkey::SCOPE_GENERAL);
-			hotkey::set_scope_active(hotkey::SCOPE_GAME);
+			deactivate_all_scopes();
+			set_scope_active(SCOPE_GENERAL);
+			set_scope_active(SCOPE_GAME);
 
-			hotkey::load_hotkeys(cfg_);
+			load_hotkeys(cfg_);
 			paths_manager_.set_paths(cfg_);
 			font::load_font_config();
 

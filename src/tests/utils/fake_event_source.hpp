@@ -121,7 +121,7 @@ namespace test_utils {
 
 			event_queue queue_;
 
-			SDL_Event make_key_event(Uint8 type, const SDLKey key, const SDLMod mod);
+			SDL_Event make_key_event(Uint8 type, const SDL_Keymod key, const SDL_KeyModmod);
 			SDL_Event make_mouse_click_event(const Uint8 type, const Uint8 button);
 		public:
 			fake_event_source();
@@ -144,17 +144,17 @@ namespace test_utils {
 			/**
 			 * adds keyboard press event to queue
 			 **/
-			event_node_ptr press_key(const size_t time, const SDLKey key, const SDLMod mod = KMOD_NONE);
+			event_node_ptr press_key(const size_t time, const SDL_Keymod key, const SDL_KeyModmod = KMOD_NONE);
 			/**
 			 * adds keyboard release event to queue
 			 **/
-			event_node_ptr release_key(const size_t time, const SDLKey key, const SDLMod mod =KMOD_NONE);
+			event_node_ptr release_key(const size_t time, const SDL_Keymod key, const SDL_KeyModmod =KMOD_NONE);
 			/**
 			 * Just push and release a key
 			 * release is done in time+1
 			 * @return release event only
 			 **/
-			event_node_ptr type_key(const size_t time, const SDLKey key, const SDLMod mod =KMOD_NONE);
+			event_node_ptr type_key(const size_t time, const SDL_Keymod key, const SDL_KeyModmod =KMOD_NONE);
 
 			/**
 			 * Adds mouse motion event to queue

@@ -26,7 +26,7 @@
 #include "engine.hpp"
 #include "stage.hpp"
 
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../../terrain_filter.hpp"
 #include "../../util.hpp"
 #include "../../serdes/string_utils.hpp"

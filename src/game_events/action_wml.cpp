@@ -31,7 +31,7 @@
 #include "../actions/create.hpp"
 #include "../actions/move.hpp"
 #include "../actions/vision.hpp"
-#include "../ai/manager.hpp"
+#include "../ai/mgr.hpp"
 #include "../dialogs.hpp"
 #include "../game_display.hpp"
 #include "../game_preferences.hpp"

@@ -20,7 +20,7 @@
  * @file
  */
 
-#include "manager.hpp"
+#include "mgr.hpp"
 
 #include "action.hpp"
 #include "highlighter.hpp"
@@ -116,27 +116,27 @@ void manager::print_help_once()
 	print_to_chat("whiteboard", std::string("Type :wb to activate/deactivate planning mode.")
 		+ "  Hold TAB to temporarily deactivate/activate it.");
 	std::stringstream hotkeys;
-	const hotkey::hotkey_item& hk_execute = hotkey::get_hotkey(hotkey::HOTKEY_WB_EXECUTE_ACTION);
+	const hotkey_item& hk_execute = get_hotkey(HOTKEY_WB_EXECUTE_ACTION);
 	if(!hk_execute.null()) {
 		//print_to_chat("[execute action]", "'" + hk_execute.get_name() + "'");
 		hotkeys << "Execute: " << hk_execute.get_name() << ", ";
 	}
-	const hotkey::hotkey_item& hk_execute_all = hotkey::get_hotkey(hotkey::HOTKEY_WB_EXECUTE_ALL_ACTIONS);
+	const hotkey_item& hk_execute_all = get_hotkey(HOTKEY_WB_EXECUTE_ALL_ACTIONS);
 	if(!hk_execute_all.null()) {
 		//print_to_chat("[execute action]", "'" + hk_execute_all.get_name() + "'");
 		hotkeys << "Execute all: " << hk_execute_all.get_name() << ", ";
 	}
-	const hotkey::hotkey_item& hk_delete = hotkey::get_hotkey(hotkey::HOTKEY_WB_DELETE_ACTION);
+	const hotkey_item& hk_delete = get_hotkey(HOTKEY_WB_DELETE_ACTION);
 	if(!hk_delete.null()) {
 		//print_to_chat("[delete action]", "'" + hk_delete.get_name() + "'");
 		hotkeys << "Delete: " << hk_delete.get_name() << ", ";
 	}
-	const hotkey::hotkey_item& hk_bump_up = hotkey::get_hotkey(hotkey::HOTKEY_WB_BUMP_UP_ACTION);
+	const hotkey_item& hk_bump_up = get_hotkey(HOTKEY_WB_BUMP_UP_ACTION);
 	if(!hk_bump_up.null()) {
 		//print_to_chat("[move action earlier in queue]", "'" + hk_bump_up.get_name() + "'");
 		hotkeys << "Move earlier: " << hk_bump_up.get_name() << ", ";
 	}
-	const hotkey::hotkey_item& hk_bump_down = hotkey::get_hotkey(hotkey::HOTKEY_WB_BUMP_DOWN_ACTION);
+	const hotkey_item& hk_bump_down = get_hotkey(HOTKEY_WB_BUMP_DOWN_ACTION);
 	if(!hk_bump_down.null()) {
 		//print_to_chat("[move action later in queue]", "'" + hk_bump_down.get_name() + "'");
 		hotkeys << "Move later: " << hk_bump_down.get_name() << ", ";

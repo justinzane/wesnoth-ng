@@ -328,8 +328,8 @@ private:
 	 * widget. These functions are called by the SDL event handling functions.
 	 */
 
-	void signal_handler_sdl_key_down(const SDLKey key
-			, const SDLMod modifier
+	void signal_handler_sdl_key_down(const SDL_Keymod key
+			, const SDL_KeyModmodifier
 			, const Uint16 unicode);
 
 	void signal_handler_notify_removal(tdispatcher& widget, const tevent event);

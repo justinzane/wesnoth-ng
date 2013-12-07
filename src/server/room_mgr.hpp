@@ -1,5 +1,5 @@
 /**
- * @file src/server/room_manager.hpp
+ * @file src/server/room_mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 

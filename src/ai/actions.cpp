@@ -37,7 +37,7 @@
  */
 
 #include "actions.hpp"
-#include "manager.hpp"
+#include "mgr.hpp"
 
 #include "../actions/attack.hpp"
 #include "../actions/create.hpp"

@@ -22,11 +22,11 @@
  */
 
 #include "cursor.hpp"
-
+#include "img.hpp"
 #include "game_preferences.hpp"
 #include "image.hpp"
 #include "preferences_display.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 #include <iostream>
 
@@ -35,50 +35,47 @@ static bool use_color_cursors()
 	return game_config::editor == false && preferences::use_color_cursors();
 }
 
-static SDL_Cursor* create_cursor(SDL_Surface surf)
-{
-	const SDL_Surface nsurf(make_neutral_surface(surf));
-	if(nsurf == nullptr) {
-		return nullptr;
-	}
-
-	// The width must be a multiple of 8 (SDL requirement)
-
-#ifdef __APPLE__
-	size_t cursor_width = 16;
-#else
-	size_t cursor_width = nsurf->w;
-	if((cursor_width%8) != 0) {
-		cursor_width += 8 - (cursor_width%8);
-	}
-#endif
-	std::vector<Uint8> data((cursor_width*nsurf->h)/8,0);
-	std::vector<Uint8> mask(data.size(),0);
-
-	// See http://sdldoc.csn.ul.ie/sdlcreatecursor.php for documentation
-	// on the format that data has to be in to pass to SDL_CreateCursor
-	const_surface_lock lock(nsurf);
-	const Uint32* const pixels = lock.pixels();
-	for(int y = 0; y != nsurf->h; ++y) {
-		for(int x = 0; x != nsurf->w; ++x) {
-
-			if (static_cast<size_t>(x) < cursor_width) {
-				Uint8 r,g,b,a;
-				SDL_GetRGBA(pixels[y*nsurf->w + x],nsurf->format,&r,&g,&b,&a);
-
-				const size_t index = y*cursor_width + x;
-				const size_t shift = 7 - (index % 8);
-
-				const Uint8 trans = (a < 128 ? 0 : 1) << shift;
-				const Uint8 black = (trans == 0 || (r+g + b) / 3 > 128 ? 0 : 1) << shift;
-
-				data[index/8] |= black;
-				mask[index/8] |= trans;
-			}
-		}
-	}
-
-	return SDL_CreateCursor(&data[0],&mask[0],cursor_width,nsurf->h,0,0);
+static SDL_Cursor* create_cursor(SDL_Surface surf) {
+//	SDL_Surface* nsurf = SDL_CreateRGBSurface(0, surf->w, surf->h, RGBA_consts::bpp,
+//	                                         RGBA_consts::rmask, RGBA_consts::gmask,
+//	                                         RGBA_consts::bmask, RGBA_consts::amask);
+//	// The width must be a multiple of 8 (SDL requirement)
+//#ifdef __APPLE__
+//	size_t cursor_width = 16;
+//#else
+//	size_t cursor_width = nsurf->w;
+//	if((cursor_width%8) != 0) {
+//		cursor_width += 8 - (cursor_width%8);
+//	}
+//#endif
+//	std::vector<Uint8> data((cursor_width*nsurf->h)/8,0);
+//	std::vector<Uint8> mask(data.size(),0);
+//
+//	// See http://sdldoc.csn.ul.ie/sdlcreatecursor.php for documentation
+//	// on the format that data has to be in to pass to SDL_CreateCursor
+//	SDL_LockSurface(nsurf);
+//	for(int y = 0; y != nsurf->h; ++y) {
+//		for(int x = 0; x != nsurf->w; ++x) {
+//		    Uint32 pix = ((r << RGBA_consts::rshift) +
+//		                  (g << RGBA_consts::gshift) +
+//		                  (b << RGBA_consts::bshift) +
+//		                  (a << RGBA_consts::ashift));
+//			if (static_cast<size_t>(x) < cursor_width) {
+//				Uint8 r,g,b,a;
+//
+//				const size_t index = y*cursor_width + x;
+//				const size_t shift = 7 - (index % 8);
+//
+//				const Uint8 trans = (a < 128 ? 0 : 1) << shift;
+//				const Uint8 black = (trans == 0 || (r+g + b) / 3 > 128 ? 0 : 1) << shift;
+//
+//				data[index/8] |= black;
+//				mask[index/8] |= trans;
+//			}
+//		}
+//	}
+//
+//	return SDL_CreateCursor(&data[0],&mask[0],cursor_width,nsurf->h,0,0);
 }
 
 namespace {
@@ -238,7 +235,7 @@ void draw(SDL_Surface screen)
 	}
 
 	/** @todo FIXME: don't parse the file path every time */
-	const SDL_Surface surf(image::get_image("cursors/" + color_images[current_cursor]));
+	const SDL_Surface* surf(image::get_image("cursors/" + color_images[current_cursor]));
 	if(surf == nullptr) {
 		// Fall back to b&w cursors
 		std::cerr << "could not load color cursors. Falling back to hardware cursors\n";

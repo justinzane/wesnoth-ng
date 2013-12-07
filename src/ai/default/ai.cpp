@@ -24,7 +24,7 @@
 #include "ai.hpp"
 
 #include "../actions.hpp"
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../formula/ai.hpp"
 
 #include "../../array.hpp"

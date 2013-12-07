@@ -26,38 +26,36 @@
 #ifndef SDL_UTILS_INCLUDED
 #define SDL_UTILS_INCLUDED
 
+#include <img.hpp>
+#include <math.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/types_c.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/opencv.hpp>
+#include <stddef.h>
+#include <stdint.h>
+#include <SDL2/SDL.h>
+#include <util.hpp>
+#include "arch_dep/neon.hpp"
 #include "defs.hpp"
 #include "floating_point_emulation.hpp"
 #include "global.hpp"
 #include "scoped_resource.hpp"
-#include "util.hpp"
-#include "video.hpp"
-#include "arch_dep/neon.hpp"
+#include "sdl2/sdl2_color.hpp"
+#include "sdl2/sdl2_rect.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
-#include <boost/math/constants/constants.hpp>
-#include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/core/types_c.h>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <SDL2/SDL.h>
 #include <algorithm>
-#include <cassert>
-#include <cstdlib>
-#include <cstring>
-#include <iosfwd>
 #include <iostream>
 #include <map>
-#include <math.h>
-#include <stdint.h>
 #include <string>
-#include <tuple>
+#include <vector>
 
 #define SDL_UTILS_ROTATE_CROP 201
 #define SDL_UTILS_ROTATE_GROW 202
 
 /** @name Event Handling Functionality @{ ---------------------------------------------------*/
 
-SDLKey sdl_keysym_from_name(std::string const &keyname);
 
 /** @} end Event Handling Functionality------------------------------------------------------*/
 
@@ -65,7 +63,10 @@ SDLKey sdl_keysym_from_name(std::string const &keyname);
 
 /** @brief Returns true if the point defined by x,y is in rect. */
 inline bool is_point_in_rect(int x, int y, const SDL_Rect* rect) {
-    return x >= rect->x && y >= rect->y && x < rect->x + rect->w && y < rect>y + rect->h;
+    return (x >= (rect->x) &&
+            y >= (rect->y) &&
+            x < (rect->x + rect->w) &&
+            y < (rect->y + rect->h));
 }
 
 /** @brief Returns true if the rects intersect. */
@@ -108,49 +109,9 @@ inline SDL_Rect union_rects(SDL_Rect const &rect1, SDL_Rect const &rect2) {
  * @todo WRITEME this function needs to be coded. */
 std::vector<SDL_Rect> rects_union(const SDL_Rect* rect1, const SDL_Rect* rect2);
 
-/** @brief SDL_Rect equality operator */
-inline bool operator==(const SDL_Rect* a, const SDL_Rect* b) {
-    return a->x == b->x && a->y == b->y && a->w == b->w && a->h == b->h;
-}
-
-/** @brief SDL_Rect inequality operator */
-inline bool operator!=(const SDL_Rect* a, const SDL_Rect* b) {
-    return !operator==(a, b);
-}
-
-/** @brief SDL_Rect equality operator */
-inline bool operator==(const SDL_Rect a, const SDL_Rect b) {
-    return a.x == b.x && a.y == b.y && a.w == b.w && a.h == b.h;
-}
-
-/** @brief SDL_Rect inequality operator */
-inline bool operator!=(const SDL_Rect a, const SDL_Rect b) {
-    return !operator==(a, b);
-}
-
 /** @} end Geometric Utilities --------------------------------------------------------------*/
 
 /** @name Color Utilities @{ ----------------------------------------------------------------*/
-
-/** @brief SDL_Color equality operator */
-inline bool operator==(const SDL_Color* a, const SDL_Color* b) {
-    return a->r == b->r && a->g == b->g && a->b == b->b && a->a == b->a;
-}
-
-/** @brief SDL_Color equality operator */
-inline bool operator==(const SDL_Color a, const SDL_Color b) {
-    return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
-}
-
-/** @brief SDL_Color inequality operator */
-inline bool operator!=(const SDL_Color* a, const SDL_Color* b) {
-    return !operator==(a, b);
-}
-
-/** @brief SDL_Color inequality operator */
-inline bool operator!=(const SDL_Color a, const SDL_Color b) {
-    return !operator==(a, b);
-}
 
 /** @brief Invert the hue of the color in HSV space. */
 SDL_Color invert_hue(const SDL_Color* color);
@@ -167,10 +128,11 @@ SDL_Color invert_value(const SDL_Color* color);
  *      SDL_Color.b      = bits  0- 7
  */
 inline SDL_Color get_sdl_color(const Uint32 argb) {
-    SDL_Color result {(RMASK & argb) >> 16,
-                      (GMASK & argb) >>  8,
-                      (BMASK & argb),
-                      (AMASK & argb) >> 24};
+    SDL_Color result;
+    result.r = (RGBA_consts::rmask & argb) >> RGBA_consts::rshift;
+    result.r = (RGBA_consts::gmask & argb) >> RGBA_consts::gshift;
+    result.r = (RGBA_consts::bmask & argb) >> RGBA_consts::bshift;
+    result.r = (RGBA_consts::amask & argb) >> RGBA_consts::ashift;
     return result;
 }
 
@@ -183,40 +145,44 @@ inline SDL_Color get_sdl_color(const Uint8 r, const Uint8 g, const Uint8 b, cons
 /** @brief convert 4 32bit unsigned ints to an SDL color.
  *  @note values above and below 0-255 are replaced with the closest valid value. */
 inline SDL_Color get_sdl_color(const int r, const int g, const int b, const int a) {
-    SDL_Color result {(r < 0) ? 0 : ((r > 255) ? 255 : (Uint8)r),
-                      (g < 0) ? 0 : ((g > 255) ? 255 : (Uint8)g),
-                      (b < 0) ? 0 : ((b > 255) ? 255 : (Uint8)b),
-                      (a < 0) ? 0 : ((a > 255) ? 255 : (Uint8)a)};
+    SDL_Color result;
+    (r < 0) ? result.r = 0 : ((r > 255) ? result.r = 255 : result.r = (Uint8)r);
+    (g < 0) ? result.r = 0 : ((g > 255) ? result.g = 255 : result.g = (Uint8)g);
+    (b < 0) ? result.r = 0 : ((b > 255) ? result.b = 255 : result.b = (Uint8)b);
+    (a < 0) ? result.r = 0 : ((a > 255) ? result.a = 255 : result.a = (Uint8)a);
     return result;
 }
 
 /** @brief convert 4 size_ts to an SDL color.
  *  @note values above and below 0-255 are replaced with the closest valid value. */
 inline SDL_Color get_sdl_color(const size_t r, const size_t g, const size_t b, const size_t a) {
-    SDL_Color result {(r > 255) ? 255 : (Uint8)r,
-                      (g > 255) ? 255 : (Uint8)g,
-                      (b > 255) ? 255 : (Uint8)b,
-                      (a > 255) ? 255 : (Uint8)a};
+    SDL_Color result;
+    (r < 0) ? result.r = 0 : ((r > 255) ? result.r = 255 : result.r = (Uint8)r);
+    (g < 0) ? result.r = 0 : ((g > 255) ? result.g = 255 : result.g = (Uint8)g);
+    (b < 0) ? result.r = 0 : ((b > 255) ? result.b = 255 : result.b = (Uint8)b);
+    (a < 0) ? result.r = 0 : ((a > 255) ? result.a = 255 : result.a = (Uint8)a);
     return result;
 }
 
 /** @brief convert 4 floats to an SDL color.
  *  @note values above and below 0-255 are replaced with the closest valid value. */
 inline SDL_Color get_sdl_color(const float r, const float g, const float b, const float a) {
-    SDL_Color result {(r < 0.0f) ? 0 : ((r > 255.0f) ? 255 : (Uint8)r),
-                      (g < 0.0f) ? 0 : ((g > 255.0f) ? 255 : (Uint8)g),
-                      (b < 0.0f) ? 0 : ((b > 255.0f) ? 255 : (Uint8)b),
-                      (a < 0.0f) ? 0 : ((a > 255.0f) ? 255 : (Uint8)a)};
+    SDL_Color result;
+    (r < 0) ? result.r = 0 : ((r > 255) ? result.r = 255 : result.r = (Uint8)r);
+    (g < 0) ? result.r = 0 : ((g > 255) ? result.g = 255 : result.g = (Uint8)g);
+    (b < 0) ? result.r = 0 : ((b > 255) ? result.b = 255 : result.b = (Uint8)b);
+    (a < 0) ? result.r = 0 : ((a > 255) ? result.a = 255 : result.a = (Uint8)a);
     return result;
 }
 
 /** @brief convert 4 doubles to an SDL color.
  *  @note values above and below 0-255 are replaced with the closest valid value. */
 inline SDL_Color get_sdl_color(const double r, const double g, const double b, const double a) {
-    SDL_Color result {(r < 0.0) ? 0 : ((r > 255.0) ? 255 : (Uint8)r),
-                      (g < 0.0) ? 0 : ((g > 255.0) ? 255 : (Uint8)g),
-                      (b < 0.0) ? 0 : ((b > 255.0) ? 255 : (Uint8)b),
-                      (a < 0.0) ? 0 : ((a > 255.0) ? 255 : (Uint8)a)};
+    SDL_Color result;
+    (r < 0) ? result.r = 0 : ((r > 255) ? result.r = 255 : result.r = (Uint8)r);
+    (g < 0) ? result.r = 0 : ((g > 255) ? result.g = 255 : result.g = (Uint8)g);
+    (b < 0) ? result.r = 0 : ((b > 255) ? result.b = 255 : result.b = (Uint8)b);
+    (a < 0) ? result.r = 0 : ((a > 255) ? result.a = 255 : result.a = (Uint8)a);
     return result;
 }
 
@@ -234,21 +200,21 @@ inline SDL_Color get_sdl_color(const double r, const double g, const double b, c
  * @param optimize  Whether to optimize return surface
  * @return          Resized surface.
  */
-surface resize_surface(SDL_Surface* surf, const unsigned h, const unsigned w);
+SDL_Surface* resize_surface(SDL_Surface* surf, const unsigned h, const unsigned w);
 
 /** @brief wrapper for resize_surface.*/
-surface stretch_surface_horizontal(SDL_Surface* surf,
+SDL_Surface* stretch_surface_horizontal(SDL_Surface* surf,
                                    const unsigned w) __attribute__((deprecated));
 
 /** @brief wrapper for resize_surface.*/
-surface stretch_surface_vertical(SDL_Surface* surf,
+SDL_Surface* stretch_surface_vertical(SDL_Surface* surf,
                                  const unsigned h) __attribute__((deprecated));
 
 /** @brief wrapper for resize_surface.*/
-surface scale_surface(SDL_Surface* surf, int w, int h) __attribute__((deprecated));
+SDL_Surface* scale_surface(SDL_Surface* surf, int w, int h) __attribute__((deprecated));
 
 /** @brief wrapper for resize_surface.*/
-surface scale_surface_sharp(SDL_Surface* surf, int w, int h) __attribute__((deprecated));
+SDL_Surface* scale_surface_sharp(SDL_Surface* surf, int w, int h) __attribute__((deprecated));
 
 /**
  * @brief Tile a surface
@@ -289,7 +255,7 @@ void surface_change_sat(SDL_Surface* surf, float sat_diff);
 /**
  * @brief create an heavy shadow of the image, by blurring, increasing alpha and darkening
  */
-surface shadow_image(const SDL_Surface* surf,   /**< @param surf source image */
+SDL_Surface* shadow_image(const SDL_Surface* surf,   /**< @param surf source image */
                      bool optimize = true); /**< @param optimize whether to optimize the return surface. */
 
 /**
@@ -305,7 +271,7 @@ surface shadow_image(const SDL_Surface* surf,   /**< @param surf source image */
  * @return                   A recolored surface, or a null surface if there are
  *                           problems with the source.
  */
-surface recolor_image(surface surf, const std::map<Uint32, Uint32>& map_rgb, bool optimize =
+SDL_Surface* recolor_image(SDL_Surface*surf, const std::map<Uint32, Uint32>& map_rgb, bool optimize =
     true);
 
 /**
@@ -315,7 +281,7 @@ surface recolor_image(surface surf, const std::map<Uint32, Uint32>& map_rgb, boo
  * @param optimize
  * @return
  */
-surface brighten_image(const SDL_Surface* surf, fixed_t amount, bool optimize = true);
+SDL_Surface* brighten_image(const SDL_Surface* surf, fixed_t amount, bool optimize = true);
 
 /** Get a portion of the screen.
  *  Send nullptr if the portion is outside of the screen.
@@ -328,13 +294,13 @@ surface brighten_image(const SDL_Surface* surf, fixed_t amount, bool optimize = 
  *                           No RLE or Alpha bits are set.
  *  @retval 0                if error or the portion is outside of the surface.
  */
-surface get_surface_portion(const SDL_Surface* surf, SDL_Rect* rect, bool optimize_format = false);
+SDL_Surface* get_surface_portion(const SDL_Surface* surf, SDL_Rect* rect, bool optimize_format = false);
 
-surface adjust_surface_alpha(const SDL_Surface* surf, fixed_t amount, bool optimize = true);
-surface adjust_surface_alpha_add(const SDL_Surface* surf, int amount, bool optimize = true);
+SDL_Surface* adjust_surface_alpha(const SDL_Surface* surf, fixed_t amount, bool optimize = true);
+SDL_Surface* adjust_surface_alpha_add(const SDL_Surface* surf, int amount, bool optimize = true);
 
 /** Applies a mask on a surface. */
-surface mask_surface(const SDL_Surface* surf,
+SDL_Surface* mask_surface(const SDL_Surface* surf,
                      const SDL_Surface* mask,
                      bool* empty_result = nullptr,
                      const std::string& filename = std::string());
@@ -349,7 +315,7 @@ bool in_mask_surface(const SDL_Surface* surf, const SDL_Surface* mask);
  *  @param alpha_delta       The alpha adjustment reduction rate by pixel depth
  *  @param optimize          Optimize by converting to result to display
  */
-surface submerge_alpha(const SDL_Surface* surf,
+SDL_Surface* submerge_alpha(const SDL_Surface* surf,
                        int depth,
                        float alpha_base,
                        float alpha_delta,
@@ -364,7 +330,7 @@ surface submerge_alpha(const SDL_Surface* surf,
  *                           Should already be neutral
  * @param optimize           Whether the new surface should be RLE encoded.
  */
-surface light_surface(const SDL_Surface* surf, const SDL_Surface* lightmap, bool optimize = true);
+SDL_Surface* light_surface(const SDL_Surface* surf, const SDL_Surface* lightmap, bool optimize = true);
 
 /**
  * @brief Performs a basic box blur on a surface
@@ -373,7 +339,7 @@ surface light_surface(const SDL_Surface* surf, const SDL_Surface* lightmap, bool
  * @param optimize  Whether the new surface should be RLE encoded.
  * @return  the blurred surface.
  */
-surface surface_blur(const SDL_Surface* surf, int depth = 1, bool optimize = true);
+SDL_Surface* surface_blur(const SDL_Surface* surf, int depth = 1, bool optimize = true);
 
 /**
  * @brief Performs a basic box blur on a sub-rectangle of a surface.
@@ -384,11 +350,11 @@ surface surface_blur(const SDL_Surface* surf, int depth = 1, bool optimize = tru
 void surface_blur(SDL_Surface* surf, SDL_Rect rect, unsigned depth = 1);
 
 /** @brief wrapper for blur surface. */
-surface blur_alpha_surface(const SDL_Surface* surf, int depth = 1, bool optimize = true)
+SDL_Surface* blur_alpha_surface(const SDL_Surface* surf, int depth = 1, bool optimize = true)
     __attribute__((deprecated ("Use blur_surface instead of blur_alpha_surface.")));
 
 /** Cuts a rectangle from a surface. */
-surface cut_surface(const SDL_Surface* surf, SDL_Rect const &r);
+SDL_Surface* cut_surface(const SDL_Surface* surf, SDL_Rect const &r);
 
 /**
  * @brief Blends a surface with a color.
@@ -403,7 +369,7 @@ surface cut_surface(const SDL_Surface* surf, SDL_Rect const &r);
  * @param optimize                Should the return surface be RLE optimized.
  * @return                        The blended surface.
  */
-surface blend_surface(const SDL_Surface* surf,
+SDL_Surface* blend_surface(const SDL_Surface* surf,
                       const double amount,
                       const Uint32 color,
                       const bool optimize = true);
@@ -422,7 +388,7 @@ surface blend_surface(const SDL_Surface* surf,
  * @param optimize      true caused the surface to be RLE optimized
  * @return              the rotated image as a surface.
  */
-surface rotate_surface(const SDL_Surface* surf,
+SDL_Surface* rotate_surface(const SDL_Surface* surf,
                        float deg,
                        float scale,
                        int center_x,
@@ -444,7 +410,7 @@ surface rotate_surface(const SDL_Surface* surf,
  * @param optimize      true caused the surface to be RLE optimized
  * @return              the rotated image as a surface.
  */
-surface rotate_surface(const SDL_Surface* surf,
+SDL_Surface* rotate_surface(const SDL_Surface* surf,
                        double deg,
                        double scale,
                        int center_x,
@@ -464,7 +430,7 @@ surface rotate_surface(const SDL_Surface* surf,
  * @return                        The rotated surface.
  * @deprecated Use rotate_surface instead.
  */
-surface rotate_any_surface(const SDL_Surface* surf, float angle, int zoom, int offset,
+SDL_Surface* rotate_any_surface(const SDL_Surface* surf, float angle, int zoom, int offset,
                            bool optimize = true)
                            __attribute__((deprecated("Use rotate_surface.")));
 
@@ -475,7 +441,7 @@ surface rotate_any_surface(const SDL_Surface* surf, float angle, int zoom, int o
  * @return                        The rotated surface.
  * @deprecated Use rotate_surface instead.
  */
-surface rotate_180_surface(const SDL_Surface* surf, bool optimize = true)
+SDL_Surface* rotate_180_surface(const SDL_Surface* surf, bool optimize = true)
                            __attribute__((deprecated("Use rotate_surface.")));
 
 /**
@@ -487,7 +453,7 @@ surface rotate_180_surface(const SDL_Surface* surf, bool optimize = true)
  * @return                        The rotated surface.
  * @deprecated Use rotate_surface instead.
  */
-surface rotate_90_surface(const SDL_Surface* surf, bool clockwise, bool optimize = true)
+SDL_Surface* rotate_90_surface(const SDL_Surface* surf, bool clockwise, bool optimize = true)
                           __attribute__((deprecated("Use rotate_surface.")));
 
 typedef enum mirror_axis_t{
@@ -514,7 +480,7 @@ typedef enum mirror_axis_t{
  * @note Diagonal and custom mirrors are NOT implemented yet.
  * @todo Implement diag and custom mirrors.
  */
-surface mirror_surface(const SDL_Surface* surf,
+SDL_Surface* mirror_surface(const SDL_Surface* surf,
                        const mirror_axis_t axis,
                        const bool optimize=true,
                        const double axis_x1 = 0.0,
@@ -531,7 +497,7 @@ surface mirror_surface(const SDL_Surface* surf,
  * @param optimize
  * @return mirrored image
  */
-surface flip_surface(const SDL_Surface* surf, bool optimize = true)
+SDL_Surface* flip_surface(const SDL_Surface* surf, bool optimize = true)
                      __attribute__((deprecated("Use mirror surface instead.")));
 
 /**
@@ -543,7 +509,7 @@ surface flip_surface(const SDL_Surface* surf, bool optimize = true)
  * @param optimize
  * @return mirrored image
  */
-surface flop_surface(const SDL_Surface* surf, bool optimize = true)
+SDL_Surface* flop_surface(const SDL_Surface* surf, bool optimize = true)
                      __attribute__((deprecated("Use mirror surface instead.")));
 
 SDL_Rect get_non_transparent_portion(const SDL_Surface* surf);
@@ -560,7 +526,7 @@ SDL_Color get_sdl_color(const double r,
                         const double b,
                         const double a = 255.0);
 
-void draw_rectangle(int x, int y, int w, int h, Uint32 color, surface tg);
+void draw_rectangle(int x, int y, int w, int h, Uint32 color, SDL_Surface* tg);
 
 void draw_solid_tinted_rectangle(int x,
                                  int y,
@@ -570,14 +536,14 @@ void draw_solid_tinted_rectangle(int x,
                                  int g,
                                  int b,
                                  double alpha,
-                                 surface target);
+                                 SDL_Surface* target);
 
 // blit the image on the center of the rectangle
 // and a add a colored background
-void draw_centered_on_background(surface surf,
+void draw_centered_on_background(SDL_Surface* surf,
                                  const SDL_Rect* rect,
                                  const SDL_Color* color,
-                                 surface target);
+                                 SDL_Surface* target);
 
 std::ostream& operator<<(std::ostream& s, const SDL_Rect* rect);
 

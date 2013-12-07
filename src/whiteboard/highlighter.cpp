@@ -29,7 +29,7 @@
 
 #include "action.hpp"
 #include "attack.hpp"
-#include "manager.hpp"
+#include "mgr.hpp"
 #include "move.hpp"
 #include "recall.hpp"
 #include "recruit.hpp"

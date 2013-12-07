@@ -23,7 +23,7 @@
 
 #include "stage_rca.hpp"
 
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../composite/ai.hpp"
 #include "../composite/engine.hpp"
 #include "../composite/property_handler.hpp"

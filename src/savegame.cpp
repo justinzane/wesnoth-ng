@@ -39,7 +39,7 @@
 #include "log/log.hpp"
 #include "map.hpp"
 #include "map_label.hpp"
-#include "persist_manager.hpp"
+#include "persist_mgr.hpp"
 #include "replay.hpp"
 #include "resources.hpp"
 #include "serdes/binary_or_text.hpp"

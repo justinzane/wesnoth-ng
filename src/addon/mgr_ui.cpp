@@ -20,7 +20,7 @@
 #include "addon/manager_ui.hpp"
 
 #include "addon/info.hpp"
-#include "addon/manager.hpp"
+#include "addon/mgr.hpp"
 #include "addon/state.hpp"
 #include "dialogs.hpp"
 #include "display.hpp"

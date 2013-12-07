@@ -45,7 +45,7 @@
 #include "resources.hpp"
 #include "rng.hpp"
 #include "serdes/wml_separators.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 
 #include <boost/bind.hpp>
 #include "global.hpp"

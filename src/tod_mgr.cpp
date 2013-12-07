@@ -16,7 +16,7 @@
    See the COPYING file for more details.
  */
 
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 #include "serdes/wml_exception.hpp"
 #include "gettext.hpp"
 #include "formula/formula_string_utils.hpp"

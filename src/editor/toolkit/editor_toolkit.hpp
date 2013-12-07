@@ -21,8 +21,8 @@
 
 
 #include "config.hpp"
-#include "editor/map/context_manager.hpp"
-#include "editor/palette/palette_manager.hpp"
+#include "editor/map/context_mgr.hpp"
+#include "editor/palette/palette_mgr.hpp"
 #include "editor/toolkit/brush.hpp"
 #include "hotkeys.hpp"
 
@@ -60,12 +60,12 @@ public:
 	/**
 	 * Set the current mouse action based on a hotkey id
 	 */
-	void hotkey_set_mouse_action(hotkey::HOTKEY_COMMAND command);
+	void hotkey_set_mouse_action(hotkey_cmd_t command);
 
 	/**
 	 * @return true if the mouse action identified by the hotkey is active
 	 */
-	bool is_mouse_action_set(hotkey::HOTKEY_COMMAND command) const;
+	bool is_mouse_action_set(hotkey_cmd_t command) const;
 
 
 	/** Get the current mouse action */
@@ -98,11 +98,11 @@ private:
 	mouse_action* mouse_action_;
 
 	/** The mouse actions */
-	typedef std::map<hotkey::HOTKEY_COMMAND, mouse_action*> mouse_action_map;
+	typedef std::map<hotkey_cmd_t, mouse_action*> mouse_action_map;
 	mouse_action_map mouse_actions_;
 
 	/** Usage tips for mouse actions */
-	typedef std::map<hotkey::HOTKEY_COMMAND, std::string> mouse_action_string_map;
+	typedef std::map<hotkey_cmd_t, std::string> mouse_action_string_map;
 	mouse_action_string_map mouse_action_hints_;
 
 //Brush members

@@ -41,7 +41,7 @@
 #include "../resources.hpp"
 #include "../statistics.hpp"
 #include "../team.hpp"
-#include "../tod_manager.hpp"
+#include "../tod_mgr.hpp"
 #include "../unit/unit.hpp"
 #include "../unit/unit.hpp"
 #include "../unit/unit_abilities.hpp"
@@ -50,7 +50,7 @@
 #include "../unit/unit_display.hpp"
 #include "../unit/unit_map.hpp"
 #include "../unit/unit_map.hpp"
-#include "../whiteboard/manager.hpp"
+#include "../whiteboard/mgr.hpp"
 #include "../serdes/wml_exception.hpp"
 
 #include "global.hpp"

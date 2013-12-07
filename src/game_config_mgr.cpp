@@ -15,10 +15,10 @@
 
    See the COPYING file for more details.
 */
-#include "game_config_manager.hpp"
+#include "game_config_mgr.hpp"
 
 #include "about.hpp"
-#include "addon/manager.hpp"
+#include "addon/mgr.hpp"
 #include "ai/configuration.hpp"
 #include "builder.hpp"
 #include "cursor.hpp"
@@ -81,11 +81,11 @@ bool game_config_manager::init_game_config(FORCE_RELOAD_CONFIG force_reload)
 
 	game_config::load_config(game_config_.child("game_config"));
 
-	hotkey::deactivate_all_scopes();
-	hotkey::set_scope_active(hotkey::SCOPE_GENERAL);
-	hotkey::set_scope_active(hotkey::SCOPE_GAME);
+	deactivate_all_scopes();
+	set_scope_active(SCOPE_GENERAL);
+	set_scope_active(SCOPE_GAME);
 
-	hotkey::load_hotkeys(game_config(), true);
+	load_hotkeys(game_config(), true);
 	::init_textdomains(game_config());
 	about::set_about(game_config());
 	ai::configuration::init(game_config());

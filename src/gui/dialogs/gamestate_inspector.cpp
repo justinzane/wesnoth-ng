@@ -35,7 +35,7 @@
 #include "../../gamestatus.hpp"
 #include "../../resources.hpp"
 #include "../../team.hpp"
-#include "../../ai/manager.hpp"
+#include "../../ai/mgr.hpp"
 
 #include <vector>
 #include <boost/bind.hpp>

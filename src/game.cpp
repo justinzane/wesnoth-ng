@@ -20,7 +20,7 @@
 
 #include "about.hpp"
 #include "commandline_options.hpp"
-#include "game_config_manager.hpp"
+#include "game_config_mgr.hpp"
 #include "game_controller.hpp"
 #include "global.hpp"
 #include "help.hpp"
@@ -31,8 +31,8 @@
 #include "statistics.hpp"
 #include "version.hpp"
 
-#include "addon/manager.hpp"
-#include "addon/manager_ui.hpp"
+#include "addon/mgr.hpp"
+#include "addon/mgr_ui.hpp"
 
 #include "gui/dialogs/title_screen.hpp"
 #ifdef DEBUG_WINDOW_LAYOUT_GRAPHS
@@ -409,8 +409,7 @@ static void init_locale() {
  * Setups the game environment and enters
  * the titlescreen or game loops.
  */
-static int do_gameloop(int argc, char** argv)
-{
+static int do_gameloop(int argc, char** argv) {
 	srand(time(nullptr));
 
 	commandline_options cmdline_opts = commandline_options(argc,argv);
@@ -566,7 +565,7 @@ static int do_gameloop(int argc, char** argv)
 
 		cursor::set(cursor::NORMAL);
 		if(res == gui2::ttitle_screen::NOTHING) {
-			const hotkey::basic_handler key_handler(&game->disp());
+			const basic_handler key_handler(&game->disp());
 			gui2::ttitle_screen dlg;
 			dlg.show(game->disp().video());
 
@@ -641,6 +640,7 @@ static int do_gameloop(int argc, char** argv)
 		else{
 			game->play_replay();
 		}
+		return 0;
 	}
 }
 

@@ -137,15 +137,33 @@ public:
 		lifetime_ = lifetime;
 		alpha_change_ = -255 / lifetime_;
 	}
-	void set_color(const SDL_Color* color) {color_ = color;}
-	void set_bg_color(const SDL_Color* bg_color) {
-		bgcolor_ = bg_color;
+
+	inline void set_color(const SDL_Color* color) {
+        color_.r = color->r;
+        color_.g = color->g;
+        color_.b = color->b;
+        color_.a = color->a;
 	}
+
+	inline void set_bg_color(const SDL_Color* bg_color) {
+        bgcolor_.r = bg_color->r;
+        bgcolor_.g = bg_color->g;
+        bgcolor_.b = bg_color->b;
+        bgcolor_.a = bg_color->a;
+	}
+
 	void set_border_size(int border) {border_ = border;}
 	// set width for word wrapping (use -1 to disable it)
 	void set_width(int w) {width_ = w;}
 	void set_height(int h) { height_ = h; }
-	void set_clip_rect(const SDL_Rect* r) {clip_rect_ = r;}
+
+	inline void set_clip_rect(const SDL_Rect* r) {
+        clip_rect_.h = r->h;
+        clip_rect_.w = r->w;
+        clip_rect_.x = r->x;
+        clip_rect_.y = r->y;
+	}
+
 	void set_alignment(ALIGN align) {align_ = align;}
 	void set_scroll_mode(LABEL_SCROLL_MODE scroll) {scroll_ = scroll;}
 	void use_markup(bool b) {use_markup_ = b;}
@@ -167,21 +185,27 @@ private:
 
 	int xpos(size_t width) const;
 
-	SDL_Surface surf_, buf_;
-	std::string text_;
-	int font_size_;
-	SDL_Color color_, bgcolor_;
-	int bgalpha_;
-	double xpos_, ypos_, xmove_, ymove_;
-	int lifetime_;
-	int width_, height_;
-	SDL_Rect clip_rect_;
-	int alpha_change_;
-	bool visible_;
+	SDL_Surface surf_;
+	SDL_Surface buf_;
+	std::string text_ {""};
+	int font_size_ {0};
+	SDL_Color color_ {0,0,0,0};
+	SDL_Color bgcolor_ {0,0,0,0};
+	int bgalpha_ {0};
+	double xpos_ {0.0};
+	double ypos_ {0.0};
+	double xmove_ {0.0};
+	double ymove_ {0.0};
+	int lifetime_ {0};
+	int width_ {0};
+	int height_ {0};
+	SDL_Rect clip_rect_ {0,0,0,0};
+	int alpha_change_ {0};
+	bool visible_ {true};
 	font::ALIGN align_;
-	int border_;
+	int border_ {0};
 	LABEL_SCROLL_MODE scroll_;
-	bool use_markup_;
+	bool use_markup_ {true};
 };
 
 

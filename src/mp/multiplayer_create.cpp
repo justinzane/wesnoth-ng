@@ -24,7 +24,7 @@
 #include "global.hpp"
 
 #include "gettext.hpp"
-#include "game_config_manager.hpp"
+#include "game_config_mgr.hpp"
 #include "game_display.hpp"
 #include "game_preferences.hpp"
 #include "construct_dialog.hpp"

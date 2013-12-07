@@ -21,7 +21,7 @@
 #include "fake_display.hpp"
 
 #include "game_display.hpp"
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 #include "map.hpp"
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"

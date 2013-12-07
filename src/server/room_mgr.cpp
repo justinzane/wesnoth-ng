@@ -17,7 +17,7 @@
 */
 #include "game.hpp"
 #include "player_network.hpp"
-#include "room_manager.hpp"
+#include "room_mgr.hpp"
 
 #include "../serdes/parser.hpp"
 #include "../serdes/binary_or_text.hpp"

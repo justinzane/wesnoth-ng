@@ -18,7 +18,7 @@
 
 #include "addon/info.hpp"
 
-#include "addon/manager.hpp"
+#include "addon/mgr.hpp"
 #include "game_config.hpp"
 #include "gettext.hpp"
 #include "image.hpp"

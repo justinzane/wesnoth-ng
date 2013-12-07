@@ -25,7 +25,7 @@
 #include "configuration.hpp"
 #include "contexts.hpp"
 #include "default/ai.hpp"
-#include "manager.hpp"
+#include "mgr.hpp"
 #include "formula/ai.hpp"
 #include "registry.hpp"
 #include "../game_events/pump.hpp"

@@ -45,7 +45,7 @@
 #include "../unit/unit_display.hpp"
 #include "../unit/unit_display.hpp"
 #include "../variable.hpp"
-#include "../whiteboard/manager.hpp"
+#include "../whiteboard/mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>

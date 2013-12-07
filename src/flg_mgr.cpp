@@ -15,7 +15,7 @@
 
    See the COPYING file for more details.
 */
-#include "flg_manager.hpp"
+#include "flg_mgr.hpp"
 
 #include "config.hpp"
 #include "formula/formula_string_utils.hpp"

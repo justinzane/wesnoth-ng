@@ -28,7 +28,7 @@ class CVideo;
 #include "gettext.hpp"
 #include "image.hpp"
 #include "marked-up_text.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 #include "sdl_utils.hpp"
 #include "log/log.hpp"
 #include <SDL2/SDL_events.h>
@@ -38,28 +38,27 @@ class CVideo;
 
 class loadscreen {
     public:
-        // Preferred constructor
+        /** @brief Preferred constructor */
         explicit loadscreen(CVideo &screen, const int percent = 0);
-        // Keep default copy constructor
-        // Keep default copy assignment
-        // Destructor, dumps the counter values to stderr
-        ~loadscreen() {
-            dump_counters();
-        }
 
-        /** @brief Starts the stage with identifier @a id. */
+        // Keep default copy constructor
+
+        // Keep default copy assignment
+
+        /** @brief Destructor, dumps the counter values to stderr */
+        ~loadscreen() { dump_counters(); }
+
+        /** @brief Starts the stage with identifier id. */
         static void start_stage(char const *id);
 
         /** @brief Increments the current stage for the progress bar. */
         static void increment_progress();
 
-        /** Function to draw a blank screen. */
+        /** @brief Function to draw a blank screen. */
         void clear_screen();
 
-        /**
-         * A global loadscreen instance that can be used to avoid
-         * passing it on to functions that are many levels deep.
-         */
+        /**@brief A global loadscreen instance that can be used to avoid
+         * passing it on to functions that are many levels deep. */
         static loadscreen* global_loadscreen;
 
         struct loadscreen_mgr {

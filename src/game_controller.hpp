@@ -21,7 +21,7 @@
 #include "commandline_options.hpp"
 #include "editor/editor_main.hpp"
 #include "gamestatus.hpp"
-#include "game_config_manager.hpp"
+#include "game_config_mgr.hpp"
 #include "game_display.hpp"
 #include "game_preferences.hpp"
 #include "hotkeys.hpp"
@@ -105,7 +105,7 @@ private:
 	const preferences::manager prefs_manager_;
 	const image::manager image_manager_;
 	const events::event_context main_event_context_;
-	const hotkey::manager hotkey_manager_;
+	const manager hotkey_manager_;
 	sound::music_thinker music_thinker_;
 	resize_monitor resize_monitor_;
 

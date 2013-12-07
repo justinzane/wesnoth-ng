@@ -39,7 +39,7 @@
 #include "../unit/unit_display.hpp"
 #include "../unit/unit_map.hpp"
 #include "../unit/unit_map.hpp"
-#include "../whiteboard/manager.hpp"
+#include "../whiteboard/mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>

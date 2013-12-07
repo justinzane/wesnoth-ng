@@ -1,5 +1,5 @@
 /**
- * @file src/persist_manager.hpp
+ * @file src/persist_mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 

@@ -40,9 +40,9 @@
 #include "time_of_day.hpp"
 #include "tooltips.hpp"
 #include "arrow.hpp"
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 #include "resources.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 #include "overlay.hpp"
 
 #include "SDL2/SDL_image.h"
@@ -191,7 +191,7 @@ display::display(unit_map* units, CVideo& video, const gamemap* map, const std::
 	animate_map_(true),
 	local_tod_light_(false),
 	flags_(),
-	activeTeam_(0),
+	active_team_(0),
 	drawing_buffer_(),
 	map_screenshot_(false),
 	fps_handle_(0),
@@ -352,7 +352,7 @@ void display::set_team(size_t teamindex, bool show_everything)
 void display::set_playing_team(size_t teamindex)
 {
 	assert(teamindex < teams_->size());
-	activeTeam_ = teamindex;
+	active_team_ = teamindex;
 	invalidate_game_status();
 }
 
@@ -965,9 +965,9 @@ void display::create_buttons()
 	DBG_DP << "buttons created\n";
 }
 
-gui::button::TYPE display::string_to_button_type(std::string type)
+gui::button::button_type_t display::string_to_button_type(std::string type)
 {
-	gui::button::TYPE res = gui::button::TYPE_PRESS;
+	gui::button::button_type_t res = gui::button::TYPE_PRESS;
 	if (type == "checkbox") { res = gui::button::TYPE_CHECK; }
 	else if (type == "image") { res = gui::button::TYPE_IMAGE; }
 	else if (type == "radiobox") { res = gui::button::TYPE_RADIO; }
@@ -1063,11 +1063,11 @@ std::vector<surface> display::get_fog_shroud_images(const map_location& loc, ima
 std::vector<surface> display::get_terrain_images(const map_location &loc,
 						     const std::string& timeid,
 		image::TYPE image_type,
-		TERRAIN_TYPE terrain_type)
+		terr_type_t terrain_type)
 {
 	std::vector<surface> res;
 
-	terrain_builder::TERRAIN_TYPE builder_terrain_type =
+	terrain_builder::terr_type_t builder_terrain_type =
 	      (terrain_type == FOREGROUND ?
 		  terrain_builder::FOREGROUND : terrain_builder::BACKGROUND);
 
@@ -1146,14 +1146,14 @@ std::vector<surface> display::get_terrain_images(const map_location &loc,
 	return res;
 }
 
-void display::drawing_buffer_add(const tdrawing_layer layer,
+void display::drawing_buffer_add(const drawing_layer_t layer,
 		const map_location& loc, int x, int y, const SDL_Surface& surf,
 		const SDL_Rect* clip)
 {
 	drawing_buffer_.push_back(tblit(layer, loc, x, y, surf, clip));
 }
 
-void display::drawing_buffer_add(const tdrawing_layer layer,
+void display::drawing_buffer_add(const drawing_layer_t layer,
 		const map_location& loc, int x, int y,
 		const std::vector<surface> &surf,
 		const SDL_Rect* clip)
@@ -1162,10 +1162,10 @@ void display::drawing_buffer_add(const tdrawing_layer layer,
 }
 
 // FIXME: temporary method. Group splitting should be made
-// public into the definition of tdrawing_layer
+// public into the definition of drawing_layer_t
 //
 // The drawing is done per layer_group, the range per group is [low, high).
-const display::tdrawing_layer display::drawing_buffer_key::layer_groups[] = {
+const drawing_layer_t display::drawing_buffer_key::layer_groups[] = {
 	LAYER_TERRAIN_BG,
 	LAYER_UNIT_FIRST,
 	LAYER_UNIT_MOVE_DEFAULT,
@@ -1175,7 +1175,7 @@ const display::tdrawing_layer display::drawing_buffer_key::layer_groups[] = {
 };
 
 // no need to change this if layer_groups above is changed
-const unsigned int display::drawing_buffer_key::max_layer_group = sizeof(display::drawing_buffer_key::layer_groups) / sizeof(display::tdrawing_layer) - 2;
+const unsigned int display::drawing_buffer_key::max_layer_group = sizeof(display::drawing_buffer_key::layer_groups) / sizeof(drawing_layer_t) - 2;
 
 enum {
 	// you may adjust the following when needed:
@@ -1200,7 +1200,7 @@ enum {
 	BITS_FOR_X_OVER_2    = 9
 };
 
-inline display::drawing_buffer_key::drawing_buffer_key(const map_location &loc, tdrawing_layer layer)
+inline display::drawing_buffer_key::drawing_buffer_key(const map_location &loc, drawing_layer_t layer)
 	: key_(0)
 {
 	// max_layer_group + 1 is the last valid entry in layer_groups, but it is always > layer
@@ -1471,7 +1471,7 @@ static void draw_background(SDL_Surface screen, const SDL_Rect* area, const std:
 }
 
 void display::draw_text_in_hex(const map_location& loc,
-		const tdrawing_layer layer, const std::string& text,
+		const drawing_layer_t layer, const std::string& text,
 		size_t font_size, SDL_Color color, double x_in_hex, double y_in_hex)
 {
 	if (text.empty()) return;
@@ -1495,7 +1495,7 @@ void display::draw_text_in_hex(const map_location& loc,
 	drawing_buffer_add(layer, loc, x, y, text_surf);
 }
 
-void display::render_image(int x, int y, const display::tdrawing_layer drawing_layer,
+void display::render_image(int x, int y, const drawing_layer_t drawing_layer,
 		const map_location& loc, SDL_Surface image,
 		bool hreverse, bool greyscale, fixed_t alpha,
 		Uint32 blendto, double blend_ratio, double submerged, bool vreverse)
@@ -2069,7 +2069,7 @@ bool display::tile_nearly_on_screen(const map_location& loc) const
 	       y + hs >= area.y - hs && y < area.y + area.h + hs;
 }
 
-void display::scroll_to_xy(int screenxpos, int screenypos, SCROLL_TYPE scroll_type, bool force)
+void display::scroll_to_xy(int screenxpos, int screenypos, scroll_type_t scroll_type, bool force)
 {
 	if(!force && (view_locked_ || !preferences::scroll_to_action())) return;
 	if(screen_.update_locked()) {
@@ -2148,7 +2148,7 @@ void display::scroll_to_xy(int screenxpos, int screenypos, SCROLL_TYPE scroll_ty
 	}
 }
 
-void display::scroll_to_tile(const map_location& loc, SCROLL_TYPE scroll_type, bool check_fogged, bool force)
+void display::scroll_to_tile(const map_location& loc, scroll_type_t scroll_type, bool check_fogged, bool force)
 {
 	if(get_map().on_board(loc) == false) {
 		ERR_DP << "Tile at " << loc << " isn't on the map, can't scroll to the tile.\n";
@@ -2161,7 +2161,7 @@ void display::scroll_to_tile(const map_location& loc, SCROLL_TYPE scroll_type, b
 }
 
 void display::scroll_to_tiles(map_location loc1, map_location loc2,
-                              SCROLL_TYPE scroll_type, bool check_fogged,
+                              scroll_type_t scroll_type, bool check_fogged,
 			      double add_spacing, bool force)
 {
 	std::vector<map_location> locs;
@@ -2172,7 +2172,7 @@ void display::scroll_to_tiles(map_location loc1, map_location loc2,
 
 void display::scroll_to_tiles(const std::vector<map_location>::const_iterator & begin,
                               const std::vector<map_location>::const_iterator & end,
-                              SCROLL_TYPE scroll_type, bool check_fogged,
+                              scroll_type_t scroll_type, bool check_fogged,
                               bool only_if_possible, double add_spacing, bool force)
 {
 	// basically we calculate the min/max coordinates we want to have on-screen

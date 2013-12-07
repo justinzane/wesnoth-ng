@@ -29,7 +29,7 @@
 #include "gui/widgets/window.hpp"
 #include "hotkeys.hpp"
 #include "utils/foreach.tpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 #include <cassert>
 
@@ -235,7 +235,7 @@ private:
 	 *
 	 * @returns                   True if the hotkey is handled false otherwise.
 	 */
-	bool hotkey_pressed(const hotkey::hotkey_item& key);
+	bool hotkey_pressed(const hotkey_item& key);
 
 	/**
 	 * Fires a key down event.
@@ -244,8 +244,8 @@ private:
 	 * @param modifier               The SDL key modifiers used.
 	 * @param unicode                The unicode value for the key pressed.
 	 */
-	void key_down(const SDLKey key
-			, const SDLMod modifier
+	void key_down(const SDL_Keymod key
+			, const SDL_KeyModmodifier
 			, const Uint16 unicode);
 
 	/**
@@ -624,7 +624,7 @@ tdispatcher* thandler::keyboard_dispatcher()
 
 void thandler::hat_motion(const SDL_JoyHatEvent& event)
 {
-	const hotkey::hotkey_item& hk = hotkey::get_hotkey(event);
+	const hotkey_item& hk = get_hotkey(event);
 	bool done = false;
 	if(!hk.null()) {
 		done = hotkey_pressed(hk);
@@ -636,7 +636,7 @@ void thandler::hat_motion(const SDL_JoyHatEvent& event)
 
 void thandler::button_down(const SDL_JoyButtonEvent& event)
 {
-	const hotkey::hotkey_item& hk = hotkey::get_hotkey(event);
+	const hotkey_item& hk = get_hotkey(event);
 	bool done = false;
 	if(!hk.null()) {
 		done = hotkey_pressed(hk);
@@ -648,7 +648,7 @@ void thandler::button_down(const SDL_JoyButtonEvent& event)
 
 void thandler::key_down(const SDL_KeyboardEvent& event)
 {
-	const hotkey::hotkey_item& hk = hotkey::get_hotkey(event);
+	const hotkey_item& hk = get_hotkey(event);
 	bool done = false;
 	if(!hk.null()) {
 		done = hotkey_pressed(hk);
@@ -658,7 +658,7 @@ void thandler::key_down(const SDL_KeyboardEvent& event)
 	}
 }
 
-bool thandler::hotkey_pressed(const hotkey::hotkey_item& key)
+bool thandler::hotkey_pressed(const hotkey_item& key)
 {
 	tdispatcher* dispatcher = keyboard_dispatcher();
 
@@ -669,8 +669,8 @@ bool thandler::hotkey_pressed(const hotkey::hotkey_item& key)
 	return dispatcher->execute_hotkey(key.get_id());
 }
 
-void thandler::key_down(const SDLKey key
-		, const SDLMod modifier
+void thandler::key_down(const SDL_Keymod key
+		, const SDL_KeyModmodifier
 		, const Uint16 unicode)
 {
 	DBG_GUI_E << "Firing: " << SDL_KEY_DOWN << ".\n";

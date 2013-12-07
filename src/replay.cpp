@@ -44,7 +44,7 @@
 #include "resources.hpp"
 #include "rng.hpp"
 #include "statistics.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>

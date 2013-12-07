@@ -52,7 +52,7 @@ void show_unit_help(display &disp, const std::string& unit_id, bool hidden = fal
 void show_variation_help(display &disp, const std::string &unit_id, const std::string &variation,
 				bool hidden = false, int xloc=-1, int yloc=-1);
 
-class help_button : public gui::dialog_button, public hotkey::command_executor {
+class help_button : public gui::dialog_button, public command_executor {
 public:
 	help_button(display& disp, const std::string &help_topic);
 	~help_button();
@@ -62,11 +62,11 @@ public:
 	void leave();
 private:
 	void show_help();
-	bool can_execute_command(const hotkey::hotkey_command& command, int/*index*/ =-1) const;
+	bool can_execute_command(const hotkey_cmd_t& command, int/*index*/ =-1) const;
 
 	display &disp_;
 	const std::string topic_;
-	hotkey::basic_handler *help_hand_;
+	basic_handler *help_hand_;
 };
 
 

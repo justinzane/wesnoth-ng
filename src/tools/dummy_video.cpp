@@ -18,7 +18,7 @@
 
 /** @file */
 
-#include "../video.hpp"
+#include "../sdl2/sdl2_rndr_mgr.hpp"
 #include "../sdl_utils.hpp"
 
 static SDL_Surface dummy_screen_surface(nullptr);

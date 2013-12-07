@@ -22,7 +22,7 @@
  * @file
  */
 
-#include "manager.hpp"
+#include "mgr.hpp"
 #include "gamestate_observer.hpp"
 
 namespace ai {

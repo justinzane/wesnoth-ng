@@ -256,7 +256,7 @@ const twidget* thorizontal_list::find_at(const tpoint& coordinate,
 }
 
 void thorizontal_list::handle_key_left_arrow(
-		SDLMod /*modifier*/, bool& handled)
+		SDL_KeyMod/*modifier*/, bool& handled)
 {
 	if(get_selected_item_count() == 0) {
 		return;
@@ -278,7 +278,7 @@ void thorizontal_list::handle_key_left_arrow(
 }
 
 void thorizontal_list::handle_key_right_arrow(
-		SDLMod /*modifier*/, bool& handled)
+		SDL_KeyMod/*modifier*/, bool& handled)
 {
 	if(get_selected_item_count() == 0) {
 		return;
@@ -459,7 +459,7 @@ const twidget* tvertical_list::find_at(const tpoint& coordinate,
 	return nullptr;
 }
 
-void tvertical_list::handle_key_up_arrow(SDLMod /*modifier*/, bool& handled)
+void tvertical_list::handle_key_up_arrow(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	if(get_selected_item_count() == 0) {
 		return;
@@ -480,7 +480,7 @@ void tvertical_list::handle_key_up_arrow(SDLMod /*modifier*/, bool& handled)
 	}
 }
 
-void tvertical_list::handle_key_down_arrow(SDLMod /*modifier*/, bool& handled)
+void tvertical_list::handle_key_down_arrow(SDL_KeyMod/*modifier*/, bool& handled)
 {
 	if(get_selected_item_count() == 0) {
 		return;

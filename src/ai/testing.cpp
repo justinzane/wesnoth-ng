@@ -20,7 +20,7 @@
  * Gather statistics important for AI testing and output them
  * @file
  */
-#include "manager.hpp"
+#include "mgr.hpp"
 #include "testing.hpp"
 #include "../log/log.hpp"
 #include "../log/log.hpp"
@@ -28,7 +28,7 @@
 #include "../util.hpp"
 #include "../resources.hpp"
 #include "../team.hpp"
-#include "../tod_manager.hpp"
+#include "../tod_mgr.hpp"
 
 static lg::log_domain log_ai_testing("ai/testing");
 #define DBG_AI_TESTING LOG_STREAM(debug, log_ai_testing)

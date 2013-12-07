@@ -1,5 +1,5 @@
 /**
- * @file src/tod_manager.hpp
+ * @file src/tod_mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 

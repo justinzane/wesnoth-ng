@@ -24,7 +24,7 @@
 #include "../../global.hpp"
 
 #include "ai.hpp"
-#include "../manager.hpp"
+#include "../mgr.hpp"
 
 #include "../../actions/attack.hpp"
 #include "../../attack_prediction.hpp"

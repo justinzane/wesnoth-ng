@@ -77,10 +77,10 @@ void help_button::show_help()
 	help::show_help(disp_, topic_);
 }
 
-bool help_button::can_execute_command(const hotkey::hotkey_command& cmd, int/*index*/) const
+bool help_button::can_execute_command(const hotkey_cmd_t& cmd, int/*index*/) const
 {
-	hotkey::HOTKEY_COMMAND command = cmd.id;
-	return (topic_.empty() == false && command == hotkey::HOTKEY_HELP) || command == hotkey::HOTKEY_SCREENSHOT;
+	hotkey_cmd_t command = cmd.id;
+	return (topic_.empty() == false && command == HOTKEY_HELP) || command == HOTKEY_SCREENSHOT;
 }
 
 void help_button::join() {
@@ -88,7 +88,7 @@ void help_button::join() {
 
 	//wait until we join the event context to start a hotkey handler
 	delete help_hand_;
-	help_hand_ = new hotkey::basic_handler(&disp_, this);
+	help_hand_ = new basic_handler(&disp_, this);
 }
 
 void help_button::leave() {

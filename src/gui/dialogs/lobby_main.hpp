@@ -311,14 +311,14 @@ private:
 	void chat_input_keypress_callback(
 			  bool& handled
 			, bool& halt
-			, const SDLKey key
+			, const SDL_Keymod key
 			, twindow& window);
 
 	void game_filter_reload();
 
 	void game_filter_change_callback(twidget& widget);
 
-	void game_filter_keypress_callback(const SDLKey key);
+	void game_filter_keypress_callback(const SDL_Keymod key);
 
 	void gamelist_change_callback(twindow& window);
 

@@ -287,7 +287,7 @@ void commit_wmi_commands()
 			LOG_NG << "setting command for " << event_name << " to:\n" << *wcc.second;
 			add_event_handler(*wcc.second, true);
 			if(item.use_hotkey()) {
-				hotkey::add_wml_hotkey(play_controller::wml_menu_hotkey_prefix + wcc.first, item.description(), item.default_hotkey());
+				add_wml_hotkey(play_controller::wml_menu_hotkey_prefix + wcc.first, item.description(), item.default_hotkey());
 			}
 		}
 
@@ -376,7 +376,7 @@ manager::manager(const config& cfg)
 manager::~manager() {
 	clear_events();
 	event_handlers.clear();
-	hotkey::delete_all_wml_hotkeys();
+	delete_all_wml_hotkeys();
 	reports::reset_generators();
 	delete resources::lua_kernel;
 	resources::lua_kernel = nullptr;

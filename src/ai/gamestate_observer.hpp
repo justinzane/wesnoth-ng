@@ -24,7 +24,7 @@
 #ifndef AI_GAMESTATE_OBSERVER_HPP_INCLUDED
 #define AI_GAMESTATE_OBSERVER_HPP_INCLUDED
 
-#include "../generic_event.hpp"
+#include "../generic_sdl2/sdl2_evt_mgr.hpp"
 
 namespace ai {
 

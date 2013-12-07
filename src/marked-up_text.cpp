@@ -30,7 +30,7 @@
 #include "gettext.hpp"
 #include "marked-up_text.hpp"
 #include "serdes/string_utils.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 #include "serdes/wml_exception.hpp"
 
 namespace font {

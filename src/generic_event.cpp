@@ -16,7 +16,7 @@
    See the COPYING file for more details.
 */
 
-#include "generic_event.hpp"
+#include "generic_sdl2/sdl2_evt_mgr.hpp"
 
 #include <algorithm>
 

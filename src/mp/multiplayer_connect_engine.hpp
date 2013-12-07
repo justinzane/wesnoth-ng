@@ -20,7 +20,7 @@
 
 #include "commandline_options.hpp"
 #include "config.hpp"
-#include "flg_manager.hpp"
+#include "flg_mgr.hpp"
 #include "gamestatus.hpp"
 #include "mp/multiplayer_ui.hpp"
 #include "mp/multiplayer_ui.hpp"

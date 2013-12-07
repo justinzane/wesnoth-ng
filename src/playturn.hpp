@@ -22,7 +22,7 @@
 class config;
 class replay_network_sender;
 
-#include "generic_event.hpp"
+#include "generic_sdl2/sdl2_evt_mgr.hpp"
 #include "net/network.hpp"
 #include "net/network.hpp"
 #include "replay.hpp"

@@ -345,7 +345,7 @@ void wmi_container::init_handlers() const
 				// still reapplied if set_menu_item is called again, for example
 				// by starting a new campaign.) Since it isn't that important
 				// I'll just leave it for now.
-				hotkey::add_wml_hotkey(play_controller::wml_menu_hotkey_prefix + wmi.id(), wmi.description(), wmi.default_hotkey());
+				add_wml_hotkey(play_controller::wml_menu_hotkey_prefix + wmi.id(), wmi.description(), wmi.default_hotkey());
 			}
 		}
 		// Count the menu items (for the diagnostic message).

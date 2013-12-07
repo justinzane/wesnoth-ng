@@ -21,7 +21,7 @@
 #include "global.hpp"
 
 #include "widgets/widget.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 #include "tooltips.hpp"
 
 #include <cassert>

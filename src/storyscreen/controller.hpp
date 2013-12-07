@@ -26,7 +26,7 @@
 
 #include "events.hpp"
 #include "interface.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 #include <boost/shared_ptr.hpp>
 

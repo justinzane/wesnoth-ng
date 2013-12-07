@@ -35,7 +35,7 @@ public:
 		const int ticks, const int num_turns, const config& game_config, CVideo& video);
 	virtual ~replay_controller();
 
-	virtual bool can_execute_command(const hotkey::hotkey_command& command, int index=-1) const;
+	virtual bool can_execute_command(const hotkey_cmd_t& command, int index=-1) const;
 
 	//event handlers
 	virtual void preferences();

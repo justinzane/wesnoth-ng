@@ -222,16 +222,16 @@ protected:
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/
 
 	/** Inherited from tscrollbar_container. */
-	void handle_key_up_arrow(SDLMod modifier, bool& handled);
+	void handle_key_up_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/** Inherited from tscrollbar_container. */
-	void handle_key_down_arrow(SDLMod modifier, bool& handled);
+	void handle_key_down_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/** Inherited from tscrollbar_container. */
-	void handle_key_left_arrow(SDLMod modifier, bool& handled);
+	void handle_key_left_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/** Inherited from tscrollbar_container. */
-	void handle_key_right_arrow(SDLMod modifier, bool& handled);
+	void handle_key_right_arrow(SDL_KeyModmodifier, bool& handled);
 
 private:
 

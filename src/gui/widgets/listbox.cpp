@@ -333,7 +333,7 @@ void tlistbox::child_populate_dirty_list(twindow& caller,
 	generator_->populate_dirty_list(caller, child_call_stack);
 }
 
-void tlistbox::handle_key_up_arrow(SDLMod modifier, bool& handled)
+void tlistbox::handle_key_up_arrow(SDL_KeyModmodifier, bool& handled)
 {
 	assert(generator_);
 
@@ -360,7 +360,7 @@ void tlistbox::handle_key_up_arrow(SDLMod modifier, bool& handled)
 	}
 }
 
-void tlistbox::handle_key_down_arrow(SDLMod modifier, bool& handled)
+void tlistbox::handle_key_down_arrow(SDL_KeyModmodifier, bool& handled)
 {
 	assert(generator_);
 
@@ -387,7 +387,7 @@ void tlistbox::handle_key_down_arrow(SDLMod modifier, bool& handled)
 	}
 }
 
-void tlistbox::handle_key_left_arrow(SDLMod modifier, bool& handled)
+void tlistbox::handle_key_left_arrow(SDL_KeyModmodifier, bool& handled)
 {
 	assert(generator_);
 
@@ -414,7 +414,7 @@ void tlistbox::handle_key_left_arrow(SDLMod modifier, bool& handled)
 	}
 }
 
-void tlistbox::handle_key_right_arrow(SDLMod modifier, bool& handled)
+void tlistbox::handle_key_right_arrow(SDL_KeyModmodifier, bool& handled)
 {
 	assert(generator_);
 

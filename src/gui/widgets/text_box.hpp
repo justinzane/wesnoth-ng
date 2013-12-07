@@ -195,7 +195,7 @@ private:
 	 * Shift                      Ignored.
 	 * Alt                        Ignored.
 	 */
-	void handle_key_up_arrow(SDLMod /*modifier*/, bool& /*handled*/) {}
+	void handle_key_up_arrow(SDL_KeyMod/*modifier*/, bool& /*handled*/) {}
 
 	/**
 	 * Inherited from ttext_.
@@ -205,7 +205,7 @@ private:
 	 * Shift                      Ignored.
 	 * Alt                        Ignored.
 	 */
-	void handle_key_down_arrow(SDLMod /*modifier*/, bool& /*handled*/) {}
+	void handle_key_down_arrow(SDL_KeyMod/*modifier*/, bool& /*handled*/) {}
 
 	/**
 	 * Goes one item up in the history.
@@ -223,10 +223,10 @@ private:
 
 	/** Inherited from ttext_. */
 	void handle_key_default(
-		bool& handled, SDLKey key, SDLMod modifier, Uint16 unicode);
+		bool& handled, SDL_Keymod key, SDL_KeyModmodifier, Uint16 unicode);
 
 	/** Inherited from ttext_. */
-	void handle_key_clear_line(SDLMod modifier, bool& handled);
+	void handle_key_clear_line(SDL_KeyModmodifier, bool& handled);
 
 	/** See @ref tcontrol::get_control_type. */
 	virtual const std::string& get_control_type() const OVERRIDE;

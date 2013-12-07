@@ -76,28 +76,28 @@ void editor_toolkit::init_sidebar(const config& game_config)
 
 void editor_toolkit::init_mouse_actions(const config& game_config, context_manager& cmanager)
 {
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_TOOL_PAINT,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_PAINT,
 		new mouse_action_paint(&brush_, key_, *palette_manager_->terrain_palette_.get())));
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_TOOL_FILL,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_FILL,
 		new mouse_action_fill(key_, *palette_manager_->terrain_palette_.get())));
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_TOOL_SELECT,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_SELECT,
 		new mouse_action_select(&brush_, key_, *palette_manager_->empty_palette_.get())));
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_TOOL_STARTING_POSITION,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_STARTING_POSITION,
 		new mouse_action_starting_position(key_, *palette_manager_->empty_palette_.get())));
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_TOOL_LABEL,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_LABEL,
 		new mouse_action_map_label(key_, *palette_manager_->empty_palette_.get())));
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_TOOL_UNIT,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_UNIT,
 		new mouse_action_unit(key_, *palette_manager_->unit_palette_.get())));
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_TOOL_VILLAGE,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_VILLAGE,
 			new mouse_action_village(key_, *palette_manager_->empty_palette_.get())));
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_PASTE,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_PASTE,
 			new mouse_action_paste(cmanager.get_clipboard(), key_, *palette_manager_->empty_palette_.get())));
-	mouse_actions_.insert(std::make_pair(hotkey::HOTKEY_EDITOR_TOOL_ITEM,
+	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_ITEM,
 			new mouse_action_item(key_, *palette_manager_->item_palette_.get())));
 
 	foreach_ng(const theme::menu& menu, gui_.get_theme().menus()) {
 		if (menu.items().size() == 1) {
-			hotkey::HOTKEY_COMMAND hk = hotkey::get_id(menu.items().front());
+			hotkey_cmd_t hk = get_id(menu.items().front());
 			mouse_action_map::iterator i = mouse_actions_.find(hk);
 			if (i != mouse_actions_.end()) {
 				i->second->set_toolbar_button(&menu);
@@ -106,20 +106,20 @@ void editor_toolkit::init_mouse_actions(const config& game_config, context_manag
 	}
 	foreach_ng(const config &c, game_config.child_range("editor_tool_hint")) {
 		mouse_action_map::iterator i =
-			mouse_actions_.find(hotkey::get_id(c["id"]));
+			mouse_actions_.find(get_id(c["id"]));
 		if (i != mouse_actions_.end()) {
 			mouse_action_hints_.insert(std::make_pair(i->first, c["text"]));
 		}
 	}
 
-	mouse_action_ = (mouse_actions_.find(hotkey::HOTKEY_EDITOR_TOOL_PAINT))->second;
+	mouse_action_ = (mouse_actions_.find(HOTKEY_EDITOR_TOOL_PAINT))->second;
 	set_mouseover_overlay();
 }
 
 
-void editor_toolkit::hotkey_set_mouse_action(hotkey::HOTKEY_COMMAND command)
+void editor_toolkit::hotkey_set_mouse_action(hotkey_cmd_t command)
 {
-	std::map<hotkey::HOTKEY_COMMAND, mouse_action*>::iterator i = mouse_actions_.find(command);
+	std::map<hotkey_cmd_t, mouse_action*>::iterator i = mouse_actions_.find(command);
 	if (i != mouse_actions_.end()) {
 		palette_manager_->active_palette().hide(true);
 		mouse_action_ = i->second;
@@ -138,9 +138,9 @@ void editor_toolkit::hotkey_set_mouse_action(hotkey::HOTKEY_COMMAND command)
 
 }
 
-bool editor_toolkit::is_mouse_action_set(hotkey::HOTKEY_COMMAND command) const
+bool editor_toolkit::is_mouse_action_set(hotkey_cmd_t command) const
 {
-	std::map<hotkey::HOTKEY_COMMAND, mouse_action*>::const_iterator i = mouse_actions_.find(command);
+	std::map<hotkey_cmd_t, mouse_action*>::const_iterator i = mouse_actions_.find(command);
 	return (i != mouse_actions_.end()) && (i->second == mouse_action_);
 }
 

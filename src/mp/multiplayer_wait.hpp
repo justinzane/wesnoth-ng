@@ -19,7 +19,7 @@
 #ifndef MULTIPLAYER_WAIT_HPP_INCLUDED
 #define MULTIPLAYER_WAIT_HPP_INCLUDED
 
-#include "flg_manager.hpp"
+#include "flg_mgr.hpp"
 #include "gamestatus.hpp"
 #include "mp/multiplayer_ui.hpp"
 #include "mp/multiplayer_ui.hpp"

@@ -23,7 +23,7 @@
 
 #include "ca.hpp"
 #include "../actions.hpp"
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../composite/engine.hpp"
 #include "../composite/rca.hpp"
 #include "../composite/stage.hpp"

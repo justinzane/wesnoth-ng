@@ -30,7 +30,7 @@
 #endif
 #include "gui/widgets/settings.hpp"
 #include "utils/foreach.tpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 #include <boost/bind.hpp>
 

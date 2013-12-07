@@ -21,7 +21,7 @@
 
 #include "font.hpp"
 #include "image.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 namespace gui {
 

@@ -1,5 +1,5 @@
 /**
- * @file src/addon/manager.hpp
+ * @file src/addon/mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 

@@ -50,9 +50,9 @@
 #include "serdes/wml_exception.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
-#include "ai/manager.hpp"
+#include "ai/mgr.hpp"
 #include "ai/testing.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 #include "scripting/lua.hpp"
 
 #include "global.hpp"
@@ -152,9 +152,9 @@ play_controller::play_controller(const config& level, game_state& state_of_game,
 	set_defeat_music_list(level_["defeat_music"]);
 
 	game_config::add_color_info(level);
-	hotkey::deactivate_all_scopes();
-	hotkey::set_scope_active(hotkey::SCOPE_GENERAL);
-	hotkey::set_scope_active(hotkey::SCOPE_GAME);
+	deactivate_all_scopes();
+	set_scope_active(SCOPE_GENERAL);
+	set_scope_active(SCOPE_GAME);
 	try {
 		init(video);
 	} catch (...) {
@@ -827,9 +827,9 @@ void play_controller::fire_wml_menu_item_event(const wml_menu_item &menu_item)
 }
 
 
-bool play_controller::execute_command(const hotkey::hotkey_command& cmd, int index)
+bool play_controller::execute_command(const hotkey_cmd_t& cmd, int index)
 {
-	hotkey::HOTKEY_COMMAND command = cmd.id;
+	hotkey_cmd_t command = cmd.id;
 	if(index >= 0) {
 		unsigned i = static_cast<unsigned>(index);
 		if(i < savenames_.size() && !savenames_[i].empty()) {
@@ -842,7 +842,7 @@ bool play_controller::execute_command(const hotkey::hotkey_command& cmd, int ind
 		}
 	}
 	int prefixlen = wml_menu_hotkey_prefix.length();
-	if(command == hotkey::HOTKEY_WML && cmd.command.compare(0, prefixlen, wml_menu_hotkey_prefix) == 0)
+	if(command == HOTKEY_WML && cmd.command.compare(0, prefixlen, wml_menu_hotkey_prefix) == 0)
 	{
 		std::string name = cmd.command.substr(prefixlen);
 		wmi_container& gs_wmi = gamedata_.get_wml_menu_items();
@@ -872,7 +872,7 @@ bool play_controller::execute_command(const hotkey::hotkey_command& cmd, int ind
 	return command_executor::execute_command(cmd, index);
 }
 
-bool play_controller::can_execute_command(const hotkey::hotkey_command& cmd, int index) const
+bool play_controller::can_execute_command(const hotkey_cmd_t& cmd, int index) const
 {
 	if(index >= 0) {
 		unsigned i = static_cast<unsigned>(index);
@@ -884,63 +884,63 @@ bool play_controller::can_execute_command(const hotkey::hotkey_command& cmd, int
 	switch(cmd.id) {
 
 	// Commands we can always do:
-	case hotkey::HOTKEY_LEADER:
-	case hotkey::HOTKEY_CYCLE_UNITS:
-	case hotkey::HOTKEY_CYCLE_BACK_UNITS:
-	case hotkey::HOTKEY_ZOOM_IN:
-	case hotkey::HOTKEY_ZOOM_OUT:
-	case hotkey::HOTKEY_ZOOM_DEFAULT:
-	case hotkey::HOTKEY_FULLSCREEN:
-	case hotkey::HOTKEY_SCREENSHOT:
-	case hotkey::HOTKEY_MAP_SCREENSHOT:
-	case hotkey::HOTKEY_ACCELERATED:
-	case hotkey::HOTKEY_SAVE_MAP:
-	case hotkey::HOTKEY_TOGGLE_ELLIPSES:
-	case hotkey::HOTKEY_TOGGLE_GRID:
-	case hotkey::HOTKEY_MOUSE_SCROLL:
-	case hotkey::HOTKEY_ANIMATE_MAP:
-	case hotkey::HOTKEY_STATUS_TABLE:
-	case hotkey::HOTKEY_MUTE:
-	case hotkey::HOTKEY_PREFERENCES:
-	case hotkey::HOTKEY_OBJECTIVES:
-	case hotkey::HOTKEY_UNIT_LIST:
-	case hotkey::HOTKEY_STATISTICS:
-	case hotkey::HOTKEY_QUIT_GAME:
-	case hotkey::HOTKEY_SEARCH:
-	case hotkey::HOTKEY_HELP:
-	case hotkey::HOTKEY_USER_CMD:
-	case hotkey::HOTKEY_CUSTOM_CMD:
-	case hotkey::HOTKEY_AI_FORMULA:
-	case hotkey::HOTKEY_CLEAR_MSG:
-	case hotkey::HOTKEY_LEFT_MOUSE_CLICK:
-	case hotkey::HOTKEY_RIGHT_MOUSE_CLICK:
-	case hotkey::HOTKEY_MINIMAP_COLOR_CODING:
+	case HOTKEY_LEADER:
+	case HOTKEY_CYCLE_UNITS:
+	case HOTKEY_CYCLE_BACK_UNITS:
+	case HOTKEY_ZOOM_IN:
+	case HOTKEY_ZOOM_OUT:
+	case HOTKEY_ZOOM_DEFAULT:
+	case HOTKEY_FULLSCREEN:
+	case HOTKEY_SCREENSHOT:
+	case HOTKEY_MAP_SCREENSHOT:
+	case HOTKEY_ACCELERATED:
+	case HOTKEY_SAVE_MAP:
+	case HOTKEY_TOGGLE_ELLIPSES:
+	case HOTKEY_TOGGLE_GRID:
+	case HOTKEY_MOUSE_SCROLL:
+	case HOTKEY_ANIMATE_MAP:
+	case HOTKEY_STATUS_TABLE:
+	case HOTKEY_MUTE:
+	case HOTKEY_PREFERENCES:
+	case HOTKEY_OBJECTIVES:
+	case HOTKEY_UNIT_LIST:
+	case HOTKEY_STATISTICS:
+	case HOTKEY_QUIT_GAME:
+	case HOTKEY_SEARCH:
+	case HOTKEY_HELP:
+	case HOTKEY_USER_CMD:
+	case HOTKEY_CUSTOM_CMD:
+	case HOTKEY_AI_FORMULA:
+	case HOTKEY_CLEAR_MSG:
+	case HOTKEY_LEFT_MOUSE_CLICK:
+	case HOTKEY_RIGHT_MOUSE_CLICK:
+	case HOTKEY_MINIMAP_COLOR_CODING:
 		return true;
 
 	// Commands that have some preconditions:
-	case hotkey::HOTKEY_SAVE_GAME:
-	case hotkey::HOTKEY_SAVE_REPLAY:
+	case HOTKEY_SAVE_GAME:
+	case HOTKEY_SAVE_REPLAY:
 		return !events::commands_disabled;
 
-	case hotkey::HOTKEY_SHOW_ENEMY_MOVES:
-	case hotkey::HOTKEY_BEST_ENEMY_MOVES:
+	case HOTKEY_SHOW_ENEMY_MOVES:
+	case HOTKEY_BEST_ENEMY_MOVES:
 		return !linger_ && enemies_visible();
 
-	case hotkey::HOTKEY_LOAD_GAME:
+	case HOTKEY_LOAD_GAME:
 		return network::nconnections() == 0; // Can only load games if not in a network game
 
-	case hotkey::HOTKEY_CHAT_LOG:
+	case HOTKEY_CHAT_LOG:
 		return network::nconnections() > 0;
 
-	case hotkey::HOTKEY_REDO:
+	case HOTKEY_REDO:
 		return !linger_ && undo_stack_->can_redo() && !events::commands_disabled && !browse_;
-	case hotkey::HOTKEY_UNDO:
+	case HOTKEY_UNDO:
 		return !linger_ && undo_stack_->can_undo() && !events::commands_disabled && !browse_;
 
-	case hotkey::HOTKEY_UNIT_DESCRIPTION:
+	case HOTKEY_UNIT_DESCRIPTION:
 		return menu_handler_.current_unit() != units_.end();
 
-	case hotkey::HOTKEY_RENAME_UNIT:
+	case HOTKEY_RENAME_UNIT:
 		return !events::commands_disabled &&
 			menu_handler_.current_unit() != units_.end() &&
 			!(menu_handler_.current_unit()->unrenamable()) &&
@@ -1250,14 +1250,14 @@ void play_controller::expand_wml_commands(std::vector<std::string>& items)
 void play_controller::show_menu(const std::vector<std::string>& items_arg, int xloc, int yloc, bool context_menu, display& disp)
 {
 	std::vector<std::string> items = items_arg;
-	hotkey::hotkey_command* cmd;
+	hotkey_cmd_t* cmd;
 	std::vector<std::string>::iterator i = items.begin();
 	while(i != items.end()) {
 		if (*i == "AUTOSAVES") {
 			// Autosave visibility is similar to LOAD_GAME hotkey
-			cmd = &hotkey::hotkey_command::get_command_by_command(hotkey::HOTKEY_LOAD_GAME);
+			cmd = &hotkey_cmd_t::get_command_by_command(HOTKEY_LOAD_GAME);
 		} else {
-			cmd = &hotkey::get_hotkey_command(*i);
+			cmd = &get_hotkey_cmd_t(*i);
 		}
 		// Remove WML commands if they would not be allowed here
 		if(*i == "wml") {
@@ -1286,13 +1286,13 @@ void play_controller::show_menu(const std::vector<std::string>& items_arg, int x
 	command_executor::show_menu(items, xloc, yloc, context_menu, disp);
 }
 
-bool play_controller::in_context_menu(hotkey::HOTKEY_COMMAND command) const
+bool play_controller::in_context_menu(hotkey_cmd_t command) const
 {
 	switch(command) {
 	// Only display these if the mouse is over a castle or keep tile
-	case hotkey::HOTKEY_RECRUIT:
-	case hotkey::HOTKEY_REPEAT_RECRUIT:
-	case hotkey::HOTKEY_RECALL: {
+	case HOTKEY_RECRUIT:
+	case HOTKEY_REPEAT_RECRUIT:
+	case HOTKEY_RECALL: {
 		// last_hex_ is set by mouse_events::mouse_motion
 		const map_location & last_hex = mouse_handler_.get_last_hex();
 		const int viewing_side = resources::screen->viewing_side();
@@ -1324,7 +1324,7 @@ bool play_controller::in_context_menu(hotkey::HOTKEY_COMMAND command) const
 	}
 }
 
-std::string play_controller::get_action_image(hotkey::HOTKEY_COMMAND command, int index) const
+std::string play_controller::get_action_image(hotkey_cmd_t command, int index) const
 {
 	if(index >= 0 && index < static_cast<int>(wml_commands_.size())) {
 		const wml_menu_item* const wmi = wml_commands_[index];
@@ -1335,13 +1335,13 @@ std::string play_controller::get_action_image(hotkey::HOTKEY_COMMAND command, in
 	return command_executor::get_action_image(command, index);
 }
 
-hotkey::ACTION_STATE play_controller::get_action_state(hotkey::HOTKEY_COMMAND command, int /*index*/) const
+ACTION_STATE play_controller::get_action_state(hotkey_cmd_t command, int /*index*/) const
 {
 	switch(command) {
-	case hotkey::HOTKEY_DELAY_SHROUD:
-		return teams_[gui_->viewing_team()].auto_shroud_updates() ? hotkey::ACTION_OFF : hotkey::ACTION_ON;
+	case HOTKEY_DELAY_SHROUD:
+		return teams_[gui_->viewing_team()].auto_shroud_updates() ? ACTION_OFF : ACTION_ON;
 	default:
-		return hotkey::ACTION_STATELESS;
+		return ACTION_STATELESS;
 	}
 }
 
@@ -1481,7 +1481,7 @@ void play_controller::toggle_accelerated_speed()
 	if (preferences::turbo())
 	{
 		utils::string_map symbols;
-		symbols["hk"] = hotkey::get_names(hotkey::HOTKEY_ACCELERATED);
+		symbols["hk"] = get_names(HOTKEY_ACCELERATED);
 		gui_->announce(_("Accelerated speed enabled!"), font::NORMAL_COLOR);
 		gui_->announce("\n" + vgettext("(press $hk to disable)", symbols), font::NORMAL_COLOR);
 	}

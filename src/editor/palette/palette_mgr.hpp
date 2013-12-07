@@ -1,5 +1,5 @@
 /**
- * @file src/editor/palette/palette_manager.hpp
+ * @file src/editor/palette/palette_mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 

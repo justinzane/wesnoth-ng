@@ -19,7 +19,7 @@
 #define GETTEXT_DOMAIN "wesnoth-test"
 
 #include "tests/utils/play_scenario.hpp"
-#include "tests/utils/game_config_manager.hpp"
+#include "tests/utils/game_config_mgr.hpp"
 #include "tests/utils/fake_display.hpp"
 
 #include "game_display.hpp"
@@ -56,7 +56,7 @@ namespace test_utils {
 		void operator()(const std::string::value_type& c)
 		{
 
-			source_.type_key(time_++, static_cast<SDLKey>(c));
+			source_.type_key(time_++, static_cast<SDL_Keymod>(c));
 		}
 		private:
 		fake_event_source& source_;

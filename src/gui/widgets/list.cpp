@@ -465,8 +465,8 @@ void tlist::signal_handler_left_button_click(
 
 void tlist::signal_handler_sdl_key_down(const event::tevent event
 		, bool& handled
-		, const SDLKey key
-		, SDLMod modifier)
+		, const SDL_Keymod key
+		, SDL_KeyModmodifier)
 {
 	DBG_GUI_E << LOG_HEADER << ' ' << event << ".\n";
 

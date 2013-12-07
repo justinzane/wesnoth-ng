@@ -310,7 +310,7 @@ protected:
 	 *                            This is used in the keyboard event
 	 *                            changing.
 	 */
-	virtual void handle_key_home(SDLMod modifier, bool& handled);
+	virtual void handle_key_home(SDL_KeyModmodifier, bool& handled);
 
 	/**
 	 * End key pressed.
@@ -322,7 +322,7 @@ protected:
 	 *                            This is used in the keyboard event
 	 *                            changing.
 	 */
-	virtual void handle_key_end(SDLMod modifier, bool& handled);
+	virtual void handle_key_end(SDL_KeyModmodifier, bool& handled);
 
 	/**
 	 * Page up key pressed.
@@ -334,7 +334,7 @@ protected:
 	 *                            This is used in the keyboard event
 	 *                            changing.
 	 */
-	virtual void handle_key_page_up(SDLMod modifier, bool& handled);
+	virtual void handle_key_page_up(SDL_KeyModmodifier, bool& handled);
 
 	/**
 	 * Page down key pressed.
@@ -346,7 +346,7 @@ protected:
 	 *                            This is used in the keyboard event
 	 *                            changing.
 	 */
-	virtual void handle_key_page_down(SDLMod modifier, bool& handled);
+	virtual void handle_key_page_down(SDL_KeyModmodifier, bool& handled);
 
 
 	/**
@@ -359,7 +359,7 @@ protected:
 	 *                            This is used in the keyboard event
 	 *                            changing.
 	 */
-	virtual void handle_key_up_arrow(SDLMod modifier, bool& handled);
+	virtual void handle_key_up_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/**
 	 * Down arrow key pressed.
@@ -371,7 +371,7 @@ protected:
 	 *                            This is used in the keyboard event
 	 *                            changing.
 	 */
-	virtual void handle_key_down_arrow(SDLMod modifier, bool& handled);
+	virtual void handle_key_down_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/**
 	 * Left arrow key pressed.
@@ -383,7 +383,7 @@ protected:
 	 *                            This is used in the keyboard event
 	 *                            changing.
 	 */
-	virtual void handle_key_left_arrow(SDLMod modifier, bool& handled);
+	virtual void handle_key_left_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/**
 	 * Right arrow key pressed.
@@ -395,7 +395,7 @@ protected:
 	 *                            This is used in the keyboard event
 	 *                            changing.
 	 */
-	virtual void handle_key_right_arrow(SDLMod modifier, bool& handled);
+	virtual void handle_key_right_arrow(SDL_KeyModmodifier, bool& handled);
 private:
 
 	/**
@@ -494,8 +494,8 @@ private:
 
 	void signal_handler_sdl_key_down(const event::tevent event
 			, bool& handled
-			, const SDLKey key
-			, SDLMod modifier);
+			, const SDL_Keymod key
+			, SDL_KeyModmodifier);
 
 	void signal_handler_sdl_wheel_up(const event::tevent event
 			, bool& handled);

@@ -63,7 +63,7 @@ void controller_base::handle_event(const SDL_Event& event)
 		// in which case the key press events should go only to it.
 		if(have_keyboard_focus()) {
 			process_keydown_event(event);
-			hotkey::key_event(get_display(), event.key,this);
+			key_event(get_display(), event.key,this);
 		} else {
 			process_focus_keydown_event(event);
 			break;
@@ -74,11 +74,11 @@ void controller_base::handle_event(const SDL_Event& event)
 		break;
 	case SDL_JOYBUTTONDOWN:
 		process_keydown_event(event);
-		hotkey::jbutton_event(get_display(), event.jbutton, this);
+		jbutton_event(get_display(), event.jbutton, this);
 		break;
 	case SDL_JOYHATMOTION:
 		process_keydown_event(event);
-		hotkey::jhat_event(get_display(), event.jhat, this);
+		jhat_event(get_display(), event.jhat, this);
 		break;
 	case SDL_MOUSEMOTION:
 		// Ignore old mouse motion events in the event queue
@@ -94,7 +94,7 @@ void controller_base::handle_event(const SDL_Event& event)
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 		process_keydown_event(event);
-		hotkey::mbutton_event(get_display(), event.button, this);
+		mbutton_event(get_display(), event.button, this);
 		// intentionally fall-through
 	case SDL_MOUSEBUTTONUP:
 		get_mouse_handler_base().mouse_press(event.button, browse_);
@@ -284,7 +284,7 @@ void controller_base::show_menu(const std::vector<std::string>& items_arg, int x
 	std::vector<std::string> items = items_arg;
 	std::vector<std::string>::iterator i = items.begin();
 	while(i != items.end()) {
-		hotkey::hotkey_command& command = hotkey::get_hotkey_command(*i);
+		hotkey_cmd_t& command = get_hotkey_cmd_t(*i);
 		if(!can_execute_command(command)
 			|| (context_menu && !in_context_menu(command.id))) {
 			i = items.erase(i);
@@ -303,7 +303,7 @@ void controller_base::execute_action(const std::vector<std::string>& items_arg, 
 	std::vector<std::string> items;
 	foreach_ng(const std::string& item, items_arg) {
 
-		hotkey::hotkey_command& command = hotkey::get_hotkey_command(item);
+		hotkey_cmd_t& command = get_hotkey_cmd_t(item);
 		if(can_execute_command(command))
 			items.push_back(item);
 	}
@@ -315,7 +315,7 @@ void controller_base::execute_action(const std::vector<std::string>& items_arg, 
 
 
 
-bool controller_base::in_context_menu(hotkey::HOTKEY_COMMAND /*command*/) const
+bool controller_base::in_context_menu(hotkey_cmd_t /*command*/) const
 {
 	return true;
 }

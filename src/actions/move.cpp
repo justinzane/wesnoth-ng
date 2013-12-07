@@ -45,7 +45,7 @@
 #include "../team.hpp"
 #include "../unit/unit.hpp"
 #include "../unit/unit.hpp"
-#include "../whiteboard/manager.hpp"
+#include "../whiteboard/mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>
@@ -1149,7 +1149,7 @@ namespace { // Private helpers for move_unit()
 		// Suggest "continue move"?
 		if ( playing_team_is_viewing_ && sighted_stop_ && !resources::whiteboard->is_executing_actions() ) {
 			// See if the "Continue Move" action has an associated hotkey
-			std::string name = hotkey::get_names(hotkey::HOTKEY_CONTINUE_MOVE);
+			std::string name = get_names(HOTKEY_CONTINUE_MOVE);
 			if ( !name.empty() ) {
 				utils::string_map symbols;
 				symbols["hotkey"] = name;

@@ -227,7 +227,7 @@ void terrain_builder::change_map(const gamemap* m)
 }
 
 const terrain_builder::imagelist *terrain_builder::get_terrain_at(const map_location &loc,
-		const std::string &tod, const TERRAIN_TYPE terrain_type)
+		const std::string &tod, const terr_type_t terrain_type)
 {
 	if(!tile_map_.on_map(loc))
 		return nullptr;

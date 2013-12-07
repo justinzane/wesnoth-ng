@@ -23,13 +23,13 @@
 
 #include "aspect_attacks.hpp"
 
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../../actions/attack.hpp"
 #include "../../log/log.hpp"
 #include "../../log/log.hpp"
 #include "../../map.hpp"
 #include "../../team.hpp"
-#include "../../tod_manager.hpp"
+#include "../../tod_mgr.hpp"
 #include "../../resources.hpp"
 #include "../../unit/unit.hpp"
 #include "../../unit/unit.hpp"

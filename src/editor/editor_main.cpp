@@ -35,10 +35,10 @@ EXIT_STATUS start(const config& game_conf, CVideo& video, const std::string& fil
 {
 	EXIT_STATUS e = EXIT_ERROR;
 	try {
-		hotkey::scope_changer h_;
-		hotkey::deactivate_all_scopes();
-		hotkey::set_scope_active(hotkey::SCOPE_GENERAL);
-		hotkey::set_scope_active(hotkey::SCOPE_EDITOR);
+		scope_changer h_;
+		deactivate_all_scopes();
+		set_scope_active(SCOPE_GENERAL);
+		set_scope_active(SCOPE_EDITOR);
 		editor_controller editor(game_conf, video);
 		if (!filename.empty()) {
 			if (is_directory(filename)) {

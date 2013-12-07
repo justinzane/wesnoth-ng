@@ -17,7 +17,7 @@
 */
 
 #include "persist_context.hpp"
-#include "persist_manager.hpp"
+#include "persist_mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>

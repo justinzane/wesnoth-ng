@@ -510,26 +510,26 @@ void replay_controller::handle_generic_event(const std::string& name){
 	}
 }
 
-bool replay_controller::can_execute_command(const hotkey::hotkey_command& cmd, int index) const
+bool replay_controller::can_execute_command(const hotkey_cmd_t& cmd, int index) const
 {
-	hotkey::HOTKEY_COMMAND command = cmd.id;
+	hotkey_cmd_t command = cmd.id;
 	bool result = play_controller::can_execute_command(cmd,index);
 
 	switch(command) {
 
 	//commands we can always do
-	case hotkey::HOTKEY_PLAY_REPLAY:
-	case hotkey::HOTKEY_RESET_REPLAY:
-	case hotkey::HOTKEY_STOP_REPLAY:
-	case hotkey::HOTKEY_REPLAY_NEXT_TURN:
-	case hotkey::HOTKEY_REPLAY_NEXT_SIDE:
-	case hotkey::HOTKEY_REPLAY_SHOW_EVERYTHING:
-	case hotkey::HOTKEY_REPLAY_SHOW_EACH:
-	case hotkey::HOTKEY_REPLAY_SHOW_TEAM1:
-	case hotkey::HOTKEY_REPLAY_SKIP_ANIMATION:
-	case hotkey::HOTKEY_SAVE_GAME:
-	case hotkey::HOTKEY_SAVE_REPLAY:
-	case hotkey::HOTKEY_CHAT_LOG:
+	case HOTKEY_PLAY_REPLAY:
+	case HOTKEY_RESET_REPLAY:
+	case HOTKEY_STOP_REPLAY:
+	case HOTKEY_REPLAY_NEXT_TURN:
+	case HOTKEY_REPLAY_NEXT_SIDE:
+	case HOTKEY_REPLAY_SHOW_EVERYTHING:
+	case HOTKEY_REPLAY_SHOW_EACH:
+	case HOTKEY_REPLAY_SHOW_TEAM1:
+	case HOTKEY_REPLAY_SKIP_ANIMATION:
+	case HOTKEY_SAVE_GAME:
+	case HOTKEY_SAVE_REPLAY:
+	case HOTKEY_CHAT_LOG:
 		return true;
 
 	default:

@@ -30,7 +30,7 @@
 #include "gui/dialogs/transient_message.hpp"
 #include "gui/widgets/window.hpp"
 #include "playcampaign.hpp"
-#include "persist_manager.hpp"
+#include "persist_mgr.hpp"
 #include "mp/playmp_controller.hpp"
 #include "mp/playmp_controller.hpp"
 #include "replay_controller.hpp"

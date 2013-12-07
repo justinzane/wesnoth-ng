@@ -31,7 +31,7 @@
 #include "replay.hpp"
 #include "resources.hpp"
 #include "rng.hpp"
-#include "whiteboard/manager.hpp"
+#include "whiteboard/mgr.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "formula/formula_string_utils.hpp"
 #include "play_controller.hpp"

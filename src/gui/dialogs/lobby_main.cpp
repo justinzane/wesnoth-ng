@@ -463,7 +463,7 @@ static bool fullscreen(CVideo& video)
 void tlobby_main::post_build(CVideo& video, twindow& window)
 {
 	/** @todo Should become a global hotkey after 1.8, then remove it here. */
-	window.register_hotkey(hotkey::HOTKEY_FULLSCREEN
+	window.register_hotkey(HOTKEY_FULLSCREEN
 			, boost::bind(fullscreen, boost::ref(video)));
 
 
@@ -480,7 +480,7 @@ void tlobby_main::post_build(CVideo& video, twindow& window)
 			, boost::ref(window));
 
 	window.register_hotkey(
-			  hotkey::HOTKEY_PREFERENCES
+			  HOTKEY_PREFERENCES
 			, boost::bind(function_wrapper<bool, boost::function<void()> >
 				, true
 				, boost::cref(preferences_wrapper_)));
@@ -1664,7 +1664,7 @@ void tlobby_main::room_switch_callback(twindow& /*window*/)
 void tlobby_main::chat_input_keypress_callback(
 		  bool& handled
 		, bool& halt
-		, const SDLKey key
+		, const SDL_Keymod key
 		, twindow& window)
 {
 	if (key == SDLK_RETURN || key == SDLK_KP_ENTER) {
@@ -1722,7 +1722,7 @@ void tlobby_main::game_filter_reload()
 	lobby_info_.set_game_filter_invert(filter_invert_->get_value());
 }
 
-void tlobby_main::game_filter_keypress_callback(const SDLKey key)
+void tlobby_main::game_filter_keypress_callback(const SDL_Keymod key)
 {
 	if (key == SDLK_RETURN || key == SDLK_KP_ENTER) {
 		game_filter_reload();

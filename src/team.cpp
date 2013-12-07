@@ -23,7 +23,7 @@
 
 #include "team.hpp"
 
-#include "ai/manager.hpp"
+#include "ai/mgr.hpp"
 #include "game_events/pump.hpp"
 #include "gamestatus.hpp"
 #include "map.hpp"

@@ -220,22 +220,22 @@ struct thorizontal_list
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/
 
 	/** Inherited from tgenerator_. */
-	void handle_key_up_arrow(SDLMod /*modifier*/, bool& /*handled*/)
+	void handle_key_up_arrow(SDL_KeyMod/*modifier*/, bool& /*handled*/)
 	{
 		/* do nothing */
 	}
 
 	/** Inherited from tgenerator_. */
-	void handle_key_down_arrow(SDLMod /*modifier*/, bool& /*handled*/)
+	void handle_key_down_arrow(SDL_KeyMod/*modifier*/, bool& /*handled*/)
 	{
 		/* do nothing */
 	}
 
 	/** Inherited from tgenerator_. */
-	void handle_key_left_arrow(SDLMod modifier, bool& handled);
+	void handle_key_left_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/** Inherited from tgenerator_. */
-	void handle_key_right_arrow(SDLMod modifier, bool& handled);
+	void handle_key_right_arrow(SDL_KeyModmodifier, bool& handled);
 
 private:
 	/**
@@ -295,17 +295,17 @@ struct tvertical_list
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/
 
 	/** Inherited from tgenerator_. */
-	void handle_key_up_arrow(SDLMod modifier, bool& handled);
+	void handle_key_up_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/** Inherited from tgenerator_. */
-	void handle_key_down_arrow(SDLMod modifier, bool& handled);
+	void handle_key_down_arrow(SDL_KeyModmodifier, bool& handled);
 
 	/** Inherited from tgenerator_. */
-	void handle_key_left_arrow(SDLMod /*modifier*/, bool& /*handled*/)
+	void handle_key_left_arrow(SDL_KeyMod/*modifier*/, bool& /*handled*/)
 		{ /* do nothing */ }
 
 	/** Inherited from tgenerator_. */
-	void handle_key_right_arrow(SDLMod /*modifier*/, bool& /*handled*/)
+	void handle_key_right_arrow(SDL_KeyMod/*modifier*/, bool& /*handled*/)
 		{ /* do nothing */ }
 
 	// FIXME we need a delete handler as well,
@@ -905,25 +905,25 @@ public:
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/
 
 	/** Inherited from tgenerator_. */
-	void handle_key_up_arrow(SDLMod modifier, bool& handled)
+	void handle_key_up_arrow(SDL_KeyModmodifier, bool& handled)
 	{
 		placement::handle_key_up_arrow(modifier, handled);
 	}
 
 	/** Inherited from tgenerator_. */
-	void handle_key_down_arrow(SDLMod modifier, bool& handled)
+	void handle_key_down_arrow(SDL_KeyModmodifier, bool& handled)
 	{
 		placement::handle_key_down_arrow(modifier, handled);
 	}
 
 	/** Inherited from tgenerator_. */
-	void handle_key_left_arrow(SDLMod modifier, bool& handled)
+	void handle_key_left_arrow(SDL_KeyModmodifier, bool& handled)
 	{
 		placement::handle_key_left_arrow(modifier, handled);
 	}
 
 	/** Inherited from tgenerator_. */
-	void handle_key_right_arrow(SDLMod modifier, bool& handled)
+	void handle_key_right_arrow(SDL_KeyModmodifier, bool& handled)
 	{
 		placement::handle_key_right_arrow(modifier, handled);
 	}

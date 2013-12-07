@@ -24,7 +24,7 @@
 #include "clipboard.hpp"
 #include "log/log.hpp"
 #include "log/log.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 static lg::log_domain log_display("display");
 #define WRN_DP LOG_STREAM(warn, log_display)
@@ -372,7 +372,7 @@ bool textbox::requires_event_focus(const SDL_Event* event) const
 	}
 
 	if(event->type == SDL_KEYDOWN) {
-		SDLKey key = event->key.keysym.sym;
+		SDL_Keymod key = event->key.keysym.sym;
 		switch(key) {
 		case SDLK_UP:
 		case SDLK_DOWN:
@@ -479,7 +479,7 @@ void textbox::handle_event(const SDL_Event& event, bool was_forwarded)
 	}
 
 	const SDL_keysym& key = reinterpret_cast<const SDL_KeyboardEvent&>(event).keysym;
-	const SDLMod modifiers = SDL_GetModState();
+	const SDL_KeyModmodifiers = SDL_GetModState();
 
 	const int c = key.sym;
 	const int old_cursor = cursor_;

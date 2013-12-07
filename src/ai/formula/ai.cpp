@@ -31,7 +31,7 @@
 #include "function_table.hpp"
 
 #include "../actions.hpp"
-#include "../manager.hpp"
+#include "../mgr.hpp"
 
 #include "../../callable_objects.hpp"
 #include "../../game_display.hpp"
@@ -43,7 +43,7 @@
 #include "../../pathfind/teleport.hpp"
 #include "../../resources.hpp"
 #include "../../terrain_filter.hpp"
-#include "../../tod_manager.hpp"
+#include "../../tod_mgr.hpp"
 #include "../../pathfind/pathfind.hpp"
 
 #include "global.hpp"

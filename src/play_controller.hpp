@@ -25,9 +25,9 @@
 #include "help.hpp"
 #include "menu_events.hpp"
 #include "mouse_events.hpp"
-#include "persist_manager.hpp"
+#include "persist_mgr.hpp"
 #include "statistics.hpp"
-#include "tod_manager.hpp"
+#include "tod_mgr.hpp"
 #include "gamestatus.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -171,18 +171,18 @@ protected:
 	void process_keydown_event(const SDL_Event& event);
 	void process_keyup_event(const SDL_Event& event);
 
-	virtual std::string get_action_image(hotkey::HOTKEY_COMMAND, int index) const;
-	virtual hotkey::ACTION_STATE get_action_state(hotkey::HOTKEY_COMMAND command, int index) const;
+	virtual std::string get_action_image(hotkey_cmd_t, int index) const;
+	virtual ACTION_STATE get_action_state(hotkey_cmd_t command, int index) const;
 	/** Check if a command can be executed. */
-	virtual bool can_execute_command(const hotkey::hotkey_command& command, int index=-1) const;
-	virtual bool execute_command(const hotkey::hotkey_command& command, int index=-1);
+	virtual bool can_execute_command(const hotkey_cmd_t& command, int index=-1) const;
+	virtual bool execute_command(const hotkey_cmd_t& command, int index=-1);
 	void show_menu(const std::vector<std::string>& items_arg, int xloc, int yloc, bool context_menu, display& disp);
 
 	/**
 	 *  Determines whether the command should be in the context menu or not.
 	 *  Independent of whether or not we can actually execute the command.
 	 */
-	bool in_context_menu(hotkey::HOTKEY_COMMAND command) const;
+	bool in_context_menu(hotkey_cmd_t command) const;
 
 	void init_managers();
 	void fire_prestart(bool execute);

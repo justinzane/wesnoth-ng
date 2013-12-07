@@ -32,7 +32,7 @@
 #include "log/log.hpp"
 #include "preferences.hpp"
 #include "sound.hpp"
-#include "video.hpp" // non_interactive()
+#include "sdl2/sdl2_rndr_mgr.hpp" // non_interactive()
 #include "serdes/parser.hpp"
 #include "util.hpp"
 
@@ -737,17 +737,17 @@ void _set_color_cursors(bool value)
 
 void load_hotkeys()
 {
-	hotkey::load_hotkeys(prefs, false);
+	load_hotkeys(prefs, false);
 }
 
 void save_hotkeys()
 {
-	hotkey::save_hotkeys(prefs);
+	save_hotkeys(prefs);
 }
 
 void clear_hotkeys()
 {
-	hotkey::reset_default_hotkeys();
+	reset_default_hotkeys();
 	prefs.clear_children("hotkey");
 }
 

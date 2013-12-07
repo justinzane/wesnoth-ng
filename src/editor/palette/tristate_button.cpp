@@ -30,7 +30,7 @@
 #include "marked-up_text.hpp"
 #include "serdes/string_utils.hpp"
 #include "sound.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 #include "serdes/wml_separators.hpp"
 
 static lg::log_domain log_display("display");

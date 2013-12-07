@@ -130,7 +130,7 @@ namespace test_utils {
 		frame_count_ = 0;
 	}
 
-	SDL_Event fake_event_source::make_key_event(Uint8 type, const SDLKey key, const SDLMod mod)
+	SDL_Event fake_event_source::make_key_event(Uint8 type, const SDL_Keymod key, const SDL_KeyModmod)
 	{
 		SDL_Event event;
 		event.type = type;
@@ -190,7 +190,7 @@ namespace test_utils {
 		return mouse_release(time+1,button);
 	}
 
-	event_node_ptr fake_event_source::press_key(const size_t time, const SDLKey key, const SDLMod mod)
+	event_node_ptr fake_event_source::press_key(const size_t time, const SDL_Keymod key, const SDL_KeyModmod)
 	{
 		SDL_Event event = make_key_event(SDL_KEYDOWN, key, mod);
 		event_node_ptr new_key(new event_node_keyboard(time, event));
@@ -198,7 +198,7 @@ namespace test_utils {
 		return new_key;
 	}
 
-	event_node_ptr fake_event_source::release_key(const size_t time, const SDLKey key, const SDLMod mod)
+	event_node_ptr fake_event_source::release_key(const size_t time, const SDL_Keymod key, const SDL_KeyModmod)
 	{
 		SDL_Event event = make_key_event(SDL_KEYUP, key, mod);
 		event_node_ptr new_key(new event_node_keyboard(time, event));
@@ -206,7 +206,7 @@ namespace test_utils {
 		return new_key;
 	}
 
-	event_node_ptr fake_event_source::type_key(const size_t time, const SDLKey key, const SDLMod mod)
+	event_node_ptr fake_event_source::type_key(const size_t time, const SDL_Keymod key, const SDL_KeyModmod)
 	{
 		press_key(time,key,mod);
 		return release_key(time+1,key,mod);

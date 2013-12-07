@@ -27,7 +27,7 @@
 #include "../net/network.hpp"
 #include "ban.hpp"
 #include "player.hpp"
-#include "room_manager.hpp"
+#include "room_mgr.hpp"
 #include "simple_wml.hpp"
 
 #include <boost/function.hpp>

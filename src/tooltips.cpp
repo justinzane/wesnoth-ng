@@ -24,7 +24,7 @@
 #include "help.hpp"
 #include "marked-up_text.hpp"
 #include "resources.hpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>

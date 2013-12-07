@@ -21,6 +21,7 @@
 
 #include "map_location.hpp"
 #include "sdl_utils.hpp"
+#include "img.hpp"
 #include "terrain_translation.hpp"
 #include "game_config.hpp"
 
@@ -136,10 +137,10 @@ namespace image {
 	size_t hash_value(const locator::value&);
 
 
-	typedef cache_type<surface> image_cache;
+	typedef cache_type<img> image_cache;
 	typedef cache_type<bool> bool_cache;
 
-	typedef std::map<t_translation::t_terrain, surface> mini_terrain_cache_map;
+	typedef std::map<t_translation::t_terrain, img> mini_terrain_cache_map;
 	extern mini_terrain_cache_map mini_terrain_cache;
 	extern mini_terrain_cache_map mini_fogged_terrain_cache;
 
@@ -152,7 +153,7 @@ namespace image {
 	light_string get_light_string(int op, int r, int g, int b);
 
 	// pair each light possibility with its lighted surface
-	typedef std::map<light_string, surface> lit_variants;
+	typedef std::map<light_string, img> lit_variants;
 	// lighted variants for each locator
 	typedef cache_type<lit_variants> lit_cache;
 
@@ -178,7 +179,10 @@ namespace image {
 			color_adjustment_resetter();
 			void reset();
 		private:
-			int r_, g_, b_;
+            int r_ {0};
+            int g_ {0};
+            int b_ {0};
+            int a_ {0};
 	};
 
 	///set the team colors used by the TC image modification

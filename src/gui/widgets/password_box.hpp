@@ -71,8 +71,8 @@ protected:
 	// actually want it to copy just the stars
 
 private:
-	void handle_key_backspace(SDLMod modifier, bool& handled);
-	void handle_key_delete(SDLMod modifier, bool& handled);
+	void handle_key_backspace(SDL_KeyModmodifier, bool& handled);
+	void handle_key_delete(SDL_KeyModmodifier, bool& handled);
 
 	void pre_function();
 	void post_function();

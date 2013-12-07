@@ -47,7 +47,7 @@
 #include "preferences.hpp"
 #include "preferences_display.hpp"
 #include "utils/foreach.tpp"
-#include "video.hpp"
+#include "sdl2/sdl2_rndr_mgr.hpp"
 
 #include <boost/bind.hpp>
 
@@ -393,7 +393,7 @@ twindow::twindow(CVideo& video,
 				, _3)
 			, event::tdispatcher::back_pre_child);
 
-	register_hotkey(hotkey::GLOBAL__HELPTIP, boost::bind(gui2::helptip));
+	register_hotkey(GLOBAL__HELPTIP, boost::bind(gui2::helptip));
 }
 
 twindow::~twindow()
@@ -1421,7 +1421,7 @@ void twindow::signal_handler_click_dismiss(
 }
 
 void twindow::signal_handler_sdl_key_down(
-		const event::tevent event, bool& handled, SDLKey key)
+		const event::tevent event, bool& handled, SDL_Keymod key)
 {
 	DBG_GUI_E << LOG_HEADER << ' ' << event << ".\n";
 

@@ -28,7 +28,7 @@
 #include "goal.hpp"
 #include "property_handler.hpp"
 #include "stage.hpp"
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../../actions/attack.hpp"
 #include "../../log/log.hpp"
 #include "../../log/log.hpp"

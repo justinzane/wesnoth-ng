@@ -24,7 +24,7 @@
 
 #include "actions.hpp"
 #include "contexts.hpp"
-#include "manager.hpp"
+#include "mgr.hpp"
 
 #include "composite/aspect.hpp"
 #include "composite/engine.hpp"
@@ -45,7 +45,7 @@
 #include "../map.hpp"
 #include "../mouse_handler_base.hpp"
 #include "../resources.hpp"
-#include "../tod_manager.hpp"
+#include "../tod_mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>

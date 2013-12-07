@@ -23,7 +23,7 @@
 #include "config.hpp"
 #include "unit/unit.hpp"
 #include "unit/unit.hpp"
-#include "tests/utils/game_config_manager.hpp"
+#include "tests/utils/game_config_mgr.hpp"
 #include "unit/unit_map.hpp"
 #include "unit/unit_map.hpp"
 #include "unit/unit_id.hpp"

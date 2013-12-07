@@ -26,7 +26,7 @@
 
 #include "../actions.hpp"
 #include "../composite/rca.hpp"
-#include "../manager.hpp"
+#include "../mgr.hpp"
 #include "../../actions/attack.hpp"
 #include "../../attack_prediction.hpp"
 #include "../../game_display.hpp"
@@ -38,7 +38,7 @@
 #include "../../pathutils.hpp"
 #include "../../resources.hpp"
 #include "../../team.hpp"
-#include "../../tod_manager.hpp"
+#include "../../tod_mgr.hpp"
 #include "../../unit/unit_map.hpp"
 #include "../../unit/unit_map.hpp"
 #include "../../unit/unit_types.hpp"

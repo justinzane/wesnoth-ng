@@ -211,7 +211,7 @@ private:
 	bool gamelist_initialized_;
 
 	/** Ensures standard hotkeys are coorectly handled. */
-	const hotkey::basic_handler hotkey_handler_;
+	const basic_handler hotkey_handler_;
 
 	const preferences::display_manager disp_manager_;
 

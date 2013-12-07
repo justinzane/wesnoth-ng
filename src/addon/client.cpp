@@ -18,7 +18,7 @@
 */
 
 #include "addon/info.hpp"
-#include "addon/manager.hpp"
+#include "addon/mgr.hpp"
 #include "addon/validation.hpp"
 #include "cursor.hpp"
 #include "display.hpp"

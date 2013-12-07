@@ -35,7 +35,7 @@ namespace events {
 class mouse_handler_base;
 }
 
-class controller_base : public hotkey::command_executor, public events::handler
+class controller_base : public command_executor, public events::handler
 {
 public:
 	controller_base(const int ticks, const config& game_config, CVideo& video);
@@ -110,7 +110,7 @@ protected:
 	virtual void show_menu(const std::vector<std::string>& items_arg, int xloc, int yloc, bool context_menu, display& disp);
 	virtual void execute_action(const std::vector<std::string>& items_arg, int xloc, int yloc, bool context_menu);
 
-	virtual bool in_context_menu(hotkey::HOTKEY_COMMAND command) const;
+	virtual bool in_context_menu(hotkey_cmd_t command) const;
 
 	const config &get_theme(const config& game_config, std::string theme_name);
 	const config& game_config_;

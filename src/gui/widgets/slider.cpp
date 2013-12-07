@@ -267,7 +267,7 @@ void tslider::handle_key_increase(bool& handled)
 
 void tslider::signal_handler_sdl_key_down(const event::tevent event
 		, bool& handled
-		, const SDLKey key)
+		, const SDL_Keymod key)
 {
 
 	DBG_GUI_E << LOG_HEADER << ' ' << event << ".\n";

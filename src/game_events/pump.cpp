@@ -41,7 +41,7 @@
 #include "../unit/unit.hpp"
 #include "../unit/unit_map.hpp"
 #include "../unit/unit_map.hpp"
-#include "../whiteboard/manager.hpp"
+#include "../whiteboard/mgr.hpp"
 #include "../variable.hpp"
 
 #include "global.hpp"

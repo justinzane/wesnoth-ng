@@ -100,7 +100,7 @@ private:
 	static const char* clear_button_text;
 
 	/** The dialog features a tab for each hotkey scope (except SCOPE_COUNTER) */
-	hotkey::scope tab_;
+	scope tab_;
 
 	/**
 	 * These are to map the menu selection to the corresponding command
@@ -181,7 +181,7 @@ public:
 		add_button(reset_button, dialog::BUTTON_HELP);
 
 		// keep the old config in case the user cancels the dialog
-		hotkey::save_hotkeys(hotkey_cfg_);
+		save_hotkeys(hotkey_cfg_);
 	}
 
 	~hotkey_preferences_parent_dialog() {
@@ -189,7 +189,7 @@ public:
 		if (result() >= 0) {
 			save_hotkeys();
 		} else {
-			hotkey::load_hotkeys(hotkey_cfg_, false);
+			load_hotkeys(hotkey_cfg_, false);
 		}
 	}
 
@@ -227,14 +227,14 @@ void show_hotkeys_preferences_dialog(display& disp) {
 
 	// determine the current scope, but skip general == 0
 	int scope;
-	for (scope = 1; scope != hotkey::SCOPE_COUNT; scope++) {
-		if (hotkey::is_scope_active(static_cast<hotkey::scope>(scope))) {
+	for (scope = 1; scope != SCOPE_COUNT; scope++) {
+		if (is_scope_active(static_cast<scope>(scope))) {
 			break; }
 	}
 
 	// The restorer will change the scope back to where we came from
 	// when it runs out of the function's scope
-	hotkey::scope_changer scope_restorer;
+	scope_changer scope_restorer;
 	hotkey_preferences_dialog dialog(disp);
 	dialog.parent.assign(new hotkey_preferences_parent_dialog(disp, dialog));
 	dialog.parent->set_menu(items);
@@ -252,7 +252,7 @@ hotkey_preferences_dialog::hotkey_preferences_dialog(display& disp) :
 		gui::preview_pane(disp.video()),
 		add_button_(disp.video(), _("Add Hotkey")),
 		clear_button_(disp.video(),	_("Clear Hotkey")),
-		tab_(hotkey::SCOPE_GENERAL),
+		tab_(SCOPE_GENERAL),
 		general_commands_(),
 		game_commands_(),
 		editor_commands_(),
@@ -277,10 +277,10 @@ hotkey_preferences_dialog::hotkey_preferences_dialog(display& disp) :
 	set_measurements(preferences::width, preferences::height);
 
 	// Populate the command vectors, this needs to happen only once.
-	const boost::ptr_vector<hotkey::hotkey_command>& list = hotkey::get_hotkey_commands();
+	const boost::ptr_vector<hotkey_cmd_t>& list = get_hotkey_cmd_ts();
 	
-	//for (size_t i = 0; list[i].id != hotkey::HOTKEY_nullptr; ++i) {
-	foreach_ng(const hotkey::hotkey_command& command, list)
+	//for (size_t i = 0; list[i].id != HOTKEY_nullptr; ++i) {
+	foreach_ng(const hotkey_cmd_t& command, list)
 	{
 		if (command.hidden) 
 		{
@@ -289,16 +289,16 @@ hotkey_preferences_dialog::hotkey_preferences_dialog(display& disp) :
 
 		switch (command.scope) {
 
-		case hotkey::SCOPE_GAME:
+		case SCOPE_GAME:
 			game_commands_.push_back(command.command);
 			break;
-		case hotkey::SCOPE_EDITOR:
+		case SCOPE_EDITOR:
 			editor_commands_.push_back(command.command);
 			break;
-		case hotkey::SCOPE_GENERAL:
+		case SCOPE_GENERAL:
 			general_commands_.push_back(command.command);
 			break;
-		case hotkey::SCOPE_COUNT:
+		case SCOPE_COUNT:
 			break;
 		}
 	}
@@ -312,8 +312,8 @@ hotkey_preferences_dialog::hotkey_preferences_dialog(display& disp) :
 	editor_sorter_.set_alpha_sort(0).set_alpha_sort(1);
 
 	// Populate every menu_
-	for (int scope = 0; scope != hotkey::SCOPE_COUNT; scope++) {
-		tab_ = hotkey::scope(scope);
+	for (int scope = 0; scope != SCOPE_COUNT; scope++) {
+		tab_ = scope(scope);
 		set_hotkey_menu(false);
 	}
 
@@ -337,19 +337,19 @@ void hotkey_preferences_dialog::set_hotkey_menu(bool keep_viewport) {
 
 	// Determine the menu corresponding to the selected tab.
 	switch (tab_) {
-	case hotkey::SCOPE_GAME:
+	case SCOPE_GAME:
 		active_hotkeys = &game_hotkeys_;
 		commands = &game_commands_;
 		break;
-	case hotkey::SCOPE_EDITOR:
+	case SCOPE_EDITOR:
 		active_hotkeys = &editor_hotkeys_;
 		commands = &editor_commands_;
 		break;
-	case hotkey::SCOPE_GENERAL:
+	case SCOPE_GENERAL:
 		active_hotkeys = &general_hotkeys_;
 		commands = &general_commands_;
 		break;
-	case hotkey::SCOPE_COUNT:
+	case SCOPE_COUNT:
 		assert(false); // should not happen.
 		break;
 	}
@@ -358,12 +358,12 @@ void hotkey_preferences_dialog::set_hotkey_menu(bool keep_viewport) {
 	std::vector<std::string> menu_items;
 	foreach_ng(const std::string& command, *commands) {
 
-		const std::string& description = hotkey::get_description(command);
+		const std::string& description = get_description(command);
 		std::string truncated_description = description;
 		if (truncated_description.size() >= (truncate_at + 2) ) {
 			utils::ellipsis_truncate(truncated_description, truncate_at);
 		}
-		const std::string& name = hotkey::get_names(command);
+		const std::string& name = get_names(command);
 
 		menu_items.push_back(
 				(formatter() << truncated_description << HELP_STRING_SEPARATOR
@@ -392,7 +392,7 @@ void hotkey_preferences_dialog::set_hotkey_menu(bool keep_viewport) {
 	}
 	utils::string_map symbols;
 	symbols["hotkey_description"] =
-			hotkey::get_description((*commands)[selected_command_]);
+			get_description((*commands)[selected_command_]);
 
 	const std::string clear_text =
 			vgettext(hotkey_preferences_dialog::clear_button_text, symbols);
@@ -415,27 +415,27 @@ handler_vector hotkey_preferences_dialog::handler_members() {
 
 void hotkey_preferences_dialog::set_selection(int index) {
 
-	tab_ = hotkey::scope(index);
+	tab_ = scope(index);
 
 	set_dirty();
 	bg_restore();
 
-	hotkey::deactivate_all_scopes();
+	deactivate_all_scopes();
 	switch (tab_) {
-	case hotkey::SCOPE_GENERAL:
-		hotkey::set_scope_active(hotkey::SCOPE_GENERAL);
-		hotkey::set_scope_active(hotkey::SCOPE_GAME);
-		hotkey::set_scope_active(hotkey::SCOPE_EDITOR);
+	case SCOPE_GENERAL:
+		set_scope_active(SCOPE_GENERAL);
+		set_scope_active(SCOPE_GAME);
+		set_scope_active(SCOPE_EDITOR);
 		break;
-	case hotkey::SCOPE_GAME:
-		hotkey::set_scope_active(hotkey::SCOPE_GENERAL);
-		hotkey::set_scope_active(hotkey::SCOPE_GAME);
+	case SCOPE_GAME:
+		set_scope_active(SCOPE_GENERAL);
+		set_scope_active(SCOPE_GAME);
 		break;
-	case hotkey::SCOPE_EDITOR:
-		hotkey::set_scope_active(hotkey::SCOPE_GENERAL);
-		hotkey::set_scope_active(hotkey::SCOPE_EDITOR);
+	case SCOPE_EDITOR:
+		set_scope_active(SCOPE_GENERAL);
+		set_scope_active(SCOPE_EDITOR);
 		break;
-	case hotkey::SCOPE_COUNT:
+	case SCOPE_COUNT:
 		assert(false); // should not be reached
 		break;
 	}
@@ -447,19 +447,19 @@ void hotkey_preferences_dialog::process_event() {
 	std::string id;
 	gui::menu* active_menu_ = nullptr;
 	switch (tab_) {
-	case hotkey::SCOPE_GAME:
+	case SCOPE_GAME:
 		id = game_commands_[game_hotkeys_.selection()];
 		active_menu_ = &game_hotkeys_;
 		break;
-	case hotkey::SCOPE_EDITOR:
+	case SCOPE_EDITOR:
 		id = editor_commands_[editor_hotkeys_.selection()];
 		active_menu_ = &editor_hotkeys_;
 		break;
-	case hotkey::SCOPE_GENERAL:
+	case SCOPE_GENERAL:
 		id = general_commands_[general_hotkeys_.selection()];
 		active_menu_ = &general_hotkeys_;
 		break;
-	case hotkey::SCOPE_COUNT:
+	case SCOPE_COUNT:
 		break;
 	}
 
@@ -467,7 +467,7 @@ void hotkey_preferences_dialog::process_event() {
 		selected_command_ = active_menu_->selection();
 
 		utils::string_map symbols;
-		symbols["hotkey_description"] = hotkey::get_description(id);
+		symbols["hotkey_description"] = get_description(id);
 
 		const std::string clear_text = vgettext(clear_button_text, symbols);
 		clear_button_.set_help_string(clear_text);
@@ -482,7 +482,7 @@ void hotkey_preferences_dialog::process_event() {
 
 	if (clear_button_.pressed()) {
 		// clear hotkey
-		hotkey::clear_hotkeys(id);
+		clear_hotkeys(id);
 		set_hotkey_menu(true);
 	}
 
@@ -608,8 +608,8 @@ void hotkey_preferences_dialog::show_binding_dialog(
 	// only if not canceled.
 	if (!(keycode == SDLK_ESCAPE && (mod & any_mod) == 0)) {
 
-		hotkey::hotkey_item newhk(id);
-		hotkey::hotkey_item* oldhk = nullptr;
+		hotkey_item newhk(id);
+		hotkey_item* oldhk = nullptr;
 
 		CKey keystate;
 		bool shift = keystate[SDLK_RSHIFT] || keystate[SDLK_LSHIFT];
@@ -620,31 +620,31 @@ void hotkey_preferences_dialog::show_binding_dialog(
 		switch (event.type) {
 
 		case SDL_JOYHATMOTION:
-			oldhk = &hotkey::get_hotkey(mouse, joystick, button, hat, value,
+			oldhk = &get_hotkey(mouse, joystick, button, hat, value,
 					shift, ctrl, cmd, alt);
 			newhk.set_jhat(joystick, hat, value, shift, ctrl, cmd, alt);
 			break;
 		case SDL_JOYBUTTONUP:
-			oldhk = &hotkey::get_hotkey(mouse, joystick, button, -1, -1,
+			oldhk = &get_hotkey(mouse, joystick, button, -1, -1,
 					shift, ctrl, cmd, alt);
 			newhk.set_jbutton(joystick, button, shift, ctrl, cmd, alt);
 			break;
 		case SDL_MOUSEBUTTONUP:
-			oldhk = &hotkey::get_hotkey(mouse, joystick, button, -1, -1,
+			oldhk = &get_hotkey(mouse, joystick, button, -1, -1,
 					shift, ctrl, cmd, alt);
 			newhk.set_mbutton(mouse, button, shift, ctrl, cmd, alt);
 			break;
 		case SDL_KEYUP:
 			oldhk =
-					&hotkey::get_hotkey( character, keycode,
+					&get_hotkey( character, keycode,
 							(mod & KMOD_SHIFT) != 0, (mod & KMOD_CTRL) != 0,
 							(mod & KMOD_LMETA) != 0, (mod & KMOD_ALT)  != 0 );
 			newhk.set_key(character, keycode, (mod & KMOD_SHIFT) != 0,
 					(mod & KMOD_CTRL) != 0, (mod & KMOD_LMETA) != 0,
 					(mod & KMOD_ALT) != 0);
 
-			if ( (newhk.get_id() == hotkey::HOTKEY_SCREENSHOT
-					|| newhk.get_id() == hotkey::HOTKEY_MAP_SCREENSHOT)
+			if ( (newhk.get_id() == HOTKEY_SCREENSHOT
+					|| newhk.get_id() == HOTKEY_MAP_SCREENSHOT)
 					&& (mod & any_mod) == 0 ) {
 				gui2::show_transient_message(disp_.video(), _("Warning"),
 						_("Screenshot hotkeys should be combined with the \
@@ -675,7 +675,7 @@ Control, Alt or Meta modifiers to avoid problems."));
 				}
 			}
 		} else {
-			hotkey::add_hotkey(newhk);
+			add_hotkey(newhk);
 			set_hotkey_menu(true);
 		}
 	}

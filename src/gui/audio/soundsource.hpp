@@ -20,7 +20,7 @@
 
 #include <map>
 
-#include "generic_event.hpp"
+#include "generic_sdl2/sdl2_evt_mgr.hpp"
 #include "map_location.hpp"
 #include "savegame_config.hpp"
 
