@@ -141,7 +141,7 @@ bool unit::get_ability_bool(const std::string& tag_name, const map_location& loc
 		if (!adj_abilities)
 			continue;
 		foreach_ng(const config &j, adj_abilities.child_range(tag_name)) {
-			if (affects_side(j, teams_manager::get_teams(), side(), it->side()) &&
+			if (affects_side(j, teams_mgr::get_teams(), side(), it->side()) &&
 			    it->ability_active(tag_name, j, adjacent[i]) &&
 			    ability_affects_adjacent(tag_name,  j, i, loc))
 				return true;
@@ -182,7 +182,7 @@ unit_ability_list unit::get_abilities(const std::string& tag_name, const map_loc
 		if (!adj_abilities)
 			continue;
 		foreach_ng(const config &j, adj_abilities.child_range(tag_name)) {
-			if (affects_side(j, teams_manager::get_teams(), side(), it->side()) &&
+			if (affects_side(j, teams_mgr::get_teams(), side(), it->side()) &&
 			    it->ability_active(tag_name, j, adjacent[i]) &&
 			    ability_affects_adjacent(tag_name, j, i, loc))
 				res.push_back(unit_ability(&j, adjacent[i]));
@@ -300,7 +300,7 @@ std::vector<boost::tuple<t_string,t_string,t_string> > unit::ability_tooltips(st
 bool unit::ability_active(const std::string& ability,const config& cfg,const map_location& loc) const
 {
 	bool illuminates = ability == "illuminates";
-	assert(resources::units && resources::game_map && resources::teams && resources::tod_manager);
+	assert(resources::units && resources::game_map && resources::teams && resources::tod_mgr);
 
 	if (const config &afilter = cfg.child("filter"))
 		if ( !matches_filter(vconfig(afilter), loc, illuminates) )

@@ -69,7 +69,7 @@ namespace gui2 {
 /*
 static void inspect_ai(twindow& window, int side)
 {
-	const config &ai_cfg = ai::manager::to_config(side);
+	const config &ai_cfg = ai::mgr::to_config(side);
 	NEW_find_widget<tcontrol>(&window, "inspect", false).set_label(ai_cfg.debug());
 }
 */
@@ -360,12 +360,12 @@ public:
 		}
 
 		if (selected==1) {
-			model_.set_inspect_window_text(ai::manager::get_active_ai_overview_for_side(side_));
+			model_.set_inspect_window_text(ai::mgr::get_active_ai_overview_for_side(side_));
 			return;
 		}
 
 		if (selected==2) {
-			model_.set_inspect_window_text(ai::manager::to_config(side_).debug());
+			model_.set_inspect_window_text(ai::mgr::to_config(side_).debug());
 			return;
 		}
 
@@ -404,7 +404,7 @@ public:
 		}
 
 		if (selected==5) {
-			model_.set_inspect_window_text(ai::manager::get_active_ai_structure_for_side(side_));
+			model_.set_inspect_window_text(ai::mgr::get_active_ai_structure_for_side(side_));
 			return;
 		}
 

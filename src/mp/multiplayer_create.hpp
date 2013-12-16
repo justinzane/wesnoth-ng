@@ -59,7 +59,7 @@ private:
 
 	std::string select_campaign_difficulty();
 
-	tooltips::manager tooltip_manager_;
+	tooltips::mgr tooltip_mgr_;
 	int era_selection_;
 	int mod_selection_;
 	int level_selection_;

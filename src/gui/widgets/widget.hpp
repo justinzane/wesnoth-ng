@@ -351,7 +351,7 @@ private:
 	 * @returns                      The best size for the widget.
 	 * @retval 0,0                   The best size is 0,0.
 	 */
-	virtual tpoint calculate_best_size() const = 0;
+	virtual point_t calculate_best_size() const = 0;
 
 public:
 
@@ -376,7 +376,7 @@ public:
 	 *
 	 * @param origin              The new origin.
 	 */
-	virtual void set_origin(const tpoint& origin);
+	virtual void set_origin(const point_t& origin);
 
 	/**
 	 * Sets the size of the widget.
@@ -387,7 +387,7 @@ public:
 	 *
 	 * @param size                The size of the widget.
 	 */
-	virtual void set_size(const tpoint& size);
+	virtual void set_size(const point_t& size);
 
 	/**
 	 * Places the widget.
@@ -398,7 +398,7 @@ public:
 	 * @param origin              The position of top left of the widget.
 	 * @param size                The size of the widget.
 	 */
-	virtual void place(const tpoint& origin, const tpoint& size);
+	virtual void place(const point_t& origin, const point_t& size);
 
 	/**
 	 * Moves a widget.
@@ -457,8 +457,8 @@ public:
 
 protected:
 
-	void set_layout_size(const tpoint& size);
-	const tpoint& layout_size() const;
+	void set_layout_size(const point_t& size);
+	const point_t& layout_size() const;
 
 public:
 
@@ -497,7 +497,7 @@ private:
 	 * We're mutable so calls can stay const and this is disabled in
 	 * production code.
 	 */
-	mutable tpoint last_best_size_;
+	mutable point_t last_best_size_;
 
 #endif
 
@@ -776,12 +776,12 @@ public:
 	 *                            not active if must_be_active was set).
 	 */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active);
 
 	/** The constant version of @ref find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const;
 
 	/**
@@ -824,7 +824,7 @@ public:
 private:
 
 	/** See @ref event::tdispatcher::is_at. */
-	virtual bool is_at(const tpoint& coordinate) const OVERRIDE;
+	virtual bool is_at(const point_t& coordinate) const OVERRIDE;
 
 	/**
 	 * Is the coordinate inside our area.
@@ -839,7 +839,7 @@ private:
 	 *
 	 * @returns                   Status.
 	 */
-	bool is_at(const tpoint& coordinate, const bool must_be_active) const;
+	bool is_at(const point_t& coordinate, const bool must_be_active) const;
 
 
 	/***** ***** ***** ***** Miscellaneous ***** ***** ****** *****/

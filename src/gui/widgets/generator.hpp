@@ -253,13 +253,13 @@ public:
 			const unsigned maximum_height) OVERRIDE = 0;
 
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE = 0;
+	virtual point_t calculate_best_size() const OVERRIDE = 0;
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE = 0;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE = 0;
 
 	/** See @ref twidget::set_origin. */
-	virtual void set_origin(const tpoint& origin) OVERRIDE = 0;
+	virtual void set_origin(const point_t& origin) OVERRIDE = 0;
 
 	/** See @ref twidget::set_visible_rectangle. */
 	virtual void set_visible_rectangle(const SDL_Rect* rectangle) OVERRIDE = 0;
@@ -284,12 +284,12 @@ public:
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE = 0;
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE = 0;
 
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/

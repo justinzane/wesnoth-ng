@@ -99,7 +99,7 @@ void initialize_modifications()
 namespace preferences {
 
 
-manager::manager() :
+mgr::mgr() :
 	base()
 {
 	set_music_volume(music_volume());
@@ -142,7 +142,7 @@ manager::manager() :
 	network::ping_timeout = get_ping_timeout();
 }
 
-manager::~manager()
+mgr::~mgr()
 {
 	std::vector<std::string> v;
 	std::copy(encountered_units_set.begin(), encountered_units_set.end(), std::back_inserter(v));

@@ -116,8 +116,8 @@ void idle_ai::play_turn()
 ai_default_recruitment_stage::recruit_situation_change_observer::recruit_situation_change_observer()
 	: valid_(false)
 {
-	manager::add_recruit_list_changed_observer(this);
-	manager::add_turn_started_observer(this);
+	mgr::add_recruit_list_changed_observer(this);
+	mgr::add_turn_started_observer(this);
 }
 
 
@@ -129,8 +129,8 @@ void ai_default_recruitment_stage::recruit_situation_change_observer::handle_gen
 
 ai_default_recruitment_stage::recruit_situation_change_observer::~recruit_situation_change_observer()
 {
-	manager::remove_recruit_list_changed_observer(this);
-	manager::remove_turn_started_observer(this);
+	mgr::remove_recruit_list_changed_observer(this);
+	mgr::remove_turn_started_observer(this);
 }
 
 

@@ -22,7 +22,7 @@
 #define GAME_DISPLAY_H_INCLUDED
 
 class config;
-class tod_manager;
+class tod_mgr;
 class team;
 class unit;
 class unit_map;
@@ -42,7 +42,7 @@ class game_display : public display
 {
 public:
 	game_display(unit_map& units, CVideo& video,
-			const gamemap& map, const tod_manager& tod_manager,
+			const gamemap& map, const tod_mgr& tod_mgr,
 			const std::vector<team>& t, const config& theme_cfg,
 			const config& level);
 
@@ -305,7 +305,7 @@ private:
 
 	pathfind::marked_route route_;
 
-	const tod_manager& tod_manager_;
+	const tod_mgr& tod_mgr_;
 
 	const config& level_;
 

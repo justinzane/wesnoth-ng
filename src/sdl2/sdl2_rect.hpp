@@ -22,15 +22,17 @@
 #ifndef SDL2_RECT_HPP_
 #define SDL2_RECT_HPP_
 
+#include <SDL2/SDL.h>
+
 /**  @type sdl2_rect TODO: WRITEME */
-class sdl2_rect {
+class rectangle {
     public:
 
         /** Less useful constructor. */
-        sdl2_rect(){};
+        rectangle(){};
 
         /** Useful constructor. */
-        sdl2_rect(int x, int y, int w, int h){ r_.x = x; r_.y = y; r_.w = w; r_.h = h; }
+        rectangle(int x, int y, int w, int h){ r_.x = x; r_.y = y; r_.w = w; r_.h = h; }
 
         /** @brief set the  value. */
         void set_x(int x) { r_.x = x; }
@@ -60,17 +62,17 @@ class sdl2_rect {
         SDL_Rect* get_rect() { return &r_; }
 
         /** @brief SDL_Rect equality operator */
-        bool operator==(const sdl2_rect& a) {
+        bool operator==(const rectangle& a) {
             return (a.r_.x == r_.x && a.r_.y == r_.y && a.r_.w == r_.w && a.r_.h == r_.h);
         }
 
         /** @brief SDL_Rect inequality operator */
-        bool operator!=(const sdl2_rect& a) {
+        bool operator!=(const rectangle& a) {
             return (a.r_.x != r_.x || a.r_.y != r_.y || a.r_.w != r_.w || a.r_.h != r_.h);
         }
 
         /** Destructor */
-        virtual ~sdl2_rect();
+        virtual ~rectangle();
 
     private:
         SDL_Rect r_ {0,0,0,0};

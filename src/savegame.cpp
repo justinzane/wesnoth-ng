@@ -252,7 +252,7 @@ private:
 	bool loaded_;
 	config data_;
 	std::map< std::string, time_t > modified_;
-} save_index_manager;
+} save_index_mgr;
 
 class filename_filter {
 public:
@@ -274,7 +274,7 @@ public:
 		std::string name = filename;
 		replace_underbar2space(name);
 		time_t modified = file_create_time(dir + "/" + filename);
-		save_index_manager.set_modified(name, modified);
+		save_index_mgr.set_modified(name, modified);
 		return save_info(name, modified);
 	}
 	const std::string dir;
@@ -303,7 +303,7 @@ std::vector<save_info> get_saves_list(const std::string* dir, const std::string*
 
 
 const config& save_info::summary() const {
-	return save_index_manager.get(name());
+	return save_index_mgr.get(name());
 }
 
 std::string save_info::format_time_local() const
@@ -505,7 +505,7 @@ void delete_game(const std::string& name)
 	remove((get_saves_dir() + "/" + name).c_str());
 	remove((get_saves_dir() + "/" + modified_name).c_str());
 
-	save_index_manager.remove(name);
+	save_index_mgr.remove(name);
 }
 
 loadgame::loadgame(display& gui, const config& game_config, game_state& gamestate)
@@ -1017,7 +1017,7 @@ void savegame::write_game(config_writer &out)
 	log_scope("write_game");
 
 	out.write_key_val("version", game_config::version);
-	out.write_key_val("next_underlying_unit_id", lexical_cast<std::string>(n_unit::id_manager::instance().get_save_id()));
+	out.write_key_val("next_underlying_unit_id", lexical_cast<std::string>(n_unit::id_mgr::instance().get_save_id()));
 
 	gamestate_.write_config(out);
 	out.open_child("statistics");
@@ -1031,7 +1031,7 @@ void savegame::finish_save_game(const config_writer &out)
 		if(!out.good()) {
 			throw game::save_game_failed(_("Could not write to file"));
 		}
-		save_index_manager.remove(gamestate_.classification().label);
+		save_index_mgr.remove(gamestate_.classification().label);
 	} catch(io_exception& e) {
 		throw game::save_game_failed(e.what());
 	}

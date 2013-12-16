@@ -28,10 +28,10 @@ class display;
 namespace halo
 {
 
-struct manager
+struct mgr
 {
-	manager(display& disp);
-	~manager();
+	mgr(display& disp);
+	~mgr();
 
 private:
 	display* const old;

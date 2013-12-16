@@ -1063,12 +1063,12 @@ static config time_of_day_at(const map_location& mouseover_hex)
 	const team &viewing_team = (*resources::teams)[resources::screen->viewing_team()];
 	if (viewing_team.shrouded(mouseover_hex)) {
 		// Don't show time on shrouded tiles.
-		tod = resources::tod_manager->get_time_of_day();
+		tod = resources::tod_mgr->get_time_of_day();
 	} else if (viewing_team.fogged(mouseover_hex)) {
 		// Don't show illuminated time on fogged tiles.
-		tod = resources::tod_manager->get_time_of_day(mouseover_hex);
+		tod = resources::tod_mgr->get_time_of_day(mouseover_hex);
 	} else {
-		tod = resources::tod_manager->get_illuminated_time_of_day(mouseover_hex);
+		tod = resources::tod_mgr->get_illuminated_time_of_day(mouseover_hex);
 	}
 
 	int b = tod.lawful_bonus;
@@ -1113,16 +1113,16 @@ static config unit_box_at(const map_location& mouseover_hex)
 {
 	std::ostringstream tooltip;
 	time_of_day local_tod;
-	time_of_day global_tod = resources::tod_manager->get_time_of_day();
+	time_of_day global_tod = resources::tod_mgr->get_time_of_day();
 	const team &viewing_team = (*resources::teams)[resources::screen->viewing_team()];
 	if (viewing_team.shrouded(mouseover_hex)) {
 		// Don't show time on shrouded tiles.
 		local_tod = global_tod;
 	} else if (viewing_team.fogged(mouseover_hex)) {
 		// Don't show illuminated time on fogged tiles.
-		local_tod = resources::tod_manager->get_time_of_day(mouseover_hex);
+		local_tod = resources::tod_mgr->get_time_of_day(mouseover_hex);
 	} else {
-		local_tod = resources::tod_manager->get_illuminated_time_of_day(mouseover_hex);
+		local_tod = resources::tod_mgr->get_illuminated_time_of_day(mouseover_hex);
 	}
 
 	int bonus = local_tod.lawful_bonus;
@@ -1194,8 +1194,8 @@ REPORT_GENERATOR(unit_box)
 REPORT_GENERATOR(turn)
 {
 	std::ostringstream str;
-	str << resources::tod_manager->turn();
-	int nb = resources::tod_manager->number_of_turns();
+	str << resources::tod_mgr->turn();
+	int nb = resources::tod_mgr->number_of_turns();
 	if (nb != -1) str << '/' << nb;
 	return text_report(str.str());
 }

@@ -2903,12 +2903,12 @@ void console_handler::do_choose_level() {
 
 void console_handler::do_turn()
 {
-	int turn = resources::tod_manager->turn() + 1;
+	int turn = resources::tod_mgr->turn() + 1;
 	const std::string& data = get_data();
 	if (!data.empty()) {
 		turn = lexical_cast_default<int>(data, 1);
 	}
-	resources::tod_manager->set_turn(turn);
+	resources::tod_mgr->set_turn(turn);
 
 	menu_handler_.gui_->new_turn();
 	menu_handler_.gui_->redraw_everything();
@@ -2916,7 +2916,7 @@ void console_handler::do_turn()
 
 void console_handler::do_turn_limit()
 {
-	tod_manager& tod_man = *resources::tod_manager;
+	tod_mgr& tod_man = *resources::tod_mgr;
 	int limit =
 		get_data().empty() ? -1 : lexical_cast_default<int>(get_data(), 1);
 	tod_man.set_number_of_turns(limit);
@@ -3013,8 +3013,8 @@ void console_handler::do_control_dialog()
 
 void console_handler::do_manage() {
 	config cfg;
-	gui2::tdata_manage manager;
-	manager.show(resources::screen->video());
+	gui2::tdata_manage mgr;
+	mgr.show(resources::screen->video());
 }
 
 void console_handler::do_unit() {
@@ -3171,7 +3171,7 @@ void menu_handler::do_ai_formula(const std::string& str,
 	int side_num, mouse_handler& /*mousehandler*/)
 {
 	try {
-		add_chat_message(time(nullptr), _("ai"), 0, ai::manager::evaluate_command(side_num, str));
+		add_chat_message(time(nullptr), _("ai"), 0, ai::mgr::evaluate_command(side_num, str));
 	} catch(end_turn_exception&) {
 		resources::controller->force_end_turn();
 	} catch(...) {

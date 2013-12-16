@@ -413,7 +413,7 @@ static void signal_handler_sdl_video_resize(
 		  const event::tevent event
 		, bool& handled
 		, bool& halt
-		, const tpoint& new_size
+		, const point_t& new_size
 		, CVideo& video)
 {
 	DBG_GUI_E << __func__  << ": " << event << ".\n";

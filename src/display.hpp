@@ -47,7 +47,7 @@ class arrow;
 #include "team.hpp"
 #include "time_of_day.hpp"
 #include "theme.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 #include "widgets/button.hpp"
 #include "widgets/slider.hpp"
 
@@ -268,7 +268,7 @@ class display {
         }
 
         /**
-         * Add r,g,b from tod_manager to the map
+         * Add r,g,b from tod_mgr to the map
          *
          */
         void update_tod();

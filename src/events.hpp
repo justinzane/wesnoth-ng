@@ -20,28 +20,16 @@
 #define EVENTS_HPP_INCLUDED
 
 #include "SDL2/SDL.h"
+#include "sdl2/evt_mgr.hpp"
+#include "sdl2/evt_handler.hpp"
 #include <vector>
 
 namespace events {
 
-void focus_handler(const handler* ptr);
+void focus_handler(const evt_handler* ptr);
 void cycle_focus();
 
-bool has_focus(const handler* ptr, const SDL_Event* event);
-
-//event_context objects control the handler objects that SDL events are sent
-//to. When an event_context is created, it will become the current event context.
-//event_context objects MUST be created in LIFO ordering in relation to each other,
-//and in relation to handler objects. That is, all event_context objects should be
-//created as automatic/stack variables.
-//
-//handler objects need not be created as automatic variables (e.g. you could put
-//them in a vector) however you must guarantee that handler objects are destroyed
-//before their context is destroyed
-struct event_context {
-        event_context();
-        ~event_context();
-};
+bool has_focus(const evt_handler* ptr, const SDL_Event* event);
 
 //causes events to be dispatched to all handler objects.
 void pump();
@@ -81,18 +69,5 @@ bool is_input(const SDL_Event& event);
 void discard_input();
 
 }
-
-#if ! SDL_VERSION_ATLEAST(2,0,0)
-
-/**
- * Removes events from the queue.
- *
- * This emulates the function available in SDL 2.0.
- *
- * @param type                    The type of event to flush.
- */
-void SDL_FlushEvent(Uint32 type);
-
-#endif
 
 #endif

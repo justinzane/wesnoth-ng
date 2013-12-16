@@ -212,7 +212,7 @@ TCPsocket server_socket;
 std::deque<network::connection> disconnection_queue;
 std::set<network::connection> bad_sockets;
 
-network_worker_pool::manager* worker_pool_man = nullptr;
+network_worker_pool::mgr* worker_pool_man = nullptr;
 
 } // end anon namespace
 
@@ -221,7 +221,7 @@ namespace network {
 /**
  * Amount of seconds after the last server ping when we assume to have timed out.
  * When set to '0' ping timeout isn't checked.
- * Gets set in preferences::manager according to the preferences file.
+ * Gets set in preferences::mgr according to the preferences file.
  */
 unsigned int ping_timeout = 0;
 
@@ -252,9 +252,9 @@ pending_statistics get_pending_stats()
 	return network_worker_pool::get_pending_stats();
 }
 
-manager::manager(size_t min_threads, size_t max_threads) : free_(true)
+mgr::mgr(size_t min_threads, size_t max_threads) : free_(true)
 {
-	DBG_NW << "NETWORK MANAGER CALLED!\n";
+	DBG_NW << "NETWORK mgr CALLED!\n";
 	// If the network is already being managed
 	if(socket_set) {
 		free_ = false;
@@ -268,10 +268,10 @@ manager::manager(size_t min_threads, size_t max_threads) : free_(true)
 
 	socket_set = SDLNet_AllocSocketSet(512);
 
-	worker_pool_man = new network_worker_pool::manager(min_threads, max_threads);
+	worker_pool_man = new network_worker_pool::mgr(min_threads, max_threads);
 }
 
-manager::~manager()
+mgr::~mgr()
 {
 	if(free_) {
 		disconnect();
@@ -315,7 +315,7 @@ void set_proxy_password( const std::string& )
 }
 // --- End Proxy methods
 
-server_manager::server_manager(int port, CREATE_SERVER create_server) : free_(false), connection_(0)
+server_mgr::server_mgr(int port, CREATE_SERVER create_server) : free_(false), connection_(0)
 {
 	if(create_server != NO_SERVER && !server_socket) {
 		try {
@@ -334,12 +334,12 @@ server_manager::server_manager(int port, CREATE_SERVER create_server) : free_(fa
 	}
 }
 
-server_manager::~server_manager()
+server_mgr::~server_mgr()
 {
 	stop();
 }
 
-void server_manager::stop()
+void server_mgr::stop()
 {
 	if(free_) {
 		SDLNet_TCP_Close(server_socket);
@@ -349,7 +349,7 @@ void server_manager::stop()
 	}
 }
 
-bool server_manager::is_running() const
+bool server_mgr::is_running() const
 {
 	return server_socket != nullptr;
 }

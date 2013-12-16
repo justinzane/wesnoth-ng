@@ -1,5 +1,5 @@
 /**
- * @file src/server/room_manager.cpp
+ * @file src/server/room_mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -44,9 +44,9 @@ static lg::log_domain log_server("server");
 
 namespace wesnothd {
 
-const char* const room_manager::lobby_name_ = "lobby";
+const char* const room_mgr::lobby_name_ = "lobby";
 
-room_manager::room_manager(player_map &all_players)
+room_mgr::room_mgr(player_map &all_players)
 	: all_players_(all_players)
 	, lobby_(nullptr)
 	, rooms_by_name_()
@@ -59,7 +59,7 @@ room_manager::room_manager(player_map &all_players)
 {
 }
 
-room_manager::~room_manager()
+room_mgr::~room_mgr()
 {
 	// this assumes the server is shutting down, so there's no need to
 	// send the actual room-quit messages to clients
@@ -69,7 +69,7 @@ room_manager::~room_manager()
 	}
 }
 
-room_manager::PRIVILEGE_POLICY room_manager::pp_from_string(const std::string& str)
+room_mgr::PRIVILEGE_POLICY room_mgr::pp_from_string(const std::string& str)
 {
 	if (str == "everyone") {
 		return PP_EVERYONE;
@@ -83,7 +83,7 @@ room_manager::PRIVILEGE_POLICY room_manager::pp_from_string(const std::string& s
 	return PP_COUNT;
 }
 
-void room_manager::load_config(const config& cfg)
+void room_mgr::load_config(const config& cfg)
 {
 	filename_ = cfg["room_save_file"].str();
 	compress_stored_rooms_ = cfg["compress_stored_rooms"].to_bool(true);
@@ -91,7 +91,7 @@ void room_manager::load_config(const config& cfg)
 	if (pp != PP_COUNT) new_room_policy_ = pp;
 }
 
-void room_manager::read_rooms()
+void room_mgr::read_rooms()
 {
 	if (!filename_.empty() && file_exists(filename_)) {
 		LOG_LOBBY << "Reading rooms from " <<  filename_ << "\n";
@@ -123,7 +123,7 @@ void room_manager::read_rooms()
 	}
 }
 
-void room_manager::write_rooms()
+void room_mgr::write_rooms()
 {
 	if (filename_.empty()) return;
 	LOG_LOBBY << "Writing rooms to " << filename_ << "\n";
@@ -144,7 +144,7 @@ void room_manager::write_rooms()
 
 
 
-room* room_manager::get_room(const std::string &name)
+room* room_mgr::get_room(const std::string &name)
 {
 	t_rooms_by_name_::iterator i = rooms_by_name_.find(name);
 	if (i != rooms_by_name_.end()) {
@@ -154,12 +154,12 @@ room* room_manager::get_room(const std::string &name)
 	}
 }
 
-bool room_manager::room_exists(const std::string &name) const
+bool room_mgr::room_exists(const std::string &name) const
 {
 	return rooms_by_name_.find(name) != rooms_by_name_.end();
 }
 
-room* room_manager::create_room(const std::string &name)
+room* room_mgr::create_room(const std::string &name)
 {
 	if (room_exists(name)) {
 		DBG_LOBBY << "Requested creation of already existing room '" << name << "'\n";
@@ -170,7 +170,7 @@ room* room_manager::create_room(const std::string &name)
 	return r;
 }
 
-room* room_manager::get_create_room(const std::string &name, network::connection player)
+room* room_mgr::get_create_room(const std::string &name, network::connection player)
 {
 	room* r = get_room(name);
 	if (r == nullptr) {
@@ -209,20 +209,20 @@ room* room_manager::get_create_room(const std::string &name, network::connection
 	return r;
 }
 
-void room_manager::enter_lobby(network::connection player)
+void room_mgr::enter_lobby(network::connection player)
 {
 	lobby_->add_player(player);
 	unstore_player_rooms(player);
 }
 
-void room_manager::enter_lobby(const wesnothd::game &game)
+void room_mgr::enter_lobby(const wesnothd::game &game)
 {
 	foreach_ng(network::connection player, game.all_game_users()) {
 		enter_lobby(player);
 	}
 }
 
-void room_manager::exit_lobby(network::connection player)
+void room_mgr::exit_lobby(network::connection player)
 {
 	// No messages are sent to the rooms the player is in because other members
 	// will receive the "player-entered-game" message (or similar) anyway, and
@@ -238,12 +238,12 @@ void room_manager::exit_lobby(network::connection player)
 	rooms_by_player_.erase(player);
 }
 
-bool room_manager::in_lobby(network::connection player) const
+bool room_mgr::in_lobby(network::connection player) const
 {
 	return lobby_->is_member(player);
 }
 
-void room_manager::remove_player(network::connection player)
+void room_mgr::remove_player(network::connection player)
 {
 	// No messages are sent since a player-quit message is sent to everyone
 	// anyway.
@@ -258,7 +258,7 @@ void room_manager::remove_player(network::connection player)
 	player_stored_rooms_.erase(player);
 }
 
-room* room_manager::require_room(const std::string& room_name,
+room* room_mgr::require_room(const std::string& room_name,
                                    const player_map::iterator user,
                                    const char *log_string)
 {
@@ -274,7 +274,7 @@ room* room_manager::require_room(const std::string& room_name,
 	return r;
 }
 
-room* room_manager::require_member(const std::string& room_name,
+room* room_mgr::require_member(const std::string& room_name,
                                    const player_map::iterator user,
                                    const char *log_string)
 {
@@ -291,7 +291,7 @@ room* room_manager::require_member(const std::string& room_name,
 	return r;
 }
 
-bool room_manager::player_enters_room(network::connection player, wesnothd::room *room)
+bool room_mgr::player_enters_room(network::connection player, wesnothd::room *room)
 {
 	if (room->is_member(player)) {
 		room->send_server_message("You are already in this room", player);
@@ -303,13 +303,13 @@ bool room_manager::player_enters_room(network::connection player, wesnothd::room
 	return true;
 }
 
-void room_manager::player_exits_room(network::connection player, wesnothd::room *room)
+void room_mgr::player_exits_room(network::connection player, wesnothd::room *room)
 {
 	room->remove_player(player);
 	rooms_by_player_[player].erase(room);
 }
 
-void room_manager::store_player_rooms(network::connection player)
+void room_mgr::store_player_rooms(network::connection player)
 {
 	t_rooms_by_player_::iterator i = rooms_by_player_.find(player);
 	if (i == rooms_by_player_.end()) {
@@ -326,7 +326,7 @@ void room_manager::store_player_rooms(network::connection player)
 	}
 }
 
-void room_manager::unstore_player_rooms(network::connection player)
+void room_mgr::unstore_player_rooms(network::connection player)
 {
 	player_map::iterator i = all_players_.find(player);
 	if (i != all_players_.end()) {
@@ -334,7 +334,7 @@ void room_manager::unstore_player_rooms(network::connection player)
 	}
 }
 
-void room_manager::unstore_player_rooms(const player_map::iterator user)
+void room_mgr::unstore_player_rooms(const player_map::iterator user)
 {
 	t_player_stored_rooms_::iterator it = player_stored_rooms_.find(user->first);
 	if (it == player_stored_rooms_.end()) {
@@ -359,7 +359,7 @@ void room_manager::unstore_player_rooms(const player_map::iterator user)
 	}
 }
 
-void room_manager::process_message(simple_wml::document &data, const player_map::iterator user)
+void room_mgr::process_message(simple_wml::document &data, const player_map::iterator user)
 {
 	simple_wml::node* const message = data.root().child("message");
 	assert (message);
@@ -396,7 +396,7 @@ void room_manager::process_message(simple_wml::document &data, const player_map:
 	r->send_data(data, user->first, "message");
 }
 
-void room_manager::process_room_join(simple_wml::document &data, const player_map::iterator user)
+void room_mgr::process_room_join(simple_wml::document &data, const player_map::iterator user)
 {
 	simple_wml::node* const msg = data.root().child("room_join");
 	assert(msg);
@@ -417,7 +417,7 @@ void room_manager::process_room_join(simple_wml::document &data, const player_ma
 	send_to_one(data, user->first);
 }
 
-void room_manager::process_room_part(simple_wml::document &data, const player_map::iterator user)
+void room_mgr::process_room_part(simple_wml::document &data, const player_map::iterator user)
 {
 	simple_wml::node* const msg = data.root().child("room_part");
 	assert(msg);
@@ -439,7 +439,7 @@ void room_manager::process_room_part(simple_wml::document &data, const player_ma
 	send_to_one(data, user->first);
 }
 
-void room_manager::process_room_query(simple_wml::document& data, const player_map::iterator user)
+void room_mgr::process_room_query(simple_wml::document& data, const player_map::iterator user)
 {
 	simple_wml::node* const msg = data.root().child("room_query");
 	assert(msg);
@@ -531,7 +531,7 @@ void room_manager::process_room_query(simple_wml::document& data, const player_m
 	r->send_server_message("Unknown room query type", user->first);
 }
 
-void room_manager::fill_room_list(simple_wml::node& root)
+void room_mgr::fill_room_list(simple_wml::node& root)
 {
 	simple_wml::node& rooms = root.add_child("rooms");
 	foreach_ng(const t_rooms_by_name_::value_type& tr, rooms_by_name_) {
@@ -542,7 +542,7 @@ void room_manager::fill_room_list(simple_wml::node& root)
 	}
 }
 
-void room_manager::fill_member_list(const room* room, simple_wml::node& root)
+void room_mgr::fill_member_list(const room* room, simple_wml::node& root)
 {
 	simple_wml::node& members = root.add_child("members");
 	foreach_ng(network::connection m, room->members()) {

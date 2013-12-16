@@ -793,7 +793,7 @@ static int process_queue(void* shard_num)
 namespace network_worker_pool
 {
 
-manager::manager(size_t p_min_threads,size_t p_max_threads) : active_(!managed)
+mgr::mgr(size_t p_min_threads,size_t p_max_threads) : active_(!managed)
 {
 	if(active_) {
 		managed = true;
@@ -817,7 +817,7 @@ manager::manager(size_t p_min_threads,size_t p_max_threads) : active_(!managed)
 	}
 }
 
-manager::~manager()
+mgr::~mgr()
 {
 	if(active_) {
 		managed = false;
@@ -861,7 +861,7 @@ manager::~manager()
 		}
 		transfer_stats.clear();
 
-		DBG_NW << "exiting manager::~manager()\n";
+		DBG_NW << "exiting mgr::~mgr()\n";
 	}
 }
 

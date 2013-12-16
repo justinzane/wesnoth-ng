@@ -24,7 +24,7 @@
 #include "clipboard.hpp"
 #include "log/log.hpp"
 #include "log/log.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 
 static lg::log_domain log_display("display");
 #define WRN_DP LOG_STREAM(warn, log_display)

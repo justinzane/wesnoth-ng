@@ -139,7 +139,7 @@ ttree_view_node& ttree_view_node::add_child(
 		return *itor;
 	}
 
-	if(tree_view().get_size() == tpoint(0, 0)) {
+	if(tree_view().get_size() == point_t(0, 0)) {
 		return *itor;
 	}
 
@@ -249,7 +249,7 @@ private:
 	static W* find_at_aux(
 			  It begin
 			, It end
-			, const tpoint& coordinate
+			, const point_t& coordinate
 			, const bool must_be_active)
 	{
 		for(It it = begin; it != end; ++it) {
@@ -266,7 +266,7 @@ public:
 	static W* find_at(
 			  typename utils::tconst_clone<ttree_view_node, W>::reference
 				tree_view_node
-			, const tpoint& coordinate, const bool must_be_active)
+			, const point_t& coordinate, const bool must_be_active)
 	{
 		if(W* widget =
 				tree_view_node.grid_.find_at(coordinate, must_be_active)) {
@@ -285,7 +285,7 @@ public:
 };
 
 twidget* ttree_view_node::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active)
 {
 	return ttree_view_node_implementation::find_at<twidget>(
@@ -293,7 +293,7 @@ twidget* ttree_view_node::find_at(
 }
 
 const twidget* ttree_view_node::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active) const
 {
 	return ttree_view_node_implementation::find_at<const twidget>(
@@ -343,7 +343,7 @@ bool ttree_view_node::disable_click_dismiss() const
 tpoint ttree_view_node::get_current_size() const
 {
 	if(parent_node_ && parent_node_->is_folded()) {
-		return tpoint(0, 0);
+		return point_t(0, 0);
 	}
 
 	tpoint size = get_folded_size();
@@ -431,7 +431,7 @@ tpoint ttree_view_node::calculate_best_size(const int indention_level
 			continue;
 		}
 
-		const tpoint node_size = node.calculate_best_size(indention_level + 1,
+		const point_t node_size = node.calculate_best_size(indention_level + 1,
 				indention_step_size);
 
 		best_size.y += node_size.y;
@@ -442,7 +442,7 @@ tpoint ttree_view_node::calculate_best_size(const int indention_level
 	return best_size;
 }
 
-void ttree_view_node::set_origin(const tpoint& origin)
+void ttree_view_node::set_origin(const point_t& origin)
 {
 	// Inherited.
 	twidget::set_origin(origin);
@@ -451,7 +451,7 @@ void ttree_view_node::set_origin(const tpoint& origin)
 	place(tree_view().indention_step_size_, origin, get_size().x);
 }
 
-void ttree_view_node::place(const tpoint& origin, const tpoint& size)
+void ttree_view_node::place(const point_t& origin, const point_t& size)
 {
 	// Inherited.
 	twidget::place(origin, size);
@@ -461,7 +461,7 @@ void ttree_view_node::place(const tpoint& origin, const tpoint& size)
 
 unsigned ttree_view_node::place(
 	  const unsigned indention_step_size
-	, tpoint origin
+	, point_t origin
 	, unsigned width)
 {
 	log_scope2(log_gui_layout, LOG_SCOPE_HEADER);
@@ -556,8 +556,8 @@ void ttree_view_node::signal_handler_left_button_click(
 	if(is_folded()) {
 
 		// From unfolded to folded.
-		const tpoint current_size(get_current_size().x, get_unfolded_size().y);
-		const tpoint new_size = get_folded_size();
+		const point_t current_size(get_current_size().x, get_unfolded_size().y);
+		const point_t new_size = get_folded_size();
 
 		int width_modification = new_size.x - current_size.x;
 		if(width_modification < 0) {
@@ -571,8 +571,8 @@ void ttree_view_node::signal_handler_left_button_click(
 	} else {
 
 		// From folded to unfolded.
-		const tpoint current_size(get_current_size().x, get_folded_size().y);
-		const tpoint new_size = get_unfolded_size();
+		const point_t current_size(get_current_size().x, get_folded_size().y);
+		const point_t new_size = get_unfolded_size();
 
 		int width_modification = new_size.x - current_size.x;
 		if(width_modification < 0) {

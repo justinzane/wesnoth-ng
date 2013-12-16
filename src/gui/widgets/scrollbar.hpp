@@ -91,7 +91,7 @@ public:
 	/***** ***** ***** ***** layout functions ***** ***** ***** *****/
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
 	/***** ***** ***** ***** Inherited ***** ***** ***** *****/
 
@@ -246,7 +246,7 @@ private:
 	 *
 	 * @returns                   Whether the location on the positioner is.
 	 */
-	virtual bool on_positioner(const tpoint& coordinate) const = 0;
+	virtual bool on_positioner(const point_t& coordinate) const = 0;
 
 	/**
 	 * Is the coordinate on the bar?
@@ -259,7 +259,7 @@ private:
 	 * @retval 0                  Coordinate is not on the bar.
 	 * @retval 1                  Coordinate is on the bar after the positioner.
 	 */
-	virtual int on_bar(const tpoint& coordinate) const = 0;
+	virtual int on_bar(const point_t& coordinate) const = 0;
 
 	/**
 	 * Gets the relevant difference in between the two positions.
@@ -268,7 +268,7 @@ private:
 	 * moved.
 	 */
 	virtual int get_length_difference(
-		const tpoint& original, const tpoint& current) const = 0;
+		const point_t& original, const point_t& current) const = 0;
 
 	/***** ***** ***** ***** Private functions ***** ***** ***** *****/
 
@@ -308,7 +308,7 @@ private:
 			  const event::tevent event
 			, bool& handled
 			, bool& halt
-			, const tpoint& coordinate);
+			, const point_t& coordinate);
 
 	void signal_handler_mouse_leave(const event::tevent event, bool& handled);
 

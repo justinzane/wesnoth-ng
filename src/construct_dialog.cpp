@@ -297,7 +297,7 @@ int dialog::show()
 
 	//create the event context, remember to instruct any passed-in widgets to join it
 	const events::event_context dialog_events_context;
-	const dialog_manager manager;
+	const dialog_mgr mgr;
 	const resize_lock prevent_resizing;
 
 	//draw

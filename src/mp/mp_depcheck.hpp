@@ -49,10 +49,10 @@ enum component_type
  * Please note that the ctor collects data for scenario elements from
  * "multiplayer" nodes, while insert_element from "scenario" nodes.
  */
-class manager
+class mgr
 {
 public:
-	manager(const config& gamecfg, CVideo& video);
+	mgr(const config& gamecfg, CVideo& video);
 
 	/**
 	 * Tries to set the selected era
@@ -131,7 +131,7 @@ public:
 	int get_scenario_index() const;
 
 	/**
-	 * Adds a new element to the manager's database
+	 * Adds a new element to the mgr's database
 	 *
 	 * @param type 		the type of the element
 	 * @param data 		a config object containing the dependency info for the

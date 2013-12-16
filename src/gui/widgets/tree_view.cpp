@@ -68,7 +68,7 @@ ttree_view_node& ttree_view::add_node(const std::string& id
 void ttree_view::remove_node(ttree_view_node* node)
 {
 	assert(node && node != root_node_ && node->parent_node_);
-	const tpoint node_size = node->get_size();
+	const point_t node_size = node->get_size();
 
 	boost::ptr_vector<ttree_view_node>::iterator itor =
 				  node->parent_node_->children_.begin();
@@ -83,7 +83,7 @@ void ttree_view::remove_node(ttree_view_node* node)
 
 	node->parent_node_->children_.erase(itor);
 
-	if(get_size() == tpoint(0, 0)) {
+	if(get_size() == point_t(0, 0)) {
 		return;
 	}
 

@@ -192,13 +192,13 @@ struct thorizontal_list
 	}
 
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE;
+	virtual point_t calculate_best_size() const OVERRIDE;
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
 	/** See @ref twidget::set_origin. */
-	virtual void set_origin(const tpoint& origin) OVERRIDE;
+	virtual void set_origin(const point_t& origin) OVERRIDE;
 
 	/**
 	 * Sets the visible rectangle of the generator.
@@ -209,12 +209,12 @@ struct thorizontal_list
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE;
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE;
 
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/
@@ -271,25 +271,25 @@ struct tvertical_list
 	}
 
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE;
+	virtual point_t calculate_best_size() const OVERRIDE;
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
 	/** See @ref twidget::set_origin. */
-	virtual void set_origin(const tpoint& origin) OVERRIDE;
+	virtual void set_origin(const point_t& origin) OVERRIDE;
 
 	/** See @ref thorizontal_list::set_visible_rectangle(). */
 	void set_visible_rectangle(const SDL_Rect* rectangle);
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE;
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE;
 
 	/***** ***** ***** ***** keyboard functions ***** ***** ***** *****/
@@ -352,21 +352,21 @@ struct tmatrix
 	}
 
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE
+	virtual point_t calculate_best_size() const OVERRIDE
 	{
 		ERROR_LOG(false);
 	}
 
 	/** See @ref twidget::place. */
 	virtual void place(
-			  const tpoint& /*origin*/
-			, const tpoint& /*size*/) OVERRIDE
+			  const point_t& /*origin*/
+			, const point_t& /*size*/) OVERRIDE
 	{
 		ERROR_LOG(false);
 	}
 
 	/** See @ref twidget::set_origin. */
-	virtual void set_origin(const tpoint& /*origin*/) OVERRIDE
+	virtual void set_origin(const point_t& /*origin*/) OVERRIDE
 	{
 		ERROR_LOG(false);
 	}
@@ -377,7 +377,7 @@ struct tmatrix
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& /*coordinate*/
+			  const point_t& /*coordinate*/
 			, const bool /*must_be_active*/) OVERRIDE
 	{
 		ERROR_LOG(false);
@@ -385,7 +385,7 @@ struct tmatrix
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& /*coordinate*/
+			  const point_t& /*coordinate*/
 			, const bool /*must_be_active*/) const OVERRIDE
 	{
 		ERROR_LOG(false);
@@ -433,25 +433,25 @@ struct tindependent
 	virtual void request_reduce_height(const unsigned maximum_height);
 
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE;
+	virtual point_t calculate_best_size() const OVERRIDE;
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
 	/** See @ref twidget::set_origin. */
-	virtual void set_origin(const tpoint& origin) OVERRIDE;
+	virtual void set_origin(const point_t& origin) OVERRIDE;
 
 	/** See @ref thorizontal_list::set_visible_rectangle(). */
 	void set_visible_rectangle(const SDL_Rect* rectangle);
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE;
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE;
 
 	/** See @ref twidget::find. */
@@ -797,13 +797,13 @@ public:
 	}
 
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE
+	virtual point_t calculate_best_size() const OVERRIDE
 	{
 		return placement::calculate_best_size();
 	}
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE
 	{
 		// Inherited, so we get useful debug info.
 		twidget::place(origin, size);
@@ -812,7 +812,7 @@ public:
 	}
 
 	/** See @ref twidget::set_origin. */
-	virtual void set_origin(const tpoint& origin) OVERRIDE
+	virtual void set_origin(const point_t& origin) OVERRIDE
 	{
 		// Inherited.
 		twidget::set_origin(origin);
@@ -870,7 +870,7 @@ public:
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE
 	{
 		return placement::find_at(coordinate, must_be_active);
@@ -878,7 +878,7 @@ public:
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE
 	{
 		return placement::find_at(coordinate, must_be_active);

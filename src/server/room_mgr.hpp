@@ -22,28 +22,28 @@
 
 class config;
 
-#ifndef SERVER_ROOM_MANAGER_HPP_INCLUDED
-#define SERVER_ROOM_MANAGER_HPP_INCLUDED
+#ifndef SERVER_ROOM_mgr_HPP_INCLUDED
+#define SERVER_ROOM_mgr_HPP_INCLUDED
 
 namespace wesnothd {
 
 /**
- * The room manager manages the lobby and other rooms in the server, and related
+ * The room mgr manages the lobby and other rooms in the server, and related
  * client message processing.
  * The lobby represents players that are on the server, but not in any game.
  */
-class room_manager : private boost::noncopyable
+class room_mgr : private boost::noncopyable
 {
 public:
 	/**
-	 * Room manager constructor
+	 * Room mgr constructor
 	 */
-	room_manager(player_map& all_players);
+	room_mgr(player_map& all_players);
 
 	/**
-	 * Room manager destructor
+	 * Room mgr destructor
 	 */
-	~room_manager();
+	~room_mgr();
 
 	enum PRIVILEGE_POLICY {
 		PP_EVERYONE,

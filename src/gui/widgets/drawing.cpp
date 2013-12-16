@@ -33,7 +33,7 @@ REGISTER_WIDGET(drawing)
 
 tpoint tdrawing::calculate_best_size() const
 {
-	return best_size_ != tpoint(0, 0)
+	return best_size_ != point_t(0, 0)
 			? best_size_
 			: tcontrol::calculate_best_size();
 }

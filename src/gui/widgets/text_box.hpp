@@ -132,7 +132,7 @@ protected:
 	/***** ***** ***** ***** layout functions ***** ***** ***** *****/
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
 	/***** ***** ***** ***** Inherited ***** ***** ***** *****/
 
@@ -237,7 +237,7 @@ private:
 	/***** ***** ***** signal handlers ***** ****** *****/
 
 	void signal_handler_mouse_motion(
-			const event::tevent event, bool& handled, const tpoint& coordinate);
+			const event::tevent event, bool& handled, const point_t& coordinate);
 
 	void signal_handler_left_button_down(
 			const event::tevent event, bool& handled);

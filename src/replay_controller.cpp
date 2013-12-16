@@ -77,13 +77,13 @@ replay_controller::replay_controller(const config& level,
 	teams_start_(teams_),
 	gamestate_start_(gamestate_),
 	units_start_(units_),
-	tod_manager_start_(level, num_turns),
+	tod_mgr_start_(level, num_turns),
 	current_turn_(1),
 	is_playing_(false),
 	show_everything_(false),
 	show_team_(state_of_game.classification().campaign_type == "multiplayer" ? 0 : 1)
 {
-	tod_manager_start_ = tod_manager_;
+	tod_mgr_start_ = tod_mgr_;
 
 	// Our parent class correctly detects that we are loading a game. However,
 	// we are not loading mid-game, so from here on, treat this as not loading
@@ -265,19 +265,19 @@ void replay_controller::reset_replay(){
 	current_turn_ = 1;
 	it_is_a_new_turn_ = true;
 	skip_replay_ = false;
-	tod_manager_= tod_manager_start_;
+	tod_mgr_= tod_mgr_start_;
 	recorder.start_replay();
 	recorder.set_skip(false);
 	units_ = units_start_;
 	gamestate_ = gamestate_start_;
 	teams_ = teams_start_;
-	if (events_manager_ ){
+	if (events_mgr_ ){
 		// NOTE: this double reset is required so that the new
-		// instance of game_events::manager isn't created before the
-		// old manager is actually destroyed (triggering an assertion
+		// instance of game_events::mgr isn't created before the
+		// old mgr is actually destroyed (triggering an assertion
 		// failure)
-		events_manager_.reset();
-		events_manager_.reset(new game_events::manager(level_));
+		events_mgr_.reset();
+		events_mgr_.reset(new game_events::mgr(level_));
 	}
 
 	gui_->labels().read(level_);
@@ -439,7 +439,7 @@ void replay_controller::play_side(const unsigned int /*team_index*/, bool){
 
 		if (static_cast<size_t>(player_number_) > teams_.size()) {
 			finish_turn();
-			tod_manager_.next_turn();
+			tod_mgr_.next_turn();
 			it_is_a_new_turn_ = true;
 			player_number_ = 1;
 			current_turn_++;

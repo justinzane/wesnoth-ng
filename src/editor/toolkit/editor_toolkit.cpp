@@ -32,10 +32,10 @@
 namespace editor {
 
 editor_toolkit::editor_toolkit(editor_display& gui, const CKey& key,
-		const config& game_config, context_manager& c_manager)
+		const config& game_config, context_mgr& c_mgr)
 	: gui_(gui)
 	, key_(key)
-	, palette_manager_()
+	, palette_mgr_()
 	, mouse_action_(nullptr)
 	, mouse_actions_()
 	, mouse_action_hints_()
@@ -44,7 +44,7 @@ editor_toolkit::editor_toolkit(editor_display& gui, const CKey& key,
 {
 	init_brushes(game_config);
 	init_sidebar(game_config);
-	init_mouse_actions(game_config, c_manager);
+	init_mouse_actions(game_config, c_mgr);
 }
 
 editor_toolkit::~editor_toolkit()
@@ -53,7 +53,7 @@ editor_toolkit::~editor_toolkit()
 	//foreach_ng(const mouse_action_map::value_type a, mouse_actions_) {
 	//	delete a.second;
 	//}
-	//delete palette_manager_.get();
+	//delete palette_mgr_.get();
 }
 
 void editor_toolkit::init_brushes(const config& game_config)
@@ -71,29 +71,29 @@ void editor_toolkit::init_brushes(const config& game_config)
 
 void editor_toolkit::init_sidebar(const config& game_config)
 {
-	palette_manager_.reset(new palette_manager(gui_, game_config, &mouse_action_));
+	palette_mgr_.reset(new palette_mgr(gui_, game_config, &mouse_action_));
 }
 
-void editor_toolkit::init_mouse_actions(const config& game_config, context_manager& cmanager)
+void editor_toolkit::init_mouse_actions(const config& game_config, context_mgr& cmgr)
 {
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_PAINT,
-		new mouse_action_paint(&brush_, key_, *palette_manager_->terrain_palette_.get())));
+		new mouse_action_paint(&brush_, key_, *palette_mgr_->terrain_palette_.get())));
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_FILL,
-		new mouse_action_fill(key_, *palette_manager_->terrain_palette_.get())));
+		new mouse_action_fill(key_, *palette_mgr_->terrain_palette_.get())));
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_SELECT,
-		new mouse_action_select(&brush_, key_, *palette_manager_->empty_palette_.get())));
+		new mouse_action_select(&brush_, key_, *palette_mgr_->empty_palette_.get())));
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_STARTING_POSITION,
-		new mouse_action_starting_position(key_, *palette_manager_->empty_palette_.get())));
+		new mouse_action_starting_position(key_, *palette_mgr_->empty_palette_.get())));
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_LABEL,
-		new mouse_action_map_label(key_, *palette_manager_->empty_palette_.get())));
+		new mouse_action_map_label(key_, *palette_mgr_->empty_palette_.get())));
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_UNIT,
-		new mouse_action_unit(key_, *palette_manager_->unit_palette_.get())));
+		new mouse_action_unit(key_, *palette_mgr_->unit_palette_.get())));
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_VILLAGE,
-			new mouse_action_village(key_, *palette_manager_->empty_palette_.get())));
+			new mouse_action_village(key_, *palette_mgr_->empty_palette_.get())));
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_PASTE,
-			new mouse_action_paste(cmanager.get_clipboard(), key_, *palette_manager_->empty_palette_.get())));
+			new mouse_action_paste(cmgr.get_clipboard(), key_, *palette_mgr_->empty_palette_.get())));
 	mouse_actions_.insert(std::make_pair(HOTKEY_EDITOR_TOOL_ITEM,
-			new mouse_action_item(key_, *palette_manager_->item_palette_.get())));
+			new mouse_action_item(key_, *palette_mgr_->item_palette_.get())));
 
 	foreach_ng(const theme::menu& menu, gui_.get_theme().menus()) {
 		if (menu.items().size() == 1) {
@@ -121,16 +121,16 @@ void editor_toolkit::hotkey_set_mouse_action(hotkey_cmd_t command)
 {
 	std::map<hotkey_cmd_t, mouse_action*>::iterator i = mouse_actions_.find(command);
 	if (i != mouse_actions_.end()) {
-		palette_manager_->active_palette().hide(true);
+		palette_mgr_->active_palette().hide(true);
 		mouse_action_ = i->second;
-		palette_manager_->adjust_size();
+		palette_mgr_->adjust_size();
 
 		/** @todo make active_palette() private again. */
-		gui_.set_palette_report(palette_manager_->active_palette().active_group_report());
+		gui_.set_palette_report(palette_mgr_->active_palette().active_group_report());
 
 		set_mouseover_overlay();
 		gui_.invalidate_game_status();
-		palette_manager_->active_palette().hide(false);
+		palette_mgr_->active_palette().hide(false);
 	} else {
 		ERR_ED << "Invalid hotkey command ("
 			<< static_cast<int>(command) << ") passed to set_mouse_action\n";
@@ -185,7 +185,7 @@ void editor_toolkit::cycle_brush()
 
 void editor_toolkit::adjust_size()
 {
-	palette_manager_->adjust_size();
+	palette_mgr_->adjust_size();
 }
 
 

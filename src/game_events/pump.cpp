@@ -79,10 +79,10 @@ static lg::log_domain log_event_handler("event_handler");
 namespace game_events {
 
 namespace { // Types
-	class pump_manager {
+	class pump_mgr {
 	public:
-		pump_manager();
-		~pump_manager();
+		pump_mgr();
+		~pump_mgr();
 
 		/// Allows iteration through the queued events.
 		queued_event & next() { return queue_[pumped_count_++]; }
@@ -103,7 +103,7 @@ namespace { // Types
 		/// Tracks how many events have been processed.
 		size_t pumped_count_;
 	};
-	unsigned pump_manager::instance_count=0;
+	unsigned pump_mgr::instance_count=0;
 } // end anonymous namespace (types)
 
 namespace { // Variables
@@ -117,7 +117,7 @@ namespace { // Variables
 
 namespace { // Support functions
 
-	pump_manager::pump_manager() :
+	pump_mgr::pump_mgr() :
 		x1_(resources::gamedata->get_variable("x1")),
 		x2_(resources::gamedata->get_variable("x2")),
 		y1_(resources::gamedata->get_variable("y1")),
@@ -129,7 +129,7 @@ namespace { // Support functions
 		++instance_count;
 	}
 
-	pump_manager::~pump_manager() {
+	pump_mgr::~pump_mgr() {
 		--instance_count;
 
 		// Not sure what the correct thing to do is here. In princple,
@@ -467,7 +467,7 @@ bool pump()
 		DBG_EH << "Processing queued events, but none found.\n";
 		return false;
 	}
-	if(pump_manager::count() >= game_config::max_loop) {
+	if(pump_mgr::count() >= game_config::max_loop) {
 		ERR_NG << "game_events::pump() waiting to process new events because "
 		       << "recursion level would exceed maximum: " << game_config::max_loop << '\n';
 		return false;
@@ -486,13 +486,13 @@ bool pump()
 	// while events are being processed.
 	wb::real_map real_unit_map;
 
-	pump_manager pump_instance;
+	pump_mgr pump_instance;
 	
 	// Loop through the events we need to process.
 	while ( !pump_instance.done() )
 	{
-		if(pump_manager::count() <= 1)
-			manager::start_buffering();
+		if(pump_mgr::count() <= 1)
+			mgr::start_buffering();
 
 		queued_event & ev = pump_instance.next();
 		const std::string& event_name = ev.name;
@@ -506,8 +506,8 @@ bool pump()
 
 		bool init_event_vars = true;
 
-		manager::iterator end_handler = manager::end();
-		manager::iterator cur_handler = manager::begin();
+		mgr::iterator end_handler = mgr::end();
+		mgr::iterator cur_handler = mgr::begin();
 		for ( ; cur_handler != end_handler; ++cur_handler ) {
 			event_handler & handler = *cur_handler;
 			if(!handler.matches_name(event_name))
@@ -529,8 +529,8 @@ bool pump()
 			}
 		}
 
-		if(pump_manager::count() <= 1)
-			manager::stop_buffering();
+		if(pump_mgr::count() <= 1)
+			mgr::stop_buffering();
 		// Only commit new handlers when finished iterating over event_handlers.
 		commit();
 	}
@@ -552,8 +552,8 @@ void clear_events()
 void commit()
 {
 	DBG_EH << "committing new event handlers, number of pump_instances: " <<
-	          pump_manager::count() << "\n";
-	manager::commit_buffer();
+	          pump_mgr::count() << "\n";
+	mgr::commit_buffer();
 	commit_wmi_commands();
 	// Dialogs can only be shown if the display is not locked
 	if (!resources::screen->video().update_locked()) {

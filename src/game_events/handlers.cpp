@@ -60,7 +60,7 @@ namespace { // Types
 	typedef std::pair< std::string, config* > wmi_command_change;
 
 	class t_event_handlers {
-		typedef manager::t_active t_active;
+		typedef mgr::t_active t_active;
 	public:
 		typedef t_active::iterator iterator;
 		typedef t_active::const_iterator const_iterator;
@@ -341,7 +341,7 @@ void remove_event_handler(const std::string & id)
 }
 
 
-manager::manager(const config& cfg)
+mgr::mgr(const config& cfg)
 {
 	foreach_ng(const config &ev, cfg.child_range("event")) {
 		add_event_handler(ev);
@@ -351,7 +351,7 @@ manager::manager(const config& cfg)
 	}
 
 	// Guard against a memory leak (now) / memory corruption (when this is deleted).
-	// This is why creating multiple manager objects is prohibited.
+	// This is why creating multiple mgr objects is prohibited.
 	assert(resources::lua_kernel == nullptr);
 	resources::lua_kernel = new LuaKernel(cfg);
 
@@ -373,7 +373,7 @@ manager::manager(const config& cfg)
 	resources::gamedata->get_wml_menu_items().init_handlers();
 }
 
-manager::~manager() {
+mgr::~mgr() {
 	clear_events();
 	event_handlers.clear();
 	delete_all_wml_hotkeys();
@@ -385,31 +385,31 @@ manager::~manager() {
 }
 
 /** Returns an iterator to the first event handler. */
-manager::iterator manager::begin()
+mgr::iterator mgr::begin()
 {
 	return event_handlers.begin();
 }
 
 /** Returns an iterator to one past the last event handler. */
-manager::iterator manager::end()
+mgr::iterator mgr::end()
 {
 	return event_handlers.end();
 }
 
 /** Starts buffering event handler creation. */
-void manager::start_buffering()
+void mgr::start_buffering()
 {
 	event_handlers.start_buffering();
 }
 
 /** Ends buffering event handler creation. */
-void manager::stop_buffering()
+void mgr::stop_buffering()
 {
 	event_handlers.stop_buffering();
 }
 
 /** Commits the event handlers that were buffered. */
-void manager::commit_buffer()
+void mgr::commit_buffer()
 {
 	event_handlers.commit_buffer();
 }

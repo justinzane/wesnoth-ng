@@ -63,7 +63,7 @@ public:
 
 private:
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE;
+	virtual point_t calculate_best_size() const OVERRIDE;
 public:
 
 	/***** ***** ***** ***** Inherited ***** ***** ***** *****/

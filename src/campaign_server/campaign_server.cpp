@@ -125,12 +125,12 @@ namespace {
 			config &campaigns() { return cfg_.child("campaigns"); }
 			config cfg_;
 			const std::string file_;
-			const network::manager net_manager_;
+			const network::mgr net_mgr_;
 			std::map<std::string, std::string> hooks_;
 			input_stream* input_;
 			int compress_level_;
 			bool read_only_;
-			const network::server_manager server_manager_;
+			const network::server_mgr server_mgr_;
 
 	};
 
@@ -189,12 +189,12 @@ namespace {
 			size_t min_thread, size_t max_thread) :
 		cfg_(),
 		file_(cfgfile),
-		net_manager_(min_thread,max_thread),
+		net_mgr_(min_thread,max_thread),
 		hooks_(),
 		input_(0),
 		compress_level_(0), // Will be properly set by load_config()
 		read_only_(false),
-		server_manager_(load_config())
+		server_mgr_(load_config())
 	{
 #ifndef _MSC_VER
 		signal(SIGHUP, exit_sighup);

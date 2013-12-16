@@ -1,5 +1,5 @@
 /**
- * @file src/editor/palette/palette_manager.cpp
+ * @file src/editor/palette/palette_mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -28,7 +28,7 @@
 
 namespace editor {
 
-palette_manager::palette_manager(editor_display& gui, const config& cfg
+palette_mgr::palette_mgr(editor_display& gui, const config& cfg
 		, mouse_action** active_mouse_action)
 		: gui::widget(gui.video()),
 		  gui_(gui),
@@ -44,13 +44,13 @@ palette_manager::palette_manager(editor_display& gui, const config& cfg
 	item_palette_->setup(cfg);
 }
 
-void palette_manager::set_group(size_t index)
+void palette_mgr::set_group(size_t index)
 {
 	active_palette().set_group(index);
 	scroll_top();
 }
 
-void palette_manager::adjust_size()
+void palette_mgr::adjust_size()
 {
 	scroll_top();
 	const SDL_Rect* rect = gui_.palette_area();
@@ -61,7 +61,7 @@ void palette_manager::adjust_size()
 	set_dirty();
 }
 
-void palette_manager::scroll_down()
+void palette_mgr::scroll_down()
 {
 	bool scrolled = active_palette().scroll_down();
 
@@ -74,17 +74,17 @@ void palette_manager::scroll_down()
 	}
 }
 
-bool palette_manager::can_scroll_up()
+bool palette_mgr::can_scroll_up()
 {
 	return active_palette().can_scroll_up();
 }
 
-bool palette_manager::can_scroll_down()
+bool palette_mgr::can_scroll_down()
 {
 	return active_palette().can_scroll_down();
 }
 
-void palette_manager::scroll_up()
+void palette_mgr::scroll_up()
 {
 	bool scrolled_up = active_palette().scroll_up();
 	if(scrolled_up) {
@@ -95,7 +95,7 @@ void palette_manager::scroll_up()
 	}
 }
 
-void palette_manager::scroll_top()
+void palette_mgr::scroll_top()
 {
 	const SDL_Rect rect = gui_.palette_area();
 	active_palette().set_start_item(0);
@@ -103,12 +103,12 @@ void palette_manager::scroll_top()
 	set_dirty();
 }
 
-common_palette& palette_manager::active_palette()
+common_palette& palette_mgr::active_palette()
 {
 	return (*mouse_action_)->get_palette();
 }
 
-void palette_manager::scroll_bottom()
+void palette_mgr::scroll_bottom()
 {
 	unsigned int old_start   = active_palette().num_items();
 	unsigned int items_start = active_palette().start_num();
@@ -118,7 +118,7 @@ void palette_manager::scroll_bottom()
 	}
 }
 
-void palette_manager::draw_contents()
+void palette_mgr::draw_contents()
 {
 	//if (!dirty() && !force) {
 	//	return;
@@ -146,7 +146,7 @@ void palette_manager::draw_contents()
 //	set_dirty(false);
 }
 
-handler_vector palette_manager::handler_members()
+handler_vector palette_mgr::handler_members()
 {
 	//handler_vector h;
 //	foreach_ng(gui::widget& b, active_palette().get_widgets()) {
@@ -156,7 +156,7 @@ handler_vector palette_manager::handler_members()
 	return active_palette().handler_members();
 }
 
-void palette_manager::handle_event(const SDL_Event& event) {
+void palette_mgr::handle_event(const SDL_Event& event) {
 
 	if (event.type == SDL_MOUSEMOTION) {
 		// If the mouse is inside the palette, give it focus.

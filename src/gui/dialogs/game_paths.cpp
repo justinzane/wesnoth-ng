@@ -93,7 +93,7 @@ void tgame_paths::pre_show(CVideo& /*video*/, twindow& window)
 
 void tgame_paths::browse_directory_callback(const std::string& path)
 {
-	desktop::open_in_file_manager(path);
+	desktop::open_in_file_mgr(path);
 }
 
 void tgame_paths::copy_to_clipboard_callback(const std::string& path)

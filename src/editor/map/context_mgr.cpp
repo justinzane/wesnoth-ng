@@ -1,5 +1,5 @@
 /**
- * @file src/editor/map/context_manager.cpp
+ * @file src/editor/map/context_mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -65,44 +65,44 @@ map_labels* get_current_labels() {
 class map_context_refresher
 {
 public:
-	map_context_refresher(context_manager& ec, const map_context& other_mc)
-	: context_manager_(ec), size_changed_(!ec.get_map().same_size_as(other_mc.get_map())), refreshed_(false)
+	map_context_refresher(context_mgr& ec, const map_context& other_mc)
+	: context_mgr_(ec), size_changed_(!ec.get_map().same_size_as(other_mc.get_map())), refreshed_(false)
 	{
 	}
 	~map_context_refresher() {
 		if (!refreshed_) refresh();
 	}
 	void refresh() {
-		context_manager_.gui().change_map(&context_manager_.get_map());
-		resources::game_map = &context_manager_.get_map();
+		context_mgr_.gui().change_map(&context_mgr_.get_map());
+		resources::game_map = &context_mgr_.get_map();
 
-		context_manager_.gui().change_units(&context_manager_.get_map_context().get_units());
-		resources::units = &context_manager_.get_map_context().get_units();
+		context_mgr_.gui().change_units(&context_mgr_.get_map_context().get_units());
+		resources::units = &context_mgr_.get_map_context().get_units();
 
-		// TODO register the tod_manager with the gui?
-		resources::tod_manager = context_manager_.get_map_context().get_time_manager();
-		context_manager_.gui().change_teams(&context_manager_.get_map_context().get_teams());
+		// TODO register the tod_mgr with the gui?
+		resources::tod_mgr = context_mgr_.get_map_context().get_time_mgr();
+		context_mgr_.gui().change_teams(&context_mgr_.get_map_context().get_teams());
 
-		resources::teams = &context_manager_.get_map_context().get_teams();
+		resources::teams = &context_mgr_.get_map_context().get_teams();
 
-		resources::state_of_game = &context_manager_.get_map_context().get_game_state();
-		context_manager_.gui().init_flags();
+		resources::state_of_game = &context_mgr_.get_map_context().get_game_state();
+		context_mgr_.gui().init_flags();
 
-		context_manager_.reload_map();
+		context_mgr_.reload_map();
 
 		current_labels->enable(false);
-		current_labels = &context_manager_.get_map_context().get_labels();
+		current_labels = &context_mgr_.get_map_context().get_labels();
 		current_labels->enable(true);
 
 		refreshed_ = true;
 	}
 private:
-	context_manager& context_manager_;
+	context_mgr& context_mgr_;
 	bool size_changed_;
 	bool refreshed_;
 };
 
-bool context_manager::is_active_transitions_hotkey(const std::string& item) {
+bool context_mgr::is_active_transitions_hotkey(const std::string& item) {
 	switch (auto_update_transitions_) {
 
 		case preferences::editor::TransitionUpdateMode::on:
@@ -115,7 +115,7 @@ bool context_manager::is_active_transitions_hotkey(const std::string& item) {
 	return true; //should not be reached
 }
 
-size_t context_manager::modified_maps(std::string& message) {
+size_t context_mgr::modified_maps(std::string& message) {
 	std::vector<std::string> modified;
 	foreach_ng(map_context* mc, map_contexts_) {
 		if (mc->modified()) {
@@ -132,7 +132,7 @@ size_t context_manager::modified_maps(std::string& message) {
 	return modified.size();
 }
 
-context_manager::context_manager(editor_display& gui, const config& game_config)
+context_mgr::context_mgr(editor_display& gui, const config& game_config)
 	: gui_(gui)
 	, game_config_(game_config)
 	, default_dir_(preferences::editor::default_dir())
@@ -149,7 +149,7 @@ context_manager::context_manager(editor_display& gui, const config& game_config)
 	init_map_generators(game_config);
 }
 
-context_manager::~context_manager()
+context_mgr::~context_mgr()
 {
 	foreach_ng(map_generator* m, map_generators_) {
 		delete m;
@@ -159,7 +159,7 @@ context_manager::~context_manager()
 	}
 }
 
-void context_manager::refresh_all()
+void context_mgr::refresh_all()
 {
 	gui_.rebuild_all();
 	get_map_context().set_needs_terrain_rebuild(false);
@@ -168,12 +168,12 @@ void context_manager::refresh_all()
 	gui_.recalculate_minimap();
 }
 
-void context_manager::set_default_dir(const std::string& str)
+void context_mgr::set_default_dir(const std::string& str)
 {
 	default_dir_ = str;
 }
 
-void context_manager::load_map_dialog(bool force_same_context /* = false */)
+void context_mgr::load_map_dialog(bool force_same_context /* = false */)
 {
 	std::string fn = directory_name(get_map_context().get_filename());
 	if (fn.empty()) {
@@ -185,7 +185,7 @@ void context_manager::load_map_dialog(bool force_same_context /* = false */)
 	}
 }
 
-void context_manager::new_map_dialog()
+void context_mgr::new_map_dialog()
 {
 	int w = get_map().w();
 	int h = get_map().h();
@@ -195,7 +195,7 @@ void context_manager::new_map_dialog()
 	}
 }
 
-void context_manager::expand_open_maps_menu(std::vector<std::string>& items)
+void context_mgr::expand_open_maps_menu(std::vector<std::string>& items)
 {
 	for (unsigned int i = 0; i < items.size(); ++i) {
 		if (items[i] == "editor-switch-map") {
@@ -220,9 +220,9 @@ void context_manager::expand_open_maps_menu(std::vector<std::string>& items)
 	}
 }
 
-void context_manager::expand_areas_menu(std::vector<std::string>& items)
+void context_mgr::expand_areas_menu(std::vector<std::string>& items)
 {
-	if (!get_map_context().get_time_manager())
+	if (!get_map_context().get_time_mgr())
 		return;
 	for (unsigned int i = 0; i < items.size(); ++i) {
 		if (items[i] == "editor-switch-area") {
@@ -230,7 +230,7 @@ void context_manager::expand_areas_menu(std::vector<std::string>& items)
 			std::vector<std::string> area_entries;
 
 			std::vector<std::string> area_ids =
-					get_map_context().get_time_manager()->get_area_ids();
+					get_map_context().get_time_mgr()->get_area_ids();
 
 			for (size_t mci = 0; mci < area_ids.size(); ++mci) {
 
@@ -248,7 +248,7 @@ void context_manager::expand_areas_menu(std::vector<std::string>& items)
 	}
 }
 
-void context_manager::expand_sides_menu(std::vector<std::string>& items)
+void context_mgr::expand_sides_menu(std::vector<std::string>& items)
 {
 	for (unsigned int i = 0; i < items.size(); ++i) {
 		if (items[i] == "editor-switch-side") {
@@ -270,14 +270,14 @@ void context_manager::expand_sides_menu(std::vector<std::string>& items)
 	}
 }
 
-void context_manager::expand_time_menu(std::vector<std::string>& items)
+void context_mgr::expand_time_menu(std::vector<std::string>& items)
 {
 	for (unsigned int i = 0; i < items.size(); ++i) {
 		if (items[i] == "editor-switch-time") {
 			items.erase(items.begin() + i);
 			std::vector<std::string> contexts;
 
-			tod_manager* tod_m = get_map_context().get_time_manager();
+			tod_mgr* tod_m = get_map_context().get_time_mgr();
 
 			foreach_ng(const time_of_day& time, tod_m->times()) {
 
@@ -300,7 +300,7 @@ void context_manager::expand_time_menu(std::vector<std::string>& items)
 	}
 }
 
-void context_manager::apply_mask_dialog()
+void context_mgr::apply_mask_dialog()
 {
 	std::string fn = get_map_context().get_filename();
 	if (fn.empty()) {
@@ -322,13 +322,13 @@ void context_manager::apply_mask_dialog()
 	}
 }
 
-void context_manager::perform_refresh(const editor_action& action, bool drag_part /* =false */)
+void context_mgr::perform_refresh(const editor_action& action, bool drag_part /* =false */)
 {
 	get_map_context().perform_action(action);
 	refresh_after_action(drag_part);
 }
 
-void context_manager::create_mask_to_dialog()
+void context_mgr::create_mask_to_dialog()
 {
 	std::string fn = get_map_context().get_filename();
 	if (fn.empty()) {
@@ -350,7 +350,7 @@ void context_manager::create_mask_to_dialog()
 	}
 }
 
-void context_manager::refresh_after_action(bool drag_part)
+void context_mgr::refresh_after_action(bool drag_part)
 {
 	if (get_map_context().needs_reload()) {
 		reload_map();
@@ -387,7 +387,7 @@ void context_manager::refresh_after_action(bool drag_part)
 	gui_.recalculate_minimap();
 }
 
-void context_manager::resize_map_dialog()
+void context_mgr::resize_map_dialog()
 {
 	int w = get_map().w();
 	int h = get_map().h();
@@ -447,7 +447,7 @@ void context_manager::resize_map_dialog()
 	}
 }
 
-void context_manager::save_map_as_dialog()
+void context_mgr::save_map_as_dialog()
 {
 	std::string input_name = get_map_context().get_filename();
 	if (input_name.empty()) {
@@ -476,7 +476,7 @@ void context_manager::save_map_as_dialog()
 	save_map_as(input_name);
 }
 
-void context_manager::init_map_generators(const config& game_config)
+void context_mgr::init_map_generators(const config& game_config)
 {
 	foreach_ng(const config &i, game_config.child_range("multiplayer")) {
 
@@ -494,7 +494,7 @@ void context_manager::init_map_generators(const config& game_config)
 	}
 }
 
-void context_manager::generate_map_dialog()
+void context_mgr::generate_map_dialog()
 {
 	if (map_generators_.empty()) {
 		gui2::show_error_message(gui_.video(),
@@ -524,7 +524,7 @@ void context_manager::generate_map_dialog()
 	}
 }
 
-bool context_manager::confirm_discard()
+bool context_mgr::confirm_discard()
 {
 	if (get_map_context().modified()) {
 		const int res = gui2::show_message(gui_.video(), _("Unsaved Changes"),
@@ -535,13 +535,13 @@ bool context_manager::confirm_discard()
 	}
 }
 
-int context_manager::add_map_context(map_context* mc)
+int context_mgr::add_map_context(map_context* mc)
 {
 	map_contexts_.push_back(mc);
 	return map_contexts_.size() - 1;
 }
 
-void context_manager::create_default_context()
+void context_mgr::create_default_context()
 {
 	if(saved_windows_.empty()) {
 
@@ -559,13 +559,13 @@ void context_manager::create_default_context()
 	}
 }
 
-void context_manager::fill_selection()
+void context_mgr::fill_selection()
 {
 	perform_refresh(editor_action_paint_area(get_map().selection(),
 			get_selected_bg_terrain()));
 }
 
-void context_manager::close_current_context()
+void context_mgr::close_current_context()
 {
 	if (!confirm_discard()) return;
 	map_context* current = map_contexts_[current_context_index_];
@@ -582,7 +582,7 @@ void context_manager::close_current_context()
 	delete current;
 }
 
-void context_manager::save_all_maps(bool auto_save_windows)
+void context_mgr::save_all_maps(bool auto_save_windows)
 {
 	int current = current_context_index_;
 	saved_windows_.clear();
@@ -603,7 +603,7 @@ void context_manager::save_all_maps(bool auto_save_windows)
 	switch_context(current);
 }
 
-void context_manager::save_map()
+void context_mgr::save_map()
 {
 	const std::string& name = get_map_context().get_filename();
 	if (name.empty() || is_directory(name)) {
@@ -613,7 +613,7 @@ void context_manager::save_map()
 	}
 }
 
-bool context_manager::save_map_as(const std::string& filename)
+bool context_mgr::save_map_as(const std::string& filename)
 {
 	size_t is_open = check_open_map(filename);
 	if (is_open < map_contexts_.size()
@@ -635,7 +635,7 @@ bool context_manager::save_map_as(const std::string& filename)
 	}
 }
 
-bool context_manager::write_map(bool display_confirmation)
+bool context_mgr::write_map(bool display_confirmation)
 {
 	try {
 		get_map_context().save();
@@ -649,14 +649,14 @@ bool context_manager::write_map(bool display_confirmation)
 	return true;
 }
 
-size_t context_manager::check_open_map(const std::string& fn) const
+size_t context_mgr::check_open_map(const std::string& fn) const
 {
 	size_t i = 0;
 	while (i < map_contexts_.size() && map_contexts_[i]->get_filename() != fn) ++i;
 	return i;
 }
 
-bool context_manager::check_switch_open_map(const std::string& fn)
+bool context_mgr::check_switch_open_map(const std::string& fn)
 {
 	size_t i = check_open_map(fn);
 	if (i < map_contexts_.size()) {
@@ -667,7 +667,7 @@ bool context_manager::check_switch_open_map(const std::string& fn)
 	return false;
 }
 
-void context_manager::load_map(const std::string& filename, bool new_context)
+void context_mgr::load_map(const std::string& filename, bool new_context)
 {
 	if (new_context && check_switch_open_map(filename)) return;
 	LOG_ED << "Load map: " << filename << (new_context ? " (new)" : " (same)") << "\n";
@@ -709,7 +709,7 @@ void context_manager::load_map(const std::string& filename, bool new_context)
 	}
 }
 
-void context_manager::revert_map()
+void context_mgr::revert_map()
 {
 	if (!confirm_discard()) return;
 	std::string filename = get_map_context().get_filename();
@@ -720,7 +720,7 @@ void context_manager::revert_map()
 	load_map(filename, false);
 }
 
-void context_manager::new_map(int width, int height, const t_translation::t_terrain & fill, bool new_context)
+void context_mgr::new_map(int width, int height, const t_translation::t_terrain & fill, bool new_context)
 {
 	editor_map m(game_config_, width, height, fill);
 	if (new_context) {
@@ -731,7 +731,7 @@ void context_manager::new_map(int width, int height, const t_translation::t_terr
 	}
 }
 
-void context_manager::reload_map()
+void context_mgr::reload_map()
 {
 	gui_.reload_map();
 	get_map_context().set_needs_reload(false);
@@ -739,7 +739,7 @@ void context_manager::reload_map()
 	refresh_all();
 }
 
-void context_manager::switch_context(const int index)
+void context_mgr::switch_context(const int index)
 {
 	if (index < 0 || static_cast<size_t>(index) >= map_contexts_.size()) {
 		WRN_ED << "Invalid index in switch map context: " << index << "\n";
@@ -750,7 +750,7 @@ void context_manager::switch_context(const int index)
 	current_context_index_ = index;
 }
 
-void context_manager::replace_map_context(map_context* new_mc)
+void context_mgr::replace_map_context(map_context* new_mc)
 {
 	boost::scoped_ptr<map_context> del(map_contexts_[current_context_index_]);
 	map_context_refresher mcr(*this, *new_mc);

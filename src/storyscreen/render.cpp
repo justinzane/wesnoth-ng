@@ -35,7 +35,7 @@
 #include "language.hpp"
 #include "sound.hpp"
 #include "text.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>

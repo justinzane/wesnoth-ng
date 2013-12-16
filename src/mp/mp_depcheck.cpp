@@ -65,7 +65,7 @@ namespace mp
 namespace depcheck
 {
 
-manager::manager(const config& gamecfg, CVideo& video)
+mgr::mgr(const config& gamecfg, CVideo& video)
 	: video_(video)
 	, depinfo_()
 	, era_()
@@ -75,7 +75,7 @@ manager::manager(const config& gamecfg, CVideo& video)
 	, prev_scenario_()
 	, prev_mods_()
 {
-	DBG_MP << "Initializing the dependency manager" << std::endl;
+	DBG_MP << "Initializing the dependency mgr" << std::endl;
 	BOOST_FOREACH (const config& cfg, gamecfg.child_range("modification")) {
 		config info;
 		info["id"] = cfg["id"];
@@ -114,7 +114,7 @@ manager::manager(const config& gamecfg, CVideo& video)
 }
 
 
-void manager::save_state()
+void mgr::save_state()
 {
 	DBG_MP << "Saving current state" << std::endl;
 	prev_era_ = era_;
@@ -122,7 +122,7 @@ void manager::save_state()
 	prev_mods_ = mods_;
 }
 
-void manager::revert()
+void mgr::revert()
 {
 	DBG_MP << "Restoring previous state" << std::endl;
 	era_ = prev_era_;
@@ -130,7 +130,7 @@ void manager::revert()
 	mods_ = prev_mods_;
 }
 
-bool manager::exists(const elem& e) const
+bool mgr::exists(const elem& e) const
 {
 	BOOST_FOREACH (const config& cfg, depinfo_.child_range(e.type)) {
 		if (cfg["id"] == e.id) {
@@ -141,7 +141,7 @@ bool manager::exists(const elem& e) const
 	return false;
 }
 
-std::string manager::find_name_for(const elem& e) const
+std::string mgr::find_name_for(const elem& e) const
 {
 	const config& cfg = depinfo_.find_child(e.type, "id", e.id);
 
@@ -149,7 +149,7 @@ std::string manager::find_name_for(const elem& e) const
 }
 
 std::vector<std::string>
-		manager::get_required_not_installed(const elem& e) const
+		mgr::get_required_not_installed(const elem& e) const
 {
 	std::vector<std::string> result;
 
@@ -164,7 +164,7 @@ std::vector<std::string>
 	return result;
 }
 
-std::vector<std::string> manager::get_required(const elem& e) const
+std::vector<std::string> mgr::get_required(const elem& e) const
 {
 	std::vector<std::string> result;
 
@@ -181,7 +181,7 @@ std::vector<std::string> manager::get_required(const elem& e) const
 	return result;
 }
 
-std::vector<std::string> manager::get_required_not_enabled(const elem& e) const
+std::vector<std::string> mgr::get_required_not_enabled(const elem& e) const
 {
 	std::vector<std::string> required = get_required(e);
 	std::vector<std::string> result;
@@ -195,7 +195,7 @@ std::vector<std::string> manager::get_required_not_enabled(const elem& e) const
 	return result;
 }
 
-std::vector<std::string> manager::get_conflicting_enabled(const elem& e) const
+std::vector<std::string> mgr::get_conflicting_enabled(const elem& e) const
 {
 	std::vector<std::string> result;
 
@@ -208,7 +208,7 @@ std::vector<std::string> manager::get_conflicting_enabled(const elem& e) const
 	return result;
 }
 
-bool manager::conflicts(const elem& elem1, const elem& elem2, bool directonly) const
+bool mgr::conflicts(const elem& elem1, const elem& elem2, bool directonly) const
 {
 	if (elem1 == elem2) {
 		return false;
@@ -311,7 +311,7 @@ bool manager::conflicts(const elem& elem1, const elem& elem2, bool directonly) c
 }
 
 
-bool manager::requires(const elem& elem1, const elem& elem2) const
+bool mgr::requires(const elem& elem1, const elem& elem2) const
 {
 	if (elem2.type != "modification") {
 		return false;
@@ -329,7 +329,7 @@ bool manager::requires(const elem& elem1, const elem& elem2) const
 	return false;
 }
 
-void manager::try_era(const std::string& id, bool force)
+void mgr::try_era(const std::string& id, bool force)
 {
 	save_state();
 
@@ -340,7 +340,7 @@ void manager::try_era(const std::string& id, bool force)
 	}
 }
 
-void manager::try_scenario(const std::string& id, bool force)
+void mgr::try_scenario(const std::string& id, bool force)
 {
 	save_state();
 
@@ -351,7 +351,7 @@ void manager::try_scenario(const std::string& id, bool force)
 	}
 }
 
-void manager::try_modifications(const std::vector<std::string>& ids, bool force)
+void mgr::try_modifications(const std::vector<std::string>& ids, bool force)
 {
 	save_state();
 
@@ -362,17 +362,17 @@ void manager::try_modifications(const std::vector<std::string>& ids, bool force)
 	}
 }
 
-void manager::try_era_by_index(int index, bool force)
+void mgr::try_era_by_index(int index, bool force)
 {
 	try_era(depinfo_.child("era", index)["id"], force);
 }
 
-void manager::try_scenario_by_index(int index, bool force)
+void mgr::try_scenario_by_index(int index, bool force)
 {
 	try_scenario(depinfo_.child("scenario", index)["id"], force);
 }
 
-int manager::get_era_index() const
+int mgr::get_era_index() const
 {
 	int result = 0;
 
@@ -387,7 +387,7 @@ int manager::get_era_index() const
 	return -1;
 }
 
-int manager::get_scenario_index() const
+int mgr::get_scenario_index() const
 {
 	int result = 0;
 
@@ -403,7 +403,7 @@ int manager::get_scenario_index() const
 }
 
 
-bool manager::enable_mods_dialog(const std::vector<std::string>& mods,
+bool mgr::enable_mods_dialog(const std::vector<std::string>& mods,
 								 const std::string& requester)
 {
 	std::vector<std::string> items;
@@ -415,7 +415,7 @@ bool manager::enable_mods_dialog(const std::vector<std::string>& mods,
 	return dialog.show(video_);
 }
 
-bool manager::disable_mods_dialog(const std::vector<std::string>& mods,
+bool mgr::disable_mods_dialog(const std::vector<std::string>& mods,
 								  const std::string& requester)
 {
 	std::vector<std::string> items;
@@ -427,7 +427,7 @@ bool manager::disable_mods_dialog(const std::vector<std::string>& mods,
 	return dialog.show(video_);
 }
 
-std::string manager::change_era_dialog(const std::vector<std::string>& eras)
+std::string mgr::change_era_dialog(const std::vector<std::string>& eras)
 {
 	std::vector<std::string> items;
 	BOOST_FOREACH(const std::string& era, eras) {
@@ -444,7 +444,7 @@ std::string manager::change_era_dialog(const std::vector<std::string>& eras)
 }
 
 std::string
-	manager::change_scenario_dialog(const std::vector<std::string>& scenarios)
+	mgr::change_scenario_dialog(const std::vector<std::string>& scenarios)
 {
 	std::vector<std::string> items;
 	BOOST_FOREACH (const std::string& scenario, scenarios) {
@@ -459,14 +459,14 @@ std::string
 	return "";
 }
 
-void manager::failure_dialog(const std::string& msg)
+void mgr::failure_dialog(const std::string& msg)
 {
 	gui2::show_message
 				(video_, _("Failed to resolve dependencies"), msg, _("OK"));
 }
 
 
-void manager::insert_element(component_type type, const config& data, int index)
+void mgr::insert_element(component_type type, const config& data, int index)
 {
 	std::string type_str;
 	switch (type) {
@@ -483,7 +483,7 @@ void manager::insert_element(component_type type, const config& data, int index)
 	depinfo_.add_child_at(type_str, data, index);
 }
 
-bool manager::change_scenario(const std::string& id)
+bool mgr::change_scenario(const std::string& id)
 {
 	// Checking for missing dependencies
 	if (!get_required_not_installed(elem(id, "scenario")).empty()) {
@@ -555,7 +555,7 @@ bool manager::change_scenario(const std::string& id)
 	return change_era(era_);
 }
 
-bool manager::change_era(const std::string& id)
+bool mgr::change_era(const std::string& id)
 {
 	// Checking for missing dependenciess
 	if (!get_required_not_installed(elem(id, "era")).empty()) {
@@ -624,7 +624,7 @@ bool manager::change_era(const std::string& id)
 	return change_scenario(scenario_);
 }
 
-bool manager::change_modifications
+bool mgr::change_modifications
 					(const std::vector<std::string>& modifications)
 {
 	// Checking if the selected combination of mods is valid at all

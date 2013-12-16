@@ -84,7 +84,7 @@ private:
 	property_handler_map property_handlers_;
 };
 
-class component_manager {
+class component_mgr {
 public:
 	static bool add_component(component *root, const std::string &path, const config &cfg);
 	static bool change_component(component *root, const std::string &path, const config &cfg);

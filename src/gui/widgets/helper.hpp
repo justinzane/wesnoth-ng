@@ -20,11 +20,9 @@
 #define GUI_WIDGETS_HELPER_HPP_INCLUDED
 
 #include "global.hpp"
-
+#include "sdl2/sdl2_point.hpp"
 #include "SDL2/SDL.h"
-
 #include <pango/pango-layout.h>
-
 #include <boost/type_traits.hpp>
 #include <boost/utility/enable_if.hpp>
 
@@ -39,7 +37,7 @@ class map_formula_callable;
 
 namespace gui2 {
 
-struct tpoint;
+struct point_t;
 
 /**
  * Initializes the gui subsystems.
@@ -57,7 +55,7 @@ bool init();
  *
  * @returns                       SDL_Rect with the proper rectangle.
  */
-SDL_Rect create_rect(const tpoint& origin, const tpoint& size);
+SDL_Rect create_rect(const point_t& origin, const point_t& size);
 
 /**
  * Converts a color string to a color.
@@ -133,7 +131,7 @@ void get_screen_size_variables(game_logic::map_formula_callable& variable);
 game_logic::map_formula_callable get_screen_size_variables();
 
 /** Returns the current mouse position. */
-tpoint get_mouse_position();
+point_2Dd get_mouse_position();
 
 /**
  * Returns a truncated version of the text.

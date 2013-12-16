@@ -23,13 +23,13 @@
 #ifndef JOYSTICK_HPP_
 #define JOYSTICK_HPP_
 
-class joystick_manager {
+class joystick_mgr {
 
 public:
 
-	joystick_manager();
+	joystick_mgr();
 
-	~joystick_manager();
+	~joystick_mgr();
 
 	bool init();
 	bool close();
@@ -94,7 +94,7 @@ private:
 
 	const map_location get_next_hex(int x_axis, int y_axis, map_location old_hex);
 
-	const map_location get_direction(const map_location& loc, joystick_manager::DIRECTION direction);
+	const map_location get_direction(const map_location& loc, joystick_mgr::DIRECTION direction);
 
 	std::vector<SDL_Joystick*> joysticks_;
 	int joystick_area_;

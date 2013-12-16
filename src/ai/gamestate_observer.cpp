@@ -31,13 +31,13 @@ namespace ai {
 gamestate_observer::gamestate_observer()
 	: gamestate_change_counter_(0)
 {
-	ai::manager::add_gamestate_observer(this);
+	ai::mgr::add_gamestate_observer(this);
 }
 
 
 gamestate_observer::~gamestate_observer()
 {
-	ai::manager::remove_gamestate_observer(this);
+	ai::mgr::remove_gamestate_observer(this);
 }
 
 

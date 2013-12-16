@@ -30,8 +30,8 @@
 #include "gui/widgets/window.hpp"
 #include "log/log.hpp"
 #include "preferences_display.hpp"
-#include "sdl2/sdl2_evt_mgr.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/evt_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 #include "serdes/wml_separators.hpp"
 #include "theme.hpp"
 #include "wesconfig.h"
@@ -469,12 +469,12 @@ class hotkey_item {
 };
 /// this class is initialized once at gamestart
 /// put all initialisation and wipe code in the methods here.
-class manager {
+class mgr {
     public:
-        manager();
+        mgr();
         static void init();
         static void wipe();
-        ~manager();
+        ~mgr();
 };
 
 class scope_changer {

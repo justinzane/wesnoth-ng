@@ -123,7 +123,7 @@ static void put_pixel(
  * @param y2              The end y coordinate of the line to draw.
  */
 static void draw_line(
-		  SDL_Surface& canvas
+		  SDL_Surface* canvas
 		, Uint32 color
 		, unsigned x1
 		, unsigned y1

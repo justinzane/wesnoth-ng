@@ -15,8 +15,8 @@
 
    See the COPYING file for more details.
 */
-#ifndef GAME_CONFIG_MANAGER_HPP_INCLUDED
-#define GAME_CONFIG_MANAGER_HPP_INCLUDED
+#ifndef GAME_CONFIG_mgr_HPP_INCLUDED
+#define GAME_CONFIG_mgr_HPP_INCLUDED
 
 #include "commandline_options.hpp"
 #include "config_cache.hpp"
@@ -26,12 +26,12 @@
 
 class config;
 
-class game_config_manager
+class game_config_mgr
 {
 public:
-	game_config_manager(const commandline_options& cmdline_opts,
+	game_config_mgr(const commandline_options& cmdline_opts,
 		game_display& disp,	const bool jump_to_editor);
-	~game_config_manager();
+	~game_config_mgr();
 
 	enum FORCE_RELOAD_CONFIG { FORCE_RELOAD, NO_FORCE_RELOAD };
 
@@ -44,8 +44,8 @@ public:
 	void load_game_config_for_game(const game_classification& classification);
 
 private:
-	game_config_manager(const game_config_manager&);
-	void operator=(const game_config_manager&);
+	game_config_mgr(const game_config_mgr&);
+	void operator=(const game_config_mgr&);
 
 	void load_game_config(FORCE_RELOAD_CONFIG force_reload,
 		game_classification const* classification = nullptr);
@@ -64,7 +64,7 @@ private:
 
 	preproc_map old_defines_map_;
 
-	binary_paths_manager paths_manager_;
+	binary_paths_mgr paths_mgr_;
 
 	game_config::config_cache& cache_;
 };

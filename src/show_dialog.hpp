@@ -47,9 +47,9 @@ enum DIALOG_RESULT {
 
 bool in_dialog();
 
-struct dialog_manager : private cursor::setter, private font::floating_label_context {
-	dialog_manager();
-	~dialog_manager();
+struct dialog_mgr : private cursor::setter, private font::floating_label_context {
+	dialog_mgr();
+	~dialog_mgr();
 
 private:
 	bool reset_to;

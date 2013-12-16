@@ -22,13 +22,28 @@
 #ifndef SDL2_COLOR_HPP_
 #define SDL2_COLOR_HPP_
 
+#include <stdlib.h>
+#include <SDL2/SDL.h>
+#include <stdint.h>
+#include <cstdint>
+#include <string>
+#include <cstdio>
+
 /**  @type sdl2_color TODO: WRITEME */
 class sdl2_color {
     public:
         sdl2_color(){};
         sdl2_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a){ c_.r = r; c_.g = g; c_.b = b; c_.a = a; };
-        SDL_Color* get_color() { return &c_; }
         virtual ~sdl2_color();
+
+        std::string get_html_color() {
+            char hex[9];
+            sprintf(hex, "#%2x%2x%2x%2x", c_.r, c_.g, c_.b, c_.a);
+            std::string retval = hex;
+            return retval;
+        }
+
+        SDL_Color* get_sdl_color() { return &c_; }
 
         /** @brief SDL_Color equality operator */
         inline bool operator==(const sdl2_color& a) {

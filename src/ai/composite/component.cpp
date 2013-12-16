@@ -193,7 +193,7 @@ static component *find_component(component *root, const std::string &path, path_
 }
 
 
-bool component_manager::add_component(component *root, const std::string &path, const config &cfg)
+bool component_mgr::add_component(component *root, const std::string &path, const config &cfg)
 {
 	path_element tail;
 	component *c = find_component(root,path,tail);
@@ -208,7 +208,7 @@ bool component_manager::add_component(component *root, const std::string &path, 
 
 }
 
-bool component_manager::change_component(component *root, const std::string &path, const config &cfg)
+bool component_mgr::change_component(component *root, const std::string &path, const config &cfg)
 {
 	path_element tail;
 	component *c = find_component(root,path,tail);
@@ -222,7 +222,7 @@ bool component_manager::change_component(component *root, const std::string &pat
 	return c->change_child(tail,ch);
 }
 
-bool component_manager::delete_component(component *root, const std::string &path)
+bool component_mgr::delete_component(component *root, const std::string &path)
 {
 	path_element tail;
 	component *c = find_component(root,path,tail);
@@ -253,7 +253,7 @@ static void print_component(component *root, const std::string &type, std::strin
 	}
 }
 
-std::string component_manager::print_component_tree(component *root, const std::string &path)
+std::string component_mgr::print_component_tree(component *root, const std::string &path)
 {
 	path_element tail;
 	component *c;
@@ -271,7 +271,7 @@ std::string component_manager::print_component_tree(component *root, const std::
 	return s.str();
 }
 
-component* component_manager::get_component(component *root, const std::string &path)
+component* component_mgr::get_component(component *root, const std::string &path)
 {
 	if(!path.empty()) {
 		path_element tail;

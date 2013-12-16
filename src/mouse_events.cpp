@@ -997,7 +997,7 @@ void mouse_handler::attack_enemy_(const map_location& att_loc
 	///@todo change ToD to be location specific for the defender
 	recorder.add_attack(attacker_loc, defender_loc, att.attack_num, def.attack_num,
 		attacker->type_id(), defender->type_id(), att.level,
-		def.level, resources::tod_manager->turn(), resources::tod_manager->get_time_of_day());
+		def.level, resources::tod_mgr->turn(), resources::tod_mgr->get_time_of_day());
 	rand_rng::invalidate_seed();
 	if (rand_rng::has_valid_seed()) { //means SRNG is disabled
 		perform_attack(attacker_loc, defender_loc, att.attack_num, def.attack_num, rand_rng::get_last_seed());

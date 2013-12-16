@@ -23,7 +23,7 @@
 #include "gui/dialogs/field.hpp"
 #include "gui/widgets/integer_selector.hpp"
 #include "utils/foreach.tpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 
 namespace gui2 {
 

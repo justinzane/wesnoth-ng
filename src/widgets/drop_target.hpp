@@ -31,8 +31,8 @@ namespace gui {
 	typedef boost::shared_ptr<drop_target> drop_target_ptr;
 
 	typedef int drop_target_group;
-	class drop_group_manager;
-	typedef boost::shared_ptr<drop_group_manager> drop_group_manager_ptr;
+	class drop_group_mgr;
+	typedef boost::shared_ptr<drop_group_mgr> drop_group_mgr_ptr;
 
 	/**
 	 * Handles droping for drag able ui items.
@@ -52,7 +52,7 @@ namespace gui {
 
 		const SDL_Rect* loc_;
 		const int id_;
-		drop_group_manager_ptr group_;
+		drop_group_mgr_ptr group_;
 
 		static drop_target_group create_group();
 		static void delete_group(const drop_target_group id);
@@ -77,7 +77,7 @@ namespace gui {
 		/**
 		 * Registers drop target and saves reference to location.
 		 **/
-		drop_target(const drop_group_manager_ptr group, const SDL_Rect* loc);
+		drop_target(const drop_group_mgr_ptr group, const SDL_Rect* loc);
 		~drop_target();
 
 		int get_id() const;
@@ -87,20 +87,20 @@ namespace gui {
 		 **/
 		bool is_this_id(const int id) const;
 
-		friend class drop_group_manager;
+		friend class drop_group_mgr;
 
 	};
 
 	/**
 	 * Used to create and destroy drop groups.
 	 * To create drop_target widgets one has to have
-	 * drop_group_manager stored in drop_group_manager_ptr.
+	 * drop_group_mgr stored in drop_group_mgr_ptr.
 	 **/
-	class drop_group_manager : public boost::noncopyable {
+	class drop_group_mgr : public boost::noncopyable {
 		const drop_target_group group_id_;
 		public:
-		drop_group_manager();
-		~drop_group_manager();
+		drop_group_mgr();
+		~drop_group_mgr();
 
 		drop_target_group get_group_id() const;
 	};

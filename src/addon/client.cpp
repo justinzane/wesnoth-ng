@@ -309,7 +309,7 @@ void addons_client::wait_for_transfer_done(const std::string& status_message, bo
 	check_connected();
 
 	if(!stat_) {
-		stat_ = new gui2::tnetwork_transmission(*conn_, _("Add-ons Manager"), status_message);
+		stat_ = new gui2::tnetwork_transmission(*conn_, _("Add-ons mgr"), status_message);
 	} else {
 		stat_->set_subtitle(status_message);
 		stat_->set_track_upload(track_upload);

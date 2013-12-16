@@ -26,7 +26,7 @@
 
 #include "SDL2/SDL.h"
 #include "config.hpp"
-#include "generic_sdl2/sdl2_evt_mgr.hpp"
+#include "sdl2/evt_mgr.hpp"
 
 typedef struct {
         size_t x1, y1, x2, y2;

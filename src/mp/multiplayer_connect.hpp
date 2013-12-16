@@ -147,7 +147,7 @@ private:
 	gui::scrollpane scroll_pane_;
 	gui::button launch_;
 	gui::button cancel_;
-	gui::drop_group_manager_ptr combo_control_group_;
+	gui::drop_group_mgr_ptr combo_control_group_;
 };
 
 } // end namespace mp

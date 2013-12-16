@@ -82,7 +82,7 @@ void ttoggle_panel::set_child_members(const std::map<std::string /* widget id */
 	}
 }
 twidget* ttoggle_panel::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active)
 {
 	/**
@@ -98,7 +98,7 @@ twidget* ttoggle_panel::find_at(
 }
 
 const twidget* ttoggle_panel::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active) const
 {
 	const twidget* result = tcontainer_::find_at(coordinate, must_be_active);
@@ -153,7 +153,7 @@ tpoint ttoggle_panel::border_space() const
 		boost::dynamic_pointer_cast<const ttoggle_panel_definition::tresolution>(config());
 	assert(conf);
 
-	return tpoint(conf->left_border + conf->right_border,
+	return point_t(conf->left_border + conf->right_border,
 		conf->top_border + conf->bottom_border);
 }
 

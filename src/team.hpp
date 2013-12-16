@@ -331,7 +331,7 @@ private:
 	boost::shared_ptr<wb::side_actions> planned_actions_;
 };
 
-namespace teams_manager {
+namespace teams_mgr {
 	const std::vector<team> &get_teams();
 }
 

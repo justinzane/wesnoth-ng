@@ -536,7 +536,7 @@ unit::unit(const unit_type &u_type, int side, bool real_unit,
 	race_(&unit_race::null_race),
 	id_(),
 	name_(),
-	underlying_id_(real_unit? 0: n_unit::id_manager::instance().next_fake_id()),
+	underlying_id_(real_unit? 0: n_unit::id_mgr::instance().next_fake_id()),
 	undead_variation_(),
 	variation_(type_->default_variation()),
 	hit_points_(0),
@@ -969,7 +969,7 @@ void unit::set_recruits(const std::vector<std::string>& recruits)
 	recruit_list_ = recruits;
 	//TODO crab
 	//info_.minimum_recruit_price = 0;
-	//ai::manager::raise_recruit_list_changed();
+	//ai::mgr::raise_recruit_list_changed();
 }
 
 const std::vector<std::string> unit::advances_to_translated() const
@@ -993,7 +993,7 @@ void unit::set_advances_to(const std::vector<std::string>& advances_to)
 	advances_to_ = advances_to;
 }
 
-std::string unit::side_id() const {return teams_manager::get_teams()[side()-1].save_id(); }
+std::string unit::side_id() const {return teams_mgr::get_teams()[side()-1].save_id(); }
 
 /**
  * Set the unit's remaining movement to @a moves.
@@ -1309,7 +1309,7 @@ bool unit::internal_matches_filter(const vconfig& cfg, const map_location& loc, 
 	if(cfg.has_child("filter_location")) {
 		assert(resources::game_map != nullptr);
 		assert(resources::teams != nullptr);
-		assert(resources::tod_manager != nullptr);
+		assert(resources::tod_mgr != nullptr);
 		assert(resources::units != nullptr);
 		const vconfig& t_cfg = cfg.child("filter_location");
 		terrain_filter t_filter(t_cfg, *resources::units, use_flat_tod);
@@ -1559,7 +1559,7 @@ bool unit::internal_matches_filter(const vconfig& cfg, const map_location& loc, 
 			}
 			std::set<int>::const_iterator viewer, viewer_end = viewers.end();
 			for (viewer = viewers.begin(); viewer != viewer_end; ++viewer) {
-				bool not_fogged = !teams_manager::get_teams()[*viewer - 1].fogged(loc);
+				bool not_fogged = !teams_mgr::get_teams()[*viewer - 1].fogged(loc);
 				bool not_hiding = !this->invisible(loc/*, false(?) */);
 				if (visible != not_fogged && not_hiding) {
 					return false;
@@ -1591,7 +1591,7 @@ bool unit::internal_matches_filter(const vconfig& cfg, const map_location& loc, 
 				}
 				config::attribute_value i_is_enemy = (*i)["is_enemy"];
 				if (i_is_enemy.blank() || i_is_enemy.to_bool() ==
-				    teams_manager::get_teams()[this->side() - 1].is_enemy(unit_itor->side())) {
+				    teams_mgr::get_teams()[this->side() - 1].is_enemy(unit_itor->side())) {
 					++match_count;
 				}
 			}
@@ -2870,7 +2870,7 @@ bool unit::is_visible_to_team(team const& team, bool const see_all, gamemap cons
 
 void unit::set_underlying_id() {
 	if(underlying_id_ == 0){
-		underlying_id_ = n_unit::id_manager::instance().next_id();
+		underlying_id_ = n_unit::id_mgr::instance().next_id();
 	}
 	if (id_.empty()) {
 		std::stringstream ss;
@@ -2882,9 +2882,9 @@ void unit::set_underlying_id() {
 unit& unit::clone(bool is_temporary)
 {
 	if(is_temporary) {
-		underlying_id_ = n_unit::id_manager::instance().next_fake_id();
+		underlying_id_ = n_unit::id_mgr::instance().next_fake_id();
 	} else {
-		underlying_id_ = n_unit::id_manager::instance().next_id();
+		underlying_id_ = n_unit::id_mgr::instance().next_id();
 		std::string::size_type pos = id_.find_last_of('-');
 		if(pos != std::string::npos && pos+1 < id_.size()
 		&& id_.find_first_not_of("0123456789", pos+1) == std::string::npos) {

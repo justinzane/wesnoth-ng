@@ -35,7 +35,7 @@ public:
 
 private:
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE;
+	virtual point_t calculate_best_size() const OVERRIDE;
 public:
 
 	/***** ***** ***** ***** Inherited ***** ***** ***** *****/
@@ -118,13 +118,13 @@ private:
 	unsigned offset_after() const;
 
 	/** Inherited from tscrollbar. */
-	bool on_positioner(const tpoint& coordinate) const;
+	bool on_positioner(const point_t& coordinate) const;
 
 	/** Inherited from tscrollbar. */
-	int on_bar(const tpoint& coordinate) const;
+	int on_bar(const point_t& coordinate) const;
 
 	/** Inherited from tscrollbar. */
-	int get_length_difference(const tpoint& original, const tpoint& current) const
+	int get_length_difference(const point_t& original, const point_t& current) const
 		{ return current.x - original.x; }
 
 	/** See @ref tcontrol::update_canvas. */

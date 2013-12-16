@@ -21,7 +21,7 @@
 #include "gui/dialogs/popup.hpp"
 
 #include "gui/widgets/window.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 
 namespace gui2 {
 

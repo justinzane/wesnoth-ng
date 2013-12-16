@@ -35,7 +35,7 @@ class editor_toolkit {
 
 public:
 	editor_toolkit(editor_display& gui, const CKey& key,
-			const config& game_config, context_manager& c_manager);
+			const config& game_config, context_mgr& c_mgr);
 
 	~editor_toolkit();
 
@@ -51,7 +51,7 @@ private:
 	void init_brushes(const config& game_config);
 
 	/** init the mouse actions (tools) */
-	void init_mouse_actions(const config& game_config, context_manager& c_manager);
+	void init_mouse_actions(const config& game_config, context_mgr& c_mgr);
 
 public:
 	void set_mouseover_overlay();
@@ -82,7 +82,7 @@ public:
 	/** TODO */
 	bool is_active_brush(std::string id) const { return brush_->id() == id; };
 
-	palette_manager* get_palette_manager() { return palette_manager_.get(); };
+	palette_mgr* get_palette_mgr() { return palette_mgr_.get(); };
 
 private:
 
@@ -90,7 +90,7 @@ private:
 
 	const CKey& key_;
 
-	boost::scoped_ptr<palette_manager> palette_manager_;
+	boost::scoped_ptr<palette_mgr> palette_mgr_;
 
 //Tools
 

@@ -182,7 +182,7 @@ std::string directory_name(const std::string& file);
 std::string normalize_path(const std::string &path);
 
 /**
- *  The paths manager is responsible for recording the various paths
+ *  The paths mgr is responsible for recording the various paths
  *  that binary files may be located at.
  *  It should be passed a config object which holds binary path information.
  *  This is in the format
@@ -193,17 +193,17 @@ std::string normalize_path(const std::string &path);
  *  Binaries will be searched for in [wesnoth-path]/data/<path>/images/
  *@endverbatim
  */
-struct binary_paths_manager
+struct binary_paths_mgr
 {
-	binary_paths_manager();
-	binary_paths_manager(const class config& cfg);
-	~binary_paths_manager();
+	binary_paths_mgr();
+	binary_paths_mgr(const class config& cfg);
+	~binary_paths_mgr();
 
 	void set_paths(const class config& cfg);
 
 private:
-	binary_paths_manager(const binary_paths_manager& o);
-	binary_paths_manager& operator=(const binary_paths_manager& o);
+	binary_paths_mgr(const binary_paths_mgr& o);
+	binary_paths_mgr& operator=(const binary_paths_mgr& o);
 
 	void cleanup();
 

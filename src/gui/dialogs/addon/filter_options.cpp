@@ -49,7 +49,7 @@ namespace gui2 {
  *
  * == Add-on filter options ==
  *
- * Advanced filtering options for the legacy (GUI1) Add-ons Manager dialog.
+ * Advanced filtering options for the legacy (GUI1) Add-ons mgr dialog.
  *
  * @begin{table}{dialog_widgets}
  *

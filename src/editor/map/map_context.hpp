@@ -106,8 +106,8 @@ public:
 		return units_;
 	}
 
-	tod_manager* get_time_manager() {
-		return tod_manager_.get();
+	tod_mgr* get_time_mgr() {
+		return tod_mgr_.get();
 	}
 
 	game_state& get_game_state() {
@@ -372,7 +372,7 @@ private:
 	map_labels labels_;
 	unit_map units_;
 	std::vector<team> teams_;
-	boost::scoped_ptr<tod_manager> tod_manager_;
+	boost::scoped_ptr<tod_mgr> tod_mgr_;
 	game_state state_;
 
 	typedef std::map<std::string, sound::music_track> music_map;

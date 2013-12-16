@@ -34,7 +34,7 @@ namespace gui {
 		return group_id->second++;
 	}
 
-	drop_target::drop_target(const drop_group_manager_ptr group, const SDL_Rect* loc) : loc_(loc), id_(next_free_id(group->get_group_id())), group_(group)
+	drop_target::drop_target(const drop_group_mgr_ptr group, const SDL_Rect* loc) : loc_(loc), id_(next_free_id(group->get_group_id())), group_(group)
 	{
 		groups_.insert(std::make_pair(group_->get_group_id(), this));
 	}
@@ -92,31 +92,31 @@ namespace gui {
 	{
 		if (id_ == not_id)
 			return false;
-		int this_right = loc_.x + loc_.w;
-		int this_lower = loc_.y + loc_.h;
+		int this_right = loc_->x + loc_->w;
+		int this_lower = loc_->y + loc_->h;
 
-		int hit_right = hit_loc.x + hit_loc.w;
-		int hit_lower = hit_loc.y + hit_loc.h;
+		int hit_right = hit_loc->x + hit_loc->w;
+		int hit_lower = hit_loc->y + hit_loc->h;
 
 		// Is it inside in x direction?
-		return (this_right > hit_loc.x
-				&& loc_.x < hit_right
+		return (this_right > hit_loc->x
+				&& loc_->x < hit_right
 		// Is it inside in y direction?
-				&& this_lower > hit_loc.y
-				&& loc_.y < hit_lower);
+				&& this_lower > hit_loc->y
+				&& loc_->y < hit_lower);
 
 	}
 
-	drop_group_manager::drop_group_manager() : group_id_(drop_target::create_group())
+	drop_group_mgr::drop_group_mgr() : group_id_(drop_target::create_group())
 	{
 	}
 
-	drop_group_manager::~drop_group_manager()
+	drop_group_mgr::~drop_group_mgr()
 	{
 		drop_target::delete_group(group_id_);
 	}
 
-	drop_target_group drop_group_manager::get_group_id() const
+	drop_target_group drop_group_mgr::get_group_id() const
 	{
 		return group_id_;
 	}

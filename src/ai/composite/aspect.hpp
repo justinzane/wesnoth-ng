@@ -44,7 +44,7 @@
 
 namespace ai {
 
-class aspect : public readonly_context_proxy, public events::observer, public component {
+class aspect : public readonly_context_proxy, public evt_observer, public component {
 public:
 	aspect(readonly_context &context, const config &cfg, const std::string &id);
 

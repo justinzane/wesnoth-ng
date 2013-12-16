@@ -93,7 +93,7 @@ void scenario::set_metadata() {
     const std::string& map_data = data_["map_data"];
 
     try {
-        map_.reset(new gamemap(resources::config_manager->game_config(), map_data));
+        map_.reset(new gamemap(resources::config_mgr->game_config(), map_data));
     } catch (incorrect_map_format_error& e) {
         data_["description"] = _("Map could not be loaded: ") + e.message;
 
@@ -261,14 +261,14 @@ create_engine::create_engine(game_display& disp, game_state& state) :
     mods_(),
     state_(state),
     parameters_(),
-    dependency_manager_(resources::config_manager->game_config(), disp.video()),
+    dependency_mgr_(resources::config_mgr->game_config(), disp.video()),
     generator_(nullptr) {
     DBG_MP<< "restoring game config\n";
 
     // Restore game config for multiplayer.
     state_ = game_state();
     state_.classification().campaign_type = "multiplayer";
-    resources::config_manager->
+    resources::config_mgr->
     load_game_config_for_game(state_.classification());
 
     get_files_in_dir(get_user_data_dir() + "/editor/maps", &user_map_names_,
@@ -283,14 +283,14 @@ create_engine::create_engine(game_display& disp, game_state& state) :
     parameters_.saved_game = false;
 
     BOOST_FOREACH (const std::string& str, preferences::modifications()) {
-        if (resources::config_manager->
+        if (resources::config_mgr->
             game_config().find_child("modification", "id", str))
         parameters_.active_mods.push_back(str);
     }
 
     if (current_level_type_ != level::CAMPAIGN &&
         current_level_type_ != level::SP_CAMPAIGN) {
-        dependency_manager_.try_modifications(parameters_.active_mods, true);
+        dependency_mgr_.try_modifications(parameters_.active_mods, true);
     }
 }
 
@@ -335,11 +335,11 @@ void create_engine::prepare_for_campaign(const std::string& difficulty) {
     state_.classification().campaign_xtra_defines =
     utils::split(current_level().data()["extra_defines"]);
 
-    resources::config_manager->
+    resources::config_mgr->
     load_game_config_for_game(state_.classification());
 
     current_level().set_data(
-        resources::config_manager->game_config().find_child("multiplayer",
+        resources::config_mgr->game_config().find_child("multiplayer",
             "id", current_level().data()["first_scenario"]));
 
     parameters_.mp_campaign = current_level().id();
@@ -428,14 +428,14 @@ void create_engine::set_current_level(const size_t index) {
 
     if (current_level_type_ != level::CAMPAIGN && current_level_type_ != level::SP_CAMPAIGN) {
 
-        dependency_manager_.try_scenario(current_level().id());
+        dependency_mgr_.try_scenario(current_level().id());
     }
 }
 
 void create_engine::set_current_era_index(const size_t index) {
     current_era_index_ = index;
 
-    dependency_manager_.try_era_by_index(index);
+    dependency_mgr_.try_era_by_index(index);
 }
 
 void create_engine::set_current_mod_index(const size_t index) {
@@ -507,16 +507,16 @@ int create_engine::find_extra_by_id(const MP_EXTRA extra_type, const std::string
     return -1;
 }
 
-const depcheck::manager& create_engine::dependency_manager() const {
-    return dependency_manager_;
+const depcheck::mgr& create_engine::dependency_mgr() const {
+    return dependency_mgr_;
 }
 
 void create_engine::init_active_mods() {
     if (current_level_type_ != level::CAMPAIGN && current_level_type_ != level::SP_CAMPAIGN) {
-        dependency_manager_.try_modifications(parameters_.active_mods);
+        dependency_mgr_.try_modifications(parameters_.active_mods);
     }
 
-    parameters_.active_mods = dependency_manager_.get_modifications();
+    parameters_.active_mods = dependency_mgr_.get_modifications();
 }
 
 std::vector<std::string>& create_engine::active_mods() {
@@ -532,7 +532,7 @@ const mp_game_settings& create_engine::get_parameters() {
 }
 
 void create_engine::init_all_levels() {
-    if (const config &generic_multiplayer = resources::config_manager->game_config().child(
+    if (const config &generic_multiplayer = resources::config_mgr->game_config().child(
         "generic_multiplayer")) {
         config gen_mp_data = generic_multiplayer;
 
@@ -549,7 +549,7 @@ void create_engine::init_all_levels() {
             boost::scoped_ptr<gamemap> map;
             try {
                 map.reset(
-                    new gamemap(resources::config_manager->game_config(),
+                    new gamemap(resources::config_mgr->game_config(),
                                 user_map_data["map_data"]));
             } catch (incorrect_map_format_error& e) {
                 user_map_data["description"] = _("Map could not be loaded: ") + e.message;
@@ -570,7 +570,7 @@ void create_engine::init_all_levels() {
                 config depinfo;
                 depinfo["id"] = user_map_names_[i];
                 depinfo["name"] = user_map_names_[i];
-                dependency_manager_.insert_element(depcheck::SCENARIO, depinfo,
+                dependency_mgr_.insert_element(depcheck::SCENARIO, depinfo,
                                                    i - dep_index_offset);
             }
         }
@@ -578,7 +578,7 @@ void create_engine::init_all_levels() {
 
     // Stand-alone scenarios.
     foreach_ng(const config &data,
-        resources::config_manager->game_config().child_range("multiplayer")) {
+        resources::config_mgr->game_config().child_range("multiplayer")) {
     if (!data["map_generation"].empty()) {
         random_map_ptr new_random_map(new random_map(data));
         random_maps_.push_back(new_random_map);
@@ -590,7 +590,7 @@ void create_engine::init_all_levels() {
 
 // Campaigns.
     foreach_ng(const config &data,
-        resources::config_manager->game_config().child_range("campaign")) {
+        resources::config_mgr->game_config().child_range("campaign")) {
     const std::string& type = data["type"];
 
     if (type == "mp" || type == "hybrid") {
@@ -608,7 +608,7 @@ void create_engine::init_extras(const MP_EXTRA extra_type) {
     const std::string extra_name = (extra_type == ERA) ? "era" : "modification";
 
     foreach_ng(const config &extra,
-        resources::config_manager->game_config().child_range(extra_name)) {
+        resources::config_mgr->game_config().child_range(extra_name)) {
 
     extras_metadata_ptr new_extras_metadata(new extras_metadata());
     new_extras_metadata->id = extra["id"].str();

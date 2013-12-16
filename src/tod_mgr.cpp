@@ -1,5 +1,5 @@
 /**
- * @file src/tod_manager.cpp
+ * @file src/tod_mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -38,7 +38,7 @@
 static lg::log_domain log_engine("engine");
 #define LOG_NG LOG_STREAM(info, log_engine)
 
-tod_manager::tod_manager(const config& scenario_cfg, const int num_turns):
+tod_mgr::tod_mgr(const config& scenario_cfg, const int num_turns):
 	savegame_config(),
 	currentTime_(0),
 	times_(),
@@ -61,23 +61,23 @@ tod_manager::tod_manager(const config& scenario_cfg, const int num_turns):
 	non_const_config["current_tod"] = currentTime_;
 }
 
-tod_manager& tod_manager::operator=(const tod_manager& manager)
+tod_mgr& tod_mgr::operator=(const tod_mgr& mgr)
 {
-	if(this == &manager) {
+	if(this == &mgr) {
 		return *this;
 	}
 
-	currentTime_ = manager.currentTime_;
-	times_ = manager.times_;
-	areas_ = manager.areas_;
+	currentTime_ = mgr.currentTime_;
+	times_ = mgr.times_;
+	areas_ = mgr.areas_;
 
-	turn_ = manager.turn_;
-	num_turns_ = manager.num_turns_;
+	turn_ = mgr.turn_;
+	num_turns_ = mgr.num_turns_;
 
 	return *this;
 }
 
-config tod_manager::to_config() const
+config tod_mgr::to_config() const
 {
 	config cfg;
 	cfg["turn_at"] = turn_;
@@ -105,12 +105,12 @@ config tod_manager::to_config() const
 	return cfg;
 }
 
-const time_of_day& tod_manager::get_previous_time_of_day() const
+const time_of_day& tod_mgr::get_previous_time_of_day() const
 {
 	return get_time_of_day_turn(times_, turn_ - 1, currentTime_);
 }
 
-const time_of_day& tod_manager::get_time_of_day(const map_location& loc, int n_turn) const
+const time_of_day& tod_mgr::get_time_of_day(const map_location& loc, int n_turn) const
 {
 	if(n_turn == 0)
 		n_turn = turn_;
@@ -128,7 +128,7 @@ const time_of_day& tod_manager::get_time_of_day(const map_location& loc, int n_t
 	return get_time_of_day_turn(times_, n_turn, currentTime_);
 }
 
-const time_of_day tod_manager::get_illuminated_time_of_day(const map_location& loc, int for_turn) const
+const time_of_day tod_mgr::get_illuminated_time_of_day(const map_location& loc, int for_turn) const
 {
 	const gamemap& map = *resources::game_map;
 	const unit_map& units = *resources::units;
@@ -195,20 +195,20 @@ const time_of_day tod_manager::get_illuminated_time_of_day(const map_location& l
 }
 
 
-bool tod_manager::is_start_ToD(const std::string& random_start_time)
+bool tod_mgr::is_start_ToD(const std::string& random_start_time)
 {
 	return !random_start_time.empty()
 		&& utils::string_bool(random_start_time, true);
 }
 
-void tod_manager::replace_schedule(const config& time_cfg)
+void tod_mgr::replace_schedule(const config& time_cfg)
 {
 	times_.clear();
 	time_of_day::parse_times(time_cfg,times_);
 	currentTime_ = 0;
 }
 
-void tod_manager::replace_schedule(const std::vector<time_of_day>& schedule)
+void tod_mgr::replace_schedule(const std::vector<time_of_day>& schedule)
 {
 	times_ = schedule;
 	currentTime_ = 0;
@@ -216,7 +216,7 @@ void tod_manager::replace_schedule(const std::vector<time_of_day>& schedule)
 
 
 
-std::vector<std::string> tod_manager::get_area_ids() const
+std::vector<std::string> tod_mgr::get_area_ids() const
 {
 	std::vector<std::string> areas;
 	foreach_ng(const area_time_of_day& area, areas_) {
@@ -225,12 +225,12 @@ std::vector<std::string> tod_manager::get_area_ids() const
 	return areas;
 }
 
-const std::set<map_location>& tod_manager::get_area_by_index(int index) const
+const std::set<map_location>& tod_mgr::get_area_by_index(int index) const
 {
 	return areas_[index].hexes;
 }
 
-void tod_manager::add_time_area(const config& cfg)
+void tod_mgr::add_time_area(const config& cfg)
 {
 	areas_.push_back(area_time_of_day());
 	area_time_of_day &area = areas_.back();
@@ -243,7 +243,7 @@ void tod_manager::add_time_area(const config& cfg)
 	time_of_day::parse_times(cfg, area.times);
 }
 
-void tod_manager::add_time_area(const std::string& id, const std::set<map_location>& locs,
+void tod_mgr::add_time_area(const std::string& id, const std::set<map_location>& locs,
 		const config& time_cfg)
 {
 	areas_.push_back(area_time_of_day());
@@ -253,7 +253,7 @@ void tod_manager::add_time_area(const std::string& id, const std::set<map_locati
 	time_of_day::parse_times(time_cfg, area.times);
 }
 
-void tod_manager::remove_time_area(const std::string& area_id)
+void tod_mgr::remove_time_area(const std::string& area_id)
 {
 	if(area_id.empty()) {
 		areas_.clear();
@@ -270,7 +270,7 @@ void tod_manager::remove_time_area(const std::string& area_id)
 	}
 }
 
-int tod_manager::get_start_ToD(const config &level) const
+int tod_mgr::get_start_ToD(const config &level) const
 {
 	const config::attribute_value& current_tod = level["current_tod"];
 	if (!current_tod.blank())
@@ -300,22 +300,22 @@ int tod_manager::get_start_ToD(const config &level) const
 	return default_result;
 }
 
-const time_of_day& tod_manager::get_time_of_day_turn(const std::vector<time_of_day>& times, int nturn, const int current_time) const
+const time_of_day& tod_mgr::get_time_of_day_turn(const std::vector<time_of_day>& times, int nturn, const int current_time) const
 {
 	const int time = calculate_current_time(times.size(), nturn, current_time);
 	return times[time];
 }
 
-void tod_manager::modify_turns(const std::string& mod)
+void tod_mgr::modify_turns(const std::string& mod)
 {
 	num_turns_ = std::max<int>(utils::apply_modifier(num_turns_,mod,0),-1);
 }
-void tod_manager::set_number_of_turns(int num)
+void tod_mgr::set_number_of_turns(int num)
 {
 	num_turns_ = std::max<int>(num, -1);
 }
 
-void tod_manager::set_turn(const int num, const bool increase_limit_if_needed)
+void tod_mgr::set_turn(const int num, const bool increase_limit_if_needed)
 {
 	const int new_turn = std::max<int>(num, 1);
 	LOG_NG << "changing current turn number from " << turn_ << " to " << new_turn << '\n';
@@ -330,7 +330,7 @@ void tod_manager::set_turn(const int num, const bool increase_limit_if_needed)
 		resources::gamedata->get_variable("turn_number") = new_turn;
 }
 
-void tod_manager::set_new_current_times(const int new_current_turn_number)
+void tod_mgr::set_new_current_times(const int new_current_turn_number)
 {
 	currentTime_ = calculate_current_time(times_.size(), new_current_turn_number, currentTime_);
 	foreach_ng(area_time_of_day& area, areas_) {
@@ -341,7 +341,7 @@ void tod_manager::set_new_current_times(const int new_current_turn_number)
 	}
 }
 
-int tod_manager::calculate_current_time(
+int tod_mgr::calculate_current_time(
 	const int number_of_times,
 	const int for_turn_number,
 	const int current_time,
@@ -354,14 +354,14 @@ int tod_manager::calculate_current_time(
 	return new_current_time;
 }
 
-bool tod_manager::next_turn()
+bool tod_mgr::next_turn()
 {
 	set_turn(turn_ + 1, false);
 	return is_time_left();
 }
 
 
-bool tod_manager::is_time_left()
+bool tod_mgr::is_time_left()
 {
 	return num_turns_ == -1 || turn_ <= num_turns_;
 }

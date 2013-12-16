@@ -100,7 +100,7 @@ void help_button::leave() {
 }
 
 /// Generate the help contents from the configurations given to the
-/// manager.
+/// mgr.
 static void generate_contents();
 
 struct section;
@@ -777,7 +777,7 @@ static void push_tab_pair(std::vector<std::pair<std::string, unsigned int> > &v,
 
 namespace help {
 
-help_manager::help_manager(const config *cfg) //, gamemap *_map)
+help_mgr::help_mgr(const config *cfg) //, gamemap *_map)
 {
 	game_cfg = cfg == nullptr ? &dummy_cfg : cfg;
 //	map = _map;
@@ -846,7 +846,7 @@ void generate_contents()
 	}
 }
 
-help_manager::~help_manager()
+help_mgr::~help_mgr()
 {
 	game_cfg = nullptr;
 //	map = nullptr;
@@ -3272,7 +3272,7 @@ void show_help(display &disp, const section &toplevel_sec,
 			   int xloc, int yloc)
 {
 	const events::event_context dialog_events_context;
-	const gui::dialog_manager manager;
+	const gui::dialog_mgr mgr;
 	const resize_lock prevent_resizing;
 
 	CVideo& screen = disp.video();

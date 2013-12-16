@@ -39,7 +39,7 @@ controller_base::controller_base(
 	key_(),
 	browse_(false),
 	scrolling_(false),
-	joystick_manager_()
+	joystick_mgr_()
 {
 }
 
@@ -219,7 +219,7 @@ void controller_base::play_slice(bool is_delay_enabled)
 
 	bool was_scrolling = scrolling_;
 
-	std::pair<double, double> values = joystick_manager_.get_scroll_axis_pair();
+	std::pair<double, double> values = joystick_mgr_.get_scroll_axis_pair();
 	const double joystickx = values.first;
 	const double joysticky = values.second;
 
@@ -227,7 +227,7 @@ void controller_base::play_slice(bool is_delay_enabled)
 	Uint8 mouse_flags = SDL_GetMouseState(&mousex, &mousey);
 
 	/* TODO fendrin enable after an axis choosing mechanism is implemented
-	std::pair<double, double> values = joystick_manager_.get_mouse_axis_pair();
+	std::pair<double, double> values = joystick_mgr_.get_mouse_axis_pair();
 	mousex += values.first * 10;
 	mousey += values.second * 10;
 	SDL_WarpMouse(mousex, mousey);
@@ -240,14 +240,14 @@ void controller_base::play_slice(bool is_delay_enabled)
 	const map_location& selected_hex = get_display().selected_hex();
 
 	if (selected_hex != map_location::null_location) {
-		if (joystick_manager_.next_highlighted_hex(highlighted_hex, selected_hex)) {
+		if (joystick_mgr_.next_highlighted_hex(highlighted_hex, selected_hex)) {
 			get_mouse_handler_base().mouse_motion(0,0, true, true, highlighted_hex);
 			get_display().scroll_to_tile(highlighted_hex, display::ONSCREEN_WARP, false, true);
 			scrolling_ = true;
 		}
 	} else */
 
-	if (joystick_manager_.update_highlighted_hex(highlighted_hex)
+	if (joystick_mgr_.update_highlighted_hex(highlighted_hex)
 			&& get_display().get_map().on_board(highlighted_hex)) {
 		get_mouse_handler_base().mouse_motion(0,0, true, true, highlighted_hex);
 		get_display().scroll_to_tile(highlighted_hex, display::ONSCREEN_WARP, false, true);

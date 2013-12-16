@@ -242,9 +242,9 @@ bool terrain_filter::match_internal(const map_location& loc, const bool ignore_x
 		time_of_day tod;
 
 		if(flat_) {
-			tod = resources::tod_manager->get_time_of_day(loc);
+			tod = resources::tod_mgr->get_time_of_day(loc);
 		} else {
-			tod = resources::tod_manager->get_illuminated_time_of_day(loc);
+			tod = resources::tod_mgr->get_illuminated_time_of_day(loc);
 		}
 
 		if(!tod_type.empty()) {

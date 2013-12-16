@@ -99,13 +99,13 @@ private:
 
 	//this should get destroyed *after* the video, since we want
 	//to clean up threads after the display disappears.
-	const threading::manager thread_manager;
+	const threading::mgr thread_mgr;
 
-	const font::manager font_manager_;
-	const preferences::manager prefs_manager_;
-	const image::manager image_manager_;
+	const font::mgr font_mgr_;
+	const preferences::mgr prefs_mgr_;
+	const image::mgr image_mgr_;
 	const events::event_context main_event_context_;
-	const manager hotkey_manager_;
+	const mgr hotkey_mgr_;
 	sound::music_thinker music_thinker_;
 	resize_monitor resize_monitor_;
 

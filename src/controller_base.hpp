@@ -23,13 +23,10 @@
 #include "global.hpp"
 
 #include "hotkeys.hpp"
-#include "key.hpp"
 
 #include "joystick.hpp"
 
 #include "map.hpp"
-
-class CVideo;
 
 namespace events {
 class mouse_handler_base;
@@ -118,7 +115,7 @@ protected:
 	CKey key_;
 	bool browse_;
 	bool scrolling_;
-	joystick_manager joystick_manager_;
+	joystick_mgr joystick_mgr_;
 
 };
 

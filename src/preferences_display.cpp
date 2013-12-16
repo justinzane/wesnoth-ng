@@ -50,7 +50,7 @@ namespace preferences {
 
 display* disp = nullptr;
 
-display_manager::display_manager(display* d)
+display_mgr::display_mgr(display* d)
 {
 	disp = d;
 
@@ -64,7 +64,7 @@ display_manager::display_manager(display* d)
 	set_color_cursors(preferences::get("color_cursors", false));
 }
 
-display_manager::~display_manager()
+display_mgr::~display_mgr()
 {
 	disp = nullptr;
 }
@@ -131,7 +131,7 @@ void set_fullscreen(CVideo& video, const bool ison)
 			} else if(video.modePossible(1024,768,16,flags)) {
 				set_resolution(video, 1024, 768);
 			} else {
-				gui2::show_transient_message(video,"",_("The video mode could not be changed. Your window manager must be set to 16 bits per pixel to run the game in windowed mode. Your display must support 1024x768x16 to run the game full screen."));
+				gui2::show_transient_message(video,"",_("The video mode could not be changed. Your window mgr must be set to 16 bits per pixel to run the game in windowed mode. Your display must support 1024x768x16 to run the game full screen."));
 			}
 			// We reinit color cursors, because SDL on Mac seems to forget the SDL_Cursor
 			set_color_cursors(preferences::get("color_cursors", false));
@@ -187,7 +187,7 @@ bool set_resolution(CVideo& video
 
 	} else {
         // grzywacz: is this even true?
-		gui2::show_transient_message(video,"",_("The video mode could not be changed. Your window manager must be set to 16 bits per pixel to run the game in windowed mode. Your display must support 1024x768x16 to run the game full screen."));
+		gui2::show_transient_message(video,"",_("The video mode could not be changed. Your window mgr must be set to 16 bits per pixel to run the game in windowed mode. Your display must support 1024x768x16 to run the game full screen."));
 		return false;
 	}
 

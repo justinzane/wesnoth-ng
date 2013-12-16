@@ -165,7 +165,7 @@ void tmouse_motion::capture_mouse(//twidget* widget)
 void tmouse_motion::signal_handler_sdl_mouse_motion(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& coordinate)
+		, const point_t& coordinate)
 {
 	if(signal_handler_sdl_mouse_motion_entered_) {
 		return;
@@ -208,7 +208,7 @@ void tmouse_motion::signal_handler_sdl_mouse_motion(
 void tmouse_motion::signal_handler_sdl_wheel(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& coordinate)
+		, const point_t& coordinate)
 {
 	DBG_GUI_E << LOG_HEADER << event << ".\n";
 
@@ -227,7 +227,7 @@ void tmouse_motion::signal_handler_sdl_wheel(
 void tmouse_motion::signal_handler_show_helptip(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& coordinate)
+		, const point_t& coordinate)
 {
 	DBG_GUI_E << LOG_HEADER << event << ".\n";
 
@@ -263,7 +263,7 @@ void tmouse_motion::mouse_enter(twidget* mouse_over)
 	start_hover_timer(mouse_over, get_mouse_position());
 }
 
-void tmouse_motion::mouse_motion(twidget* mouse_over, const tpoint& coordinate)
+void tmouse_motion::mouse_motion(twidget* mouse_over, const point_t& coordinate)
 {
 	DBG_GUI_E << LOG_HEADER << "Firing: " << event::MOUSE_MOTION << ".\n";
 
@@ -303,7 +303,7 @@ void tmouse_motion::show_tooltip()
 
 	hover_timer_ = 0;
 	hover_widget_ = nullptr;
-	hover_position_ = tpoint(0, 0);
+	hover_position_ = point_t(0, 0);
 }
 
 void tmouse_motion::mouse_leave()
@@ -322,7 +322,7 @@ void tmouse_motion::mouse_leave()
 	stop_hover_timer();
 }
 
-void tmouse_motion::start_hover_timer(twidget* widget, const tpoint& coordinate)
+void tmouse_motion::start_hover_timer(twidget* widget, const point_t& coordinate)
 {
 	assert(widget);
 	stop_hover_timer();
@@ -360,7 +360,7 @@ void tmouse_motion::stop_hover_timer()
 
 		hover_timer_ = 0;
 		hover_widget_ = nullptr;
-		hover_position_ = tpoint(0, 0);
+		hover_position_ = point_t(0, 0);
 	}
 }
 
@@ -458,7 +458,7 @@ template<
 >::signal_handler_sdl_button_down(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& coordinate)
+		, const point_t& coordinate)
 {
 	if(signal_handler_sdl_button_down_entered_) {
 		return;
@@ -523,7 +523,7 @@ template<
 >::signal_handler_sdl_button_up(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& coordinate)
+		, const point_t& coordinate)
 {
 	if(signal_handler_sdl_button_up_entered_) {
 		return;

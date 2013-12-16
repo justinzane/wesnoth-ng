@@ -72,7 +72,7 @@ private:
 	virtual bool recruit_usage(const std::string& usage);
 
 
-	class recruit_situation_change_observer : public events::observer {
+	class recruit_situation_change_observer : public evt_observer {
 	public:
 		recruit_situation_change_observer();
 		~recruit_situation_change_observer();

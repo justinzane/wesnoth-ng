@@ -264,7 +264,7 @@ static lg::log_domain log_server("server");
 		return (ip_ & mask_ & pair.second) == (pair.first & pair.second & mask_);
 	}
 
-	void ban_manager::read()
+	void ban_mgr::read()
 	{
 		if (filename_.empty() || !file_exists(filename_))
 			return;
@@ -303,7 +303,7 @@ static lg::log_domain log_server("server");
 
 	}
 
-	void ban_manager::write()
+	void ban_mgr::write()
 	{
 		if (filename_.empty() || !dirty_)
 			return;
@@ -329,7 +329,7 @@ static lg::log_domain log_server("server");
 		writer.write(cfg);
 	}
 
-	bool ban_manager::parse_time(const std::string& duration, time_t* time) const
+	bool ban_mgr::parse_time(const std::string& duration, time_t* time) const
 	{
 		if (!time) return false;
 
@@ -484,7 +484,7 @@ static lg::log_domain log_server("server");
 		return true;
 	}
 
-	std::string ban_manager::ban(const std::string& ip,
+	std::string ban_mgr::ban(const std::string& ip,
 								 const time_t& end_time,
 								 const std::string& reason,
 								 const std::string& who_banned,
@@ -518,7 +518,7 @@ static lg::log_domain log_server("server");
 		return ret.str();
 	}
 
-	void ban_manager::unban(std::ostringstream& os, const std::string& ip)
+	void ban_mgr::unban(std::ostringstream& os, const std::string& ip)
 	{
 		ban_set::iterator ban;
 		try {
@@ -543,7 +543,7 @@ static lg::log_domain log_server("server");
 
 	}
 
-	void ban_manager::unban_group(std::ostringstream& os, const std::string& group)
+	void ban_mgr::unban_group(std::ostringstream& os, const std::string& group)
 	{
 		ban_set temp;
 		std::insert_iterator<ban_set> temp_inserter(temp, temp.begin());
@@ -554,7 +554,7 @@ static lg::log_domain log_server("server");
 		dirty_ = true;
 	}
 
-	void ban_manager::check_ban_times(time_t time_now)
+	void ban_mgr::check_ban_times(time_t time_now)
 	{
 		while (!time_queue_.empty())
 		{
@@ -578,7 +578,7 @@ static lg::log_domain log_server("server");
 		write();
 	}
 
-	void ban_manager::list_deleted_bans(std::ostringstream& out, const std::string& mask) const
+	void ban_mgr::list_deleted_bans(std::ostringstream& out, const std::string& mask) const
 	{
 		if (deleted_bans_.empty())
 		{
@@ -606,7 +606,7 @@ static lg::log_domain log_server("server");
 
 
 
-	void ban_manager::list_bans(std::ostringstream& out, const std::string& mask) const
+	void ban_mgr::list_bans(std::ostringstream& out, const std::string& mask) const
 	{
 		if (bans_.empty())
 		{
@@ -649,7 +649,7 @@ static lg::log_domain log_server("server");
 	}
 
 
-	std::string ban_manager::is_ip_banned(const std::string& ip) const
+	std::string ban_mgr::is_ip_banned(const std::string& ip) const
 	{
 		ip_mask pair;
 		try {
@@ -663,7 +663,7 @@ static lg::log_domain log_server("server");
 		return (*ban)->get_reason() + (nick.empty() ? "" : " (" + nick + ")") + " (" + (*ban)->get_human_time_span() + ")";
 	}
 
-	void ban_manager::init_ban_help()
+	void ban_mgr::init_ban_help()
 	{
 		ban_help_ = "ban <mask> <time> <reason>\n"
 				"The time format is: %d[%s[%d[%s[...]]]] where %s is a time"
@@ -690,7 +690,7 @@ static lg::log_domain log_server("server");
 				"kban suokko Y One year ban for constant flooding";
 	}
 
-	void ban_manager::load_config(const config& cfg)
+	void ban_mgr::load_config(const config& cfg)
 	{
 		ban_times_.clear();
 		foreach_ng(const config &bt, cfg.child_range("ban_time")) {
@@ -707,12 +707,12 @@ static lg::log_domain log_server("server");
 		}
 	}
 
-	ban_manager::~ban_manager()
+	ban_mgr::~ban_mgr()
 	{
 		write();
 	}
 
-	ban_manager::ban_manager()
+	ban_mgr::ban_mgr()
 		: bans_()
 		, deleted_bans_()
 		, time_queue_()

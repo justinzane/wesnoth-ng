@@ -31,10 +31,10 @@ namespace preferences {
 	static const int height = 400;
 	static const int width = 465;
 
-	struct display_manager
+	struct display_mgr
 	{
-		display_manager(display* disp);
-		~display_manager();
+		display_mgr(display* disp);
+		~display_mgr();
 	};
 
 

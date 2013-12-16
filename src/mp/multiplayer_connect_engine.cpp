@@ -330,7 +330,7 @@ void connect_engine::update_and_send_diff(bool update_time_of_day)
 
 	if (update_time_of_day) {
 		// Set random start ToD.
-		tod_manager tod_mng(level_, level_["turns"]);
+		tod_mgr tod_mng(level_, level_["turns"]);
 	}
 
 	config diff = level_.get_diff(old_level);
@@ -877,7 +877,7 @@ config side_engine::new_config() const
 	config res = cfg_;
 
 	// Save default "recruit" so that correct faction lists would be
-	// initialized by flg_manager when the new side config is sent over network.
+	// initialized by flg_mgr when the new side config is sent over network.
 	res["default_recruit"] = cfg_["recruit"];
 
 	// If the user is allowed to change type, faction, leader etc,

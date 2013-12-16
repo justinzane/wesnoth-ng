@@ -1169,7 +1169,7 @@ WML_HANDLER_FUNCTION(modify_ai, /*event_info*/, cfg)
 	}
 	foreach_ng(const int &side_num, sides)
 	{
-		ai::manager::modify_active_ai_for_side(side_num,cfg.get_parsed_config());
+		ai::mgr::modify_active_ai_for_side(side_num,cfg.get_parsed_config());
 	}
 }
 
@@ -1266,11 +1266,11 @@ WML_HANDLER_FUNCTION(modify_side, /*event_info*/, cfg)
 		}
 		// Redeploy ai from location (this ignores current AI parameters)
 		if (!switch_ai.empty()) {
-			ai::manager::add_ai_for_side_from_file(side_num,switch_ai,true);
+			ai::mgr::add_ai_for_side_from_file(side_num,switch_ai,true);
 		}
 		// Override AI parameters
 		if (ai.first != ai.second) {
-			ai::manager::modify_active_ai_config_old_for_side(side_num,ai);
+			ai::mgr::modify_active_ai_config_old_for_side(side_num,ai);
 		}
 		// Change team color
 		config::attribute_value color = cfg["color"];
@@ -1319,7 +1319,7 @@ WML_HANDLER_FUNCTION(modify_turns, /*event_info*/, cfg)
 	config::attribute_value value = cfg["value"];
 	std::string add = cfg["add"];
 	config::attribute_value current = cfg["current"];
-	tod_manager& tod_man = *resources::tod_manager;
+	tod_mgr& tod_man = *resources::tod_mgr;
 	if(!add.empty()) {
 		tod_man.modify_turns(add);
 	} else if(!value.empty()) {
@@ -1731,7 +1731,7 @@ WML_HANDLER_FUNCTION(replace_map, /*event_info*/, cfg)
 	*game_map = map;
 	resources::screen->reload_map();
 	context::screen_needs_rebuild(true);
-	ai::manager::raise_map_changed();
+	ai::mgr::raise_map_changed();
 }
 
 /// Replacing the current time of day schedule.
@@ -1740,7 +1740,7 @@ WML_HANDLER_FUNCTION(replace_schedule, /*event_info*/, cfg)
 	if(cfg.get_children("time").empty()) {
 		ERR_NG << "attempted to to replace ToD schedule with empty schedule\n";
 	} else {
-		resources::tod_manager->replace_schedule(cfg.get_parsed_config());
+		resources::tod_mgr->replace_schedule(cfg.get_parsed_config());
 		resources::screen->new_turn();
 		LOG_NG << "replaced ToD schedule\n";
 	}
@@ -2237,7 +2237,7 @@ WML_HANDLER_FUNCTION(store_time_of_day, /*event_info*/, cfg)
 	const map_location loc = cfg_to_loc(cfg);
 	int turn = cfg["turn"];
 	// using 0 will use the current turn
-	const time_of_day& tod = resources::tod_manager->get_time_of_day(loc,turn);
+	const time_of_day& tod = resources::tod_mgr->get_time_of_day(loc,turn);
 
 	std::string variable = cfg["variable"];
 	if(variable.empty()) {
@@ -2355,7 +2355,7 @@ WML_HANDLER_FUNCTION(time_area, /*event_info*/, cfg)
 		const std::vector<std::string> id_list =
 			utils::split(ids, ',', utils::STRIP_SPACES | utils::REMOVE_EMPTY);
 		foreach_ng(const std::string& id, id_list) {
-			resources::tod_manager->remove_time_area(id);
+			resources::tod_mgr->remove_time_area(id);
 			LOG_NG << "event WML removed time_area '" << id << "'\n";
 		}
 	}
@@ -2371,7 +2371,7 @@ WML_HANDLER_FUNCTION(time_area, /*event_info*/, cfg)
 		const terrain_filter filter(cfg, *resources::units);
 		filter.get_locations(locs, true);
 		config parsed_cfg = cfg.get_parsed_config();
-		resources::tod_manager->add_time_area(id, locs, parsed_cfg);
+		resources::tod_mgr->add_time_area(id, locs, parsed_cfg);
 		LOG_NG << "event WML inserted time_area '" << id << "'\n";
 	}
 }

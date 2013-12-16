@@ -25,7 +25,6 @@
 #ifndef STORYSCREEN_RENDER_HPP_INCLUDED
 #define STORYSCREEN_RENDER_HPP_INCLUDED
 
-#include "key.hpp"
 #include "storyscreen/part.hpp"
 // #include "widgets/button.hpp"
 
@@ -71,8 +70,8 @@ public:
 private:
 	part& p_;
 	display& disp_;
-	CVideo& video_; // convenience, it's currently obtained from disp_
-	CKey keys_;     // convenience
+	//CVideo& video_; // convenience, it's currently obtained from disp_
+	//CKey keys_;     // convenience
 
 	gui::button& next_button_;
 	gui::button& back_button_;

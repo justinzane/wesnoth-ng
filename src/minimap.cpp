@@ -26,6 +26,7 @@
 #include "log/log.hpp"
 #include "log/log.hpp"
 #include "map.hpp"
+#include "sdl2/rndr_mgr.hpp"
 #include "sdl_utils.hpp"
 
 #include "team.hpp"
@@ -40,6 +41,7 @@ static lg::log_domain log_display("display");
 namespace image {
 
 SDL_Surface* getMinimap(int w, int h, const gamemap &map, const team *vw) {
+    rndr_mgr rm = get_rndr_mgr();
     const int scale = 8;
 
     DBG_DP<< "creating minimap " << int(map.w()*scale*0.75) << "," << map.h()*scale << "\n";
@@ -99,8 +101,10 @@ SDL_Surface* getMinimap(int w, int h, const gamemap &map, const team *vw) {
                         SDL_Surface overlay = get_image(overlay_file, image::HEXED);
 
                         if (overlay != nullptr && overlay != tile) {
-                            SDL_Surface combined = create_neutral_surface(tile->w, tile->h);
-                            SDL_Rect r = create_rect(0, 0, 0, 0);
+                            SDL_Surface* combined = SDL_CreateRGBSurface(0, tile->w, tile->h, 32,
+                                                                         0xff000000, 0x00ff0000,
+                                                                         0x0000ff00, 0x000000ff);
+                            SDL_Rect r {0, 0, 0, 0};
                             SDL_BlitSurface(tile, nullptr, combined, &r);
                             r.x = std::max(0, (tile->w - overlay->w) / 2);
                             r.y = std::max(0, (tile->h - overlay->h) / 2);

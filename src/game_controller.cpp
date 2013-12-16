@@ -83,12 +83,12 @@ game_controller::game_controller(const commandline_options& cmdline_opts, const 
 	cmdline_opts_(cmdline_opts),
 	disp_(nullptr),
 	video_(),
-	thread_manager(),
-	font_manager_(),
-	prefs_manager_(),
-	image_manager_(),
+	thread_mgr(),
+	font_mgr_(),
+	prefs_mgr_(),
+	image_mgr_(),
 	main_event_context_(),
-	hotkey_manager_(),
+	hotkey_mgr_(),
 	music_thinker_(),
 	resize_monitor_(),
 	test_scenario_("test"),
@@ -114,7 +114,7 @@ game_controller::game_controller(const commandline_options& cmdline_opts, const 
 	)
 	{
 		game_config::path = get_cwd() + '/' + game_config::path;
-		font_manager_.update_font_path();
+		font_mgr_.update_font_path();
 	}
 
 	const std::string app_basename = file_name(appname);
@@ -424,11 +424,11 @@ bool game_controller::play_test()
 	state_.carryover_sides_start["next_scenario"] = test_scenario_;
 	state_.classification().campaign_define = "TEST";
 
-	resources::config_manager->
+	resources::config_mgr->
 		load_game_config_for_game(state_.classification());
 
 	try {
-		play_game(disp(),state_,resources::config_manager->game_config());
+		play_game(disp(),state_,resources::config_mgr->game_config());
 	} catch (game::load_game_exception &) {
 		return true;
 	}
@@ -442,11 +442,11 @@ bool game_controller::play_screenshot_mode()
 		return true;
 	}
 
-	resources::config_manager->load_game_config_for_editor();
+	resources::config_mgr->load_game_config_for_editor();
 
-	::init_textdomains(resources::config_manager->game_config());
+	::init_textdomains(resources::config_mgr->game_config());
 
-	editor::start(resources::config_manager->game_config(), video_,
+	editor::start(resources::config_mgr->game_config(), video_,
 	    screenshot_map_, true, screenshot_filename_);
 	return false;
 }
@@ -458,7 +458,7 @@ bool game_controller::is_loading() const
 
 bool game_controller::load_game()
 {
-	savegame::loadgame load(disp(), resources::config_manager->game_config(),
+	savegame::loadgame load(disp(), resources::config_mgr->game_config(),
 	    state_);
 
 	try {
@@ -466,7 +466,7 @@ bool game_controller::load_game()
 
 
 		try {
-			resources::config_manager->
+			resources::config_mgr->
 				load_game_config_for_game(state_.classification());
 		} catch(config::error&) {
 			return false;
@@ -581,7 +581,7 @@ bool game_controller::new_campaign()
 
 	std::vector<config> campaigns;
 	foreach_ng(const config& campaign,
-		resources::config_manager->game_config().child_range("campaign")) {
+		resources::config_mgr->game_config().child_range("campaign")) {
 
 		if (campaign["type"] != "mp") {
 			campaigns.push_back(campaign);
@@ -841,7 +841,7 @@ bool game_controller::play_multiplayer()
 
 		}
 
-		resources::config_manager->
+		resources::config_mgr->
 			load_game_config_for_game(state_.classification());
 
 		events::discard_input(); // prevent the "keylogger" effect
@@ -849,7 +849,7 @@ bool game_controller::play_multiplayer()
 
 		if(res == 3) {
 			mp::start_local_game(disp(),
-			    resources::config_manager->game_config(), state_);
+			    resources::config_mgr->game_config(), state_);
 		} else if((res >= 0 && res <= 2) || res == 4) {
 			std::string host;
 			if(res == 0) {
@@ -860,7 +860,7 @@ bool game_controller::play_multiplayer()
 				host = multiplayer_server_;
 				multiplayer_server_ = "";
 			}
-			mp::start_client(disp(), resources::config_manager->game_config(),
+			mp::start_client(disp(), resources::config_mgr->game_config(),
 				state_, host);
 		}
 
@@ -909,14 +909,14 @@ bool game_controller::play_multiplayer_commandline()
 	state_ = game_state();
 	state_.classification().campaign_type = "multiplayer";
 
-	resources::config_manager->
+	resources::config_mgr->
 		load_game_config_for_game(state_.classification());
 
 	events::discard_input(); // prevent the "keylogger" effect
 	cursor::set(cursor::NORMAL);
 
 	mp::start_local_game_commandline(disp(),
-	    resources::config_manager->game_config(), state_, cmdline_opts_);
+	    resources::config_mgr->game_config(), state_, cmdline_opts_);
 
 	return false;
 }
@@ -938,20 +938,20 @@ bool game_controller::change_language()
 
 void game_controller::show_preferences()
 {
-	const preferences::display_manager disp_manager(&disp());
+	const preferences::display_mgr disp_mgr(&disp());
 	preferences::show_preferences_dialog(disp(),
-	    resources::config_manager->game_config());
+	    resources::config_mgr->game_config());
 
 	disp().redraw_everything();
 }
 
 void game_controller::launch_game(RELOAD_GAME_DATA reload)
 {
-	loadscreen::loadscreen_mgr loadscreen_manager(disp().video());
+	loadscreen::loadscreen_mgr loadscreen_mgr(disp().video());
 	loadscreen::start_stage("load data");
 	if(reload == RELOAD_DATA) {
 		try {
-			resources::config_manager->
+			resources::config_mgr->
 				load_game_config_for_game(state_.classification());
 		} catch(config::error&) {
 			return;
@@ -960,7 +960,7 @@ void game_controller::launch_game(RELOAD_GAME_DATA reload)
 
 	try {
 		const LEVEL_RESULT result = play_game(disp(),state_,
-		    resources::config_manager->game_config());
+		    resources::config_mgr->game_config());
 		// don't show The End for multiplayer scenario
 		// change this if MP campaigns are implemented
 		if(result == VICTORY && (state_.classification().campaign_type.empty() || state_.classification().campaign_type != "multiplayer")) {
@@ -982,7 +982,7 @@ void game_controller::launch_game(RELOAD_GAME_DATA reload)
 void game_controller::play_replay()
 {
 	try {
-		::play_replay(disp(),state_,resources::config_manager->game_config(),
+		::play_replay(disp(),state_,resources::config_mgr->game_config(),
 		    video_);
 
 		clear_loaded_game();
@@ -996,17 +996,17 @@ void game_controller::play_replay()
 editor::EXIT_STATUS game_controller::start_editor(const std::string& filename)
 {
 	while(true){
-		resources::config_manager->load_game_config_for_editor();
+		resources::config_mgr->load_game_config_for_editor();
 
-		::init_textdomains(resources::config_manager->game_config());
+		::init_textdomains(resources::config_mgr->game_config());
 
 		editor::EXIT_STATUS res = editor::start(
-		    resources::config_manager->game_config(), video_, filename);
+		    resources::config_mgr->game_config(), video_, filename);
 
 		if(res != editor::EXIT_RELOAD_DATA)
 			return res;
 
-		resources::config_manager->reload_changed_game_config();
+		resources::config_mgr->reload_changed_game_config();
 		image::flush_cache();
 	}
 	return editor::EXIT_ERROR; // not supposed to happen

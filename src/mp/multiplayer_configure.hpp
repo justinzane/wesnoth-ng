@@ -51,7 +51,7 @@ protected:
 private:
 	bool local_players_only_;
 
-	tooltips::manager tooltip_manager_;
+	tooltips::mgr tooltip_mgr_;
 	int mp_countdown_init_time_;
 	int mp_countdown_reservoir_time_;
 
@@ -102,7 +102,7 @@ private:
 	bool force_use_map_settings_check_;
 	mp_game_settings parameters_;
 
-	options::manager options_manager_;
+	options::mgr options_mgr_;
 };
 
 } // end namespace mp

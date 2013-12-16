@@ -32,12 +32,12 @@ namespace preferences {
 
 class acquaintance;
 
-	struct manager
+	struct mgr
 	{
-		manager();
-		~manager();
+		mgr();
+		~mgr();
 
-		base_manager base;
+		base_mgr base;
 	};
 
 	bool is_authenticated();

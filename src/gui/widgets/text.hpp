@@ -167,7 +167,7 @@ protected:
 		const unsigned column, const unsigned line = 0) const
 		{ return text_.get_cursor_position(column, line); }
 
-	tpoint get_column_line(const tpoint& position) const
+	tpoint get_column_line(const point_t& position) const
 		{ return text_.get_column_line(position); }
 
 	void set_font_size(const unsigned font_size)

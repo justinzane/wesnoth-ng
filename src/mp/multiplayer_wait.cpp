@@ -54,7 +54,7 @@ const int leader_pane_border = 10;
 namespace mp {
 
 wait::leader_preview_pane::leader_preview_pane(game_display& disp,
-	flg_manager& flg, const int color) :
+	flg_mgr& flg, const int color) :
 	gui::preview_pane(disp.video()),
 	flg_(flg),
 	color_(color),
@@ -208,7 +208,7 @@ wait::~wait()
 		state_ = game_state();
 		state_.classification().campaign_type = "multiplayer";
 
-		resources::config_manager->
+		resources::config_mgr->
 			load_game_config_for_game(state_.classification());
 	}
 }
@@ -234,7 +234,7 @@ void wait::join_game(bool observe)
 		state_ = game_state();
 		state_.classification().campaign_type = "multiplayer";
 
-		const config* campaign = &resources::config_manager->
+		const config* campaign = &resources::config_mgr->
 			game_config().find_child("campaign", "id",
 				level_.child("multiplayer")["mp_campaign"]);
 		if (*campaign) {
@@ -247,7 +247,7 @@ void wait::join_game(bool observe)
 		}
 
 		// Make sure that we have the same config as host, if possible.
-		resources::config_manager->
+		resources::config_mgr->
 			load_game_config_for_game(state_.classification());
 	}
 
@@ -320,7 +320,7 @@ void wait::join_game(bool observe)
 			const bool saved_game =
 				level_.child("multiplayer")["savegame"].to_bool();
 
-			flg_manager flg(era_factions, *side_choice, map_settings,
+			flg_mgr flg(era_factions, *side_choice, map_settings,
 				saved_game, color);
 
 			std::vector<std::string> choices;

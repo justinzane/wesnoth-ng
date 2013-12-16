@@ -299,7 +299,7 @@ static int process_command_args(const commandline_options& cmdline_opts) {
 			throw config::error("directory not found");
 		}
 	// don't update font as we already updating it in game ctor
-	//font_manager_.update_font_path();
+	//font_mgr_.update_font_path();
 	}
 	if(cmdline_opts.debug_lua) {
 		game_config::debug_lua = true;
@@ -458,20 +458,20 @@ static int do_gameloop(int argc, char** argv) {
 		}
 	}
 
-	const cursor::manager cursor_manager;
+	const cursor::mgr cursor_mgr;
 	cursor::set(cursor::WAIT);
 
-	loadscreen::loadscreen_mgr loadscreen_manager(game->disp().video());
+	loadscreen::loadscreen_mgr loadscreen_mgr(game->disp().video());
 
 	loadscreen::start_stage("init gui");
 	gui2::init();
-	const gui2::event::tmanager gui_event_manager;
+	const gui2::event::tmgr gui_event_mgr;
 
-	game_config_manager config_manager(cmdline_opts, game->disp(),
+	game_config_mgr config_mgr(cmdline_opts, game->disp(),
 	    game->jump_to_editor());
 
 	loadscreen::start_stage("load config");
-	res = config_manager.init_game_config(game_config_manager::NO_FORCE_RELOAD);
+	res = config_mgr.init_game_config(game_config_mgr::NO_FORCE_RELOAD);
 	if(res == false) {
 		std::cerr << "could not initialize game config\n";
 		return 1;
@@ -507,7 +507,7 @@ static int do_gameloop(int argc, char** argv) {
 
         if (!game->is_loading()) {
 			const config &cfg =
-			    config_manager.game_config().child("titlescreen_music");
+			    config_mgr.game_config().child("titlescreen_music");
 			if (cfg) {
 	            sound::play_music_repeatedly(game_config::title_music);
 				BOOST_FOREACH(const config &i, cfg.child_range("music")) {
@@ -520,7 +520,7 @@ static int do_gameloop(int argc, char** argv) {
 			}
         }
 
-		loadscreen_manager.reset();
+		loadscreen_mgr.reset();
 
 		if(game->play_test() == false) {
 			return 0;
@@ -559,9 +559,9 @@ static int do_gameloop(int argc, char** argv) {
 				? gui2::ttitle_screen::LOAD_GAME
 				: gui2::ttitle_screen::NOTHING;
 
-		const preferences::display_manager disp_manager(&game->disp());
+		const preferences::display_mgr disp_mgr(&game->disp());
 
-		const font::floating_label_context label_manager;
+		const font::floating_label_context label_mgr;
 
 		cursor::set(cursor::NORMAL);
 		if(res == gui2::ttitle_screen::NOTHING) {
@@ -610,20 +610,20 @@ static int do_gameloop(int argc, char** argv) {
 			about::show_about(game->disp());
 			continue;
 		} else if(res == gui2::ttitle_screen::SHOW_HELP) {
-			help::help_manager help_manager(&config_manager.game_config());
+			help::help_mgr help_mgr(&config_mgr.game_config());
 			help::show_help(game->disp());
 			continue;
 		} else if(res == gui2::ttitle_screen::GET_ADDONS) {
-			// NOTE: we need the help_manager to get access to the Add-ons
+			// NOTE: we need the help_mgr to get access to the Add-ons
 			// section in the game help!
-			help::help_manager help_manager(&config_manager.game_config());
+			help::help_mgr help_mgr(&config_mgr.game_config());
 			if(manage_addons(game->disp())) {
-				config_manager.reload_changed_game_config();
+				config_mgr.reload_changed_game_config();
 			}
 			continue;
 		} else if(res == gui2::ttitle_screen::RELOAD_GAME_DATA) {
 			loadscreen::loadscreen_mgr loadscreen(game->disp().video());
-			config_manager.reload_changed_game_config();
+			config_mgr.reload_changed_game_config();
 			image::flush_cache();
 			continue;
 		} else if(res == gui2::ttitle_screen::START_MAP_EDITOR) {
@@ -700,7 +700,7 @@ int main(int argc, char** argv)
 	} catch(CVideo::error&) {
 		std::cerr << "Could not initialize video. Exiting.\n";
 		return 1;
-	} catch(font::manager::error&) {
+	} catch(font::mgr::error&) {
 		std::cerr << "Could not initialize fonts. Exiting.\n";
 		return 1;
 	} catch(config::error& e) {

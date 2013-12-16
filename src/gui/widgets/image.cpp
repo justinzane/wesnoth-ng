@@ -45,10 +45,10 @@ tpoint timage::calculate_best_size() const
 		return get_config_default_size();
 	}
 
-	const tpoint minimum = get_config_default_size();
-	const tpoint maximum = get_config_maximum_size();
+	const point_t minimum = get_config_default_size();
+	const point_t maximum = get_config_maximum_size();
 
-	tpoint result = tpoint(image->w, image->h);
+	tpoint result = point_t(image->w, image->h);
 
 	if(minimum.x > 0 && result.x < minimum.x) {
 		DBG_GUI_L << LOG_HEADER << " increase width to minimum.\n";

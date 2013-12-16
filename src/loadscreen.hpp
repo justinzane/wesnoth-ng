@@ -28,7 +28,8 @@ class CVideo;
 #include "gettext.hpp"
 #include "image.hpp"
 #include "marked-up_text.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
+#include "sdl2/loadscreen_mgr.hpp"
 #include "sdl_utils.hpp"
 #include "log/log.hpp"
 #include <SDL2/SDL_events.h>
@@ -39,7 +40,7 @@ class CVideo;
 class loadscreen {
     public:
         /** @brief Preferred constructor */
-        explicit loadscreen(CVideo &screen, const int percent = 0);
+        explicit loadscreen(const int percent = 0);
 
         // Keep default copy constructor
 
@@ -61,32 +62,19 @@ class loadscreen {
          * passing it on to functions that are many levels deep. */
         static loadscreen* global_loadscreen;
 
-        struct loadscreen_mgr {
-                explicit loadscreen_mgr(CVideo& screen);
-                ~loadscreen_mgr();
-                static loadscreen_mgr* get() {
-                    return manager;
-                }
-                void reset();
-            private:
-                static loadscreen_mgr* manager {nullptr};
-                bool owns;
-        };
-
     private:
         /** @brief Displays a load progress bar. */
         void draw_screen(const std::string &text);
 
         // Prohibit default constructor
-        loadscreen();
+        loadscreen() = delete;
 
         // Data members
-        CVideo& screen_;
-        SDL_Rect textarea_;
-        SDL_Surface* logo_surface_;
-        bool logo_drawn_;
-        int pby_offset_;
-        int prcnt_;
+        SDL_Rect textarea_ {0,0,0,0};
+        SDL_Surface* logo_surface_ {nullptr};
+        bool logo_drawn_ {false};
+        int pby_offset_ {0};
+        int prcnt_ {0};
 
         void dump_counters() const;
 };

@@ -21,7 +21,7 @@
 
 #include <string>
 #include "config.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 #include "gui/widgets/widget.hpp"
 #include "gui/widgets/window.hpp"
 
@@ -42,7 +42,7 @@ enum elem_type
 	MODIFICATION
 };
 
-class manager
+class mgr
 {
 public:
 
@@ -56,7 +56,7 @@ public:
 	 *
 	 * @param initial_values	The initial values for each option.
 	 */
-	manager(const config& gamecfg, CVideo& video, const config& initial_values);
+	mgr(const config& gamecfg, CVideo& video, const config& initial_values);
 
 	/**
 	 * Set the current values the options. This overrides ALL previously set
@@ -357,11 +357,11 @@ private:
 	/**
 	 * Restores every widget's value to its default for a window.
 	 *
-	 * @param m						A pointer to the manager which generated
+	 * @param m						A pointer to the mgr which generated
 	 * 								the window.
 	 * @param w						A pointer to the window itself.
 	 */
-	static void restore_defaults(manager* m, gui2::twindow* w);
+	static void restore_defaults(mgr* m, gui2::twindow* w);
 
 	/**
 	 * Finds the widgets representing the options of a certain component in a
@@ -369,11 +369,11 @@ private:
 	 * defaults.
 	 *
 	 * @param comp					The config of the component.
-	 * @param m						A pointer to the manager which generated
+	 * @param m						A pointer to the mgr which generated
 	 * 								the window.
 	 * @param w						A pointer to the window.
 	 */
-	static void restore_defaults_for_component(const config& comp, manager* m,
+	static void restore_defaults_for_component(const config& comp, mgr* m,
 											   gui2::twindow* w);
 
 	/**

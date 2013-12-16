@@ -32,7 +32,7 @@ public:
 	formula_expression() : name_("") {}
 	virtual ~formula_expression() {}
 	variant evaluate(const formula_callable& variables, formula_debugger *fdb = nullptr) const {
-		call_stack_manager manager(name_);
+		call_stack_mgr mgr(name_);
 		if (fdb!=nullptr) {
 			return evaluate_arg_callback(*fdb,*this,variables);
 		} else {

@@ -77,7 +77,7 @@ config to_event(const config& cfg)
 	return result;
 }
 
-void manager::init_info(const config& cfg, const std::string& key)
+void mgr::init_info(const config& cfg, const std::string& key)
 {
 	BOOST_FOREACH (const config& comp, cfg.child_range(key)) {
 		config entry;
@@ -100,7 +100,7 @@ void manager::init_info(const config& cfg, const std::string& key)
 	}
 }
 
-manager::manager(const config& gamecfg, CVideo& video, const config& values)
+mgr::mgr(const config& gamecfg, CVideo& video, const config& values)
 		: options_info_()
 		, values_(values)
 		, video_(video)
@@ -108,7 +108,7 @@ manager::manager(const config& gamecfg, CVideo& video, const config& values)
 		, scenario_()
 		, modifications_()
 {
-	DBG_MP << "Initializing the options manager" << std::endl;
+	DBG_MP << "Initializing the options mgr" << std::endl;
 	init_info(gamecfg, "modification");
 	init_info(gamecfg, "era");
 	init_info(gamecfg, "multiplayer");
@@ -127,37 +127,37 @@ manager::manager(const config& gamecfg, CVideo& video, const config& values)
 }
 
 
-void manager::set_values(const config& c)
+void mgr::set_values(const config& c)
 {
 	values_ = c;
 }
 
-void manager::set_era(const std::string& era)
+void mgr::set_era(const std::string& era)
 {
 	era_ = era;
 }
 
-void manager::set_era_by_index(int index)
+void mgr::set_era_by_index(int index)
 {
 	era_ = options_info_.child("era", index)["id"].str();
 }
 
-void manager::set_scenario(const std::string& scenario)
+void mgr::set_scenario(const std::string& scenario)
 {
 	scenario_ = scenario;
 }
 
-void manager::set_scenario_by_index(int index)
+void mgr::set_scenario_by_index(int index)
 {
 	scenario_ = options_info_.child("multiplayer", index - 1)["id"].str();
 }
 
-void manager::set_modifications(const std::vector<std::string>& modifications)
+void mgr::set_modifications(const std::vector<std::string>& modifications)
 {
 	modifications_ = modifications;
 }
 
-void manager::insert_element(elem_type type, const config& data, int pos)
+void mgr::insert_element(elem_type type, const config& data, int pos)
 {
 	switch (type)
 	{
@@ -173,7 +173,7 @@ void manager::insert_element(elem_type type, const config& data, int pos)
 	}
 }
 
-void manager::show_dialog()
+void mgr::show_dialog()
 {
 	DBG_MP << "Building the options dialog" << std::endl;
 	// Constructing the dialog
@@ -270,7 +270,7 @@ void manager::show_dialog()
 	delete window;
 }
 
-void manager::add_widgets(const config& data, config& grid) const
+void mgr::add_widgets(const config& data, config& grid) const
 {
 	if (!data.has_child("entry") &&
 		!data.has_child("slider") &&
@@ -311,7 +311,7 @@ void manager::add_widgets(const config& data, config& grid) const
 	}
 }
 
-void manager::add_entry(const config& data, config& column) const
+void mgr::add_entry(const config& data, config& column) const
 {
 	config& grid = column.add_child("grid");
 	config& row = grid.add_child("row");
@@ -331,7 +331,7 @@ void manager::add_entry(const config& data, config& column) const
 	entry["tooltip"] = data["description"];
 }
 
-void manager::add_slider(const config& data, config& column) const
+void mgr::add_slider(const config& data, config& column) const
 {
 	config& grid = column.add_child("grid");
 	config& row = grid.add_child("row");
@@ -354,7 +354,7 @@ void manager::add_slider(const config& data, config& column) const
 	slider["tooltip"] = data["description"];
 }
 
-void manager::add_checkbox(const config& data, config& column) const
+void mgr::add_checkbox(const config& data, config& column) const
 {
 	config& grid = column.add_child("grid");
 	config& row = grid.add_child("row");
@@ -369,7 +369,7 @@ void manager::add_checkbox(const config& data, config& column) const
 	checkbox["tooltip"] = data["description"];
 }
 
-config& manager::get_value_cfg(const std::string& id)
+config& mgr::get_value_cfg(const std::string& id)
 {
 	{
 		const config& value_cfg = get_value_cfg_or_empty(id);
@@ -393,7 +393,7 @@ config& manager::get_value_cfg(const std::string& id)
 	return value_cfg;
 }
 
-const config& manager::get_value_cfg_or_empty(const std::string& id) const
+const config& mgr::get_value_cfg_or_empty(const std::string& id) const
 {
 	static const config empty;
 
@@ -408,7 +408,7 @@ const config& manager::get_value_cfg_or_empty(const std::string& id) const
 	return empty;
 }
 
-config::any_child manager::get_option_parent(const std::string& id) const
+config::any_child mgr::get_option_parent(const std::string& id) const
 {
 	static const config empty;
 	static const std::string empty_key = "";
@@ -426,7 +426,7 @@ config::any_child manager::get_option_parent(const std::string& id) const
 	return not_found;
 }
 
-const config& manager::get_option_info_cfg(const std::string& id) const
+const config& mgr::get_option_info_cfg(const std::string& id) const
 {
 	static const config empty;
 
@@ -443,7 +443,7 @@ const config& manager::get_option_info_cfg(const std::string& id) const
 }
 
 
-config::attribute_value manager::get_stored_value(const std::string& id) const
+config::attribute_value mgr::get_stored_value(const std::string& id) const
 {
 	const config& valcfg = get_value_cfg_or_empty(id);
 
@@ -456,14 +456,14 @@ config::attribute_value manager::get_stored_value(const std::string& id) const
 	return get_default_value(id);
 }
 
-config::attribute_value manager::get_default_value(const std::string& id) const
+config::attribute_value mgr::get_default_value(const std::string& id) const
 {
 	const config& optinfo = get_option_info_cfg(id);
 
 	return optinfo["default"];
 }
 
-int manager::get_slider_value(const std::string& id, gui2::twindow* win) const
+int mgr::get_slider_value(const std::string& id, gui2::twindow* win) const
 {
 	gui2::tslider* widget =
 						gui2::find_widget<gui2::tslider>(win, id, false, true);
@@ -471,7 +471,7 @@ int manager::get_slider_value(const std::string& id, gui2::twindow* win) const
 	return widget->get_value();
 }
 
-bool manager::get_checkbox_value
+bool mgr::get_checkbox_value
 					(const std::string& id, gui2::twindow* win) const
 {
 	gui2::ttoggle_button* widget =
@@ -480,7 +480,7 @@ bool manager::get_checkbox_value
 	return widget->get_value();
 }
 
-std::string manager::get_entry_value(const std::string& id,
+std::string mgr::get_entry_value(const std::string& id,
 									 gui2::twindow* window) const
 {
 	gui2::ttext_box* widget =
@@ -489,7 +489,7 @@ std::string manager::get_entry_value(const std::string& id,
 	return widget->text();
 }
 
-void manager::set_slider_value(int val, const std::string& id,
+void mgr::set_slider_value(int val, const std::string& id,
 							   gui2::twindow* win) const
 {
 	gui2::tslider* widget =
@@ -498,7 +498,7 @@ void manager::set_slider_value(int val, const std::string& id,
 	widget->set_value(val);
 }
 
-void manager::set_checkbox_value(bool val, const std::string& id,
+void mgr::set_checkbox_value(bool val, const std::string& id,
 								 gui2::twindow* win) const
 {
 	gui2::ttoggle_button* widget =
@@ -507,7 +507,7 @@ void manager::set_checkbox_value(bool val, const std::string& id,
 	widget->set_value(val);
 }
 
-void manager::set_entry_value(const std::string& val, const std::string& id,
+void mgr::set_entry_value(const std::string& val, const std::string& id,
 							  gui2::twindow* win) const
 {
 	gui2::ttext_box* widget =
@@ -516,7 +516,7 @@ void manager::set_entry_value(const std::string& val, const std::string& id,
 	widget->set_value(val);
 }
 
-void manager::extract_values(const std::string& key, const std::string& id,
+void mgr::extract_values(const std::string& key, const std::string& id,
 						   gui2::twindow* window)
 {
 	BOOST_FOREACH (const config::any_child& c,
@@ -538,13 +538,13 @@ void manager::extract_values(const std::string& key, const std::string& id,
 	}
 }
 
-bool manager::is_valid_option(const std::string& key, const config& option)
+bool mgr::is_valid_option(const std::string& key, const config& option)
 {
 	return (key == "slider" || key == "entry" || key == "checkbox") &&
 		   (!option["id"].empty());
 }
 
-void manager::restore_defaults(manager* m, gui2::twindow* w)
+void mgr::restore_defaults(mgr* m, gui2::twindow* w)
 {
 	const config& era = m->options_info_.find_child("era", "id", m->era_);
 	restore_defaults_for_component(era, m, w);
@@ -560,7 +560,7 @@ void manager::restore_defaults(manager* m, gui2::twindow* w)
 	}
 }
 
-void manager::restore_defaults_for_component(const config& c, manager* m,
+void mgr::restore_defaults_for_component(const config& c, mgr* m,
 											 gui2::twindow* w)
 {
 	BOOST_FOREACH (const config::any_child& i, c.all_children_range()) {
@@ -580,7 +580,7 @@ void manager::restore_defaults_for_component(const config& c, manager* m,
 	}
 }
 
-void manager::__tmp_set_checkbox_defaults(gui2::twindow* window) const
+void mgr::__tmp_set_checkbox_defaults(gui2::twindow* window) const
 {
 	BOOST_FOREACH (const config::any_child& i,
 				   options_info_.all_children_range())

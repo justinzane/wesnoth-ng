@@ -22,51 +22,25 @@
  */
 
 #include "loadscreen.hpp"
-
+#include "sdl2/rndr_mgr.hpp"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 static lg::log_domain log_display("display");
 static lg::log_domain log_loadscreen("loadscreen");
 #define LOG_LS LOG_STREAM(info, log_loadscreen)
 #define ERR_DP LOG_STREAM(err, log_display)
 
-loadscreen::loadscreen_mgr::loadscreen_mgr(CVideo& screen) :
-    owns(global_loadscreen == nullptr) {
-    if (owns) {
-        manager = this;
-        global_loadscreen = new loadscreen(screen);
-        global_loadscreen->clear_screen();
-    }
-}
-
-loadscreen::loadscreen_mgr::~loadscreen_mgr() {
-    reset();
-}
-
-void loadscreen::loadscreen_mgr::reset() {
-    if (owns) {
-        owns = false;
-        manager = nullptr;
-        assert(global_loadscreen);
-        global_loadscreen->clear_screen();
-        delete global_loadscreen;
-        global_loadscreen = nullptr;
-    }
-}
-
-loadscreen::loadscreen(CVideo &screen, const int percent) :
-    screen_(screen),
-    textarea_(),
-    logo_surface_(image::get_image("misc/logo.png")),
-    logo_drawn_(false),
-    pby_offset_(0),
-    prcnt_(percent) {
+loadscreen::loadscreen(const int percent) {
+    prcnt_ = percent;
+    logo_surface_ = IMG_Load("misc/logo.png");
     if (logo_surface_ == nullptr) {
         ERR_DP<< "loadscreen: Failed to load the logo" << std::endl;
     }
-    textarea_.x = textarea_.y = textarea_.w = textarea_.h = 0;
 }
 
 void loadscreen::draw_screen(const std::string &text) {
+    rndr_mgr rm_ =  rndr_mgr::get_rndr_mgr();
     // Set progress bar parameters:
     // RGB-values for finished piece.
     int fca = 191, fcr = 21, fcg = 53, fcb = 80;
@@ -78,15 +52,16 @@ void loadscreen::draw_screen(const std::string &text) {
     int bispw = 1;
     // Border width.
     int bw;
-    if (4 > std::min(screen_.getx(), screen_.gety())) {
+    std::pair<int,int> window_size = rm_.get_window_size();
+    if (4 > std::min(window_size.first, window_size.second)) {
         int bw = 0;
     } else {
         int bw = 1;
     }
     // Available width.
-    int scrx = screen_.getx() - 2 * (bw + bispw);
+    int scrx = window_size.first - 2 * (bw + bispw);
     // Available height.
-    int scry = screen_.gety() - 2 * (bw + bispw);
+    int scry = window_size.second - 2 * (bw + bispw);
     // Used width.
     int pbw = scrx / 2;
     // Used height.
@@ -94,16 +69,10 @@ void loadscreen::draw_screen(const std::string &text) {
     // Height of the lighting line.
     int lightning_thickness = 2;
 
-    SDL_Surface* gdis = screen_.getSurface();
     SDL_Rect area;
-
-    // Pump events and make sure to redraw the logo if there's a chance that it's been obscured
-    SDL_Event ev;
-    while (SDL_PollEvent( &ev)) {
-        if (ev.type == SDL_WINDOWEVENT_RESIZED || ev.type == SDL_WINDOWEVENT_EXPOSED) {
-            logo_drawn_ = false;
-        }
-    }
+    SDL_Rect src_rect {0, 0, logo_surface_->w, logo_surface_->h};
+    /** @todo Need to create handler for screen resizes/shows and register it. Handler must
+     * ensure that logo is redrawn properly. */
 
     // Draw logo if it was successfully loaded.
     if (logo_surface_ && !logo_drawn_) {
@@ -115,7 +84,7 @@ void loadscreen::draw_screen(const std::string &text) {
         if (area.x > 0 && area.y > 0) {
             pby_offset_ = (pbh + area.h) / 2;
 
-            SDL_BlitSurface(logo_surface_, 0, gdis, &area);
+            rm_.blit_surf(logo_surface_, &src_rect , &area);
         }
         logo_drawn_ = true;
         update_rect(area.x, area.y, area.w, area.h);

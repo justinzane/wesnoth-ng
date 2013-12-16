@@ -89,7 +89,7 @@ private:
 
 	game_state gamestate_start_;
 	unit_map units_start_;
-	tod_manager tod_manager_start_;
+	tod_mgr tod_mgr_start_;
 
 	unsigned int current_turn_;
 	bool is_playing_;

@@ -20,8 +20,8 @@
  * Manages all the palettes in the editor.
  */
 
-#ifndef PALETTE_MANAGER_H_INCLUDED
-#define PALETTE_MANAGER H_INCLUDED
+#ifndef PALETTE_mgr_H_INCLUDED
+#define PALETTE_mgr H_INCLUDED
 
 #include "common_palette.hpp"
 
@@ -33,11 +33,11 @@
 namespace editor {
 
 /** Empty palette */
-class palette_manager : public gui::widget {
+class palette_mgr : public gui::widget {
 
 public:
 
-	palette_manager(editor_display &gui, const config& cfg
+	palette_mgr(editor_display &gui, const config& cfg
 				, mouse_action** active_mouse_action);
 
 	void set_group(size_t index);

@@ -199,7 +199,7 @@ public:
 	/***** ***** ***** ***** inherited ***** ***** ****** *****/
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
 	/** See @ref twidget::layout_children. */
 	virtual void layout_children() OVERRIDE;
@@ -307,7 +307,7 @@ private:
 	void layout_children(const bool force);
 
 	/** Inherited from tscrollbar_container. */
-	virtual void set_content_size(const tpoint& origin, const tpoint& size);
+	virtual void set_content_size(const point_t& origin, const point_t& size);
 
 	/** See @ref tcontrol::get_control_type. */
 	virtual const std::string& get_control_type() const OVERRIDE;

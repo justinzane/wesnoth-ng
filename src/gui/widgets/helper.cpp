@@ -46,7 +46,7 @@ bool init() {
 	return initialized_;
 }
 
-SDL_Rect create_rect(const tpoint& origin, const tpoint& size)
+SDL_Rect create_rect(const point_t& origin, const point_t& size)
 {
 	return ::create_rect(origin.x, origin.y, size.x, size.y);
 }
@@ -143,7 +143,7 @@ tpoint get_mouse_position()
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 
-	return tpoint(x, y);
+	return point_t(x, y);
 }
 
 std::string debug_truncate(const std::string& text)

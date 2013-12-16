@@ -59,12 +59,12 @@ bool in_dialog()
 	return is_in_dialog || gui2::is_in_dialog();
 }
 
-dialog_manager::dialog_manager() : cursor::setter(cursor::NORMAL), reset_to(is_in_dialog)
+dialog_mgr::dialog_mgr() : cursor::setter(cursor::NORMAL), reset_to(is_in_dialog)
 {
 	is_in_dialog = true;
 }
 
-dialog_manager::~dialog_manager()
+dialog_mgr::~dialog_mgr()
 {
 	is_in_dialog = reset_to;
 	int mousex, mousey;

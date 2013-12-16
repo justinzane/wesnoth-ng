@@ -40,7 +40,7 @@ struct tviewport_implementation
 {
 	/**
 	 * Implementation for the wrappers for
-	 * [const] twidget* tpane::find_at(const tpoint&, const bool) [const].
+	 * [const] twidget* tpane::find_at(const point_t&, const bool) [const].
 	 *
 	 * @tparam W                  A pointer to the pane.
 	 */
@@ -48,7 +48,7 @@ struct tviewport_implementation
 	static typename utils::tconst_clone<twidget, W>::pointer
 	find_at(
 			  W viewport
-			, tpoint coordinate
+			, point_t coordinate
 			, const bool must_be_active
 			)
 	{
@@ -117,7 +117,7 @@ tviewport* tviewport::build(
 	return new tviewport(builder, replacements);
 }
 
-void tviewport::place(const tpoint& origin, const tpoint& size)
+void tviewport::place(const point_t& origin, const point_t& size)
 {
 	twidget::place(origin, size);
 
@@ -161,13 +161,13 @@ void tviewport::request_reduce_width(const unsigned /*maximum_width*/)
 {
 }
 
-twidget* tviewport::find_at(const tpoint& coordinate, const bool must_be_active)
+twidget* tviewport::find_at(const point_t& coordinate, const bool must_be_active)
 {
 	return tviewport_implementation::find_at(this, coordinate, must_be_active);
 }
 
 const twidget* tviewport::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active) const
 {
 	return tviewport_implementation::find_at(this, coordinate, must_be_active);

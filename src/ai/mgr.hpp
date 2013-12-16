@@ -23,11 +23,12 @@
  * @todo 1.9 AI Interface command to clear the history.
  */
 
-#ifndef AI_MANAGER_HPP_INCLUDED
-#define AI_MANAGER_HPP_INCLUDED
+#ifndef AI_mgr_HPP_INCLUDED
+#define AI_mgr_HPP_INCLUDED
 
 #include "../config.hpp"
-#include "../generic_sdl2/sdl2_evt_mgr.hpp"
+#include "../sdl2/evt_mgr.hpp"
+#include "../sdl2/evt_observer.hpp"
 
 #include "game_info.hpp"
 
@@ -117,9 +118,9 @@ private:
 /**
  * Class that manages AIs for all sides and manages AI redeployment.
  * This class is responsible for managing the AI lifecycle
- * It can be accessed like this:   ai::manager::foo(...);
+ * It can be accessed like this:   ai::mgr::foo(...);
  */
-class manager
+class mgr
 {
 public:
 
@@ -160,26 +161,26 @@ public:
 	 * Adds observer of game events.
 	 * Should be called in playsingle_controller 's constructor.
 	 */
-	static void add_observer( events::observer* event_observer);
+	static void add_observer( evt_observer* event_observer);
 
 
 	/**
 	 * Removes an observer of game events.
 	 * Should be called in playsingle_controller 's destructor.
 	 */
-	static void remove_observer( events::observer* event_observer );
+	static void remove_observer( evt_observer* event_observer );
 
 
 	/**
 	 * Adds observer of game events except ai_user_interact event and ai_sync_network event
 	 */
-	static void add_gamestate_observer( events::observer* event_observer);
+	static void add_gamestate_observer( evt_observer* event_observer);
 
 
 	/**
 	 * Removes an observer of game events except ai_user_interact event and ai_sync_network event
 	 */
-	static void remove_gamestate_observer( events::observer* event_observer );
+	static void remove_gamestate_observer( evt_observer* event_observer );
 
 
 	/**
@@ -225,43 +226,43 @@ public:
 	/**
 	 * Adds an observer of 'ai_map_changed' event.
 	 */
-	static void add_map_changed_observer( events::observer* event_observer );
+	static void add_map_changed_observer( evt_observer* event_observer );
 
 
 	/**
 	 * Adds an observer of 'ai_recruit_list_changed' event.
 	 */
-	static void add_recruit_list_changed_observer( events::observer* event_observer );
+	static void add_recruit_list_changed_observer( evt_observer* event_observer );
 
 
 	/**
 	 * Adds an observer of 'ai_turn_started' event.
 	 */
-	static void add_turn_started_observer( events::observer* event_observer );
+	static void add_turn_started_observer( evt_observer* event_observer );
 
 
 	/**
 	 * Deletes an observer of 'ai_map_changed' event.
 	 */
-	static void remove_map_changed_observer( events::observer* event_observer );
+	static void remove_map_changed_observer( evt_observer* event_observer );
 
 
 
 	/**
 	 * Deletes an observer of 'ai_recruit_list_changed' event.
 	 */
-	static void remove_recruit_list_changed_observer( events::observer* event_observer );
+	static void remove_recruit_list_changed_observer( evt_observer* event_observer );
 
 
 	/**
 	 * Deletes an observer of 'ai_turn_started' event.
 	 */
-	static void remove_turn_started_observer( events::observer* event_observer );
+	static void remove_turn_started_observer( evt_observer* event_observer );
 
 
 private:
 
-	manager();
+	mgr();
 
 
 public:
@@ -273,7 +274,7 @@ public:
 	/**
 	 * Evaluates a string command using command AI.
 	 * @note Running this command may invalidate references previously returned
-	 *       by manager. Will intercept those commands which start with '!'
+	 *       by mgr. Will intercept those commands which start with '!'
 	 *       and '?', and will try to evaluate them as internal commands.
 	 * @param side side number (1-based).
 	 * @param str string to evaluate.
@@ -289,7 +290,7 @@ public:
 	/**
 	 * Adds active AI for specified @a side from @a file.
 	 * @note Running this command may invalidate references previously returned
-	 *       by manager. AI is not initialized at this point.
+	 *       by mgr. AI is not initialized at this point.
 	 * @param side side number (1-based, as in game_info).
 	 * @param file file name, follows the usual WML convention.
 	 * @param replace should new ai replace the current ai or 'be placed on top of it'.
@@ -301,7 +302,7 @@ public:
 	/**
 	 * Adds active AI for specified @a side from @a cfg.
 	 * @note Running this command may invalidate references previously returned
-	 *       by manager. AI is not initialized at this point.
+	 *       by mgr. AI is not initialized at this point.
 	 * @param side side number (1-based, as in game_info).
 	 * @param cfg the config from which all ai parameters are to be read.
 	 * @param replace should new ai replace the current ai or 'be placed on top of it'.
@@ -313,7 +314,7 @@ public:
 	/**
 	 * Adds active AI for specified @a side from parameters.
 	 * @note Running this command may invalidate references previously returned
-	 *       by manager. AI is not initialized at this point.
+	 *       by mgr. AI is not initialized at this point.
 	 * @param side side number (1-based, as in game_info).
 	 * @param ai_algorithm_type type of AI algorithm to create.
 	 * @param replace should new ai replace the current ai or 'be placed on top of it'.
@@ -339,7 +340,7 @@ public:
 	/**
 	 * Removes top-level AI from @a side.
 	 * @note Running this command may invalidate references previously returned
-	 *       by manager.
+	 *       by mgr.
 	 * @param side side number (1-based, as in game_info).
 	 */
 	static void remove_ai_for_side( side_number side );
@@ -348,7 +349,7 @@ public:
 	/**
 	 * Removes all AIs from @a side.
 	 * @note Running this command may invalidate references previously returned
-	 *       by manager.
+	 *       by mgr.
 	 * @param side side number (1-based, as in game_info).
 	 */
 	static void remove_all_ais_for_side( side_number side );
@@ -357,7 +358,7 @@ public:
 	/**
 	 * Clears all the AIs.
 	 * @note Running this command may invalidate references previously returned
-	 *       by manager. For example, this is called from the destructor of
+	 *       by mgr. For example, this is called from the destructor of
 	 *       playsingle_controller. It is necessary to do this if any of the
 	 *       info structures used by the AI goes out of scope.
 	 */
@@ -481,7 +482,7 @@ private:
 	// =======================================================================
 
 	/**
-	 * Evaluates an internal manager command.
+	 * Evaluates an internal mgr command.
 	 * @param side side number (1-based).
 	 * @param str string to evaluate.
 	 * @return string result of evaluation.
@@ -523,10 +524,10 @@ private:
 	/**
 	 * Gets active AI for specified side.
 	 * @note Running this command may invalidate references previously returned
-	 *       by manager.
+	 *       by mgr.
 	 * @param side side number (1-based, as in game_info).
 	 * @return a reference to the active AI.
-	 * @note This reference may become invalid after specific manager operations.
+	 * @note This reference may become invalid after specific mgr operations.
 	 */
 	static interface& get_active_ai_for_side( side_number side );
 

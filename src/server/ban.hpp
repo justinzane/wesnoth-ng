@@ -124,7 +124,7 @@ namespace wesnothd {
 		};
 	};
 
-	class ban_manager
+	class ban_mgr
 	{
 
 		ban_set bans_;
@@ -142,8 +142,8 @@ namespace wesnothd {
 
 		void init_ban_help();
 	public:
-		ban_manager();
-		~ban_manager();
+		ban_mgr();
+		~ban_mgr();
 
 		void read();
 		void write();

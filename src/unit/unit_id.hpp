@@ -26,14 +26,14 @@
 
 namespace n_unit {
 
-	class id_manager : private boost::noncopyable {
+	class id_mgr : private boost::noncopyable {
 		private:
 			size_t next_id_;
 			size_t fake_id_;
-			static id_manager manager_;
-			id_manager();
+			static id_mgr mgr_;
+			id_mgr();
 		public:
-			static id_manager& instance();
+			static id_mgr& instance();
 			/** returns id for unit that is created */
 			size_t next_id();
 

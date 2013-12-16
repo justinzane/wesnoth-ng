@@ -1,5 +1,5 @@
 /**
- * @file src/flg_manager.cpp
+ * @file src/flg_mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -44,7 +44,7 @@ std::string get_RC_suffix(const std::string& unit_color, const int color)
 #endif
 
 
-flg_manager::flg_manager(const std::vector<const config*>& era_factions,
+flg_mgr::flg_mgr(const std::vector<const config*>& era_factions,
 	const config& side, const bool map_settings, const bool saved_game,
 	const int color) :
 	era_factions_(era_factions),
@@ -99,11 +99,11 @@ flg_manager::flg_manager(const std::vector<const config*>& era_factions,
 	set_current_faction(0);
 }
 
-flg_manager::~flg_manager()
+flg_mgr::~flg_mgr()
 {
 }
 
-void flg_manager::set_current_faction(const unsigned index)
+void flg_mgr::set_current_faction(const unsigned index)
 {
 	assert(index < choosable_factions_.size());
 	current_faction_ = choosable_factions_[index];
@@ -112,7 +112,7 @@ void flg_manager::set_current_faction(const unsigned index)
 	set_current_leader(0);
 }
 
-void flg_manager::set_current_faction(const std::string& id)
+void flg_mgr::set_current_faction(const std::string& id)
 {
 	unsigned index = 0;
 	foreach_ng(const config* faction, choosable_factions_) {
@@ -126,7 +126,7 @@ void flg_manager::set_current_faction(const std::string& id)
 	set_current_faction(index);
 }
 
-void flg_manager::set_current_leader(const unsigned index)
+void flg_mgr::set_current_leader(const unsigned index)
 {
 	assert(index < choosable_leaders_.size());
 	current_leader_ = choosable_leaders_[index];
@@ -135,13 +135,13 @@ void flg_manager::set_current_leader(const unsigned index)
 	set_current_gender(0);
 }
 
-void flg_manager::set_current_gender(const unsigned index)
+void flg_mgr::set_current_gender(const unsigned index)
 {
 	assert(index < choosable_genders_.size());
 	current_gender_ = choosable_genders_[index];
 }
 
-void flg_manager::reset_leader_combo(gui::combo& combo_leader) const
+void flg_mgr::reset_leader_combo(gui::combo& combo_leader) const
 {
 	std::vector<std::string> leaders;
 	foreach_ng(const std::string& leader, choosable_leaders_) {
@@ -166,7 +166,7 @@ void flg_manager::reset_leader_combo(gui::combo& combo_leader) const
 	combo_leader.set_selected(current_leader_index());
 }
 
-void flg_manager::reset_gender_combo(gui::combo& combo_gender) const
+void flg_mgr::reset_gender_combo(gui::combo& combo_gender) const
 {
 	const unit_type* unit = unit_types.find(current_leader_);
 
@@ -199,7 +199,7 @@ void flg_manager::reset_gender_combo(gui::combo& combo_gender) const
 	combo_gender.set_selected(current_gender_index());
 }
 
-void flg_manager::resolve_random() {
+void flg_mgr::resolve_random() {
 	if ((*current_faction_)["random_faction"].to_bool()) {
 		std::vector<std::string> faction_choices, faction_excepts;
 
@@ -296,7 +296,7 @@ void flg_manager::resolve_random() {
 	}
 }
 
-void flg_manager::update_available_factions()
+void flg_mgr::update_available_factions()
 {
 	foreach_ng(const config* faction, era_factions_) {
 		if ((*faction)["id"] == "Custom" && side_["faction"] != "Custom" &&
@@ -316,7 +316,7 @@ void flg_manager::update_available_factions()
 	update_choosable_factions();
 }
 
-void flg_manager::update_available_leaders()
+void flg_mgr::update_available_leaders()
 {
 	available_leaders_.clear();
 
@@ -367,7 +367,7 @@ void flg_manager::update_available_leaders()
 	update_choosable_leaders();
 }
 
-void flg_manager::update_available_genders()
+void flg_mgr::update_available_genders()
 {
 	available_genders_.clear();
 
@@ -410,7 +410,7 @@ void flg_manager::update_available_genders()
 	update_choosable_genders();
 }
 
-void flg_manager::update_choosable_factions()
+void flg_mgr::update_choosable_factions()
 {
 	choosable_factions_ = available_factions_;
 
@@ -428,7 +428,7 @@ void flg_manager::update_choosable_factions()
 	}
 }
 
-void flg_manager::update_choosable_leaders()
+void flg_mgr::update_choosable_leaders()
 {
 	choosable_leaders_ = available_leaders_;
 
@@ -442,7 +442,7 @@ void flg_manager::update_choosable_leaders()
 	}
 }
 
-void flg_manager::update_choosable_genders()
+void flg_mgr::update_choosable_genders()
 {
 	choosable_genders_ = available_genders_;
 
@@ -466,7 +466,7 @@ void flg_manager::update_choosable_genders()
 	}
 }
 
-int flg_manager::find_suitable_faction(const std::string& faction_id) const
+int flg_mgr::find_suitable_faction(const std::string& faction_id) const
 {
 	std::vector<std::string> find;
 	std::string search_field;
@@ -513,14 +513,14 @@ int flg_manager::find_suitable_faction(const std::string& faction_id) const
 	return res;
 }
 
-int flg_manager::current_faction_index() const
+int flg_mgr::current_faction_index() const
 {
 	assert(current_faction_);
 
 	return faction_index(*current_faction_);
 }
 
-void flg_manager::append_leaders_from_faction(const config* faction)
+void flg_mgr::append_leaders_from_faction(const config* faction)
 {
 	std::vector<std::string> leaders_to_append =
 		utils::split((*faction)["random_leader"]);
@@ -532,7 +532,7 @@ void flg_manager::append_leaders_from_faction(const config* faction)
 		leaders_to_append.end());
 }
 
-int flg_manager::faction_index(const config& faction) const
+int flg_mgr::faction_index(const config& faction) const
 {
 	std::vector<const config*>::const_iterator it = std::find(
 		choosable_factions_.begin(), choosable_factions_.end(), &faction);
@@ -541,7 +541,7 @@ int flg_manager::faction_index(const config& faction) const
 	return std::distance(choosable_factions_.begin(), it);
 }
 
-int flg_manager::leader_index(const std::string& leader) const
+int flg_mgr::leader_index(const std::string& leader) const
 {
 	std::vector<std::string>::const_iterator it = std::find(
 		choosable_leaders_.begin(), choosable_leaders_.end(), leader);
@@ -550,7 +550,7 @@ int flg_manager::leader_index(const std::string& leader) const
 	return std::distance(choosable_leaders_.begin(), it);
 }
 
-int flg_manager::gender_index(const std::string& gender) const
+int flg_mgr::gender_index(const std::string& gender) const
 {
 	std::vector<std::string>::const_iterator it = std::find(
 		choosable_genders_.begin(), choosable_genders_.end(), gender);

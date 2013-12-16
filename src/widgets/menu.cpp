@@ -28,7 +28,7 @@
 #include "image.hpp"
 #include "marked-up_text.hpp"
 #include "sound.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 #include "serdes/wml_separators.hpp"
 
 #include <numeric>

@@ -34,48 +34,48 @@ static lg::log_domain log_unit("unit");
 static const size_t INITIAL_FAKE_ID = 4294967295u;
 
 namespace n_unit {
-	id_manager id_manager::manager_;
+	id_mgr id_mgr::mgr_;
 
-	id_manager::id_manager() : next_id_(0), fake_id_(INITIAL_FAKE_ID)
+	id_mgr::id_mgr() : next_id_(0), fake_id_(INITIAL_FAKE_ID)
 	{}
 
-	id_manager& id_manager::instance()
+	id_mgr& id_mgr::instance()
 	{
-		return manager_;
+		return mgr_;
 	}
 
-	size_t id_manager::next_id()
+	size_t id_mgr::next_id()
 	{
 		assert(next_id_ != fake_id_);
 		DBG_UT << "id: " << next_id_ << "\n";
 		return ++next_id_;
 	}
 
-	size_t id_manager::next_fake_id()
+	size_t id_mgr::next_fake_id()
 	{
 		assert(next_id_ != fake_id_);
 		DBG_UT << "fake id: " << fake_id_ << "\n";
 		return --fake_id_;
 	}
 
-	size_t id_manager::get_save_id()
+	size_t id_mgr::get_save_id()
 	{
 		return next_id_;
 	}
 
-	void id_manager::set_save_id(size_t id)
+	void id_mgr::set_save_id(size_t id)
 	{
 		clear();
 		DBG_UT << "set save id: " << id << "\n";
 		next_id_ = id;
 	}
 
-	void id_manager::reset_fake()
+	void id_mgr::reset_fake()
 	{
 		fake_id_ = INITIAL_FAKE_ID;
 	}
 
-	void id_manager::clear()
+	void id_mgr::clear()
 	{
 		next_id_ = 0;
 		reset_fake();

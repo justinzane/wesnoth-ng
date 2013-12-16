@@ -24,11 +24,11 @@
 #ifndef AI_GAMESTATE_OBSERVER_HPP_INCLUDED
 #define AI_GAMESTATE_OBSERVER_HPP_INCLUDED
 
-#include "../generic_sdl2/sdl2_evt_mgr.hpp"
+#include "../sdl2/evt_mgr.hpp"
 
 namespace ai {
 
-class gamestate_observer : public events::observer {
+class gamestate_observer : public evt_observer {
 public:
 
 

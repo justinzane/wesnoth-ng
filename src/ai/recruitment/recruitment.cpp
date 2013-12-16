@@ -157,10 +157,10 @@ double recruitment::evaluate() {
 
 	// When evaluate() is called the first time this turn,
 	// we'll retrieve the recruitment-instruction aspect.
-	if (resources::tod_manager->turn() != recruitment_instructions_turn_) {
+	if (resources::tod_mgr->turn() != recruitment_instructions_turn_) {
 		recruitment_instructions_ = get_recruitment_instructions();
 		integrate_recruitment_pattern_in_recruitment_instructions();
-		recruitment_instructions_turn_ = resources::tod_manager->turn();
+		recruitment_instructions_turn_ = resources::tod_mgr->turn();
 		LOG_AI_RECRUITMENT << "Recruitment-instructions updated:\n";
 		LOG_AI_RECRUITMENT << recruitment_instructions_ << "\n";
 	}
@@ -196,7 +196,7 @@ double recruitment::evaluate() {
 
 void recruitment::execute() {
 	LOG_AI_RECRUITMENT << "\n\n\n------------AI RECRUITMENT BEGIN---------------\n\n";
-	LOG_AI_RECRUITMENT << "TURN: " << resources::tod_manager->turn() <<
+	LOG_AI_RECRUITMENT << "TURN: " << resources::tod_mgr->turn() <<
 			" SIDE: " << current_team().side() << "\n";
 
 	/*
@@ -342,7 +342,7 @@ void recruitment::execute() {
 		// Check if we may want to save gold by not recruiting.
 		update_state();
 		int save_gold_turn = get_recruitment_save_gold()["active"].to_int(2);  // From aspect.
-		int current_turn = resources::tod_manager->turn();
+		int current_turn = resources::tod_mgr->turn();
 		bool save_gold_active = save_gold_turn > 0 && save_gold_turn <= current_turn;
 		if (state_ == SAVE_GOLD && save_gold_active) {
 			break;
@@ -738,7 +738,7 @@ void recruitment::show_important_hexes() const {
 void recruitment::update_average_lawful_bonus() {
 	int sum = 0;
 	int counter = 0;
-	foreach_ng(const time_of_day& time, resources::tod_manager->times()) {
+	foreach_ng(const time_of_day& time, resources::tod_mgr->times()) {
 		sum += time.lawful_bonus;
 		++counter;
 	}
@@ -1750,8 +1750,8 @@ void recruitment::update_scouts_wanted() {
  */
 recruitment::recruit_situation_change_observer::recruit_situation_change_observer()
 	: recruit_list_changed_(false), gamestate_changed_(0) {
-	manager::add_recruit_list_changed_observer(this);
-	manager::add_gamestate_observer(this);
+	mgr::add_recruit_list_changed_observer(this);
+	mgr::add_gamestate_observer(this);
 }
 
 void recruitment::recruit_situation_change_observer::handle_generic_event(
@@ -1765,8 +1765,8 @@ void recruitment::recruit_situation_change_observer::handle_generic_event(
 }
 
 recruitment::recruit_situation_change_observer::~recruit_situation_change_observer() {
-	manager::remove_recruit_list_changed_observer(this);
-	manager::remove_gamestate_observer(this);
+	mgr::remove_recruit_list_changed_observer(this);
+	mgr::remove_gamestate_observer(this);
 }
 
 bool recruitment::recruit_situation_change_observer::recruit_list_changed() {

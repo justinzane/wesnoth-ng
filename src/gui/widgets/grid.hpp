@@ -224,12 +224,12 @@ class tgrid: public twidget {
          *
          * @returns                   The newly calculated size.
          */
-        tpoint recalculate_best_size();
+        point_t recalculate_best_size();
 
     private:
 
         /** See @ref twidget::calculate_best_size. */
-        virtual tpoint calculate_best_size() const OVERRIDE;
+        virtual point_t calculate_best_size() const OVERRIDE;
     public:
 
         /** See @ref twidget::can_wrap. */
@@ -237,12 +237,12 @@ class tgrid: public twidget {
 
     public:
         /** See @ref twidget::place. */
-        virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+        virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
         /***** ***** ***** ***** Inherited ***** ***** ***** *****/
 
         /** See @ref twidget::set_origin. */
-        virtual void set_origin(const tpoint& origin) OVERRIDE;
+        virtual void set_origin(const point_t& origin) OVERRIDE;
 
         /** See @ref twidget::set_visible_rectangle. */
         virtual void set_visible_rectangle(const SDL_Rect* rectangle) OVERRIDE;
@@ -256,10 +256,10 @@ class tgrid: public twidget {
                                                    OVERRIDE;
 
         /** See @ref twidget::find_at. */
-        virtual twidget* find_at(const tpoint& coordinate, const bool must_be_active) OVERRIDE;
+        virtual twidget* find_at(const point_t& coordinate, const bool must_be_active) OVERRIDE;
 
         /** See @ref twidget::find_at. */
-        virtual const twidget* find_at(const tpoint& coordinate,
+        virtual const twidget* find_at(const point_t& coordinate,
                                        const bool must_be_active) const OVERRIDE;
 
         /** See @ref twidget::find. */
@@ -311,7 +311,7 @@ class tgrid: public twidget {
                 }
 
                 /** Returns the best size for the cell. */
-                tpoint get_best_size() const;
+                point_t get_best_size() const;
 
                 /**
                  * Places the widget in the cell.
@@ -319,7 +319,7 @@ class tgrid: public twidget {
                  * @param origin          The origin (x, y) for the widget.
                  * @param size            The size for the widget.
                  */
-                void place(tpoint origin, tpoint size);
+                void place(tpoint origin, point_t size);
 
                 /** Forwards @ref tgrid::layout_initialise to the cell. */
                 void layout_initialise(const bool full_initialisation);
@@ -376,7 +376,7 @@ class tgrid: public twidget {
                 twidget* widget_;
 
                 /** Returns the space needed for the border. */
-                tpoint border_space() const;
+                point_t border_space() const;
 
         };  // class tchild
 
@@ -459,7 +459,7 @@ class tgrid: public twidget {
         }
 
         /** Layouts the children in the grid. */
-        void layout(const tpoint& origin);
+        void layout(const point_t& origin);
 
         /** See @ref twidget::impl_draw_children. */
         virtual void impl_draw_children(SDL_Surface& frame_buffer);

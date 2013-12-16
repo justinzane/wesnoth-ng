@@ -57,9 +57,9 @@ private:
 			const std::string& user, const char* error_code ="",
 			bool force_confirmation = false);
 
-	const network::manager net_manager_;
-	network::server_manager server_;
-	wesnothd::ban_manager ban_manager_;
+	const network::mgr net_mgr_;
+	network::server_mgr server_;
+	wesnothd::ban_mgr ban_mgr_;
 
 	struct connection_log {
 		connection_log(std::string _nick, std::string _ip, time_t _log_off) :
@@ -102,7 +102,7 @@ private:
 	std::vector<wesnothd::game*> games_;
 	std::set<network::connection> not_logged_in_;
 
-	wesnothd::room_manager rooms_;
+	wesnothd::room_mgr rooms_;
 
 	/** server socket/fifo. */
 	boost::scoped_ptr<input_stream> input_;

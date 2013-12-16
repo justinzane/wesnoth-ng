@@ -173,7 +173,7 @@ bool action_result::is_execution() const
 
 game_info& action_result::get_info() const
 {
-	return manager::get_active_ai_info_for_side(get_side());
+	return mgr::get_active_ai_info_for_side(get_side());
 }
 
 
@@ -296,13 +296,13 @@ void attack_result::do_execute()
 
 	///@todo 1.9: change ToD to be location specific for the defender unit
 	recorder.add_attack(attacker_loc_, defender_loc_, attacker_weapon, defender_weapon, a_->type_id(),
-		d_->type_id(), a_->level(), d_->level(), resources::tod_manager->turn(),
-		resources::tod_manager->get_time_of_day());
+		d_->type_id(), a_->level(), d_->level(), resources::tod_mgr->turn(),
+		resources::tod_mgr->get_time_of_day());
 	rand_rng::invalidate_seed();
 	rand_rng::clear_new_seed_callback();
 	while (!rand_rng::has_valid_seed()) {
-		manager::raise_user_interact();
-		manager::raise_sync_network();
+		mgr::raise_user_interact();
+		mgr::raise_sync_network();
 		SDL_Delay(10);
 	}
 	recorder.add_seed("attack", rand_rng::get_last_seed());
@@ -324,7 +324,7 @@ void attack_result::do_execute()
 	get_info().recent_attacks.insert(defender_loc_);
 	//end of ugly hack
 	try {
-		manager::raise_gamestate_changed();
+		mgr::raise_gamestate_changed();
 	} catch (...) {
 		is_ok(); //Silences "unchecked result" warning
 		throw;
@@ -509,7 +509,7 @@ void move_result::do_execute()
 
 	if (is_gamestate_changed()) {
 		try {
-			manager::raise_gamestate_changed();
+			mgr::raise_gamestate_changed();
 		} catch (...) {
 			is_ok(); //Silences "unchecked result" warning
 			throw;
@@ -656,7 +656,7 @@ void recall_result::do_execute()
 
 	set_gamestate_changed();
 	try {
-		manager::raise_gamestate_changed();
+		mgr::raise_gamestate_changed();
 	} catch (...) {
 		is_ok(); //Silences "unchecked result" warning
 		throw;
@@ -801,7 +801,7 @@ void recruit_result::do_execute()
 
 	set_gamestate_changed();
 	try {
-		manager::raise_gamestate_changed();
+		mgr::raise_gamestate_changed();
 	} catch (...) {
 		is_ok(); //Silences "unchecked result" warning
 		throw;
@@ -898,12 +898,12 @@ void stopunit_result::do_execute()
 		if (remove_movement_){
 			un->remove_movement_ai();
 			set_gamestate_changed();
-			manager::raise_gamestate_changed();
+			mgr::raise_gamestate_changed();
 		}
 		if (remove_attacks_){
 			un->remove_attacks_ai();
 			set_gamestate_changed();
-			manager::raise_gamestate_changed();//to be on the safe side
+			mgr::raise_gamestate_changed();//to be on the safe side
 		}
 	} catch (...) {
 		is_ok(); //Silences "unchecked result" warning

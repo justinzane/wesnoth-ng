@@ -104,7 +104,7 @@ tpoint tpanel::border_space() const
 		boost::dynamic_pointer_cast<const tpanel_definition::tresolution>(config());
 	assert(conf);
 
-	return tpoint(conf->left_border + conf->right_border,
+	return point_t(conf->left_border + conf->right_border,
 		conf->top_border + conf->bottom_border);
 }
 

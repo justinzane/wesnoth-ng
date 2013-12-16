@@ -204,7 +204,7 @@ const teleport_map get_teleport_locations(const unit &u,
 	return teleport_map(groups, u, viewing_team, see_all, ignore_units);
 }
 
-manager::manager(const config &cfg) : tunnels_(), id_(cfg["next_teleport_group_id"].to_int(0)) {
+mgr::mgr(const config &cfg) : tunnels_(), id_(cfg["next_teleport_group_id"].to_int(0)) {
 	const int tunnel_count = cfg.child_count("tunnel");
 	for(int i = 0; i < tunnel_count; ++i) {
 		const config& t = cfg.child("tunnel", i);
@@ -217,11 +217,11 @@ manager::manager(const config &cfg) : tunnels_(), id_(cfg["next_teleport_group_i
 	}
 }
 
-void manager::add(const teleport_group &group) {
+void mgr::add(const teleport_group &group) {
 	tunnels_.push_back(group);
 }
 
-void manager::remove(const std::string &id) {
+void mgr::remove(const std::string &id) {
 	std::vector<teleport_group>::iterator t = tunnels_.begin();
 	for(;t != tunnels_.end();) {
 		if (t->get_teleport_id() == id || t->get_teleport_id() == id + reversed_suffix) {
@@ -232,11 +232,11 @@ void manager::remove(const std::string &id) {
 	}
 }
 
-const std::vector<teleport_group>& manager::get() const {
+const std::vector<teleport_group>& mgr::get() const {
 	return tunnels_;
 }
 
-config manager::to_config() const {
+config mgr::to_config() const {
 	config store;
 
 	std::vector<teleport_group>::const_iterator tunnel = tunnels_.begin();
@@ -248,7 +248,7 @@ config manager::to_config() const {
 	return store;
 }
 
-std::string manager::next_unique_id() {
+std::string mgr::next_unique_id() {
 	return str_cast(++id_);
 }
 

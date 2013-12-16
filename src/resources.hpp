@@ -21,7 +21,7 @@
 
 #include <vector>
 
-class game_config_manager;
+class game_config_mgr;
 class game_display;
 class gamemap;
 class game_state;
@@ -29,35 +29,35 @@ class game_data;
 class LuaKernel;
 class play_controller;
 class team;
-class tod_manager;
+class tod_mgr;
 class unit_map;
-class persist_manager;
+class persist_mgr;
 
 namespace actions { class undo_list; }
 
-namespace soundsource { class manager; }
+namespace soundsource { class mgr; }
 
-namespace pathfind { class manager; }
+namespace pathfind { class mgr; }
 
-namespace wb { class manager; } //whiteboard manager
+namespace wb { class mgr; } //whiteboard mgr
 
 namespace resources
 {
-	extern game_config_manager  *config_manager;
+	extern game_config_mgr  *config_mgr;
 	extern play_controller      *controller;
 	extern game_data            *gamedata;
 	extern gamemap              *game_map;
-	extern LuaKernel            *lua_kernel;     // Set by game_events::manager.
-	extern persist_manager      *persist;
+	extern LuaKernel            *lua_kernel;     // Set by game_events::mgr.
+	extern persist_mgr      *persist;
 	extern game_display         *screen;
-	extern soundsource::manager *soundsources;
+	extern soundsource::mgr *soundsources;
 	extern game_state           *state_of_game;
 	extern std::vector<team>    *teams;
-	extern ::tod_manager        *tod_manager;
-	extern pathfind::manager    *tunnels;
+	extern ::tod_mgr        *tod_mgr;
+	extern pathfind::mgr    *tunnels;
 	extern actions::undo_list   *undo_stack;
 	extern unit_map             *units;
-	extern wb::manager          *whiteboard;
+	extern wb::mgr          *whiteboard;
 }
 
 #endif

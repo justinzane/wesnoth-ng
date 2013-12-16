@@ -20,6 +20,7 @@
 #define TEXT_HPP_INCLUDED
 
 #include "sdl_utils.hpp"
+#include "sdl2/sdl2_point"
 #include <boost/noncopyable.hpp>
 #include <pango/pango.h>
 #include <pango/pangocairo.h>
@@ -27,24 +28,7 @@
 
 struct language_def;
 
-namespace gui2 {
-	struct tpoint;
-} // namespace gui2;
-
 namespace font {
-
-/**
- * Escapes the markup characters in a text.
- *
- * The markups escaped are the ones used in the pango markup. The special
- * characters are: @verbatim <>'"& @endverbatim
- * The escaping is the same as for HTML.
- *
- * @param text                    The text to escape.
- *
- * @returns                       The escaped text.
- */
-std::string escape_text(const std::string& text);
 
 
 // add background color and also font markup.
@@ -70,7 +54,7 @@ public:
 	 * Before rendering it tests whether a redraw is needed and if so it first
 	 * redraws the SDL_Surface before returning it.
 	 */
-	SDL_Surface render() const;
+	SDL_Surface* render() const;
 
 	/** Returns the width needed for the text. */
 	int get_width() const;
@@ -79,23 +63,12 @@ public:
 	int get_height() const;
 
 	/** Returns the size needed for the text. */
-	gui2::tpoint get_size() const;
+	point_2Dd get_size() const;
 
 	/** Has the text been truncated? */
 	bool is_truncated() const;
 
-	/**
-	 * Inserts utf 8 text.
-	 *
-	 * @param offset              The position to insert the text.
-	 * @param text                The utf-8 text to insert.
-	 *
-	 * @returns                   The number of characters inserted.
-	 */
-	unsigned insert_text(const unsigned offset, const std::string& text);
-
-	/**
-	 * Inserts a unicode char.
+	/**@brief Inserts a unicode char.
 	 *
 	 * @param offset              The position to insert the char.
 	 * @param unicode             The character to insert.
@@ -115,32 +88,15 @@ public:
 	unsigned insert_unicode(
 		const unsigned offset, const std::vector<wchar_t>& unicode);
 
-	/***** ***** ***** ***** Font flags ***** ***** ***** *****/
-
-	/**
-	 * The flags have the same values as the ones in SDL_TTF so it's easy to mix
-	 * them for now. To avoid including SDL_TTF in the header they're only
-	 * declared here. Once SDL_TTF is removed they can be moved in the header.
-	 */
-
-	static const unsigned STYLE_NORMAL;     /**< Normal text. */
-	static const unsigned STYLE_BOLD;       /**< Bold text. */
-	static const unsigned STYLE_ITALIC;     /**< Italicized text. */
-	static const unsigned STYLE_UNDERLINE;  /**< Underlined text. */
-
 	/***** ***** ***** ***** Query details ***** ***** ***** *****/
 
-	/**
-	 * Gets the location for the cursor.
-	 *
+	/**@brief Gets the location for the cursor.
 	 * @param column              The column offset of the cursor.
 	 * @param line                The line offset of the cursor.
-	 *
 	 * @returns                   The position of the top of the cursor. It the
 	 *                            requested location is out of range 0,0 is
-	 *                            returned.
-	 */
-	gui2::tpoint get_cursor_position(
+	 *                            returned. */
+	point_2Dd get_cursor_position(
 		const unsigned column, const unsigned line = 0) const;
 
 	/**
@@ -152,7 +108,7 @@ public:
 	 *                            value the line of the character found (or last
 	 *                            character if not found.
 	 */
-	gui2::tpoint get_column_line(const gui2::tpoint& position) const;
+	point_2Dd get_column_line(const point_2Dd& position) const;
 
 	/**
 	 * Gets the length of the text in characters.
@@ -162,9 +118,7 @@ public:
 	 */
 	size_t get_length() const { return length_; }
 
-	/**
-	 * Sets the text to render.
-	 *
+	/**Sets the text to render.
 	 * @param text                The text to render.
 	 * @param markedup            Should the text be rendered with pango
 	 *                            markup. If the markup is invalid it's
@@ -180,12 +134,6 @@ public:
 
 	const std::string& text() const { return text_; }
 
-	ttext& set_font_size(const unsigned font_size);
-
-	ttext& set_font_style(const unsigned font_style);
-
-	ttext& set_foreground_color(const Uint32 color);
-
 	ttext& set_maximum_width(int width);
 
 	ttext& set_characters_per_line(const unsigned characters_per_line);
@@ -193,8 +141,6 @@ public:
 	ttext& set_maximum_height(int height, bool multiline);
 
 	ttext& set_ellipse_mode(const PangoEllipsizeMode ellipse_mode);
-
-	ttext &set_alignment(const PangoAlignment alignment);
 
 	ttext& set_maximum_length(const size_t maximum_length);
 
@@ -206,7 +152,7 @@ private:
 	mutable PangoRectangle rect_;
 
 	/** The SDL_Surface to render upon used as a cache. */
-	mutable SDL_Surface surface_;
+	mutable SDL_Surface* surface_;
 
 	/** The text to draw (stored as utf-8). */
 	std::string text_;
@@ -280,49 +226,31 @@ private:
 	/** Length of the text. */
 	mutable size_t length_;
 
-	/**
-	 * Recalculates the text.
-	 *
-	 * When the text is recalculated the SDL_Surface is dirtied.
-	 *
-	 * @param force               Recalculate even if not dirty?
-	 */
+	/**@brief Recalculates the text.
+	 * @details When the text is recalculated the SDL_Surface is dirtied.
+	 * @param force               Recalculate even if not dirty? */
 	void recalculate(const bool force = false) const;
 
 	/** The dirty state of the surface. */
 	mutable bool surface_dirty_;
 
-	/**
-	 * Renders the text.
-	 *
-	 * It will do a recalculation first so no need to call both.
-	 *
-	 * @param force               Render even if not dirty? This parameter is
-	 *                            also send to recalculate().
-	 */
+	/**@brief Renders the text.
+	 * @details It will do a recalculation first so no need to call both.
+	 * @param force Render even if not dirty? This parameter is also send to recalculate(). */
 	void rerender(const bool force = false) const;
 
-	/**
-	 * Buffer to store the image on.
-	 *
-	 * We use a cairo SDL_Surface to draw on this buffer and then use the buffer as
-	 * data source for the SDL_Surface. This means the buffer needs to be stored
-	 * in the object.
-	 */
+	/**@brief Buffer to store the image on.
+	 * @details We use a cairo SDL_Surface to draw on this buffer and then use the buffer as
+	 * data source for the SDL_Surface. This means the buffer needs to be stored in the object. */
 	mutable unsigned char* surface_buffer_;
 
-	/**
-	 * Creates a new buffer.
-	 *
-	 * If needed frees the other SDL_Surface and then creates a new buffer and
+	/**@brief Creates a new buffer.
+	 * @details If needed frees the other SDL_Surface and then creates a new buffer and
 	 * initializes the entire buffer with values 0.
-	 *
-	 * NOTE eventhough we're clearly modifying function we don't change the
+	 * @note even though we're clearly modifying function we don't change the
 	 * state of the object. The const is needed so other functions can also be
 	 * marked const (those also don't change the state of the object.
-	 *
-	 * @param size                The required size of the buffer.
-	 */
+	 * @param size                The required size of the buffer. */
 	void create_surface_buffer(const size_t size) const;
 
 	/**

@@ -133,12 +133,12 @@ public:
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE;
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE;
 
 	/** See @ref twidget::find. */
@@ -227,7 +227,7 @@ private:
 			const std::vector<twidget*>& call_stack);
 
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE;
+	virtual point_t calculate_best_size() const OVERRIDE;
 
 	/** See @ref twidget::disable_click_dismiss. */
 	bool disable_click_dismiss() const OVERRIDE;
@@ -240,14 +240,14 @@ private:
 	tpoint get_unfolded_size() const;
 
 	/** See @ref twidget::set_origin. */
-	virtual void set_origin(const tpoint& origin) OVERRIDE;
+	virtual void set_origin(const point_t& origin) OVERRIDE;
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
 	unsigned place(
 			  const unsigned indention_step_size
-			, tpoint origin
+			, point_t origin
 			, unsigned width);
 
 	/** See @ref twidget::set_visible_rectangle. */

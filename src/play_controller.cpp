@@ -78,7 +78,7 @@ static void clear_resources()
 	resources::soundsources = nullptr;
 	resources::state_of_game = nullptr;
 	resources::teams = nullptr;
-	resources::tod_manager = nullptr;
+	resources::tod_mgr = nullptr;
 	resources::tunnels = nullptr;
 	resources::undo_stack = nullptr;
 	resources::units = nullptr;
@@ -94,17 +94,17 @@ play_controller::play_controller(const config& level, game_state& state_of_game,
 	observer(),
 	savegame_config(),
 	animation_cache(),
-	prefs_disp_manager_(),
-	tooltips_manager_(),
-	events_manager_(),
-	halo_manager_(),
-	labels_manager_(),
-	help_manager_(&game_config),
+	prefs_disp_mgr_(),
+	tooltips_mgr_(),
+	events_mgr_(),
+	halo_mgr_(),
+	labels_mgr_(),
+	help_mgr_(&game_config),
 	mouse_handler_(nullptr, teams_, units_, map_),
 	menu_handler_(nullptr, units_, teams_, level, map_, game_config, state_of_game),
-	soundsources_manager_(),
-	tod_manager_(level, num_turns),
-	pathfind_manager_(),
+	soundsources_mgr_(),
+	tod_mgr_(level, num_turns),
+	pathfind_mgr_(),
 	persist_(),
 	gui_(),
 	statistics_context_(level["name"]),
@@ -115,13 +115,13 @@ play_controller::play_controller(const config& level, game_state& state_of_game,
 	map_(game_config, level),
 	units_(),
 	undo_stack_(new actions::undo_list(level.child("undo_stack"))),
-	whiteboard_manager_(),
+	whiteboard_mgr_(),
 	xp_mod_(level["experience_modifier"].to_int(100)),
 	loading_game_(level["playing_team"].empty() == false),
 	first_human_team_(-1),
 	player_number_(1),
 	first_player_(level_["playing_team"].to_int() + 1),
-	start_turn_(tod_manager_.turn()), // tod_manager_ constructed above
+	start_turn_(tod_mgr_.turn()), // tod_mgr_ constructed above
 	is_host_(true),
 	skip_replay_(skip_replay),
 	linger_(false),
@@ -141,7 +141,7 @@ play_controller::play_controller(const config& level, game_state& state_of_game,
 	resources::persist = &persist_;
 	resources::state_of_game = &gamestate_;
 	resources::teams = &teams_;
-	resources::tod_manager = &tod_manager_;
+	resources::tod_mgr = &tod_mgr_;
 	resources::undo_stack = undo_stack_.get();
 	resources::units = &units_;
 
@@ -169,12 +169,12 @@ play_controller::~play_controller()
 }
 
 void play_controller::init(CVideo& video){
-	util::scoped_resource<loadscreen::loadscreen_mgr*, util::delete_item> scoped_loadscreen_manager;
-	loadscreen::loadscreen_mgr* loadscreen_manager = loadscreen::loadscreen_mgr::get();
-	if (!loadscreen_manager)
+	util::scoped_resource<loadscreen::loadscreen_mgr*, util::delete_item> scoped_loadscreen_mgr;
+	loadscreen::loadscreen_mgr* loadscreen_mgr = loadscreen::loadscreen_mgr::get();
+	if (!loadscreen_mgr)
 	{
-		scoped_loadscreen_manager.assign(new loadscreen::loadscreen_mgr(video));
-		loadscreen_manager = scoped_loadscreen_manager.get();
+		scoped_loadscreen_mgr.assign(new loadscreen::loadscreen_mgr(video));
+		loadscreen_mgr = scoped_loadscreen_mgr.get();
 	}
 
 	loadscreen::start_stage("load level");
@@ -195,7 +195,7 @@ void play_controller::init(CVideo& video){
 	}
 
 	foreach_ng(const config &t, level_.child_range("time_area")) {
-		tod_manager_.add_time_area(t);
+		tod_mgr_.add_time_area(t);
 	}
 
 	LOG_NG << "initialized teams... "    << (SDL_GetTicks() - ticks_) << "\n";
@@ -204,9 +204,9 @@ void play_controller::init(CVideo& video){
 	resources::teams->resize(level_.child_count("side"));
 
 	// This *needs* to be created before the show_intro and show_map_scene
-	// as that functions use the manager state_of_game
+	// as that functions use the mgr state_of_game
 	// Has to be done before registering any events!
-	events_manager_.reset(new game_events::manager(level_));
+	events_mgr_.reset(new game_events::mgr(level_));
 
 	std::set<std::string> seen_save_ids;
 
@@ -255,7 +255,7 @@ void play_controller::init(CVideo& video){
 
 	LOG_NG << "building terrain rules... " << (SDL_GetTicks() - ticks_) << '\n';
 	loadscreen::start_stage("build terrain");
-	gui_.reset(new game_display(units_, video, map_, tod_manager_, teams_, theme_cfg, level_));
+	gui_.reset(new game_display(units_, video, map_, tod_mgr_, teams_, theme_cfg, level_));
 	if (!gui_->video().faked()) {
 		if (gamestate_.mp_settings().mp_countdown)
 			gui_->get_theme().modify_label("time-icon", _ ("time left for current turn"));
@@ -290,7 +290,7 @@ void play_controller::init(CVideo& video){
 
 	browse_ = true;
 
-	init_managers();
+	init_mgrs();
 	// add era & mod events for MP game
 	if (const config &era_cfg = level_.child("era")) {
 		game_events::add_events(era_cfg.child_range("event"), "era_events");
@@ -306,23 +306,23 @@ void play_controller::init(CVideo& video){
 		}
 	}
 	loadscreen::global_loadscreen->start_stage("start game");
-	loadscreen_manager->reset();
+	loadscreen_mgr->reset();
 }
 
-void play_controller::init_managers(){
-	LOG_NG << "initializing managers... " << (SDL_GetTicks() - ticks_) << "\n";
-	prefs_disp_manager_.reset(new preferences::display_manager(gui_.get()));
-	tooltips_manager_.reset(new tooltips::manager(gui_->video()));
-	soundsources_manager_.reset(new soundsource::manager(*gui_));
-	pathfind_manager_.reset(new pathfind::manager(level_));
-	whiteboard_manager_.reset(new wb::manager());
+void play_controller::init_mgrs(){
+	LOG_NG << "initializing mgrs... " << (SDL_GetTicks() - ticks_) << "\n";
+	prefs_disp_mgr_.reset(new preferences::display_mgr(gui_.get()));
+	tooltips_mgr_.reset(new tooltips::mgr(gui_->video()));
+	soundsources_mgr_.reset(new soundsource::mgr(*gui_));
+	pathfind_mgr_.reset(new pathfind::mgr(level_));
+	whiteboard_mgr_.reset(new wb::mgr());
 
-	resources::soundsources = soundsources_manager_.get();
-	resources::tunnels = pathfind_manager_.get();
-	resources::whiteboard = whiteboard_manager_.get();
+	resources::soundsources = soundsources_mgr_.get();
+	resources::tunnels = pathfind_mgr_.get();
+	resources::whiteboard = whiteboard_mgr_.get();
 
-	halo_manager_.reset(new halo::manager(*gui_));
-	LOG_NG << "done initializing managers... " << (SDL_GetTicks() - ticks_) << "\n";
+	halo_mgr_.reset(new halo::mgr(*gui_));
+	LOG_NG << "done initializing mgrs... " << (SDL_GetTicks() - ticks_) << "\n";
 }
 
 static int placing_score(const config& side, const gamemap& map, const map_location& pos)
@@ -675,7 +675,7 @@ void play_controller::do_init_side(const unsigned int team_index, bool is_replay
 		actions::clear_shroud(player_number_, true);
 	}
 
-	const time_of_day &tod = tod_manager_.get_time_of_day();
+	const time_of_day &tod = tod_mgr_.get_time_of_day();
 
 	if (int(team_index) + 1 == first_player_)
 		sound::play_sound(tod.sounds, sound::SOUND_SOURCES);
@@ -728,7 +728,7 @@ config play_controller::to_config() const
 		}
 	}
 
-	cfg.merge_with(tod_manager_.to_config());
+	cfg.merge_with(tod_mgr_.to_config());
 
 	if(linger_) {
 		config endlevel;
@@ -743,7 +743,7 @@ config play_controller::to_config() const
 
 	//write out the current state of the map
 	cfg["map_data"] = map_.write();
-	cfg.merge_with(pathfind_manager_->to_config());
+	cfg.merge_with(pathfind_mgr_->to_config());
 
 	config display;
 	gui_->write(display);
@@ -784,7 +784,7 @@ void play_controller::finish_side_turn(){
 	}
 
 	mouse_handler_.deselect_hex();
-	n_unit::id_manager::instance().reset_fake();
+	n_unit::id_mgr::instance().reset_fake();
 	game_events::pump();
 }
 
@@ -1090,7 +1090,7 @@ int play_controller::find_human_team_before(const size_t team_num) const
 }
 
 void play_controller::slice_before_scroll() {
-	soundsources_manager_->update();
+	soundsources_mgr_->update();
 }
 
 events::mouse_handler& play_controller::get_mouse_handler_base() {
@@ -1119,7 +1119,7 @@ void play_controller::process_focus_keydown_event(const SDL_Event& event)
 
 void play_controller::process_keydown_event(const SDL_Event& event) {
 	if (event.key.keysym.sym == SDLK_TAB) {
-		whiteboard_manager_->set_invert_behavior(true);
+		whiteboard_mgr_->set_invert_behavior(true);
 	}
 }
 
@@ -1152,7 +1152,7 @@ void play_controller::process_keyup_event(const SDL_Event& event) {
 	} else if (event.key.keysym.sym == SDLK_TAB) {
 		static CKey keys;
 		if (!keys[SDLK_TAB]) {
-			whiteboard_manager_->set_invert_behavior(false);
+			whiteboard_mgr_->set_invert_behavior(false);
 		}
 	}
 }
@@ -1438,7 +1438,7 @@ void play_controller::check_victory()
 	if (non_interactive()) {
 		std::cout << "winner: ";
 		foreach_ng(unsigned l, seen_leaders) {
-			std::string ai = ai::manager::get_active_ai_identifier_for_side(l);
+			std::string ai = ai::mgr::get_active_ai_identifier_for_side(l);
 			if (ai.empty()) ai = "default ai";
 			std::cout << l << " (using " << ai << ") ";
 		}

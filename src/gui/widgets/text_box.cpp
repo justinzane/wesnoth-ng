@@ -118,7 +118,7 @@ ttext_box::ttext_box()
 				::signal_handler_left_button_double_click, this, _2, _3));
 }
 
-void ttext_box::place(const tpoint& origin, const tpoint& size)
+void ttext_box::place(const point_t& origin, const point_t& size)
 {
 	// Inherited.
 	tcontrol::place(origin, size);
@@ -345,7 +345,7 @@ const std::string& ttext_box::get_control_type() const
 }
 
 void ttext_box::signal_handler_mouse_motion(
-		const event::tevent event, bool& handled, const tpoint& coordinate)
+		const event::tevent event, bool& handled, const point_t& coordinate)
 {
 	DBG_GUI_E << get_control_type() << "[" << id() << "]: " << event << ".\n";
 

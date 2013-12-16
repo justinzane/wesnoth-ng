@@ -374,7 +374,7 @@ connect::connect(game_display& disp, const std::string& game_name,
 	scroll_pane_(video()),
 	launch_(video(), _("I’m Ready")),
 	cancel_(video(), engine_.first_scenario() ? _("Cancel") : _("Quit")),
-	combo_control_group_(new gui::drop_group_manager())
+	combo_control_group_(new gui::drop_group_mgr())
 {
 	DBG_MP << "setting up connect dialog" << std::endl;
 

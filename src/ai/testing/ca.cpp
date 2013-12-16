@@ -746,7 +746,7 @@ void move_leader_to_goals_phase::remove_goal(const std::string &id)
 	mod_ai["side"] = get_side();
 	mod_ai["path"] = "aspect[leader_goal].facet["+id+"]";
 	mod_ai["action"] = "delete";
-	manager::modify_active_ai_for_side(get_side(),mod_ai);
+	mgr::modify_active_ai_for_side(get_side(),mod_ai);
 }
 
 //==============================================================

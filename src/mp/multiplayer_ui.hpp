@@ -213,7 +213,7 @@ private:
 	/** Ensures standard hotkeys are coorectly handled. */
 	const basic_handler hotkey_handler_;
 
-	const preferences::display_manager disp_manager_;
+	const preferences::display_mgr disp_mgr_;
 
 	/**
 	 * The main game configuration, as defined by loading the preprocessed WML

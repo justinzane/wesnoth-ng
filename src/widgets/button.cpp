@@ -29,7 +29,7 @@
 #include "log/log.hpp"
 #include "serdes/string_utils.hpp"
 #include "sound.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 #include "serdes/wml_separators.hpp"
 
 #include "filesystem.hpp"

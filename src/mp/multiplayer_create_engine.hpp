@@ -205,7 +205,7 @@ public:
 	int find_level_by_id(const std::string& id) const;
 	int find_extra_by_id(const MP_EXTRA extra_type, const std::string& id) const;
 
-	const depcheck::manager& dependency_manager() const;
+	const depcheck::mgr& dependency_mgr() const;
 
 	void init_active_mods();
 	std::vector<std::string>& active_mods();
@@ -244,7 +244,7 @@ private:
 	game_state& state_;
 	mp_game_settings parameters_;
 
-	depcheck::manager dependency_manager_;
+	depcheck::mgr dependency_mgr_;
 
 	util::scoped_ptr<map_generator> generator_;
 };

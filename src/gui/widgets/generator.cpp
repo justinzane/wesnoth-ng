@@ -130,7 +130,7 @@ tpoint thorizontal_list::calculate_best_size() const
 			continue;
 		}
 
-		const tpoint best_size = grid.get_best_size();
+		const point_t best_size = grid.get_best_size();
 
 		result.x += best_size.x;
 
@@ -142,7 +142,7 @@ tpoint thorizontal_list::calculate_best_size() const
 	return result;
 }
 
-void thorizontal_list::place(const tpoint& origin, const tpoint& size)
+void thorizontal_list::place(const point_t& origin, const point_t& size)
 {
 	/*
 	 * - Set every item to its best size.
@@ -175,7 +175,7 @@ void thorizontal_list::place(const tpoint& origin, const tpoint& size)
 	assert(current_origin.x == origin.x + size.x);
 }
 
-void thorizontal_list::set_origin(const tpoint& origin)
+void thorizontal_list::set_origin(const point_t& origin)
 {
 	tpoint current_origin = origin;
 	for(size_t i = 0; i < get_item_count(); ++i) {
@@ -208,7 +208,7 @@ void thorizontal_list::set_visible_rectangle(const SDL_Rect* rectangle)
 }
 
 twidget* thorizontal_list::find_at(
-		const tpoint& coordinate, const bool must_be_active)
+		const point_t& coordinate, const bool must_be_active)
 {
 	assert(get_window());
 
@@ -231,7 +231,7 @@ twidget* thorizontal_list::find_at(
 	return nullptr;
 }
 
-const twidget* thorizontal_list::find_at(const tpoint& coordinate,
+const twidget* thorizontal_list::find_at(const point_t& coordinate,
 		const bool must_be_active) const
 {
 	assert(get_window());
@@ -333,7 +333,7 @@ tpoint tvertical_list::calculate_best_size() const
 			continue;
 		}
 
-		const tpoint best_size = grid.get_best_size();
+		const point_t best_size = grid.get_best_size();
 
 		if(best_size.x > result.x) {
 			result.x = best_size.x;
@@ -345,7 +345,7 @@ tpoint tvertical_list::calculate_best_size() const
 	return result;
 }
 
-void tvertical_list::place(const tpoint& origin, const tpoint& size)
+void tvertical_list::place(const point_t& origin, const point_t& size)
 {
 	/*
 	 * - Set every item to its best size.
@@ -378,7 +378,7 @@ void tvertical_list::place(const tpoint& origin, const tpoint& size)
 	assert(current_origin.y == origin.y + size.y);
 }
 
-void tvertical_list::set_origin(const tpoint& origin)
+void tvertical_list::set_origin(const point_t& origin)
 {
 	tpoint current_origin = origin;
 	for(size_t i = 0; i < get_item_count(); ++i) {
@@ -411,7 +411,7 @@ void tvertical_list::set_visible_rectangle(const SDL_Rect* rectangle)
 }
 
 twidget* tvertical_list::find_at(
-		const tpoint& coordinate, const bool must_be_active)
+		const point_t& coordinate, const bool must_be_active)
 {
 	assert(get_window());
 
@@ -435,7 +435,7 @@ twidget* tvertical_list::find_at(
 	return nullptr;
 }
 
-const twidget* tvertical_list::find_at(const tpoint& coordinate,
+const twidget* tvertical_list::find_at(const point_t& coordinate,
 		const bool must_be_active) const
 {
 	assert(get_window());
@@ -536,7 +536,7 @@ tpoint tindependent::calculate_best_size() const
 
 		const tgrid& grid = item(i);
 
-		const tpoint best_size = grid.get_best_size();
+		const point_t best_size = grid.get_best_size();
 
 		if(best_size.x > result.x) {
 			result.x = best_size.x;
@@ -550,7 +550,7 @@ tpoint tindependent::calculate_best_size() const
 	return result;
 }
 
-void tindependent::place(const tpoint& origin, const tpoint& size)
+void tindependent::place(const point_t& origin, const point_t& size)
 {
 	for(size_t i = 0; i < get_item_count(); ++i) {
 
@@ -559,7 +559,7 @@ void tindependent::place(const tpoint& origin, const tpoint& size)
 	}
 }
 
-void tindependent::set_origin(const tpoint& origin)
+void tindependent::set_origin(const point_t& origin)
 {
 	/*
 	 * Set the origin for every item.
@@ -574,7 +574,7 @@ void tindependent::set_origin(const tpoint& origin)
 	}
 }
 
-twidget* tindependent::find_at(const tpoint& coordinate
+twidget* tindependent::find_at(const point_t& coordinate
 		, const bool must_be_active)
 {
 	assert(get_window());
@@ -588,7 +588,7 @@ twidget* tindependent::find_at(const tpoint& coordinate
 	return grid.find_at(coordinate, must_be_active);
 }
 
-const twidget* tindependent::find_at(const tpoint& coordinate
+const twidget* tindependent::find_at(const point_t& coordinate
 		, const bool must_be_active) const
 {
 	assert(get_window());

@@ -72,14 +72,14 @@ namespace {
 mp::chat gamechat;
 config gamelist;
 
-class network_game_manager {
+class network_game_mgr {
     public:
         // Add a constructor to avoid stupid warnings with some versions of GCC
-        network_game_manager() {
+        network_game_mgr() {
         }
         ;
 
-        ~network_game_manager() {
+        ~network_game_mgr() {
             if (network::nconnections() > 0) {
                 LOG_NW<<"sending leave_game\n";
                 config cfg;
@@ -438,11 +438,11 @@ bool observe) {
     DBG_MP<< "entering wait mode" << std::endl;
 
     mp::ui::result res;
-    network_game_manager m;
+    network_game_mgr m;
 
     gamelist.clear();
     statistics::fresh_stats();
-    n_unit::id_manager::instance().clear();  //< reset the unit underlying_id counter back to zero
+    n_unit::id_mgr::instance().clear();  //< reset the unit underlying_id counter back to zero
 
     {
         mp::wait ui(disp, game_config, state, gamechat, gamelist);
@@ -486,8 +486,8 @@ static bool enter_connect_mode(game_display& disp,
     DBG_MP<< "entering connect mode" << std::endl;
 
     mp::ui::result res;
-    const network::manager net_manager(1,1);
-    network_game_manager m;
+    const network::mgr net_mgr(1,1);
+    network_game_mgr m;
 
     gamelist.clear();
     statistics::fresh_stats();
@@ -623,7 +623,7 @@ static bool enter_configure_mode(game_display& disp,
 
 static void do_preferences_dialog(game_display& disp, const config& game_config) {
     DBG_MP<< "displaying preferences dialog" << std::endl;
-    const preferences::display_manager disp_manager(&disp);
+    const preferences::display_mgr disp_mgr(&disp);
     preferences::show_preferences_dialog(disp,game_config);
 
     /**
@@ -890,7 +890,7 @@ void start_client(game_display& disp,
                   const std::string& host) {
     DBG_MP<< "starting client" << std::endl;
     const rand_rng::set_random_generator generator_setter(&recorder);
-    const network::manager net_manager(1,1);
+    const network::mgr net_mgr(1,1);
 
     gamechat.clear_history();
     gamelist.clear();

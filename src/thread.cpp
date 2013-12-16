@@ -47,7 +47,7 @@ std::vector<SDL_Thread*> detached_threads;
 
 namespace threading {
 
-manager::~manager()
+mgr::~mgr()
 {
 	for(std::vector<SDL_Thread*>::iterator i = detached_threads.begin(); i != detached_threads.end(); ++i) {
 		SDL_WaitThread(*i,nullptr);

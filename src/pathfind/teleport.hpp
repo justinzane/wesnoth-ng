@@ -145,9 +145,9 @@ private:
 const teleport_map get_teleport_locations(const unit &u, const team &viewing_team,
 		bool see_all = false, bool ignore_units = false);
 
-class manager: public savegame::savegame_config {
+class mgr: public savegame::savegame_config {
 public:
-	manager(const config &cfg);
+	mgr(const config &cfg);
 
 	/*
 	 * @param group		teleport_group to be added

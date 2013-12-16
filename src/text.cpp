@@ -64,27 +64,6 @@ private:
 
 } // namespace
 
-const unsigned ttext::STYLE_NORMAL = TTF_STYLE_NORMAL;
-const unsigned ttext::STYLE_BOLD = TTF_STYLE_BOLD;
-const unsigned ttext::STYLE_ITALIC = TTF_STYLE_ITALIC;
-const unsigned ttext::STYLE_UNDERLINE = TTF_STYLE_UNDERLINE;
-
-std::string escape_text(const std::string& text)
-{
-	std::string result;
-	foreach_ng(const char c, text) {
-		switch(c) {
-			case '&':  result += "&amp;";  break;
-			case '<':  result += "&lt;";   break;
-			case '>':  result += "&gt;";   break;
-			case '\'': result += "&apos;"; break;
-			case '"':  result += "&quot;"; break;
-			default:   result += c;
-		}
-	}
-	return result;
-}
-
 ttext::ttext() :
 #if PANGO_VERSION_CHECK(1,22,0)
 	context_(pango_font_map_create_context(pango_cairo_font_map_get_default())),
@@ -161,11 +140,11 @@ int ttext::get_height() const
 	return get_size().y;
 }
 
-gui2::tpoint ttext::get_size() const
+point_2Dd ttext::get_size() const
 {
 	recalculate();
 
-	return gui2::tpoint(rect_.width, rect_.height);
+	return point_2Dd(rect_.width, rect_.height);
 }
 
 bool ttext::is_truncated() const
@@ -208,7 +187,7 @@ unsigned ttext::insert_unicode(const unsigned offset, const wide_string& unicode
 	return len;
 }
 
-gui2::tpoint ttext::get_cursor_position(
+point_2Dd ttext::get_cursor_position(
 		const unsigned column, const unsigned line) const
 {
 	recalculate();
@@ -220,7 +199,7 @@ gui2::tpoint ttext::get_cursor_position(
 	// Go the wanted line.
 	if(line != 0) {
 		if(pango_layout_get_line_count(layout_) >= static_cast<int>(line)) {
-			return gui2::tpoint(0, 0);
+			return point_2Dd(0, 0);
 		}
 
 		for(size_t i = 0; i < line; ++i) {
@@ -238,7 +217,7 @@ gui2::tpoint ttext::get_cursor_position(
 				break;
 			}
 			// We are beyond data.
-			return gui2::tpoint(0, 0);
+			return point_2Dd(0, 0);
 		}
 	}
 
@@ -249,10 +228,10 @@ gui2::tpoint ttext::get_cursor_position(
 	PangoRectangle rect;
 	pango_layout_get_cursor_pos(layout_, offset, &rect, nullptr);
 
-	return gui2::tpoint(PANGO_PIXELS(rect.x), PANGO_PIXELS(rect.y));
+	return point_2Dd(PANGO_PIXELS(rect.x), PANGO_PIXELS(rect.y));
 }
 
-gui2::tpoint ttext::get_column_line(const gui2::tpoint& position) const
+point_2Dd ttext::get_column_line(const point_2Dd& position) const
 {
 	recalculate();
 
@@ -281,7 +260,7 @@ gui2::tpoint ttext::get_column_line(const gui2::tpoint& position) const
 		const int pos = get_cursor_position(i, line).x;
 
 		if(pos == offset) {
-			return  gui2::tpoint(i, line);
+			return  point_2Dd(i, line);
 		}
 	}
 }

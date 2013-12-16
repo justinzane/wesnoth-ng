@@ -36,7 +36,7 @@
 class map_generator;
 
 namespace tooltips {
-struct manager;
+struct mgr;
 }
 
 namespace font {
@@ -49,11 +49,11 @@ struct set_random_generator;
 }
 
 namespace preferences {
-	struct display_manager;
+	struct display_mgr;
 } // namespace preferences
 
 namespace halo {
-	struct manager;
+	struct mgr;
 } // namespace halo
 
 namespace editor {
@@ -108,7 +108,7 @@ class editor_controller : public controller_base,
 		void custom_tods_dialog();
 
 		/** Save the map, open dialog if not named yet. */
-		void save_map() {context_manager_->save_map();};
+		void save_map() {context_mgr_->save_map();};
 
 		/** command_executor override */
 		bool can_execute_command(const hotkey_cmd_t& command, int index = -1) const;
@@ -229,17 +229,17 @@ class editor_controller : public controller_base,
 		typedef std::map<std::string, std::pair<std::string ,std::vector<time_of_day> > > tods_map;
 		tods_map tods_;
 
-		/* managers */
+		/* mgrs */
 	public:
-		boost::scoped_ptr<context_manager> context_manager_;
+		boost::scoped_ptr<context_mgr> context_mgr_;
 	private:
 		boost::scoped_ptr<editor_toolkit> toolkit_;
-		boost::scoped_ptr<preferences::display_manager> prefs_disp_manager_;
-		tooltips::manager tooltip_manager_;
-		boost::scoped_ptr<font::floating_label_context> floating_label_manager_;
+		boost::scoped_ptr<preferences::display_mgr> prefs_disp_mgr_;
+		tooltips::mgr tooltip_mgr_;
+		boost::scoped_ptr<font::floating_label_context> floating_label_mgr_;
 
-		boost::scoped_ptr<halo::manager> halo_manager_;
-		boost::scoped_ptr<help::help_manager> help_manager_;
+		boost::scoped_ptr<halo::mgr> halo_mgr_;
+		boost::scoped_ptr<help::help_mgr> help_mgr_;
 
 		/** Quit main loop flag */
 		bool do_quit_;

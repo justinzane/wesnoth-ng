@@ -37,7 +37,7 @@ class game_state;
 class gamemap;
 class unit_map;
 class team;
-class tod_manager;
+class tod_mgr;
 
 /**
  * info is structure which holds references to all the important objects

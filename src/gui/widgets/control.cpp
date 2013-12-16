@@ -245,8 +245,8 @@ tpoint tcontrol::calculate_best_size() const
 		return get_config_default_size();
 	}
 
-	const tpoint minimum = get_config_default_size();
-	const tpoint maximum = get_config_maximum_size();
+	const point_t minimum = get_config_default_size();
+	const point_t maximum = get_config_maximum_size();
 
 	/**
 	 * @todo The value send should subtract the border size
@@ -260,7 +260,7 @@ tpoint tcontrol::calculate_best_size() const
 	return result;
 }
 
-void tcontrol::place(const tpoint& origin, const tpoint& size)
+void tcontrol::place(const point_t& origin, const point_t& size)
 {
 	// resize canvasses
 	FOREACH(AUTO& canvas, canvas_) {
@@ -294,7 +294,7 @@ void tcontrol::load_config()
 }
 
 twidget* tcontrol::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active)
 {
 	return (twidget::find_at(coordinate, must_be_active)
@@ -304,7 +304,7 @@ twidget* tcontrol::find_at(
 }
 
 const twidget* tcontrol::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active) const
 {
 	return (twidget::find_at(coordinate, must_be_active)
@@ -467,14 +467,14 @@ void tcontrol::definition_load_configuration(const std::string& control_type)
 }
 
 tpoint tcontrol::get_best_text_size(
-		  const tpoint& minimum_size
-		, const tpoint& maximum_size) const
+		  const point_t& minimum_size
+		, const point_t& maximum_size) const
 {
 	log_scope2(log_gui_layout, LOG_SCOPE_HEADER);
 
 	assert(!label_.empty());
 
-	const tpoint border(config_->text_extra_width, config_->text_extra_height);
+	const point_t border(config_->text_extra_width, config_->text_extra_height);
 	tpoint size = minimum_size - border;
 
 	renderer_.set_text(label_, use_markup_);
@@ -517,7 +517,7 @@ tpoint tcontrol::get_best_text_size(
 	if(renderer_.is_truncated() && !can_wrap()) {
 		// FIXME if maximum size is defined we should look at that
 		// but also we don't adjust for the extra text space yet!!!
-		const tpoint maximum_size(config_->max_width, config_->max_height);
+		const point_t maximum_size(config_->max_width, config_->max_height);
 		renderer_.set_maximum_width(maximum_size.x
 				? maximum_size.x - border.x
 				: -1);
@@ -543,7 +543,7 @@ tpoint tcontrol::get_best_text_size(
 void tcontrol::signal_handler_show_tooltip(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& location)
+		, const point_t& location)
 {
 	DBG_GUI_E << LOG_HEADER << ' ' << event << ".\n";
 
@@ -567,7 +567,7 @@ void tcontrol::signal_handler_show_tooltip(
 void tcontrol::signal_handler_show_helptip(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& location)
+		, const point_t& location)
 {
 	DBG_GUI_E << LOG_HEADER << ' ' << event << ".\n";
 

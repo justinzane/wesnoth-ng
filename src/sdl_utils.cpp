@@ -16,30 +16,6 @@
 
 #include "sdl_utils.hpp"
 
-// Event Handling Utilities -------------------------------------------------------------------
-
-SDL_Keymod sdl_keysym_from_name(std::string const &keyname) {
-    static bool initialized = false;
-    typedef std::map<std::string const, SDL_Keymod> keysym_map_t;
-    static keysym_map_t keysym_map;
-
-    if ( !initialized) {
-        for (SDL_Keymod i = SDLK_FIRST; i < SDLK_LAST; i = SDL_Keymod(int(i) + 1)) {
-            std::string name = SDL_GetKeyName(i);
-            if ( !name.empty()) keysym_map[name] = i;
-        }
-        initialized = true;
-    }
-
-    keysym_map_t::const_iterator it = keysym_map.find(keyname);
-    if (it != keysym_map.end())
-        return it->second;
-    else
-        return SDLK_UNKNOWN;
-}
-
-// end Event Handling Utilities ---------------------------------------------------------------
-
 // Geometric Utilities ------------------------------------------------------------------------
 // end Geometric Utilities --------------------------------------------------------------------
 

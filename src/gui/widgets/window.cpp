@@ -47,7 +47,7 @@
 #include "preferences.hpp"
 #include "preferences_display.hpp"
 #include "utils/foreach.tpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 
 #include <boost/bind.hpp>
 
@@ -184,12 +184,12 @@ static bool helptip()
  * This is used to send event to the proper window, this allows windows to post
  * messages to themselves and let them delay for a certain amount of time.
  */
-class tmanager
+class tmgr
 {
-	tmanager();
+	tmgr();
 public:
 
-	static tmanager& instance();
+	static tmgr& instance();
 
 	void add(twindow& window);
 
@@ -206,25 +206,25 @@ private:
 	std::map<unsigned, twindow*> windows_;
 };
 
-tmanager::tmanager()
+tmgr::tmgr()
 	: windows_()
 {
 }
 
-tmanager& tmanager::instance()
+tmgr& tmgr::instance()
 {
-	static tmanager window_manager;
-	return window_manager;
+	static tmgr window_mgr;
+	return window_mgr;
 }
 
-void tmanager::add(twindow& window)
+void tmgr::add(twindow& window)
 {
 	static unsigned id;
 	++id;
 	windows_[id] = &window;
 }
 
-void tmanager::remove(twindow& window)
+void tmgr::remove(twindow& window)
 {
 	for(std::map<unsigned, twindow*>::iterator itor = windows_.begin();
 			itor != windows_.end(); ++itor) {
@@ -237,7 +237,7 @@ void tmanager::remove(twindow& window)
 	assert(false);
 }
 
-unsigned tmanager::get_id(twindow& window)
+unsigned tmgr::get_id(twindow& window)
 {
 	for(std::map<unsigned, twindow*>::iterator itor = windows_.begin();
 			itor != windows_.end(); ++itor) {
@@ -251,7 +251,7 @@ unsigned tmanager::get_id(twindow& window)
 	return 0;
 }
 
-twindow* tmanager::window(const unsigned id)
+twindow* tmgr::window(const unsigned id)
 {
 	std::map<unsigned, twindow*>::iterator itor = windows_.find(id);
 
@@ -317,7 +317,7 @@ twindow::twindow(CVideo& video,
 	set_definition(definition);
 	load_config();
 
-	tmanager::instance().add(*this);
+	tmgr::instance().add(*this);
 
 	connect();
 
@@ -422,7 +422,7 @@ twindow::~twindow()
 		tip::remove();
 	}
 
-	tmanager::instance().remove(*this);
+	tmgr::instance().remove(*this);
 
 #ifdef DEBUG_WINDOW_LAYOUT_GRAPHS
 
@@ -434,7 +434,7 @@ twindow::~twindow()
 
 twindow* twindow::window_instance(const unsigned handle)
 {
-	return tmanager::instance().window(handle);
+	return tmgr::instance().window(handle);
 }
 
 void twindow::update_screen_size()
@@ -632,7 +632,7 @@ int twindow::show(const bool restore, const unsigned auto_close_timeout)
 		SDL_UserEvent data;
 
 		data.type = CLOSE_WINDOW_EVENT;
-		data.code = tmanager::instance().get_id(*this);
+		data.code = tmgr::instance().get_id(*this);
 		data.data1 = nullptr;
 		data.data2 = nullptr;
 
@@ -929,13 +929,13 @@ void twindow::invalidate_layout()
 		need_layout_ = true;
 	}
 }
-twidget* twindow::find_at(const tpoint& coordinate, const bool must_be_active)
+twidget* twindow::find_at(const point_t& coordinate, const bool must_be_active)
 {
 	return tpanel::find_at(coordinate, must_be_active);
 }
 
 const twidget* twindow::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active) const
 {
 	return tpanel::find_at(coordinate, must_be_active);
@@ -1168,7 +1168,7 @@ void twindow::layout_linked_widgets()
 		// Determine the maximum size.
 		FOREACH(AUTO widget, linked_size.second.widgets) {
 
-			const tpoint size = widget->get_best_size();
+			const point_t size = widget->get_best_size();
 
 			if(size.x > max_size.x) {
 				max_size.x = size.x;
@@ -1372,7 +1372,7 @@ void twindow::remove_from_keyboard_chain(twidget* widget)
 }
 
 void twindow::signal_handler_sdl_video_resize(
-			const event::tevent event, bool& handled, const tpoint& new_size)
+			const event::tevent event, bool& handled, const point_t& new_size)
 {
 	DBG_GUI_E << LOG_HEADER << ' ' << event << ".\n";
 

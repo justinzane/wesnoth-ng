@@ -59,21 +59,21 @@ namespace game_events
 			config cfg_;
 	};
 
-	/// The game event manager loads the scenario configuration object,
+	/// The game event mgr loads the scenario configuration object,
 	/// and ensures that events are handled according to the
 	/// scenario configuration for its lifetime.
 	///
-	/// Thus, a manager object should be created when a scenario is played,
+	/// Thus, a mgr object should be created when a scenario is played,
 	/// and destroyed at the end of the scenario.
-	/// If a second manager object is created before destroying the previous
+	/// If a second mgr object is created before destroying the previous
 	/// one, the game will crash with an assertion failure.
 	///
 	/// This struct is responsible for setting and clearing resources::lua_kernel.
-	struct manager : boost::noncopyable {
+	struct mgr : boost::noncopyable {
 		/// Note that references will be maintained,
 		/// and must remain valid for the life of the object.
-		explicit manager(const config& scenario_cfg);
-		~manager();
+		explicit mgr(const config& scenario_cfg);
+		~mgr();
 
 		// Allow iterating over the active handlers.
 		typedef std::vector<event_handler> t_active;

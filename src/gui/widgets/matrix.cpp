@@ -104,7 +104,7 @@ unsigned tmatrix::create_item(
 	return pane_->create_item(item_data, tags);
 }
 
-void tmatrix::place(const tpoint& origin, const tpoint& size)
+void tmatrix::place(const point_t& origin, const point_t& size)
 {
 	twidget::place(origin, size);
 
@@ -140,13 +140,13 @@ void tmatrix::request_reduce_width(const unsigned /*maximum_width*/)
 {
 }
 
-twidget* tmatrix::find_at(const tpoint& coordinate, const bool must_be_active)
+twidget* tmatrix::find_at(const point_t& coordinate, const bool must_be_active)
 {
 	return content_.find_at(coordinate, must_be_active);
 }
 
 const twidget* tmatrix::find_at(
-			const tpoint& coordinate,
+			const point_t& coordinate,
 			const bool must_be_active) const
 {
 	return content_.find_at(coordinate, must_be_active);

@@ -106,14 +106,14 @@ public:
 
 private:
 	/** See @ref twidget::calculate_best_size. */
-	virtual tpoint calculate_best_size() const OVERRIDE;
+	virtual point_t calculate_best_size() const OVERRIDE;
 public:
 
 	/** See @ref twidget::place. */
-	virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+	virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
 	/** See @ref twidget::set_origin. */
-	virtual void set_origin(const tpoint& origin) OVERRIDE;
+	virtual void set_origin(const point_t& origin) OVERRIDE;
 
 	/** See @ref twidget::set_visible_rectangle. */
 	virtual void set_visible_rectangle(const SDL_Rect* rectangle) OVERRIDE;
@@ -128,12 +128,12 @@ public:
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE;
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE;
 
 	/** See @ref twidget::find. */
@@ -482,7 +482,7 @@ private:
 	 * @param origin              The origin for the content.
 	 * @param size                The size of the content.
 	 */
-	virtual void set_content_size(const tpoint& origin, const tpoint& size);
+	virtual void set_content_size(const point_t& origin, const point_t& size);
 
 	/** Helper function which needs to be called after the scollbar moved. */
 	void scrollbar_moved();

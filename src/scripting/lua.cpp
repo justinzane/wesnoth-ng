@@ -1776,14 +1776,14 @@ static int intf_get_time_of_day(lua_State *L)
 {
 	unsigned arg = 1;
 
-	int for_turn = resources::tod_manager->turn();
+	int for_turn = resources::tod_mgr->turn();
 	map_location loc = map_location();
 	bool consider_illuminates = false;
 
 	if(lua_isnumber(L, arg)) {
 		++arg;
 		for_turn = luaL_checkint(L, 1);
-		int number_of_turns = resources::tod_manager->number_of_turns();
+		int number_of_turns = resources::tod_mgr->number_of_turns();
 		if(for_turn < 1 || (number_of_turns != -1 && for_turn > number_of_turns)) {
 			return luaL_argerror(L, 1, "turn number out of range");
 		}
@@ -1803,8 +1803,8 @@ static int intf_get_time_of_day(lua_State *L)
 	}
 
 	const time_of_day& tod = consider_illuminates ?
-		resources::tod_manager->get_illuminated_time_of_day(loc, for_turn) :
-		resources::tod_manager->get_time_of_day(loc, for_turn);
+		resources::tod_mgr->get_illuminated_time_of_day(loc, for_turn) :
+		resources::tod_mgr->get_time_of_day(loc, for_turn);
 
 	lua_newtable(L);
 	lua_pushstring(L, tod.id.c_str());
@@ -1959,7 +1959,7 @@ static int impl_game_config_get(lua_State *L)
 	return_int_attrib("rest_heal_amount", game_config::rest_heal_amount);
 	return_int_attrib("recall_cost", game_config::recall_cost);
 	return_int_attrib("kill_experience", game_config::kill_experience);
-	return_int_attrib("last_turn", resources::tod_manager->number_of_turns());
+	return_int_attrib("last_turn", resources::tod_mgr->number_of_turns());
 	return_string_attrib("version", game_config::version);
 	return_bool_attrib("debug", game_config::debug);
 	return_bool_attrib("debug_lua", game_config::debug_lua);
@@ -1985,7 +1985,7 @@ static int impl_game_config_set(lua_State *L)
 	modify_int_attrib("rest_heal_amount", game_config::rest_heal_amount = value);
 	modify_int_attrib("recall_cost", game_config::recall_cost = value);
 	modify_int_attrib("kill_experience", game_config::kill_experience = value);
-	modify_int_attrib("last_turn", resources::tod_manager->set_number_of_turns(value));
+	modify_int_attrib("last_turn", resources::tod_mgr->set_number_of_turns(value));
 	return luaL_argerror(L, 2, "unknown modifiable property");
 }
 
@@ -3750,7 +3750,7 @@ static int intf_modify_ai(lua_State *L)
 	config cfg;
 	luaW_toconfig(L, 1, cfg);
 	int side = cfg["side"];
-	ai::manager::modify_active_ai_for_side(side, cfg);
+	ai::mgr::modify_active_ai_for_side(side, cfg);
 	return 0;
 }
 
@@ -3863,7 +3863,7 @@ static int intf_debug_ai(lua_State *L)
 	int side = lua_tointeger(L, 1);
 	lua_pop(L, 1);
 
-	ai::component* c = ai::manager::get_active_ai_holder_for_side_dbg(side).get_component(nullptr, "");
+	ai::component* c = ai::mgr::get_active_ai_holder_for_side_dbg(side).get_component(nullptr, "");
 
 	// Bad, but works
 	std::vector<ai::component*> engines = c->get_children("engine");
@@ -3877,7 +3877,7 @@ static int intf_debug_ai(lua_State *L)
 	}
 
 	// Better way, but doesn't work
-	//ai::component* e = ai::manager::get_active_ai_holder_for_side_dbg(side).get_component(c, "engine[lua]");
+	//ai::component* e = ai::mgr::get_active_ai_holder_for_side_dbg(side).get_component(c, "engine[lua]");
 	//ai::engine_lua* lua_engine = dynamic_cast<ai::engine_lua *>(e);
 
 	if (lua_engine == nullptr)
@@ -3893,9 +3893,9 @@ static int intf_debug_ai(lua_State *L)
 		LOG_LUA << "Created new dummy lua-engine for debug_ai(). \n";
 
 		//and add the dummy engine as a component
-		//to the manager, so we could use it later
+		//to the mgr, so we could use it later
 		cfg.add_child("engine", lua_engine->to_config());
-		ai::component_manager::add_component(c, "engine[]", cfg);
+		ai::component_mgr::add_component(c, "engine[]", cfg);
 	}
 
 	lua_engine->push_ai_table(); // stack: [-1: ai_context]

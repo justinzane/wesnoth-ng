@@ -33,7 +33,7 @@ const unsigned DEFAULT_DELAY            = 1000;
 
 unsigned int positional_source::last_id = 0;
 
-manager::manager(const display &disp) :
+mgr::mgr(const display &disp) :
 	observer(),
 	savegame_config(),
 	sources_(),
@@ -43,7 +43,7 @@ manager::manager(const display &disp) :
 	update_positions();
 }
 
-manager::~manager()
+mgr::~mgr()
 {
 	for(positional_source_iterator it = sources_.begin(); it != sources_.end(); ++it) {
 		delete (*it).second;
@@ -52,13 +52,13 @@ manager::~manager()
 	sources_.clear();
 }
 
-void manager::handle_generic_event(const std::string &event_name)
+void mgr::handle_generic_event(const std::string &event_name)
 {
 	if(event_name == "scrolled")
 		update_positions();
 }
 
-void manager::add(const sourcespec &spec)
+void mgr::add(const sourcespec &spec)
 {
 	positional_source_iterator it;
 
@@ -70,7 +70,7 @@ void manager::add(const sourcespec &spec)
 	}
 }
 
-void manager::remove(const std::string &id)
+void mgr::remove(const std::string &id)
 {
 	positional_source_iterator it;
 
@@ -82,7 +82,7 @@ void manager::remove(const std::string &id)
 	}
 }
 
-void manager::update()
+void mgr::update()
 {
 	unsigned int time = SDL_GetTicks();
 
@@ -91,7 +91,7 @@ void manager::update()
 	}
 }
 
-void manager::update_positions()
+void mgr::update_positions()
 {
 	unsigned int time = SDL_GetTicks();
 
@@ -100,7 +100,7 @@ void manager::update_positions()
 	}
 }
 
-void manager::write_sourcespecs(config& cfg) const
+void mgr::write_sourcespecs(config& cfg) const
 {
 	for(positional_source_const_iterator i = sources_.begin(); i != sources_.end(); ++i) {
 		assert(i->second);
@@ -111,7 +111,7 @@ void manager::write_sourcespecs(config& cfg) const
 	}
 }
 
-config manager::to_config() const
+config mgr::to_config() const
 {
 	config cfg;
 	write_sourcespecs(cfg);

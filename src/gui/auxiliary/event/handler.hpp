@@ -32,11 +32,11 @@ namespace event {
 
 class tdispatcher;
 
-class tmanager
+class tmgr
 {
 public:
-	tmanager();
-	~tmanager();
+	tmgr();
+	~tmgr();
 };
 
 /**

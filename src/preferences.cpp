@@ -32,7 +32,7 @@
 #include "log/log.hpp"
 #include "preferences.hpp"
 #include "sound.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp" // non_interactive()
+#include "sdl2/rndr_mgr.hpp" // non_interactive()
 #include "serdes/parser.hpp"
 #include "util.hpp"
 
@@ -60,7 +60,7 @@ config prefs;
 
 namespace preferences {
 
-base_manager::base_manager()
+base_mgr::base_mgr()
 {
 	try{
 #ifdef DEFAULT_PREFS_PATH
@@ -83,7 +83,7 @@ base_manager::base_manager()
 	}
 }
 
-base_manager::~base_manager()
+base_mgr::~base_mgr()
 {
 	if (no_preferences_save) return;
 

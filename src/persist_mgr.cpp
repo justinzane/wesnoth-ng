@@ -1,5 +1,5 @@
 /**
- * @file src/persist_manager.cpp
+ * @file src/persist_mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -22,7 +22,7 @@
 #include "global.hpp"
 #include <boost/foreach.hpp>
 
-persist_context &persist_manager::get_context(const std::string &ns)
+persist_context &persist_mgr::get_context(const std::string &ns)
 {
 	persist_context::name_space name(ns,true);
 	std::string key(name.root_);
@@ -37,7 +37,7 @@ persist_context &persist_manager::get_context(const std::string &ns)
 	return *ret;
 }
 
-bool persist_manager::start_transaction() {
+bool persist_mgr::start_transaction() {
 	if (in_transaction_) return false;
 	bool result = true;
 	foreach_ng(context_map::reference ctx, contexts_){
@@ -47,7 +47,7 @@ bool persist_manager::start_transaction() {
 	return result;
 }
 
-bool persist_manager::end_transaction() {
+bool persist_mgr::end_transaction() {
 	if (!in_transaction_) return false;
 	bool result = true;
 	foreach_ng(context_map::reference ctx, contexts_){
@@ -57,7 +57,7 @@ bool persist_manager::end_transaction() {
 	return result;
 }
 
-bool persist_manager::cancel_transaction() {
+bool persist_mgr::cancel_transaction() {
 	if (!in_transaction_) return false;
 	bool result = true;
 	foreach_ng(context_map::reference ctx, contexts_){

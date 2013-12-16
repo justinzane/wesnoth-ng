@@ -32,7 +32,7 @@
 
 namespace gui2 {
 
-struct tpoint;
+struct point_t;
 
 /**
  * Base class for the placement helper.
@@ -105,14 +105,14 @@ public:
 	 *
 	 * @param size                The required size for the item.
 	 */
-	virtual void add_item(const tpoint& size) = 0;
+	virtual void add_item(const point_t& size) = 0;
 
 	/**
 	 * Gets the required size of all items.
 	 *
 	 * @returns                   The required size.
 	 */
-	virtual tpoint get_size() const = 0;
+	virtual point_t get_size() const = 0;
 
 	/**
 	 * Gets the origin for an item.
@@ -123,7 +123,7 @@ public:
 	 *
 	 * @returns                   The origin where to place the widget.
 	 */
-	virtual tpoint get_origin(const unsigned index) const = 0;
+	virtual point_t get_origin(const unsigned index) const = 0;
 };
 
 } // namespace gui2

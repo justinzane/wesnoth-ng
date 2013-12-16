@@ -1,5 +1,5 @@
 /**
- * @file src/addon/manager.cpp
+ * @file src/addon/mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -20,7 +20,7 @@
 #include "global.hpp"
 
 #include "addon/mgr.hpp"
-#include "addon/manager_ui.hpp"
+#include "addon/mgr_ui.hpp"
 #include "dialogs.hpp"
 #include "filesystem.hpp"
 #include "formatter.hpp"
@@ -241,7 +241,7 @@ namespace {
 		files.push_back("*.js");
 		files.push_back("*.vbs");
 		files.push_back("*.o");
-		/* Remove junk created by certain file manager ;) */
+		/* Remove junk created by certain file mgr ;) */
 		files.push_back("Thumbs.db");
         /* Eclipse plugin */
         files.push_back("*.wesnoth");

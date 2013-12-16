@@ -1,5 +1,5 @@
 /**
- * @file src/ai/manager.cpp
+ * @file src/ai/mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -44,17 +44,17 @@
 
 namespace ai {
 
-const std::string manager::AI_TYPE_COMPOSITE_AI = "composite_ai";
-const std::string manager::AI_TYPE_SAMPLE_AI = "sample_ai";
-const std::string manager::AI_TYPE_IDLE_AI = "idle_ai";
-const std::string manager::AI_TYPE_FORMULA_AI = "formula_ai";
-const std::string manager::AI_TYPE_DEFAULT = "default";
+const std::string mgr::AI_TYPE_COMPOSITE_AI = "composite_ai";
+const std::string mgr::AI_TYPE_SAMPLE_AI = "sample_ai";
+const std::string mgr::AI_TYPE_IDLE_AI = "idle_ai";
+const std::string mgr::AI_TYPE_FORMULA_AI = "formula_ai";
+const std::string mgr::AI_TYPE_DEFAULT = "default";
 
 
-static lg::log_domain log_ai_manager("ai/manager");
-#define DBG_AI_MANAGER LOG_STREAM(debug, log_ai_manager)
-#define LOG_AI_MANAGER LOG_STREAM(info, log_ai_manager)
-#define ERR_AI_MANAGER LOG_STREAM(err, log_ai_manager)
+static lg::log_domain log_ai_mgr("ai/mgr");
+#define DBG_AI_mgr LOG_STREAM(debug, log_ai_mgr)
+#define LOG_AI_mgr LOG_STREAM(info, log_ai_mgr)
+#define ERR_AI_mgr LOG_STREAM(err, log_ai_mgr)
 
 static lg::log_domain log_ai_mod("ai/mod");
 #define DBG_AI_MOD LOG_STREAM(debug, log_ai_mod)
@@ -65,7 +65,7 @@ static lg::log_domain log_ai_mod("ai/mod");
 holder::holder( side_number side, const config &cfg )
 	: ai_(), side_context_(nullptr), readonly_context_(nullptr), readwrite_context_(nullptr), default_ai_context_(nullptr), side_(side), cfg_(cfg)
 {
-	DBG_AI_MANAGER << describe_ai() << "Preparing new AI holder" << std::endl;
+	DBG_AI_mgr << describe_ai() << "Preparing new AI holder" << std::endl;
 }
 
 
@@ -107,7 +107,7 @@ void holder::init( side_number side )
 		}
 
 	} else {
-		ERR_AI_MANAGER << describe_ai()<<"AI lazy initialization error!" << std::endl;
+		ERR_AI_mgr << describe_ai()<<"AI lazy initialization error!" << std::endl;
 	}
 
 }
@@ -115,7 +115,7 @@ void holder::init( side_number side )
 holder::~holder()
 {
 	if (this->ai_) {
-		LOG_AI_MANAGER << describe_ai() << "Managed AI will be deleted" << std::endl;
+		LOG_AI_mgr << describe_ai() << "Managed AI will be deleted" << std::endl;
 	}
 	delete this->default_ai_context_;
 	delete this->readwrite_context_;
@@ -143,7 +143,7 @@ void holder::modify_ai_config_old( const config::const_child_itors &ai_parameter
 	config cfg;
 	configuration::upgrade_aspect_configs_from_1_07_02_to_1_07_03(this->side_,ai_parameters,cfg);
 	//at this point we have a single config which contains [aspect][facet] tags
-	DBG_AI_MANAGER << "after transforming [modify_side][ai] into new syntax, config contains:"<< std::endl << cfg << std::endl;
+	DBG_AI_mgr << "after transforming [modify_side][ai] into new syntax, config contains:"<< std::endl << cfg << std::endl;
 
 	if (this->readonly_context_ == nullptr) {
 		// if not initialized, append that config to the bottom of base cfg
@@ -173,13 +173,13 @@ void holder::modify_ai(const config &cfg)
 	DBG_AI_MOD << "side "<< side_ << " before [modify_ai]"<<std::endl << to_config() << std::endl;
 	bool res = false;
 	if (act == "add") {
-		res = component_manager::add_component(&*this->ai_,cfg["path"],cfg);
+		res = component_mgr::add_component(&*this->ai_,cfg["path"],cfg);
 	} else if (act == "change") {
-		res = component_manager::change_component(&*this->ai_,cfg["path"],cfg);
+		res = component_mgr::change_component(&*this->ai_,cfg["path"],cfg);
 	} else if (act == "delete") {
-		res = component_manager::delete_component(&*this->ai_,cfg["path"]);
+		res = component_mgr::delete_component(&*this->ai_,cfg["path"]);
 	} else if (act == "try_delete") {
-		res = component_manager::delete_component(&*this->ai_,cfg["path"]);
+		res = component_mgr::delete_component(&*this->ai_,cfg["path"]);
 		if (!res) {
 			LOG_AI_MOD << "[modify_ai] "<<act<<" failed, ignoring because it's a try_delete"<< std::endl;
 			res = true;
@@ -277,7 +277,7 @@ const std::string holder::get_ai_structure()
 	if (!this->ai_) {
 		get_ai_ref();
 	}
-	return component_manager::print_component_tree(&*this->ai_,"");
+	return component_mgr::print_component_tree(&*this->ai_,"");
 }
 
 
@@ -302,7 +302,7 @@ component* holder::get_component(component *root, const std::string &path) {
 		return &*this->ai_;
 	}
 
-	return component_manager::get_component(root, path);
+	return component_mgr::get_component(root, path);
 }
 
 // =======================================================================
@@ -310,19 +310,19 @@ component* holder::get_component(component *root, const std::string &path) {
 // =======================================================================
 
 
-manager::AI_map_of_stacks manager::ai_map_;
-game_info *manager::ai_info_;
-events::generic_event manager::user_interact_("ai_user_interact");
-events::generic_event manager::sync_network_("ai_sync_network");
-events::generic_event manager::gamestate_changed_("ai_gamestate_changed");
-events::generic_event manager::turn_started_("ai_turn_started");
-events::generic_event manager::recruit_list_changed_("ai_recruit_list_changed");
-events::generic_event manager::map_changed_("ai_map_changed");
-int manager::last_interact_ = 0;
-int manager::num_interact_ = 0;
+mgr::AI_map_of_stacks mgr::ai_map_;
+game_info *mgr::ai_info_;
+events::generic_event mgr::user_interact_("ai_user_interact");
+events::generic_event mgr::sync_network_("ai_sync_network");
+events::generic_event mgr::gamestate_changed_("ai_gamestate_changed");
+events::generic_event mgr::turn_started_("ai_turn_started");
+events::generic_event mgr::recruit_list_changed_("ai_recruit_list_changed");
+events::generic_event mgr::map_changed_("ai_map_changed");
+int mgr::last_interact_ = 0;
+int mgr::num_interact_ = 0;
 
 
-void manager::set_ai_info(const game_info& i)
+void mgr::set_ai_info(const game_info& i)
 {
 	if (ai_info_!=nullptr){
 		clear_ai_info();
@@ -332,13 +332,13 @@ void manager::set_ai_info(const game_info& i)
 }
 
 
-void manager::clear_ai_info(){
+void mgr::clear_ai_info(){
 	delete ai_info_;
 	ai_info_ = nullptr;
 }
 
 
-void manager::add_observer( events::observer* event_observer){
+void mgr::add_observer( evt_observer* event_observer){
 	user_interact_.attach_handler(event_observer);
 	sync_network_.attach_handler(event_observer);
 	turn_started_.attach_handler(event_observer);
@@ -346,7 +346,7 @@ void manager::add_observer( events::observer* event_observer){
 }
 
 
-void manager::remove_observer(events::observer* event_observer){
+void mgr::remove_observer(evt_observer* event_observer){
 	user_interact_.detach_handler(event_observer);
 	sync_network_.detach_handler(event_observer);
 	turn_started_.detach_handler(event_observer);
@@ -354,14 +354,14 @@ void manager::remove_observer(events::observer* event_observer){
 }
 
 
-void manager::add_gamestate_observer( events::observer* event_observer){
+void mgr::add_gamestate_observer( evt_observer* event_observer){
 	gamestate_changed_.attach_handler(event_observer);
 	turn_started_.attach_handler(event_observer);
 	map_changed_.attach_handler(event_observer);
 }
 
 
-void manager::remove_gamestate_observer(events::observer* event_observer){
+void mgr::remove_gamestate_observer(evt_observer* event_observer){
 	gamestate_changed_.detach_handler(event_observer);
 	turn_started_.detach_handler(event_observer);
 	map_changed_.detach_handler(event_observer);
@@ -369,42 +369,42 @@ void manager::remove_gamestate_observer(events::observer* event_observer){
 
 
 
-void manager::add_map_changed_observer( events::observer* event_observer )
+void mgr::add_map_changed_observer( evt_observer* event_observer )
 {
 	map_changed_.attach_handler(event_observer);
 }
 
 
-void manager::add_recruit_list_changed_observer( events::observer* event_observer )
+void mgr::add_recruit_list_changed_observer( evt_observer* event_observer )
 {
 	recruit_list_changed_.attach_handler(event_observer);
 }
 
 
-void manager::add_turn_started_observer( events::observer* event_observer )
+void mgr::add_turn_started_observer( evt_observer* event_observer )
 {
 	turn_started_.attach_handler(event_observer);
 }
 
 
-void manager::remove_recruit_list_changed_observer( events::observer* event_observer )
+void mgr::remove_recruit_list_changed_observer( evt_observer* event_observer )
 {
 	recruit_list_changed_.detach_handler(event_observer);
 }
 
 
-void manager::remove_map_changed_observer( events::observer* event_observer )
+void mgr::remove_map_changed_observer( evt_observer* event_observer )
 {
 	map_changed_.detach_handler(event_observer);
 }
 
 
-void manager::remove_turn_started_observer( events::observer* event_observer )
+void mgr::remove_turn_started_observer( evt_observer* event_observer )
 {
 	turn_started_.detach_handler(event_observer);
 }
 
-void manager::raise_user_interact() {
+void mgr::raise_user_interact() {
         const int interact_time = 30;
         const int time_since_interact = SDL_GetTicks() - last_interact_;
         if(time_since_interact < interact_time) {
@@ -418,27 +418,27 @@ void manager::raise_user_interact() {
 
 }
 
-void manager::raise_sync_network() {
+void mgr::raise_sync_network() {
 	sync_network_.notify_observers();
 }
 
 
-void manager::raise_gamestate_changed() {
+void mgr::raise_gamestate_changed() {
 	gamestate_changed_.notify_observers();
 }
 
 
-void manager::raise_turn_started() {
+void mgr::raise_turn_started() {
 	turn_started_.notify_observers();
 }
 
 
-void manager::raise_recruit_list_changed() {
+void mgr::raise_recruit_list_changed() {
 	recruit_list_changed_.notify_observers();
 }
 
 
-void manager::raise_map_changed() {
+void mgr::raise_map_changed() {
 	map_changed_.notify_observers();
 }
 
@@ -447,7 +447,7 @@ void manager::raise_map_changed() {
 // EVALUATION
 // =======================================================================
 
-const std::string manager::evaluate_command( side_number side, const std::string& str )
+const std::string mgr::evaluate_command( side_number side, const std::string& str )
 {
 	//insert new command into history
 	history_.push_back(command_history_item(history_item_counter_++,str));
@@ -455,7 +455,7 @@ const std::string manager::evaluate_command( side_number side, const std::string
 	//prune history - erase 1/2 of it if it grows too large
 	if (history_.size()>MAX_HISTORY_SIZE){
 		history_.erase(history_.begin(),history_.begin()+MAX_HISTORY_SIZE/2);
-		LOG_AI_MANAGER << "AI MANAGER: pruned history" << std::endl;
+		LOG_AI_mgr << "AI mgr: pruned history" << std::endl;
 	}
 
 	if (!should_intercept(str)){
@@ -468,7 +468,7 @@ const std::string manager::evaluate_command( side_number side, const std::string
 }
 
 
-bool manager::should_intercept( const std::string& str )
+bool mgr::should_intercept( const std::string& str )
 {
 	if (str.length()<1) {
 		return false;
@@ -483,14 +483,14 @@ bool manager::should_intercept( const std::string& str )
 
 }
 
-std::deque< command_history_item > manager::history_;
-long manager::history_item_counter_ = 1;
+std::deque< command_history_item > mgr::history_;
+long mgr::history_item_counter_ = 1;
 
 //this is stub code to allow testing of basic 'history', 'repeat-last-command', 'add/remove/replace ai' capabilities.
 //yes, it doesn't look nice. but it is usable.
 //to be refactored at earliest opportunity
 ///@todo 1.9 extract to separate class which will use fai or lua parser
-const std::string manager::internal_evaluate_command( side_number side, const std::string& str ){
+const std::string mgr::internal_evaluate_command( side_number side, const std::string& str ){
 	const int MAX_HISTORY_VISIBLE = 30;
 
 	//repeat last command
@@ -502,7 +502,7 @@ const std::string manager::internal_evaluate_command( side_number side, const st
 			}
 
 			if (history_.empty()){
-				return "AI MANAGER: empty history";
+				return "AI mgr: empty history";
 			}
 			return evaluate_command(side, history_.back().get_command());//no infinite loop since '!' commands are not present in history
 	};
@@ -515,12 +515,12 @@ const std::string manager::internal_evaluate_command( side_number side, const st
 		}
 
 		if (history_.empty()){
-			return "AI MANAGER: History is empty";
+			return "AI mgr: History is empty";
 		}
 
 		int n = std::min<int>( MAX_HISTORY_VISIBLE, history_.size() );
 		std::stringstream strstream;
-		strstream << "AI MANAGER: History - last "<< n <<" commands:\n";
+		strstream << "AI mgr: History - last "<< n <<" commands:\n";
 		std::deque< command_history_item >::reverse_iterator j = history_.rbegin();
 
 		for (int cmd_id=n; cmd_id>0; --cmd_id){
@@ -540,9 +540,9 @@ const std::string manager::internal_evaluate_command( side_number side, const st
 			side_number side = lexical_cast<side_number>(cmd.at(1));
 			std::string file = cmd.at(2);
 			if (add_ai_for_side_from_file(side,file,false)){
-				return std::string("AI MANAGER: added [")+manager::get_active_ai_identifier_for_side(side)+std::string("] AI for side ")+lexical_cast<std::string>(side)+std::string(" from file ")+file;
+				return std::string("AI mgr: added [")+mgr::get_active_ai_identifier_for_side(side)+std::string("] AI for side ")+lexical_cast<std::string>(side)+std::string(" from file ")+file;
 			} else {
-				return std::string("AI MANAGER: failed attempt to add AI for side ")+lexical_cast<std::string>(side)+std::string(" from file ")+file;
+				return std::string("AI mgr: failed attempt to add AI for side ")+lexical_cast<std::string>(side)+std::string(" from file ")+file;
 			}
 		}
 		//!replace_ai side file
@@ -550,9 +550,9 @@ const std::string manager::internal_evaluate_command( side_number side, const st
 			side_number side = lexical_cast<side_number>(cmd.at(1));
 			std::string file = cmd.at(2);
 			if (add_ai_for_side_from_file(side,file,true)){
-					return std::string("AI MANAGER: added [")+manager::get_active_ai_identifier_for_side(side)+std::string("] AI for side ")+lexical_cast<std::string>(side)+std::string(" from file ")+file;
+					return std::string("AI mgr: added [")+mgr::get_active_ai_identifier_for_side(side)+std::string("] AI for side ")+lexical_cast<std::string>(side)+std::string(" from file ")+file;
 			} else {
-					return std::string("AI MANAGER: failed attempt to add AI for side ")+lexical_cast<std::string>(side)+std::string(" from file ")+file;
+					return std::string("AI mgr: failed attempt to add AI for side ")+lexical_cast<std::string>(side)+std::string(" from file ")+file;
 			}
 		}
 
@@ -561,7 +561,7 @@ const std::string manager::internal_evaluate_command( side_number side, const st
 		if (cmd.at(0)=="!remove_ai"){
 			side_number side = lexical_cast<side_number>(cmd.at(1));
 			remove_ai_for_side(side);
-			return std::string("AI MANAGER: made an attempt to remove AI for side ")+lexical_cast<std::string>(side);
+			return std::string("AI mgr: made an attempt to remove AI for side ")+lexical_cast<std::string>(side);
 		}
 		if (cmd.at(0)=="!"){
 			//this command should not be recorded in history
@@ -579,7 +579,7 @@ const std::string manager::internal_evaluate_command( side_number side, const st
 			if (j!=history_.rend()){
 				return evaluate_command(side,j->get_command());//no infinite loop since '!' commands are not present in history
 			}
-			return "AI MANAGER: no command with requested number found";
+			return "AI mgr: no command with requested number found";
 		}
 	} else if (cmd.size()==1){
 		if (cmd.at(0)=="!help") {
@@ -596,7 +596,7 @@ const std::string manager::internal_evaluate_command( side_number side, const st
 	}
 
 
-	return "AI MANAGER: nothing to do";
+	return "AI mgr: nothing to do";
 }
 
 // =======================================================================
@@ -604,18 +604,18 @@ const std::string manager::internal_evaluate_command( side_number side, const st
 // =======================================================================
 
 ///@todo 1.9 add error reporting
-bool manager::add_ai_for_side_from_file( side_number side, const std::string& file, bool replace )
+bool mgr::add_ai_for_side_from_file( side_number side, const std::string& file, bool replace )
 {
 	config cfg;
 	if (!configuration::get_side_config_from_file(file,cfg)){
-		ERR_AI_MANAGER << " unable to read [SIDE] config for side "<< side << "from file [" << file <<"]"<< std::endl;
+		ERR_AI_mgr << " unable to read [SIDE] config for side "<< side << "from file [" << file <<"]"<< std::endl;
 		return false;
 	}
 	return add_ai_for_side_from_config(side,cfg,replace);
 }
 
 
-bool manager::add_ai_for_side_from_config( side_number side, const config& cfg, bool replace ){
+bool mgr::add_ai_for_side_from_config( side_number side, const config& cfg, bool replace ){
 	config parsed_cfg;
 	configuration::parse_side_config(side, cfg, parsed_cfg);
 
@@ -631,7 +631,7 @@ bool manager::add_ai_for_side_from_config( side_number side, const config& cfg, 
 
 
 ///@todo 1.9 add error reporting
-bool manager::add_ai_for_side( side_number side, const std::string& ai_algorithm_type, bool replace )
+bool mgr::add_ai_for_side( side_number side, const std::string& ai_algorithm_type, bool replace )
 {
 	if (replace) {
 		remove_ai_for_side (side);
@@ -645,7 +645,7 @@ bool manager::add_ai_for_side( side_number side, const std::string& ai_algorithm
 }
 
 
-ai_ptr manager::create_transient_ai(const std::string &ai_algorithm_type, const config &cfg, ai_context *ai_context )
+ai_ptr mgr::create_transient_ai(const std::string &ai_algorithm_type, const config &cfg, ai_context *ai_context )
 {
 	assert(ai_context!=nullptr);
 
@@ -657,7 +657,7 @@ ai_ptr manager::create_transient_ai(const std::string &ai_algorithm_type, const 
 			throw game::game_error("no default ai set!");
 		}
 	}
-	LOG_AI_MANAGER << "Creating new AI of type [" << ai_algorithm_type << "]"<< std::endl;
+	LOG_AI_mgr << "Creating new AI of type [" << ai_algorithm_type << "]"<< std::endl;
 	ai_ptr new_ai = aii->second->get_new_instance(*ai_context,cfg);
 	return new_ai;
 }
@@ -667,7 +667,7 @@ ai_ptr manager::create_transient_ai(const std::string &ai_algorithm_type, const 
 // REMOVE
 // =======================================================================
 
-void manager::remove_ai_for_side( side_number side )
+void mgr::remove_ai_for_side( side_number side )
 {
 	std::stack<holder>& ai_stack_for_specific_side = get_or_create_ai_stack_for_side(side);
 	if (!ai_stack_for_specific_side.empty()){
@@ -676,7 +676,7 @@ void manager::remove_ai_for_side( side_number side )
 }
 
 
-void manager::remove_all_ais_for_side( side_number side )
+void mgr::remove_all_ais_for_side( side_number side )
 {
 	std::stack<holder>& ai_stack_for_specific_side = get_or_create_ai_stack_for_side(side);
 
@@ -687,7 +687,7 @@ void manager::remove_all_ais_for_side( side_number side )
 }
 
 
-void manager::clear_ais()
+void mgr::clear_ais()
 {
 	ai_map_.clear();
 }
@@ -696,13 +696,13 @@ void manager::clear_ais()
 // Work with active AI parameters
 // =======================================================================
 
-void manager::modify_active_ai_config_old_for_side ( side_number side, const config::const_child_itors &ai_parameters )
+void mgr::modify_active_ai_config_old_for_side ( side_number side, const config::const_child_itors &ai_parameters )
 {
 	get_active_ai_holder_for_side(side).modify_ai_config_old(ai_parameters);
 }
 
 
-void manager::modify_active_ai_for_side ( side_number side, const config &cfg )
+void mgr::modify_active_ai_for_side ( side_number side, const config &cfg )
 {
 	if (ai_info_==nullptr) {
 		//replay ?
@@ -712,24 +712,24 @@ void manager::modify_active_ai_for_side ( side_number side, const config &cfg )
 }
 
 
-std::string manager::get_active_ai_overview_for_side( side_number side)
+std::string mgr::get_active_ai_overview_for_side( side_number side)
 {
 	return get_active_ai_holder_for_side(side).get_ai_overview();
 }
 
 
-std::string manager::get_active_ai_structure_for_side( side_number side)
+std::string mgr::get_active_ai_structure_for_side( side_number side)
 {
 	return get_active_ai_holder_for_side(side).get_ai_structure();
 }
 
 
-std::string manager::get_active_ai_identifier_for_side( side_number side )
+std::string mgr::get_active_ai_identifier_for_side( side_number side )
 {
 	return get_active_ai_holder_for_side(side).get_ai_identifier();
 }
 
-ai::holder& manager::get_active_ai_holder_for_side_dbg(side_number side)
+ai::holder& mgr::get_active_ai_holder_for_side_dbg(side_number side)
 {
 	if (!game_config::debug)
 	{
@@ -739,19 +739,19 @@ ai::holder& manager::get_active_ai_holder_for_side_dbg(side_number side)
 }
 
 
-config manager::to_config( side_number side )
+config mgr::to_config( side_number side )
 {
 	return get_active_ai_holder_for_side(side).to_config();
 }
 
 
-game_info& manager::get_active_ai_info_for_side( side_number /*side*/ )
+game_info& mgr::get_active_ai_info_for_side( side_number /*side*/ )
 {
 	return *ai_info_;
 }
 
 
-game_info& manager::get_ai_info()
+game_info& mgr::get_ai_info()
 {
 	return *ai_info_;
 }
@@ -761,7 +761,7 @@ game_info& manager::get_ai_info()
 // PROXY
 // =======================================================================
 
-void manager::play_turn( side_number side ){
+void mgr::play_turn( side_number side ){
 	last_interact_ = 0;
 	num_interact_ = 0;
 	const int turn_start_time = SDL_GetTicks();
@@ -773,8 +773,8 @@ void manager::play_turn( side_number side ){
 	ai_obj.new_turn();
 	ai_obj.play_turn();
 	const int turn_end_time= SDL_GetTicks();
-	DBG_AI_MANAGER << "side " << side << ": number of user interactions: "<<num_interact_<<std::endl;
-	DBG_AI_MANAGER << "side " << side << ": total turn time: "<<turn_end_time - turn_start_time << " ms "<< std::endl;
+	DBG_AI_mgr << "side " << side << ": number of user interactions: "<<num_interact_<<std::endl;
+	DBG_AI_mgr << "side " << side << ": total turn time: "<<turn_end_time - turn_start_time << " ms "<< std::endl;
 }
 
 
@@ -784,7 +784,7 @@ void manager::play_turn( side_number side ){
 // =======================================================================
 // AI STACKS
 // =======================================================================
-std::stack<holder>& manager::get_or_create_ai_stack_for_side( side_number side )
+std::stack<holder>& mgr::get_or_create_ai_stack_for_side( side_number side )
 {
 	AI_map_of_stacks::iterator iter = ai_map_.find(side);
 	if (iter!=ai_map_.end()){
@@ -796,7 +796,7 @@ std::stack<holder>& manager::get_or_create_ai_stack_for_side( side_number side )
 // =======================================================================
 // AI HOLDERS
 // =======================================================================
-holder& manager::get_active_ai_holder_for_side( side_number side )
+holder& mgr::get_active_ai_holder_for_side( side_number side )
 {
 	std::stack<holder>& ai_stack_for_specific_side = get_or_create_ai_stack_for_side(side);
 
@@ -814,7 +814,7 @@ holder& manager::get_active_ai_holder_for_side( side_number side )
 // AI POINTERS
 // =======================================================================
 
-interface& manager::get_active_ai_for_side( side_number side )
+interface& mgr::get_active_ai_for_side( side_number side )
 {
 	return get_active_ai_holder_for_side(side).get_ai_ref();
 }

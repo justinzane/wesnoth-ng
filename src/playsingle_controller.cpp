@@ -84,14 +84,14 @@ playsingle_controller::playsingle_controller(const config& level,
 	}
 
 	ai::game_info ai_info;
-	ai::manager::set_ai_info(ai_info);
-	ai::manager::add_observer(this) ;
+	ai::mgr::set_ai_info(ai_info);
+	ai::mgr::add_observer(this) ;
 }
 
 playsingle_controller::~playsingle_controller()
 {
-	ai::manager::remove_observer(this) ;
-	ai::manager::clear_ais() ;
+	ai::mgr::remove_observer(this) ;
+	ai::mgr::clear_ais() ;
 }
 
 void playsingle_controller::init_gui(){
@@ -238,25 +238,25 @@ void playsingle_controller::whiteboard_toggle() {
 }
 
 void playsingle_controller::whiteboard_execute_action(){
-	whiteboard_manager_->contextual_execute();
+	whiteboard_mgr_->contextual_execute();
 }
 
 void playsingle_controller::whiteboard_execute_all_actions(){
-	whiteboard_manager_->execute_all_actions();
+	whiteboard_mgr_->execute_all_actions();
 }
 
 void playsingle_controller::whiteboard_delete_action(){
-	whiteboard_manager_->contextual_delete();
+	whiteboard_mgr_->contextual_delete();
 }
 
 void playsingle_controller::whiteboard_bump_up_action()
 {
-	whiteboard_manager_->contextual_bump_up_action();
+	whiteboard_mgr_->contextual_bump_up_action();
 }
 
 void playsingle_controller::whiteboard_bump_down_action()
 {
-	whiteboard_manager_->contextual_bump_down_action();
+	whiteboard_mgr_->contextual_bump_down_action();
 }
 
 void playsingle_controller::whiteboard_suppose_dead()
@@ -267,7 +267,7 @@ void playsingle_controller::whiteboard_suppose_dead()
 		curr_unit = &*menu_handler_.current_unit();
 		loc = curr_unit->get_location();
 	} // end planned unit map scope
-	whiteboard_manager_->save_suppose_dead(*curr_unit,loc);
+	whiteboard_mgr_->save_suppose_dead(*curr_unit,loc);
 }
 
 void playsingle_controller::report_victory(
@@ -356,10 +356,10 @@ LEVEL_RESULT playsingle_controller::play_scenario(
 	gui_->labels().read(level_);
 
 	// Read sound sources
-	assert(soundsources_manager_ != nullptr);
+	assert(soundsources_mgr_ != nullptr);
 	foreach_ng(const config &s, level_.child_range("sound_source")) {
 		soundsource::sourcespec spec(s);
-		soundsources_manager_->add(spec);
+		soundsources_mgr_->add(spec);
 	}
 
 	set_victory_when_enemies_defeated(level_["victory_when_enemies_defeated"].to_bool(true));
@@ -704,7 +704,7 @@ void playsingle_controller::before_human_turn(bool save)
 	browse_ = false;
 	linger_ = false;
 
-	ai::manager::raise_turn_started();
+	ai::mgr::raise_turn_started();
 
 	if(save && level_result_ == NONE) {
 		savegame::autosave_savegame save(gamestate_, *gui_, to_config(), preferences::compress_saves());
@@ -873,7 +873,7 @@ void playsingle_controller::play_ai_turn(){
 	turn_info turn_data(player_number_, replay_sender_);
 
 	try {
-		ai::manager::play_turn(player_number_);
+		ai::mgr::play_turn(player_number_);
 	} catch (end_turn_exception&) {
 	}
 	recorder.end_turn();
@@ -908,7 +908,7 @@ void playsingle_controller::handle_generic_event(const std::string& name){
 }
 
 void playsingle_controller::check_time_over(){
-	bool b = tod_manager_.next_turn();
+	bool b = tod_mgr_.next_turn();
 	it_is_a_new_turn_ = true;
 	if(!b) {
 
@@ -916,7 +916,7 @@ void playsingle_controller::check_time_over(){
 		game_events::fire("time over");
 		LOG_NG << "done firing time over event...\n";
 		//if turns are added while handling 'time over' event
-		if (tod_manager_.is_time_left()) {
+		if (tod_mgr_.is_time_left()) {
 			return;
 		}
 

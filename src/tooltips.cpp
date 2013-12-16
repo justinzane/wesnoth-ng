@@ -24,7 +24,7 @@
 #include "help.hpp"
 #include "marked-up_text.hpp"
 #include "resources.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 
 #include "global.hpp"
 #include <boost/foreach.hpp>
@@ -110,13 +110,13 @@ static void show_tooltip(const tooltip& tip)
 
 namespace tooltips {
 
-manager::manager(CVideo& video)
+mgr::mgr(CVideo& video)
 {
 	clear_tooltips();
 	video_ = &video;
 }
 
-manager::~manager()
+mgr::~mgr()
 {
 	clear_tooltips();
 	video_ = nullptr;

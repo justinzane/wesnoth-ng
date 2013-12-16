@@ -67,14 +67,14 @@ static lg::log_domain log_engine("engine");
 std::map<map_location,fixed_t> game_display::debugHighlights_;
 
 game_display::game_display(unit_map& units, CVideo& video, const gamemap& map,
-		const tod_manager& tod, const std::vector<team>& t,
+		const tod_mgr& tod, const std::vector<team>& t,
 		const config& theme_cfg, const config& level) :
 		display(&units, video, &map, &t, theme_cfg, level),
 		fake_units_(),
 		attack_indicator_src_(),
 		attack_indicator_dst_(),
 		route_(),
-		tod_manager_(tod),
+		tod_mgr_(tod),
 		level_(level),
 		displayedUnitHex_(),
 //		overlays_(),
@@ -97,7 +97,7 @@ game_display* game_display::create_dummy_display(CVideo& video)
 	static unit_map dummy_umap;
 	static config dummy_cfg;
 	static gamemap dummy_map(dummy_cfg, "");
-	static tod_manager dummy_tod(dummy_cfg, 0);
+	static tod_mgr dummy_tod(dummy_cfg, 0);
 	static std::vector<team> dummy_teams;
 	return new game_display(dummy_umap, video, dummy_map, dummy_tod,
 			dummy_teams, dummy_cfg, dummy_cfg);
@@ -111,10 +111,10 @@ game_display::~game_display()
 
 void game_display::new_turn()
 {
-	const time_of_day& tod = tod_manager_.get_time_of_day();
+	const time_of_day& tod = tod_mgr_.get_time_of_day();
 
 	if( !first_turn_) {
-		const time_of_day& old_tod = tod_manager_.get_previous_time_of_day();
+		const time_of_day& old_tod = tod_mgr_.get_previous_time_of_day();
 
 		if(old_tod.image_mask != tod.image_mask) {
 			const SDL_Surface old_mask(image::get_image(old_tod.image_mask,image::SCALED_TO_HEX));
@@ -375,12 +375,12 @@ void game_display::draw_hex(const map_location& loc)
 
 const time_of_day& game_display::get_time_of_day(const map_location& loc) const
 {
-	return tod_manager_.get_time_of_day(loc);
+	return tod_mgr_.get_time_of_day(loc);
 }
 
 bool game_display::has_time_area() const
 {
-	return tod_manager_.has_time_area();
+	return tod_mgr_.has_time_area();
 }
 
 void game_display::draw_sidebar()

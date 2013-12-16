@@ -139,8 +139,8 @@ void verify_and_get_global_variable(const vconfig &pcfg)
 						network::send_data(data,0);
 					}
 					while (get_replay_source().at_end()) {
-						ai::manager::raise_user_interact();
-						ai::manager::raise_sync_network();
+						ai::mgr::raise_user_interact();
+						ai::mgr::raise_sync_network();
 						SDL_Delay(10);
 					}
 				}

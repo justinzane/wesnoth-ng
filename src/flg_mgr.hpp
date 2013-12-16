@@ -15,8 +15,8 @@
 
    See the COPYING file for more details.
 */
-#ifndef FLG_MANAGER_HPP_INCLUDED
-#define FLG_MANAGER_HPP_INCLUDED
+#ifndef FLG_mgr_HPP_INCLUDED
+#define FLG_mgr_HPP_INCLUDED
 
 #include "widgets/combo.hpp"
 
@@ -31,13 +31,13 @@ const std::string random_enemy_picture("units/random-dice.png");
 
 std::string get_RC_suffix(const std::string& unit_color, const int color);
 
-class flg_manager
+class flg_mgr
 {
 public:
-	flg_manager(const std::vector<const config*>& era_factions,
+	flg_mgr(const std::vector<const config*>& era_factions,
 		const config& side, const bool map_settings, const bool saved_game,
 		const int color);
-	~flg_manager();
+	~flg_mgr();
 
 	void set_current_faction(const unsigned index);
 	void set_current_faction(const std::string& id);
@@ -82,8 +82,8 @@ public:
 	int current_faction_index() const;
 
 private:
-	flg_manager(const flg_manager&);
-	void operator=(const flg_manager&);
+	flg_mgr(const flg_mgr&);
+	void operator=(const flg_mgr&);
 
 	void update_available_factions();
 	void update_available_leaders();

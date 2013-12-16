@@ -81,13 +81,13 @@ int readwrite_context_impl::get_recursion_count() const
 
 void readonly_context_impl::raise_user_interact() const
 {
-	manager::raise_user_interact();
+	mgr::raise_user_interact();
 }
 
 
 void readwrite_context_impl::raise_gamestate_changed() const
 {
-	manager::raise_gamestate_changed();
+	mgr::raise_gamestate_changed();
 }
 
 
@@ -210,7 +210,7 @@ readonly_context_impl::readonly_context_impl(side_context &context, const config
 		villages_per_scout_()
 	{
 		init_side_context_proxy(context);
-		manager::add_gamestate_observer(this);
+		mgr::add_gamestate_observer(this);
 
 		add_known_aspect("advancements", advancements_);
 		add_known_aspect("aggression",aggression_);
@@ -292,7 +292,7 @@ config readonly_context_impl::to_readonly_context_config() const
 
 readonly_context_impl::~readonly_context_impl()
 {
-	manager::remove_gamestate_observer(this);
+	mgr::remove_gamestate_observer(this);
 }
 
 void readonly_context_impl::handle_generic_event(const std::string& /*event_name*/)
@@ -302,12 +302,12 @@ void readonly_context_impl::handle_generic_event(const std::string& /*event_name
 
 
 const game_info& readonly_context_impl::get_info() const{
-	return manager::get_active_ai_info_for_side(get_side());
+	return mgr::get_active_ai_info_for_side(get_side());
 }
 
 
 game_info& readwrite_context_impl::get_info_w(){
-	return manager::get_active_ai_info_for_side(get_side());
+	return mgr::get_active_ai_info_for_side(get_side());
 }
 
 void readonly_context_impl::diagnostic(const std::string& msg)
@@ -983,15 +983,15 @@ keeps_cache::keeps_cache()
 	: map_(nullptr)
 	, keeps_()
 {
-	ai::manager::add_turn_started_observer(this);
-	ai::manager::add_map_changed_observer(this);
+	ai::mgr::add_turn_started_observer(this);
+	ai::mgr::add_map_changed_observer(this);
 }
 
 
 keeps_cache::~keeps_cache()
 {
-	ai::manager::remove_turn_started_observer(this);
-	ai::manager::remove_map_changed_observer(this);
+	ai::mgr::remove_turn_started_observer(this);
+	ai::mgr::remove_map_changed_observer(this);
 }
 
 void keeps_cache::clear()
@@ -1135,12 +1135,12 @@ double readonly_context_impl::power_projection(const map_location& loc, const mo
 			const unit& un = *u;
 
 			// The unit might play on the next turn
-			int attack_turn = resources::tod_manager->turn();
+			int attack_turn = resources::tod_mgr->turn();
 			if(un.side() < get_side()) {
 				++attack_turn;
 			}
 			// Considering the unit location would be too slow, we only apply the bonus granted by the global ToD
-			const int lawful_bonus = resources::tod_manager->get_time_of_day(attack_turn).lawful_bonus;
+			const int lawful_bonus = resources::tod_mgr->get_time_of_day(attack_turn).lawful_bonus;
 			int tod_modifier = 0;
 			if(un.alignment() == unit_type::LAWFUL) {
 				tod_modifier = lawful_bonus;
@@ -1311,13 +1311,13 @@ bool readonly_context_impl::is_active(const std::string &time_of_day, const std:
 {
 		if(time_of_day.empty() == false) {
 			const std::vector<std::string>& times = utils::split(time_of_day);
-			if(std::count(times.begin(),times.end(),resources::tod_manager->get_time_of_day().id) == 0) {
+			if(std::count(times.begin(),times.end(),resources::tod_mgr->get_time_of_day().id) == 0) {
 				return false;
 			}
 		}
 
 		if(turns.empty() == false) {
-			int turn = resources::tod_manager->turn();
+			int turn = resources::tod_mgr->turn();
 			const std::vector<std::string>& turns_list = utils::split(turns);
 			for(std::vector<std::string>::const_iterator j = turns_list.begin(); j != turns_list.end() ; ++j ) {
 				const std::pair<int,int> range = utils::parse_range(*j);

@@ -175,7 +175,7 @@ ui::ui(game_display& disp, const std::string& title, const config& cfg, chat& c,
 	gamelist_initialized_(false),
 
 	hotkey_handler_(&disp),
-	disp_manager_(&disp),
+	disp_mgr_(&disp),
 
 	game_config_(cfg),
 	chat_(c),

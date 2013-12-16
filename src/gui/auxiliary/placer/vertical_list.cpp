@@ -19,8 +19,7 @@
 #define GETTEXT_DOMAIN "wesnoth-lib"
 
 #include "gui/auxiliary/placer/vertical_list.hpp"
-
-#include "gui/lib/types/point.hpp"
+#include "sdl2/sdl2_point.hpp"
 
 #include <cassert>
 #include <numeric>
@@ -48,7 +47,7 @@ void tplacer_vertical_list::initialise()
 	column_ = 0;
 }
 
-void tplacer_vertical_list::add_item(const tpoint& size)
+void tplacer_vertical_list::add_item(const point_t& size)
 {
 	if(size.x > columns_[column_]) {
 		columns_[column_] = size.x;
@@ -68,14 +67,14 @@ void tplacer_vertical_list::add_item(const tpoint& size)
 	}
 }
 
-tpoint tplacer_vertical_list::get_size() const
+point_2Dd tplacer_vertical_list::get_size() const
 {
 	const int width = std::accumulate(columns_.begin(), columns_.end(), 0);
 	const int height = rows_.back().first + rows_.back().second;
-	return tpoint(width, height);
+	return point_2Dd(width, height);
 }
 
-tpoint tplacer_vertical_list::get_origin(const unsigned index) const
+point_2Dd tplacer_vertical_list::get_origin(const unsigned index) const
 {
 	const unsigned row = index / maximum_columns_;
 	const unsigned column = index % maximum_columns_;
@@ -84,7 +83,7 @@ tpoint tplacer_vertical_list::get_origin(const unsigned index) const
 			? 0
 			: std::accumulate(columns_.begin(), columns_.begin() + column, 0);
 
-	return tpoint(width, rows_[row].first);
+	return point_2Dd(width, rows_[row].first);
 }
 
 } // namespace implementation

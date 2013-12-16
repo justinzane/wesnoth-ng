@@ -35,8 +35,8 @@
 
 #include <algorithm>
 
-struct tag_name_manager {
-	tag_name_manager() : names() {
+struct tag_name_mgr {
+	tag_name_mgr() : names() {
 		names.push_back("animation");
 		names.push_back("attack_anim");
 		names.push_back("death");
@@ -65,7 +65,7 @@ struct tag_name_manager {
 	std::vector<std::string> names;
 };
 namespace {
-	tag_name_manager anim_tags;
+	tag_name_mgr anim_tags;
 } //end anonymous namespace
 
 const std::vector<std::string>& unit_animation::all_tag_names() {

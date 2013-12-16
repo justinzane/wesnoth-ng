@@ -526,12 +526,12 @@ void hotkey_item::set_key(int character, int keycode,
 	}
 }
 
-manager::manager()
+mgr::mgr()
 {
 	init();
 }
 
-void manager::init()
+void mgr::init()
 {
 	//the size value is just random set.
 	boost::ptr_vector<hotkey_cmd_t> known_hotkeys_temp(200);
@@ -546,14 +546,14 @@ void manager::init()
 	}
 }
 
-void manager::wipe()
+void mgr::wipe()
 {
 	delete_all_wml_hotkeys();
 	hotkeys_.clear();
 	command_map_.clear();
 }
 
-manager::~manager()
+mgr::~mgr()
 {
 	wipe();
 }

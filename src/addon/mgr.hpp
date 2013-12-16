@@ -17,8 +17,8 @@
    See the COPYING file for more details.
 */
 
-#ifndef ADDON_MANAGER_HPP_INCLUDED
-#define ADDON_MANAGER_HPP_INCLUDED
+#ifndef ADDON_mgr_HPP_INCLUDED
+#define ADDON_mgr_HPP_INCLUDED
 
 class config;
 class version_info;

@@ -168,7 +168,7 @@ void twidget::layout_initialise(const bool /*full_initialisation*/)
 	assert(visible_ != tvisible::invisible);
 	assert(get_window());
 
-	layout_size_ = tpoint(0,0);
+	layout_size_ = point_t(0,0);
 	if(!linked_group_.empty()) {
 		get_window()->add_linked_widget(linked_group_, this);
 	}
@@ -194,7 +194,7 @@ tpoint twidget::get_best_size() const
 	assert(visible_ != tvisible::invisible);
 
 	tpoint result = layout_size_;
-	if(result == tpoint(0, 0)) {
+	if(result == point_t(0, 0)) {
 		result = calculate_best_size();
 	}
 
@@ -210,13 +210,13 @@ bool twidget::can_wrap() const
 	return false;
 }
 
-void twidget::set_origin(const tpoint& origin)
+void twidget::set_origin(const point_t& origin)
 {
 	x_ = origin.x;
 	y_ = origin.y;
 }
 
-void twidget::set_size(const tpoint& size)
+void twidget::set_size(const point_t& size)
 {
 	assert(size.x >= 0);
 	assert(size.y >= 0);
@@ -227,7 +227,7 @@ void twidget::set_size(const tpoint& size)
 	set_is_dirty(true);
 }
 
-void twidget::place(const tpoint& origin, const tpoint& size)
+void twidget::place(const point_t& origin, const point_t& size)
 {
 	assert(size.x >= 0);
 	assert(size.y >= 0);
@@ -265,12 +265,12 @@ void twidget::layout_children()
 
 tpoint twidget::get_origin() const
 {
-	return tpoint(x_, y_);
+	return point_t(x_, y_);
 }
 
 tpoint twidget::get_size() const
 {
-	return tpoint(width_, height_);
+	return point_t(width_, height_);
 }
 
 SDL_Rect twidget::get_rectangle() const
@@ -298,12 +298,12 @@ unsigned twidget::get_height() const
 	return height_;
 }
 
-void twidget::set_layout_size(const tpoint& size)
+void twidget::set_layout_size(const point_t& size)
 {
 	layout_size_ = size;
 }
 
-const tpoint& twidget::layout_size() const
+const point_t& twidget::layout_size() const
 {
 	return layout_size_;
 }
@@ -596,13 +596,13 @@ void twidget::draw_debug_border(
 	/***** ***** ***** ***** Query functions ***** ***** ***** *****/
 
 twidget* twidget::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active)
 {
 	return is_at(coordinate, must_be_active) ? this : nullptr;
 }
 
-const twidget* twidget::find_at(const tpoint& coordinate,
+const twidget* twidget::find_at(const point_t& coordinate,
 		const bool must_be_active) const
 {
 	return is_at(coordinate, must_be_active) ? this : nullptr;
@@ -627,12 +627,12 @@ bool twidget::has_widget(const twidget& widget) const
 	return &widget == this;
 }
 
-bool twidget::is_at(const tpoint& coordinate) const
+bool twidget::is_at(const point_t& coordinate) const
 {
 	return is_at(coordinate, true);
 }
 
-bool twidget::is_at(const tpoint& coordinate, const bool must_be_active) const
+bool twidget::is_at(const point_t& coordinate, const bool must_be_active) const
 {
 	if(visible_ == tvisible::invisible
 			|| (visible_ == tvisible::hidden && must_be_active)) {

@@ -67,7 +67,7 @@ namespace mp {
 create::create(game_display& disp, const config& cfg, game_state& state,
 	chat& c, config& gamelist) :
 	ui(disp, _("Create Game"), cfg, c, gamelist),
-	tooltip_manager_(disp.video()),
+	tooltip_mgr_(disp.video()),
 	era_selection_(-1),
 	mod_selection_(-1),
 	level_selection_(-1),
@@ -397,19 +397,19 @@ void create::init_level_type_changed(size_t index)
 
 void create::synchronize_selections()
 {
-	DBG_MP << "Synchronizing with the dependency manager" << std::endl;
-	if (era_selection_ != engine_.dependency_manager().get_era_index()) {
-		eras_menu_.move_selection(engine_.dependency_manager().get_era_index());
+	DBG_MP << "Synchronizing with the dependency mgr" << std::endl;
+	if (era_selection_ != engine_.dependency_mgr().get_era_index()) {
+		eras_menu_.move_selection(engine_.dependency_mgr().get_era_index());
 		process_event();
 	}
 
 	if (engine_.current_level_type() != level::CAMPAIGN &&
 		engine_.current_level_type() != level::SP_CAMPAIGN) {
 		if (engine_.current_level().id() !=
-			engine_.dependency_manager().get_scenario()) {
+			engine_.dependency_mgr().get_scenario()) {
 
 			int index = engine_.find_level_by_id(
-				engine_.dependency_manager().get_scenario());
+				engine_.dependency_mgr().get_scenario());
 
 			if (index == -1) {
 				return;

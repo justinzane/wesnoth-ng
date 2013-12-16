@@ -36,7 +36,7 @@ static lg::log_domain log_formula_ai("ai/engine/fai");
 
 namespace game_logic {
 
-void candidate_action_manager::load_config(const config& cfg, ai::formula_ai* ai, function_symbol_table* function_table)
+void candidate_action_mgr::load_config(const config& cfg, ai::formula_ai* ai, function_symbol_table* function_table)
 {
 	// register candidate actions
 	foreach_ng(const config &rc_action, cfg.child_range("register_candidate_action"))
@@ -50,7 +50,7 @@ void candidate_action_manager::load_config(const config& cfg, ai::formula_ai* ai
 	}
 }
 
-candidate_action_ptr candidate_action_manager::load_candidate_action_from_config(const config& rc_action, ai::formula_ai* ai, function_symbol_table* function_table)
+candidate_action_ptr candidate_action_mgr::load_candidate_action_from_config(const config& rc_action, ai::formula_ai* ai, function_symbol_table* function_table)
 {
 	candidate_action_ptr new_ca;
 	const t_string &name = rc_action["name"];
@@ -70,7 +70,7 @@ candidate_action_ptr candidate_action_manager::load_candidate_action_from_config
 	return new_ca;
 }
 
-bool candidate_action_manager::evaluate_candidate_actions(ai::formula_ai* ai, unit_map& units)
+bool candidate_action_mgr::evaluate_candidate_actions(ai::formula_ai* ai, unit_map& units)
 {
 	evaluated_candidate_actions_.clear();
 

@@ -16,8 +16,8 @@
  See the COPYING file for more details.
  */
 
-#ifndef CONTEXT_MANAGER_HPP_INCLUDED
-#define CONTEXT_MANAGER_HPP_INCLUDED
+#ifndef CONTEXT_mgr_HPP_INCLUDED
+#define CONTEXT_mgr_HPP_INCLUDED
 
 #include "editor/map/map_context.hpp"
 #include "editor/editor_preferences.hpp"
@@ -31,7 +31,7 @@ namespace editor {
 
 map_labels* get_current_labels();
 
-class context_manager {
+class context_mgr {
 
 public:
 
@@ -77,8 +77,8 @@ public:
 	;
 
 public:
-	context_manager(editor_display& gui, const config& game_config);
-	~context_manager();
+	context_mgr(editor_display& gui, const config& game_config);
+	~context_mgr();
 
 	size_t open_maps(void) {
 		return map_contexts_.size();

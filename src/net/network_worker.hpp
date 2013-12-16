@@ -43,14 +43,14 @@ class config;
 namespace network_worker_pool
 {
 
-struct manager
+struct mgr
 {
-	explicit manager(size_t min_threads,size_t max_threads);
-	~manager();
+	explicit mgr(size_t min_threads,size_t max_threads);
+	~mgr();
 
 private:
-	manager(const manager&);
-	void operator=(const manager&);
+	mgr(const mgr&);
+	void operator=(const mgr&);
 
 	bool active_;
 };

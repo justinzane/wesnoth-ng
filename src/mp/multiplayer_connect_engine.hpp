@@ -194,7 +194,7 @@ public:
 	bool allow_player() const { return allow_player_; }
 	const std::vector<std::string>& player_teams() const
 		{ return parent_.player_teams_; }
-	flg_manager& flg() { return flg_; }
+	flg_mgr& flg() { return flg_; }
 
 private:
 	side_engine(const side_engine& engine);
@@ -223,7 +223,7 @@ private:
 	std::string player_id_;
 	std::string ai_algorithm_;
 
-	flg_manager flg_;
+	flg_mgr flg_;
 };
 
 } // end namespace mp

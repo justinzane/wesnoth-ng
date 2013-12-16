@@ -61,11 +61,11 @@ config initial_level_config(game_display& disp, const mp_game_settings& params,
 	if (params.saved_game) {
 		try {
 			savegame::loadgame load(disp,
-				resources::config_manager->game_config(), state);
+				resources::config_mgr->game_config(), state);
 			load.load_multiplayer_game();
 			load.fill_mplevel_config(level);
 
-			resources::config_manager->
+			resources::config_mgr->
 				load_game_config_for_game(state.classification());
 		}
 		catch (load_game_cancelled_exception){
@@ -84,11 +84,11 @@ config initial_level_config(game_display& disp, const mp_game_settings& params,
 			"multiplayer", "id", params.mp_scenario)), 0);
 
 		level["next_underlying_unit_id"] = 0;
-		n_unit::id_manager::instance().clear();
+		n_unit::id_mgr::instance().clear();
 
 		if (params.random_start_time)
 		{
-			if (!tod_manager::is_start_ToD(level["random_start_time"]))
+			if (!tod_mgr::is_start_ToD(level["random_start_time"]))
 			{
 				level["random_start_time"] = true;
 			}
@@ -110,7 +110,7 @@ config initial_level_config(game_display& disp, const mp_game_settings& params,
 
 	// Initialize the list of sides available for the current era.
 	const config &era_cfg =
-		resources::config_manager->game_config().find_child("era", "id", era);
+		resources::config_mgr->game_config().find_child("era", "id", era);
 	if (!era_cfg) {
 		if (!params.saved_game)
 		{
@@ -125,7 +125,7 @@ config initial_level_config(game_display& disp, const mp_game_settings& params,
 	{
 		config& cfg = level.add_child("era", era_cfg);
 
-		const config& custom_side = resources::config_manager->
+		const config& custom_side = resources::config_mgr->
 			game_config().find_child("multiplayer_side", "id", "Custom");
 		level.child("era").add_child_at("multiplayer_side", custom_side, 0);
 
@@ -138,7 +138,7 @@ config initial_level_config(game_display& disp, const mp_game_settings& params,
 	const std::vector<std::string>& mods = params.active_mods;
 	for (unsigned i = 0; i < mods.size(); i++) {
 		config& cfg = level.add_child("modification",
-			resources::config_manager->
+			resources::config_mgr->
 				game_config().find_child("modification", "id", mods[i]));
 
 		// Convert options to event
@@ -180,7 +180,7 @@ void level_to_gamestate(config& level, game_state& state)
 
 	carryover_info sides = carryover_info(state.carryover_sides_start);
 
-	n_unit::id_manager::instance().set_save_id(level["next_underlying_unit_id"]);
+	n_unit::id_mgr::instance().set_save_id(level["next_underlying_unit_id"]);
 
 	// Set random.
 	const config::attribute_value& seed = level["random_seed"];

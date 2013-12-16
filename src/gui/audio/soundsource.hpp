@@ -20,7 +20,7 @@
 
 #include <map>
 
-#include "generic_sdl2/sdl2_evt_mgr.hpp"
+#include "sdl2/evt_mgr.hpp"
 #include "map_location.hpp"
 #include "savegame_config.hpp"
 
@@ -30,7 +30,7 @@ class display;
 namespace soundsource {
 
 class sourcespec;
-class manager;
+class mgr;
 
 /*
  * Sound source is an object on a map (a location) which has one or more
@@ -78,7 +78,7 @@ public:
 	void write_config(config& cfg) const;
 };
 
-class manager : public events::observer, public savegame::savegame_config {
+class mgr : public evt_observer, public savegame::savegame_config {
 
 	typedef std::map<std::string, positional_source *> positional_source_map;
 	typedef positional_source_map::iterator            positional_source_iterator;
@@ -88,8 +88,8 @@ class manager : public events::observer, public savegame::savegame_config {
 	const display &disp_;
 
 public:
-	manager(const display &disp);
-	~manager();
+	mgr(const display &disp);
+	~mgr();
 
 	// event interface
 	void handle_generic_event(const std::string &event_name);

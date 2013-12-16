@@ -1,5 +1,5 @@
 /**
- * @file src/addon/manager_ui.hpp
+ * @file src/addon/mgr_ui.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -17,8 +17,8 @@
    See the COPYING file for more details.
 */
 
-#ifndef ADDON_MANAGER_UI_HPP_INCLUDED
-#define ADDON_MANAGER_UI_HPP_INCLUDED
+#ifndef ADDON_mgr_UI_HPP_INCLUDED
+#define ADDON_mgr_UI_HPP_INCLUDED
 
 #include <string>
 

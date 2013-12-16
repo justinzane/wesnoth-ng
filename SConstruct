@@ -51,7 +51,7 @@ opts.AddVariables(
     # Basic Build Options ---------------------------------------------------------------------
     ListVariable('default_targets',
                  'Targets that will be built if no target is specified in command line.',
-                 "wesnoth,wesnothd,campaignd,cutter,exploder",
+                 "wesnoth,wesnothd",
                  Split("wesnoth wesnothd campaignd cutter exploder test")),
     EnumVariable('build',
                  'Build variant: debug, release profile or base (no subdirectory)',
@@ -67,13 +67,13 @@ opts.AddVariables(
      int),
     BoolVariable('distcc',
                  'Use distcc',
-                 True),
+                 False),
     BoolVariable('ccache',
                  "Use ccache",
                  False),
     BoolVariable('SDL2',
                  'Enable SDL2 instead of SDL1.2.',
-                 False),
+                 True),
     BoolVariable('openmp',
                  'Enable openmp use.',
                  False),
@@ -112,7 +112,7 @@ opts.AddVariables(
     # Compiler/Linker Flags -------------------------------------------------------------------
     ('extra_flags_config',
      'Extra compiler and linker flags to use for configuration and all builds',
-     "-march=core-avx-i -ferror-limit=4 -lprofiler -ltcmalloc"),
+     "-march=core-avx-i -ferror-limit=5 -ftemplate-backtrace-limit=3 -lprofiler -ltcmalloc"),
     ('extra_flags_base',
      'Extra compiler and linker flags to use for base builds',
      ""),
@@ -487,9 +487,8 @@ if env["prereqs"]:
             have_libpthread = True  # Check always fails with clang++
         else:
             have_libpthread = conf.CheckLib("pthread")
-        return have_libpthread and \
-            conf.CheckBoost("system") and \
-            conf.CheckBoost("asio", header_only=True)
+        return (have_libpthread and
+                conf.CheckBoost("system"))
 
     if env['host'] in ['x86_64-nacl', 'i686-nacl']:
         # libppapi_cpp has a reverse dependency on the following function
@@ -539,8 +538,7 @@ if env["prereqs"]:
         conf.CheckSDL("SDL_ttf", require_version="2.0.8", use_sdl2=env["SDL2"]) and \
         conf.CheckSDL("SDL_mixer", require_version='1.2.0', use_sdl2=env["SDL2"]) and \
         conf.CheckSDL("SDL_image", require_version='1.2.0', use_sdl2=env["SDL2"]) and \
-        conf.CheckLib("vorbisfile") and \
-        conf.CheckOgg(use_sdl2=env["SDL2"]) or \
+        conf.CheckLib("vorbisfile") or \
         Warning("Client prerequisites not met. wesnoth, cutter and exploder cannot be built.")
 
     have_X = False

@@ -46,7 +46,7 @@ struct tpane_implementation
 {
 	/**
 	 * Implementation for the wrappers for
-	 * [const] twidget* tpane::find_at(const tpoint&, const bool) [const].
+	 * [const] twidget* tpane::find_at(const point_t&, const bool) [const].
 	 *
 	 * @tparam W                  A pointer to the pane.
 	 */
@@ -54,7 +54,7 @@ struct tpane_implementation
 	static typename utils::tconst_clone<twidget, W>::pointer
 	find_at(
 			  W pane
-			, tpoint coordinate
+			, point_t coordinate
 			, const bool must_be_active
 			)
 	{
@@ -182,7 +182,7 @@ unsigned tpane::create_item(
 	return item.id;
 }
 
-void tpane::place(const tpoint& origin, const tpoint& size)
+void tpane::place(const point_t& origin, const point_t& size)
 {
 	DBG_GUI_L << LOG_HEADER << '\n';
 	twidget::place(origin, size);
@@ -253,7 +253,7 @@ void tpane::request_reduce_width(const unsigned /*maximum_width*/)
 }
 
 twidget* tpane::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active)
 {
 	return tpane_implementation::find_at(
@@ -263,7 +263,7 @@ twidget* tpane::find_at(
 }
 
 const twidget* tpane::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active) const
 {
 	return tpane_implementation::find_at(
@@ -310,7 +310,7 @@ void tpane::place_children()
 			continue;
 		}
 
-		const tpoint origin = placer_->get_origin(index);
+		const point_t origin = placer_->get_origin(index);
 		item.grid->place(origin, item.grid->get_best_size());
 		++index;
 	}
@@ -325,7 +325,7 @@ void tpane::set_origin_children()
 			continue;
 		}
 
-		const tpoint origin = placer_->get_origin(index);
+		const point_t origin = placer_->get_origin(index);
 		item.grid->set_origin(origin);
 		++index;
 	}
@@ -340,7 +340,7 @@ void tpane::place_or_set_origin_children()
 			continue;
 		}
 
-		const tpoint origin = placer_->get_origin(index);
+		const point_t origin = placer_->get_origin(index);
 		if(item.grid->get_size() != item.grid->get_best_size()) {
 			item.grid->place(origin, item.grid->get_best_size());
 		} else {

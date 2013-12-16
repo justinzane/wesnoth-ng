@@ -50,7 +50,7 @@ void fallback_to_other_ai::on_create()
 	std::string ai_algorithm = ai_cfg["ai_algorithm"];
 	if ((ai_algorithm.empty()) || (ai_algorithm=="default_ai")) {
 		if (configuration::parse_side_config(get_side(),cfg_,ai_cfg)) {
-				fallback_ai_ = manager::create_transient_ai("", ai_cfg, this);
+				fallback_ai_ = mgr::create_transient_ai("", ai_cfg, this);
 		}
 	}
 

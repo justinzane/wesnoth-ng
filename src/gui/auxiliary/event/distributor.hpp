@@ -106,7 +106,7 @@ protected:
 	 * @param widget                 The widget that wants the tooltip.
 	 * @param coordinate             The anchor coordinate.
 	 */
-	void start_hover_timer(twidget* widget, const tpoint& coordinate);
+	void start_hover_timer(twidget* widget, const point_t& coordinate);
 
 	/** Stops the current hover timer. */
 	void stop_hover_timer();
@@ -129,7 +129,7 @@ private:
 	 * @param mouse_over          The widget that should receive the event.
 	 * @param coordinate          The current screen coordinate of the mouse.
 	 */
-	void mouse_motion(twidget* mouse_over, const tpoint& coordinate);
+	void mouse_motion(twidget* mouse_over, const point_t& coordinate);
 
 	/** Called when the mouse wants the widget to show its tooltip. */
 	void show_tooltip();
@@ -138,17 +138,17 @@ private:
 	void signal_handler_sdl_mouse_motion(
 			  const event::tevent event
 			, bool& handled
-			, const tpoint& coordinate);
+			, const point_t& coordinate);
 
 	void signal_handler_sdl_wheel(
 			  const event::tevent event
 			, bool& handled
-			, const tpoint& coordinate);
+			, const point_t& coordinate);
 
 	void signal_handler_show_helptip(
 			  const event::tevent event
 			, bool& handled
-			, const tpoint& coordinate);
+			, const point_t& coordinate);
 };
 
 /***** ***** ***** ***** tmouse_button ***** ***** ***** ***** *****/
@@ -204,13 +204,13 @@ private:
 	void signal_handler_sdl_button_down(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& coordinate);
+		, const point_t& coordinate);
 
 	bool signal_handler_sdl_button_up_entered_;
 	void signal_handler_sdl_button_up(
 		  const event::tevent event
 		, bool& handled
-		, const tpoint& coordinate);
+		, const point_t& coordinate);
 
 
 	void mouse_button_click(twidget* widget);

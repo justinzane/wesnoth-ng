@@ -43,7 +43,7 @@
 #include "scoped_resource.hpp"
 #include "sdl2/sdl2_color.hpp"
 #include "sdl2/sdl2_rect.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 
 #include <algorithm>
 #include <iostream>

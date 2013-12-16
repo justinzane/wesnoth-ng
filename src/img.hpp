@@ -22,6 +22,8 @@
 #ifndef IMG_HPP_
 #define IMG_HPP_
 
+#include "sdl2/sdl2_color.hpp"
+#include "sdl2/sdl2_rect.hpp"
 #include <SDL2/SDL.h>
 #include <vector>
 #include <stdlib.h>
@@ -30,15 +32,34 @@
 /** @defgroup CnE Constants and Enums ********************************************************/
 
 /**@ingroup CnE
+ * @brief Image Edges */
+typedef enum class edge_t {
+        LEFT, TOP, RIGHT, BOTTOM,
+        L_R,   /**< Left and right. */
+        T_B,   /**< Top and bottom. */
+        ALL    /**< all four edges. */
+};
+
+/**@ingroup CnE
+ * @brief Edge Extrapolation*/
+typedef enum class edge_ext_t {
+        TRANSPARENT,    /**< All transparent. */
+        COPY,           /**< Copy nearest neighbor. */
+        COPY_FADE,      /**< Copy nearest neighbor and fade to transparent */
+        LINEAR_EXT,     /**< Extrapolate colors and alpha from nearest neighbors. */
+        LINEAR_FADE     /**< Extrapolate colors, alpha and fade to transparent. */
+};
+
+/**@ingroup CnE
  * @brief Supported Color-Spaces. */
 typedef enum class color_space_t {
-        RGBA,   /**< Required for IO with SDL2 */
+        RGBA,   /**< Required for IO with SDL2 */                           //!< RGBA
 //        HSVA,
 //        HSLA,
 //        YUVA,
-        XYZA,   /**< Intermediate for conversion CIE L*a*b*A to/from RGBA */
-        LABA,   /**< CIE L*a*b* space */
-        BOGUS   /**< Booooogus! */
+        XYZA,   /**< Intermediate for conversion CIE L*a*b*A to/from RGBA *///!< XYZA
+        LABA,   /**< CIE L*a*b* space */                                    //!< LABA
+        BOGUS   /**< Booooogus! */                                          //!< BOGUS
 } color_space;
 
 /**@ingroup CnE
@@ -256,6 +277,186 @@ bool is_surf_argb(SDL_Surface* surf);
 /**@ingroup SRF
  * @brief   True if ABGR. */
 bool is_surf_abgr(SDL_Surface* surf);
+
+/** @defgroup GIPO General Image Processing Operations **************************************
+ *  @details  Inspired by GEGL and the Gimp, this is a collection of *image processing*
+ *  primitive operations. They could be considered *atomic* operations in the colloqual sense
+ *  since more complex image transformations can be defined based on sequential applications
+ *  of these functions.
+ *
+ *  Consider a *drop shadow* effect. It is simply a sequential application of the following
+ *  steps:
+ *      - Load source image
+ *          `img load(const char* file)`
+ *      - Change to working space
+ *          `void change_space(img& src, space = spaces_t::LabA)`
+ *      - Create duplicate of source image
+ *          `img copy(const img& src)`
+ *      - Resize copy to fit blur area
+ *          `void append_vert_edge(img& src, Uint32 cols, bool left, bool dup = false)`
+ *          `void append_horz_edge(img& src, Uint32 rows, bool top, bool dup = false)`
+ *      - Perform blur on copy
+ *          `void blur(img& src, Uint32 radius)`
+ *      - Perform desaturate on copy
+ *          `void change_sat(img& src, float delta_sat)`
+ *      - Perform darken on copy
+ *          `void change_lum(img& src, float delta_lum)`
+ *      - Alpha composite copy onto background with offset.
+ *          `void compose(img& top, rect& top_rect, img& bot, rect& bot_rect)`
+ *      - Alpha composite source onto background.
+ *          `void compose(img& top, rect& top_rect, img& bot, rect& bot_rect)`
+ *      - Change to output space
+ *          `void change_space(img& src, space = spaces_t::RGBA)`
+ *      - Output shadowed image
+ *          `void output(img& src)`
+ */
+
+/**@ingroup GIPO @brief Load an image.
+ * @param file  From whence to load the image data.
+ * @return      The loaded image as an img object.
+ */
+img load_from_file(const char* file);
+
+/**@ingroup GIPO @brief load an image
+ * @param surf  From whence to load the image data.
+ * @return      The loaded image as an img object.
+ */
+img load_from_sdl2_surface(const SDL_Surface* surf);
+
+/**@ingroup GIPO @brief load an image
+ * @param buffer    Pixel data
+ * @param h         height
+ * @param w         width
+ * @param space     color space
+ * @return      The loaded image as an img object.
+ */
+img load_from_buffer(const Uint8*  buffer, Uint32 h, Uint32 w, color_space_t space);
+
+/**@ingroup GIPO @brief load an image
+ * @param buffer    Pixel data
+ * @param h         height
+ * @param w         width
+ * @param space     color space
+ * @return      The loaded image as an img object.
+ */
+img load_from_buffer(const Uint16* buffer, Uint32 h, Uint32 w, color_space_t space);
+
+/**@ingroup GIPO @brief load an image
+ * @param buffer    Pixel data
+ * @param h         height
+ * @param w         width
+ * @param space     color space
+ * @return      The loaded image as an img object.
+ */
+img load_from_buffer(const Uint32* buffer, Uint32 h, Uint32 w, color_space_t space);
+
+/**@ingroup GIPO @brief load an image
+ * @param buffer    Pixel data
+ * @param h         height
+ * @param w         width
+ * @param space     color space
+ * @return      The loaded image as an img object.
+ */
+img load_from_buffer(const Uint64* buffer, Uint32 h, Uint32 w, color_space_t space);
+
+/**@ingroup GIPO @brief load an image
+ * @param buffer    Pixel data
+ * @param h         height
+ * @param w         width
+ * @param space     color space
+ * @return      The loaded image as an img object.
+ */
+img load_from_buffer(const float*  buffer, Uint32 h, Uint32 w, color_space_t space);
+
+/**@ingroup GIPO @brief load an image
+ * @param buffer    Pixel data
+ * @param h         height
+ * @param w         width
+ * @param space     color space
+ * @return      The loaded image as an img object.
+ */
+img load_from_buffer(const double* buffer, Uint32 h, Uint32 w, color_space_t space);
+
+/**@ingroup GIPO @brief Convert from one colorspace to another.
+ * @param src       Image
+ * @param space     Target space
+ */
+void change_space(img& src, color_space_t space);
+
+/**@ingroup GIPO @brief load an image
+ * @param src           Image
+ * @param which_edge    Which edge(s) to append to.
+ * @param ext_type      method for "making up" data in new rows/cols
+ * @param size          how many rows/cols to add to each new edge
+ */
+void append_edge(img& src, edge_t which_edge, edge_ext_t ext_type, Uint32 size);
+
+/**@ingroup GIPO @brief  Fill entire image with given color. */
+void fill(img& src, sdl2_color clr);
+/**@ingroup GIPO @brief  Fill entire image with given color. */
+void fill(img& src, std::vector<Uint8> clr);
+/**@ingroup GIPO @brief  Fill entire image with given color. */
+void fill(img& src, std::vector<Uint16> clr);
+/**@ingroup GIPO @brief  Fill entire image with given color. */
+void fill(img& src, std::vector<Uint32> clr);
+/**@ingroup GIPO @brief  Fill entire image with given color. */
+void fill(img& src, std::vector<float> clr);
+/**@ingroup GIPO @brief  Fill entire image with given color. */
+void fill(img& src, std::vector<double> clr);
+
+/**@ingroup GIPO @brief Weighted blend, compose_over(top*top_weight + bot*bot_weight) */
+void blend(const img& top, const float top_weight,
+           const img& bot, const float bot_weight,
+           img& dst);
+
+/**@ingroup GIPO @brief Gaussian blur. */
+void blur(const img& src, img& dst, const Uint32 radius, const float sigma);
+
+/**@ingroup GIPO @brief Change hue angle of image. */
+void change_hue(img& src, const float hue_diff);
+
+/**@ingroup GIPO @brief Change saturation of image. */
+void change_sat(img& src, const float sat_diff);
+
+/**@ingroup GIPO @brief Increase or decrease brightness of image. */
+void change_lum(img& src, const float lum_diff);
+
+/**@ingroup GIPO @brief Basic Duff-Porter composition. */
+void compose_over(const img& top, const img& bot, img& dst);
+
+/**@ingroup GIPO @brief MIN <= top * bot <= MAX. */
+void compose_multiply(const img& top, const img& bot, img& dst);
+
+/**@ingroup GIPO @brief MIN <= (MAX - top) * (MAX - bot) <= MAX. */
+void compose_screen(const img& top, const img& bot, img& dst);
+
+/**@ingroup GIPO @brief MIN <= top + bot <= MAX.. */
+void compose_add(const img& top, const img& bot, img& dst);
+
+/**@ingroup GIPO @brief MIN <= top - bot <= MAX.. */
+void compose_subtract(const img& top, const img& bot, img& dst);
+
+/**@ingroup GIPO @brief MIN <= abs(top - bot) <= MAX.. */
+void compose_diff(const img& top, const img& bot, img& dst);
+
+/**@ingroup GIPO @brief min(top, bot). */
+void compose_min(const img& top, const img& bot, img& dst);
+
+/**@ingroup GIPO @brief max(top, bot). */
+void compose_max(const img& top, const img& bot, img& dst);
+
+/**@ingroup GIPO @brief Resize image by factor. */
+void resize(img& scr, const float factor);
+
+/**@ingroup GIPO @brief Resize image to w x h. */
+void resize(img& scr, const Uint32 w, const Uint32 h);
+
+/**@ingroup GIPO @brief Resize image by size of rect. */
+void resize(img& scr, const rectangle& rect);
+
+/**@ingroup GIPO @brief Stretch contrast of image to maximum without changing color balance. */
+void stretch_contrast(img& src);
+
 
 /** @defgroup CLR_def Color Definitions *******************************************************/
 

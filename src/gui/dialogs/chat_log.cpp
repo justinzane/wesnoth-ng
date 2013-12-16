@@ -57,9 +57,9 @@ namespace gui2 {
  * @page = GUIWindowDefinitionWML
  * @order = 3_chat_log
  *
- * == Settings manager ==
+ * == Settings mgr ==
  *
- * This shows the settings manager
+ * This shows the settings mgr
  *
  */
 

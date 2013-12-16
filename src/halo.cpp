@@ -260,12 +260,12 @@ void effect::add_overlay_location(std::set<map_location>& locations)
 
 } // end anon namespace
 
-manager::manager(display& screen) : old(disp)
+mgr::mgr(display& screen) : old(disp)
 {
 	disp = &screen;
 }
 
-manager::~manager()
+mgr::~mgr()
 {
 	haloes.clear();
 	invalidated_haloes.clear();

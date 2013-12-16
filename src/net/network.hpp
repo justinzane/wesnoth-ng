@@ -51,7 +51,7 @@ struct pending_statistics {
 
 pending_statistics get_pending_stats();
 
-// A network manager must be created before networking can be used.
+// A network mgr must be created before networking can be used.
 // It must be destroyed only after all networking activity stops.
 
 // min_threads is the maximum number we allow to wait,
@@ -62,15 +62,15 @@ pending_statistics get_pending_stats();
 // max_threads is the overall max number of helper threads.
 // If we have that many threads already running, we will never create more.
 // If max_threads == 0 we will always create a thread if we need it.
-struct manager {
-	explicit manager(size_t min_threads = 1,size_t max_threads = 0);
-	~manager();
+struct mgr {
+	explicit mgr(size_t min_threads = 1,size_t max_threads = 0);
+	~mgr();
 
 private:
 	bool free_;
 
-	manager(const manager&);
-	void operator=(const manager&);
+	mgr(const mgr&);
+	void operator=(const mgr&);
 };
 
 void set_raw_data_only();
@@ -79,10 +79,10 @@ typedef int connection;
 connection const null_connection = 0;
 
 /**
- * A server manager causes listening on a given port
+ * A server mgr causes listening on a given port
  * to occur for the duration of its lifetime.
  */
-struct server_manager {
+struct server_mgr {
 
 	/** Parameter to pass to the constructor. */
 	enum CREATE_SERVER { MUST_CREATE_SERVER,    /**< Will throw exception on failure. */
@@ -90,8 +90,8 @@ struct server_manager {
 	                     NO_SERVER };           /**< Won't try to create a server at all. */
 
 	// Throws error.
-	server_manager(int port, CREATE_SERVER create_server=MUST_CREATE_SERVER);
-	~server_manager();
+	server_mgr(int port, CREATE_SERVER create_server=MUST_CREATE_SERVER);
+	~server_mgr();
 
 	bool is_running() const;
 	void stop();

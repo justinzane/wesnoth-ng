@@ -50,7 +50,7 @@ void ai_testing::log_turn(const char* msg, unsigned int side)
 	assert(side>=1);
 	team& current_team = (*resources::teams)[side-1];
 
-	int _turn_number = resources::tod_manager->turn();
+	int _turn_number = resources::tod_mgr->turn();
 	int _units = side_units(side);
 	int _units_cost = side_units_cost(side);
 	int _gold = current_team.gold();
@@ -94,9 +94,9 @@ void ai_testing::log_game_start()
 {
 	for (std::vector<team>::const_iterator tm = resources::teams->begin(); tm != resources::teams->end(); ++tm) {
 		int side = tm-resources::teams->begin()+1;
-		LOG_AI_TESTING << "AI_IDENTIFIER"<<side<<": " << ai::manager::get_active_ai_identifier_for_side(side) <<std::endl;
+		LOG_AI_TESTING << "AI_IDENTIFIER"<<side<<": " << ai::mgr::get_active_ai_identifier_for_side(side) <<std::endl;
 		LOG_AI_TESTING << "TEAM"<<side<<": " << tm->name() << std::endl;
-		recorder.add_log_data("ai_log","ai_id"+str_cast(side),ai::manager::get_active_ai_identifier_for_side(side));
+		recorder.add_log_data("ai_log","ai_id"+str_cast(side),ai::mgr::get_active_ai_identifier_for_side(side));
 		recorder.add_log_data("ai_log","faction"+str_cast(side),tm->name());
 		///@todo 1.9: add information about ai_config
 	}
@@ -106,9 +106,9 @@ void ai_testing::log_game_start()
 
 void ai_testing::log_game_end()
 {
-	LOG_AI_TESTING << "GAME_END_TURN: "<< resources::tod_manager->turn() <<std::endl;
+	LOG_AI_TESTING << "GAME_END_TURN: "<< resources::tod_mgr->turn() <<std::endl;
 	recorder.add_log_data("ai_log","end_turn",
-		str_cast(resources::tod_manager->turn()));
+		str_cast(resources::tod_mgr->turn()));
 	for (std::vector<team>::const_iterator tm = resources::teams->begin(); tm != resources::teams->end(); ++tm) {
 		int side = tm-resources::teams->begin()+1;
 		recorder.add_log_data("ai_log","end_gold"+str_cast(side),str_cast(tm->gold()));

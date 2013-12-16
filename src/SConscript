@@ -27,6 +27,7 @@ libwesnoth_core_sources = Split("""
     tstring.cpp
     util.cpp
     version.cpp
+    wesnoth_error.cpp
     serdes/binary_or_text.cpp
     serdes/parser.cpp
     serdes/preprocessor.cpp
@@ -146,9 +147,14 @@ libcampaignd_sources = Split("""
 libcampaignd = env.Library("campaignd", libcampaignd_sources, OBJPREFIX="campaignd_")
 
 libwesnoth_sdl_sources = Split("""
-    sld2/sdl2_evt_mgr.cpp
-    sdl2/sdl2_evt_hndlr.cpp
-    sld2/sdl2_rndr_mgr.cpp
+    sdl2/evt_context.cpp
+    sdl2/evt_handler.cpp
+    sdl2/evt_mgr.cpp
+    sdl2/evt_observer.cpp
+    sdl2/loadscreen_mgr.cpp
+    sdl2/rndr_mgr.cpp
+    sdl2/text_block.cpp
+    sdl2/text_style.cpp
     sdl2/win_evt_hndlr.cpp
     sdl_utils.cpp
     img.cpp
@@ -173,8 +179,8 @@ wesnoth_sources = Split("""
     actions/vision.cpp
     addon/client.cpp
     addon/info.cpp
-    addon/manager.cpp
-    addon/manager_ui.cpp
+    addon/mgr.cpp
+    addon/mgr_ui.cpp
     addon/state.cpp
     addon/validation.cpp
     ai/actions.cpp
@@ -207,7 +213,7 @@ wesnoth_sources = Split("""
     ai/lua/core.cpp
     ai/lua/lua_object.cpp
     ai/lua/unit_advancements_aspect.cpp
-    ai/manager.cpp
+    ai/mgr.cpp
     ai/recruitment/recruitment.cpp
     ai/registry.cpp
     ai/testing.cpp
@@ -242,13 +248,13 @@ wesnoth_sources = Split("""
     editor/map/editor_map.cpp
     editor/map/map_context.cpp
     editor/map/map_fragment.cpp
-    editor/map/context_manager.cpp
+    editor/map/context_mgr.cpp
     editor/palette/editor_palettes.cpp
     editor/palette/terrain_palettes.cpp
     editor/palette/tristate_button.cpp
     editor/palette/unit_palette.cpp
     editor/palette/item_palette.cpp
-    editor/palette/palette_manager.cpp
+    editor/palette/palette_mgr.cpp
     editor/editor_controller.cpp
     editor/editor_display.cpp
     editor/editor_main.cpp
@@ -256,7 +262,7 @@ wesnoth_sources = Split("""
     editor/toolkit/brush.cpp
     editor/toolkit/editor_toolkit.cpp
     filechooser.cpp
-    flg_manager.cpp
+    flg_mgr.cpp
     floating_textbox.cpp
     formula/formula.cpp
     formula/formula_debugger.cpp
@@ -264,7 +270,7 @@ wesnoth_sources = Split("""
     formula/formula_function.cpp
     formula/formula_string_utils.cpp
     formula/formula_tokenizer.cpp
-    game_config_manager.cpp
+    game_config_mgr.cpp
     game_controller.cpp
     game_display.cpp
     game_errors.cpp
@@ -396,7 +402,6 @@ wesnoth_sources = Split("""
     gui/dialogs/unit_attack.cpp
     gui/dialogs/unit_create.cpp
     gui/dialogs/wml_message.cpp
-    gui/lib/types/point.cpp
     gui/widgets/button.cpp
     gui/widgets/container.cpp
     gui/widgets/control.cpp
@@ -461,7 +466,7 @@ wesnoth_sources = Split("""
     pathfind/pathfind.cpp
     pathfind/teleport.cpp
     persist_context.cpp
-    persist_manager.cpp
+    persist_mgr.cpp
     persist_var.cpp
     play_controller.cpp
     playcampaign.cpp
@@ -488,7 +493,7 @@ wesnoth_sources = Split("""
     strftime.cpp
     team.cpp
     terrain_filter.cpp
-    tod_manager.cpp
+    tod_mgr.cpp
     unit/unit.cpp
     unit/unit_abilities.cpp
     unit/unit_animation.cpp
@@ -503,7 +508,7 @@ wesnoth_sources = Split("""
     whiteboard/action.cpp
     whiteboard/attack.cpp
     whiteboard/highlighter.cpp
-    whiteboard/manager.cpp
+    whiteboard/mgr.cpp
     whiteboard/mapbuilder.cpp
     whiteboard/move.cpp
     whiteboard/recall.cpp
@@ -576,7 +581,7 @@ wesnothd_sources = Split("""
     server/player_network.cpp
     server/proxy.cpp
     server/room.cpp
-    server/room_manager.cpp
+    server/room_mgr.cpp
     server/sample_user_handler.cpp
     server/simple_wml.cpp
     server/user_handler.cpp
@@ -604,7 +609,7 @@ schema_generator_sources = Split("""
 client_env.WesnothProgram("schema_generator", schema_generator_sources + [libwesnoth_core, libwesnothd], have_client_prereqs)
 
 test_utils_sources = Split("""
-    tests/utils/game_config_manager.cpp
+    tests/utils/game_config_mgr.cpp
     tests/utils/fake_event_source.cpp
     tests/utils/fake_display.cpp
     """)

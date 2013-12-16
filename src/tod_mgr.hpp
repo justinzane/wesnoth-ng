@@ -15,8 +15,8 @@
 
    See the COPYING file for more details.
  */
-#ifndef TOD_MANAGER_HPP_INCLUDED
-#define TOD_MANAGER_HPP_INCLUDED
+#ifndef TOD_mgr_HPP_INCLUDED
+#define TOD_mgr_HPP_INCLUDED
 
 #include "map_location.hpp"
 #include "config.hpp"
@@ -28,12 +28,12 @@ class gamemap;
 class unit_map;
 
 //time of day and turn functionality
-class tod_manager : public savegame::savegame_config
+class tod_mgr : public savegame::savegame_config
 {
 	public:
-	explicit tod_manager(const config& scenario_cfg = config(), const int num_turns = -1);
-		~tod_manager() {}
-		tod_manager& operator=(const tod_manager& manager);
+	explicit tod_mgr(const config& scenario_cfg = config(), const int num_turns = -1);
+		~tod_mgr() {}
+		tod_mgr& operator=(const tod_mgr& mgr);
 
 		config to_config() const;
 

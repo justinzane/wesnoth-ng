@@ -30,7 +30,7 @@
 #include "marked-up_text.hpp"
 #include "text.hpp"
 #include "tooltips.hpp"
-#include "sdl2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 #include "serdes/parser.hpp"
 #include "serdes/preprocessor.hpp"
 #include "serdes/string_utils.hpp"
@@ -322,7 +322,7 @@ private:
 
 namespace font {
 
-manager::manager()
+mgr::mgr()
 {
 	const int res = TTF_Init();
 	if(res == -1) {
@@ -335,7 +335,7 @@ manager::manager()
 	init();
 }
 
-manager::~manager()
+mgr::~mgr()
 {
 	deinit();
 
@@ -343,13 +343,13 @@ manager::~manager()
 	TTF_Quit();
 }
 
-void manager::update_font_path() const
+void mgr::update_font_path() const
 {
 	deinit();
 	init();
 }
 
-void manager::init() const
+void mgr::init() const
 {
 #ifdef CAIRO_HAS_FT_FONT
 	if (!FcConfigAppFontAddDir(FcConfigGetCurrent(),
@@ -371,7 +371,7 @@ void manager::init() const
 #endif
 }
 
-void manager::deinit() const
+void mgr::deinit() const
 {
 #ifdef CAIRO_HAS_FT_FONT
 	FcConfigAppFontClear(FcConfigGetCurrent());
@@ -431,26 +431,26 @@ static void set_font_list(const std::vector<subset_descriptor>& fontlist)
 		const subset_id subset = font_names.size();
 		font_names.push_back(itor->name);
 
-		foreach_ng(const subset_descriptor::range &cp_range, itor->present_codepoints) {
+		for (auto cp_range : present_codepoints) {
 			char_blocks.insert(cp_range.first, cp_range.second, subset);
 		}
 	}
 	char_blocks.compress();
 }
 
-const SDL_Color NORMAL_COLOR = {0xDD,0xDD,0xDD,0},
-                GRAY_COLOR   = {0x77,0x77,0x77,0},
-                LOBBY_COLOR  = {0xBB,0xBB,0xBB,0},
-                GOOD_COLOR   = {0x00,0xFF,0x00,0},
-                BAD_COLOR    = {0xFF,0x00,0x00,0},
-                BLACK_COLOR  = {0x00,0x00,0x00,0},
-                YELLOW_COLOR = {0xFF,0xFF,0x00,0},
-                BUTTON_COLOR = {0xBC,0xB0,0x88,0},
-                PETRIFIED_COLOR = {0xA0,0xA0,0xA0,0},
-                TITLE_COLOR  = {0xBC,0xB0,0x88,0},
-				LABEL_COLOR  = {0x6B,0x8C,0xFF,0},
-				BIGMAP_COLOR = {0xFF,0xFF,0xFF,0};
-const SDL_Color DISABLED_COLOR = inverse(PETRIFIED_COLOR);
+const SDL_Color NORMAL_COLOR    {0xDD,0xDD,0xDD,0};
+const SDL_Color GRAY_COLOR      {0x77,0x77,0x77,0};
+const SDL_Color LOBBY_COLOR     {0xBB,0xBB,0xBB,0};
+const SDL_Color GOOD_COLOR      {0x00,0xFF,0x00,0};
+const SDL_Color BAD_COLOR       {0xFF,0x00,0x00,0};
+const SDL_Color BLACK_COLOR     {0x00,0x00,0x00,0};
+const SDL_Color YELLOW_COLOR    {0xFF,0xFF,0x00,0};
+const SDL_Color BUTTON_COLOR    {0xBC,0xB0,0x88,0};
+const SDL_Color PETRIFIED_COLOR {0xA0,0xA0,0xA0,0};
+const SDL_Color TITLE_COLOR     {0xBC,0xB0,0x88,0};
+const SDL_Color LABEL_COLOR     {0x6B,0x8C,0xFF,0};
+const SDL_Color BIGMAP_COLOR    {0xFF,0xFF,0xFF,0};
+const SDL_Color DISABLED_COLOR  {0x3f,0x3f,0x3f,0};
 
 namespace {
 
@@ -471,11 +471,11 @@ public:
 #endif
 	std::vector<surface> const & get_surfaces() const;
 
-	bool operator==(text_SDL_Surface const &t) const {
+	bool operator==(SDL_Surface* const &t) const {
 		return hash_ == t.hash_ && font_size_ == t.font_size_
 			&& color_ == t.color_ && style_ == t.style_ && str_ == t.str_;
 	}
-	bool operator!=(text_SDL_Surface const &t) const { return !operator==(t); }
+	bool operator!=(SDL_Surface* const &t) const { return !operator==(t); }
 private:
 	int hash_;
 	int font_size_;

@@ -1,5 +1,5 @@
 /**
- * @file src/whiteboard/manager.cpp
+ * @file src/whiteboard/mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -61,7 +61,7 @@
 
 namespace wb {
 
-manager::manager():
+mgr::mgr():
 		active_(false),
 		inverted_behavior_(false),
 		self_activate_once_(true),
@@ -88,12 +88,12 @@ manager::manager():
 		team_plans_hidden_(resources::teams->size(),preferences::hide_whiteboard()),
 		units_owning_moves_()
 {
-	LOG_WB << "Manager initialized.\n";
+	LOG_WB << "mgr initialized.\n";
 }
 
-manager::~manager()
+mgr::~mgr()
 {
-	LOG_WB << "Manager destroyed.\n";
+	LOG_WB << "mgr destroyed.\n";
 }
 
 //Used for chat-spamming debug info
@@ -105,7 +105,7 @@ static void print_to_chat(const std::string& title, const std::string& message)
 }
 #endif
 
-void manager::print_help_once()
+void mgr::print_help_once()
 {
 #if 0
 	if (!print_help_once_)
@@ -145,7 +145,7 @@ void manager::print_help_once()
 #endif
 }
 
-bool manager::can_modify_game_state() const
+bool mgr::can_modify_game_state() const
 {
 	if(wait_for_side_init_
 					|| resources::teams == nullptr
@@ -161,7 +161,7 @@ bool manager::can_modify_game_state() const
 	}
 }
 
-bool manager::can_activate() const
+bool mgr::can_activate() const
 {
 	//any more than one reference means a lock on whiteboard state was requested
 	if(!activation_state_lock_.unique())
@@ -170,7 +170,7 @@ bool manager::can_activate() const
 	return can_modify_game_state();
 }
 
-void manager::set_active(bool active)
+void mgr::set_active(bool active)
 {
 	if(!can_activate())
 	{
@@ -195,7 +195,7 @@ void manager::set_active(bool active)
 	}
 }
 
-void manager::set_invert_behavior(bool invert)
+void mgr::set_invert_behavior(bool invert)
 {
 	//any more than one reference means a lock on whiteboard state was requested
 	if(!activation_state_lock_.unique())
@@ -245,23 +245,23 @@ void manager::set_invert_behavior(bool invert)
 	}
 }
 
-bool manager::can_enable_execution_hotkeys() const
+bool mgr::can_enable_execution_hotkeys() const
 {
 	return can_enable_modifier_hotkeys() && viewer_side() == resources::controller->current_side()
 			&& viewer_actions()->turn_size(0) > 0;
 }
 
-bool manager::can_enable_modifier_hotkeys() const
+bool mgr::can_enable_modifier_hotkeys() const
 {
 	return can_modify_game_state() && !viewer_actions()->empty();
 }
 
-bool manager::can_enable_reorder_hotkeys() const
+bool mgr::can_enable_reorder_hotkeys() const
 {
 	return can_enable_modifier_hotkeys() && highlighter_ && highlighter_->get_bump_target();
 }
 
-bool manager::allow_leader_to_move(unit const& leader) const
+bool mgr::allow_leader_to_move(unit const& leader) const
 {
 	if(!has_actions())
 		return true;
@@ -294,7 +294,7 @@ bool manager::allow_leader_to_move(unit const& leader) const
 	return true;
 }
 
-void manager::on_init_side()
+void mgr::on_init_side()
 {
 	//Turn should never start with action auto-execution already enabled!
 	assert(!executing_all_actions_ && !executing_actions_);
@@ -310,7 +310,7 @@ void manager::on_init_side()
 	}
 }
 
-void manager::on_finish_side_turn(int side)
+void mgr::on_finish_side_turn(int side)
 {
 	preparing_to_end_turn_ = false;
 	wait_for_side_init_ = true;
@@ -322,11 +322,11 @@ void manager::on_finish_side_turn(int side)
 	LOG_WB << "on_finish_side_turn()\n";
 }
 
-void manager::pre_delete_action(action_ptr)
+void mgr::pre_delete_action(action_ptr)
 {
 }
 
-void manager::post_delete_action(action_ptr action)
+void mgr::post_delete_action(action_ptr action)
 {
 	// The fake unit representing the destination of a chain of planned moves should have the regular animation.
 	// If the last remaining action of the unit that owned this move is a move as well,
@@ -353,7 +353,7 @@ static void hide_all_plans()
 }
 
 /* private */
-void manager::update_plan_hiding(size_t team_index)
+void mgr::update_plan_hiding(size_t team_index)
 {
 	//We don't control the "viewing" side ... we're probably an observer
 	if(!resources::teams->at(team_index).is_human())
@@ -374,16 +374,16 @@ void manager::update_plan_hiding(size_t team_index)
 	}
 	validate_viewer_actions();
 }
-void manager::update_plan_hiding()
+void mgr::update_plan_hiding()
 	{update_plan_hiding(viewer_team());}
 
-void manager::on_viewer_change(size_t team_index)
+void mgr::on_viewer_change(size_t team_index)
 {
 	if(!wait_for_side_init_)
 		update_plan_hiding(team_index);
 }
 
-void manager::on_change_controller(int side, team& t)
+void mgr::on_change_controller(int side, team& t)
 {
 	wb::side_actions& sa = *t.get_side_actions();
 	if(t.is_human()) //< we own this side now
@@ -412,7 +412,7 @@ void manager::on_change_controller(int side, team& t)
 	}
 }
 
-bool manager::current_side_has_actions()
+bool mgr::current_side_has_actions()
 {
 	if(current_side_actions()->empty()) {
 		return false;
@@ -422,7 +422,7 @@ bool manager::current_side_has_actions()
 	return range.first != range.second; //non-empty range
 }
 
-void manager::validate_viewer_actions()
+void mgr::validate_viewer_actions()
 {
 	LOG_WB << "'gamestate_mutated_' flag dirty, validating actions.\n";
 	gamestate_mutated_ = false;
@@ -475,7 +475,7 @@ static void draw_numbers(map_location const& hex, side_actions::numbers_t number
 namespace
 {
 	//Helper struct that finds all units teams whose planned actions are currently visible
-	//Only used by manager::pre_draw().
+	//Only used by mgr::pre_draw().
 	//Note that this structure is used as a functor.
 	struct move_owners_finder: public visitor
 	{
@@ -514,7 +514,7 @@ namespace
 	};
 }
 
-void manager::pre_draw()
+void mgr::pre_draw()
 {
 	if (can_modify_game_state() && has_actions()) {
 		move_owners_finder move_finder;
@@ -529,7 +529,7 @@ void manager::pre_draw()
 	}
 }
 
-void manager::post_draw()
+void mgr::post_draw()
 {
 	foreach_ng(size_t unit_id, units_owning_moves_)
 	{
@@ -541,7 +541,7 @@ void manager::post_draw()
 	units_owning_moves_.clear();
 }
 
-void manager::draw_hex(const map_location& hex)
+void mgr::draw_hex(const map_location& hex)
 {
 	/**
 	 * IMPORTANT: none of the code in this method can call anything which would
@@ -567,7 +567,7 @@ void manager::draw_hex(const map_location& hex)
 
 }
 
-void manager::on_mouseover_change(const map_location& hex)
+void mgr::on_mouseover_change(const map_location& hex)
 {
 
 	map_location selected_hex = resources::controller->get_mouse_handler_base().get_selected_hex();
@@ -587,9 +587,9 @@ void manager::on_mouseover_change(const map_location& hex)
 	}
 }
 
-void manager::on_gamestate_change()
+void mgr::on_gamestate_change()
 {
-	DBG_WB << "Manager received gamestate change notification.\n";
+	DBG_WB << "mgr received gamestate change notification.\n";
 	// if on_gamestate_change() is called while the future unit map is applied,
 	// it means that the future unit map scope is used where it shouldn't be.
 	assert(!planned_unit_map_active_);
@@ -599,7 +599,7 @@ void manager::on_gamestate_change()
 	resources::screen->clear_exclusive_draws();
 }
 
-void manager::send_network_data()
+void mgr::send_network_data()
 {
 	size_t size = net_buffer_.size();
 	for(size_t team_index=0; team_index<size; ++team_index)
@@ -623,7 +623,7 @@ void manager::send_network_data()
 	}
 }
 
-void manager::process_network_data(config const& cfg)
+void mgr::process_network_data(config const& cfg)
 {
 	if(config const& wb_cfg = cfg.child("whiteboard"))
 	{
@@ -636,12 +636,12 @@ void manager::process_network_data(config const& cfg)
 	}
 }
 
-void manager::queue_net_cmd(size_t team_index, side_actions::net_cmd const& cmd)
+void mgr::queue_net_cmd(size_t team_index, side_actions::net_cmd const& cmd)
 {
 	net_buffer_[team_index].add_child("net_cmd",cmd);
 }
 
-void manager::create_temp_move()
+void mgr::create_temp_move()
 {
 	route_.reset();
 
@@ -742,7 +742,7 @@ void manager::create_temp_move()
 	fake_units_.resize(turn+1);
 }
 
-void manager::erase_temp_move()
+void mgr::erase_temp_move()
 {
 	move_arrows_.clear();
 	foreach_ng(fake_unit_ptr const& tmp, fake_units_) {
@@ -755,7 +755,7 @@ void manager::erase_temp_move()
 	temp_move_unit_underlying_id_ = 0;
 }
 
-void manager::save_temp_move()
+void mgr::save_temp_move()
 {
 	if (has_temp_move() && !executing_actions_ && !resources::controller->is_linger_mode())
 	{
@@ -792,12 +792,12 @@ void manager::save_temp_move()
 	}
 }
 
-unit_map::iterator manager::get_temp_move_unit() const
+unit_map::iterator mgr::get_temp_move_unit() const
 {
 	return resources::units->find(temp_move_unit_underlying_id_);
 }
 
-void manager::save_temp_attack(const map_location& attacker_loc, const map_location& defender_loc, int weapon_choice)
+void mgr::save_temp_attack(const map_location& attacker_loc, const map_location& defender_loc, int weapon_choice)
 {
 	if (active_ && !executing_actions_ && !resources::controller->is_linger_mode())
 	{
@@ -847,14 +847,14 @@ void manager::save_temp_attack(const map_location& attacker_loc, const map_locat
 	}
 }
 
-bool manager::save_recruit(const std::string& name, int side_num, const map_location& recruit_hex)
+bool mgr::save_recruit(const std::string& name, int side_num, const map_location& recruit_hex)
 {
 	bool created_planned_recruit = false;
 
 	if (active_ && !executing_actions_ && !resources::controller->is_linger_mode()) {
 		if (side_num != resources::screen->viewing_side())
 		{
-			LOG_WB <<"manager::save_recruit called for a different side than viewing side.\n";
+			LOG_WB <<"mgr::save_recruit called for a different side than viewing side.\n";
 			created_planned_recruit = false;
 		}
 		else
@@ -875,7 +875,7 @@ bool manager::save_recruit(const std::string& name, int side_num, const map_loca
 	return created_planned_recruit;
 }
 
-bool manager::save_recall(const unit& unit, int side_num, const map_location& recall_hex)
+bool mgr::save_recall(const unit& unit, int side_num, const map_location& recall_hex)
 {
 	bool created_planned_recall = false;
 
@@ -883,7 +883,7 @@ bool manager::save_recall(const unit& unit, int side_num, const map_location& re
 	{
 		if (side_num != resources::screen->viewing_side())
 		{
-			LOG_WB <<"manager::save_recall called for a different side than viewing side.\n";
+			LOG_WB <<"mgr::save_recall called for a different side than viewing side.\n";
 			created_planned_recall = false;
 		}
 		else
@@ -901,7 +901,7 @@ bool manager::save_recall(const unit& unit, int side_num, const map_location& re
 	return created_planned_recall;
 }
 
-void manager::save_suppose_dead(unit& curr_unit, map_location const& loc)
+void mgr::save_suppose_dead(unit& curr_unit, map_location const& loc)
 {
 	if(active_ && !executing_actions_ && !resources::controller->is_linger_mode())
 	{
@@ -911,7 +911,7 @@ void manager::save_suppose_dead(unit& curr_unit, map_location const& loc)
 	}
 }
 
-void manager::contextual_execute()
+void mgr::contextual_execute()
 {
 	validate_viewer_actions();
 	if (can_enable_execution_hotkeys())
@@ -944,13 +944,13 @@ void manager::contextual_execute()
 	} //Finalizer struct sets executing_actions_ to false
 }
 
-bool manager::allow_end_turn()
+bool mgr::allow_end_turn()
 {
 	preparing_to_end_turn_ = true;
 	return execute_all_actions();
 }
 
-bool manager::execute_all_actions()
+bool mgr::execute_all_actions()
 {
 	//exception-safety: finalizers set variables to false on destruction
 	//i.e. when method exits naturally or exception is thrown
@@ -1007,7 +1007,7 @@ bool manager::execute_all_actions()
 	return true;
 }
 
-void manager::continue_execute_all()
+void mgr::continue_execute_all()
 {
 	if (executing_all_actions_ && !rand_rng::has_new_seed_callback()) {
 		events::commands_disabled--;
@@ -1017,7 +1017,7 @@ void manager::continue_execute_all()
 	}
 }
 
-void manager::contextual_delete()
+void mgr::contextual_delete()
 {
 	validate_viewer_actions();
 	if(can_enable_modifier_hotkeys()) {
@@ -1044,7 +1044,7 @@ void manager::contextual_delete()
 	}
 }
 
-void manager::contextual_bump_up_action()
+void mgr::contextual_bump_up_action()
 {
 	validate_viewer_actions();
 	if(can_enable_reorder_hotkeys()) {
@@ -1056,7 +1056,7 @@ void manager::contextual_bump_up_action()
 	}
 }
 
-void manager::contextual_bump_down_action()
+void mgr::contextual_bump_down_action()
 {
 	validate_viewer_actions();
 	if(can_enable_reorder_hotkeys()) {
@@ -1068,20 +1068,20 @@ void manager::contextual_bump_down_action()
 	}
 }
 
-bool manager::has_actions() const
+bool mgr::has_actions() const
 {
 	assert(resources::teams);
 	return wb::has_actions();
 }
 
-bool manager::unit_has_actions(unit const* unit) const
+bool mgr::unit_has_actions(unit const* unit) const
 {
 	assert(unit != nullptr);
 	assert(resources::teams);
 	return viewer_actions()->unit_has_actions(*unit);
 }
 
-int manager::get_spent_gold_for(int side)
+int mgr::get_spent_gold_for(int side)
 {
 	if(wait_for_side_init_)
 		return 0;
@@ -1089,7 +1089,7 @@ int manager::get_spent_gold_for(int side)
 	return resources::teams->at(side - 1).get_side_actions()->get_gold_spent();
 }
 
-void manager::options_dlg()
+void mgr::options_dlg()
 {
 	int v_side = viewer_side();
 
@@ -1149,7 +1149,7 @@ void manager::options_dlg()
 	update_plan_hiding();
 }
 
-void manager::set_planned_unit_map()
+void mgr::set_planned_unit_map()
 {
 	if (!can_modify_game_state()) {
 		LOG_WB << "Not building planned unit map: cannot modify game state now.\n";
@@ -1172,7 +1172,7 @@ void manager::set_planned_unit_map()
 	planned_unit_map_active_ = true;
 }
 
-void manager::set_real_unit_map()
+void mgr::set_real_unit_map()
 {
 	if (planned_unit_map_active_)
 	{
@@ -1191,7 +1191,7 @@ void manager::set_real_unit_map()
 	}
 }
 
-void manager::validate_actions_if_needed()
+void mgr::validate_actions_if_needed()
 {
 	if (gamestate_mutated_)	{
 		validate_viewer_actions();

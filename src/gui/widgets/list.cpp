@@ -283,7 +283,7 @@ int tlist::get_selected_row() const
 	return generator_->get_selected_item();
 }
 
-void tlist::place(const tpoint& origin, const tpoint& size)
+void tlist::place(const point_t& origin, const point_t& size)
 {
 	// Inherited.
 	tcontainer_::place(origin, size);

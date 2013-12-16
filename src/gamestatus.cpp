@@ -338,8 +338,8 @@ void wmi_container::init_handlers() const
 			game_events::add_event_handler(wmi_command, true);
 			if ( wmi.use_hotkey() ) {
 				// Applying default hotkeys here currently does not work because
-				// the hotkeys are reset by play_controler::init_managers() ->
-				// display_manager::display_manager, which is called after this.
+				// the hotkeys are reset by play_controler::init_mgrs() ->
+				// display_mgr::display_mgr, which is called after this.
 				// The result is that default wml hotkeys will be ignored if wml
 				// hotkeys are set to default in the preferences menu. (They are
 				// still reapplied if set_menu_item is called again, for example
@@ -1204,7 +1204,7 @@ game_state::game_state(const config& cfg, bool show_replay) :
 		classification_(cfg),
 		mp_settings_(cfg)
 {
-	n_unit::id_manager::instance().set_save_id(cfg["next_underlying_unit_id"]);
+	n_unit::id_mgr::instance().set_save_id(cfg["next_underlying_unit_id"]);
 	log_scope("read_game");
 
 	if(cfg.has_child("carryover_sides")){
@@ -1373,7 +1373,7 @@ void game_state::write_snapshot(config& cfg, game_display* gui) const
 
 	cfg["campaign_define"] = classification_.campaign_define;
 	cfg["campaign_extra_defines"] = utils::join(classification_.campaign_xtra_defines);
-	cfg["next_underlying_unit_id"] = str_cast(n_unit::id_manager::instance().get_save_id());
+	cfg["next_underlying_unit_id"] = str_cast(n_unit::id_mgr::instance().get_save_id());
 
 	cfg["end_credits"] = classification_.end_credits;
 	cfg["end_text"] = classification_.end_text;

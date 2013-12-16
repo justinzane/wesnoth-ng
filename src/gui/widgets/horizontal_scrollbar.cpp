@@ -75,7 +75,7 @@ unsigned thorizontal_scrollbar::offset_after() const
 	return conf->right_offset;
 }
 
-bool thorizontal_scrollbar::on_positioner(const tpoint& coordinate) const
+bool thorizontal_scrollbar::on_positioner(const point_t& coordinate) const
 {
 	// Note we assume the positioner is over the entire height of the widget.
 	return coordinate.x >= static_cast<int>(get_positioner_offset())
@@ -85,7 +85,7 @@ bool thorizontal_scrollbar::on_positioner(const tpoint& coordinate) const
 		&& coordinate.y < static_cast<int>(get_height());
 }
 
-int thorizontal_scrollbar::on_bar(const tpoint& coordinate) const
+int thorizontal_scrollbar::on_bar(const point_t& coordinate) const
 {
 	// Not on the widget, leave.
 	if(static_cast<size_t>(coordinate.x) > get_width()

@@ -75,7 +75,7 @@ public:
 	virtual void add_formula_function(const std::string& name, game_logic::const_formula_ptr formula, game_logic::const_formula_ptr precondition, const std::vector<std::string>& args);
 
 	//class responsible for looking for possible infinite loops when calling set_var or set_unit_var
-	class gamestate_change_observer : public events::observer
+	class gamestate_change_observer : public evt_observer
 	{
 		static const int MAX_CALLS = 1000;
 		int set_var_counter_;
@@ -153,7 +153,7 @@ private:
 	gamestate_change_observer infinite_loop_guardian_;
 	game_logic::map_formula_callable vars_;
 	game_logic::ai_function_symbol_table function_table_;
-	game_logic::candidate_action_manager candidate_action_manager_;
+	game_logic::candidate_action_mgr candidate_action_mgr_;
 
 	friend class ai_default;
 };

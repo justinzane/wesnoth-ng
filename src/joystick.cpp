@@ -28,7 +28,7 @@ static lg::log_domain log_joystick("joystick");
 #define LOG_JOY LOG_STREAM(info, log_joystick)
 #define DBG_JOY LOG_STREAM(debug, log_joystick)
 
-joystick_manager::joystick_manager()
+joystick_mgr::joystick_mgr()
 	: joysticks_()
 	, joystick_area_(0)
 	, counter_(0)
@@ -36,7 +36,7 @@ joystick_manager::joystick_manager()
 	init();
 }
 
-joystick_manager::~joystick_manager() {
+joystick_mgr::~joystick_mgr() {
 	close();
 }
 
@@ -70,7 +70,7 @@ static const char* name(const std::vector<SDL_Joystick*>&, const size_t index)
 
 #endif
 
-bool joystick_manager::close() {
+bool joystick_mgr::close() {
 	if(SDL_WasInit(SDL_INIT_JOYSTICK) == 0)
 		return true;
 
@@ -92,7 +92,7 @@ bool joystick_manager::close() {
 	return all_closed;
 }
 
-bool joystick_manager::init() {
+bool joystick_mgr::init() {
 
 	close();
 
@@ -135,7 +135,7 @@ bool joystick_manager::init() {
 	return joystick_found;
 }
 
-std::pair<double, double> joystick_manager::get_mouse_axis_pair() {
+std::pair<double, double> joystick_mgr::get_mouse_axis_pair() {
 
 	const int mouse_joystick_x = preferences::joystick_num_mouse_xaxis();
 	const int mouse_xaxis = preferences::joystick_mouse_xaxis_num();
@@ -169,7 +169,7 @@ std::pair<double, double> joystick_manager::get_mouse_axis_pair() {
 
 }
 
-std::pair<double, double> joystick_manager::get_scroll_axis_pair() {
+std::pair<double, double> joystick_mgr::get_scroll_axis_pair() {
 
 	if (!preferences::joystick_support_enabled()) return std::make_pair(0.0, 0.0);
 
@@ -198,7 +198,7 @@ std::pair<double, double> joystick_manager::get_scroll_axis_pair() {
 			, ((static_cast<double>(values.second)) / 32768.0) * multiplier );
 }
 
-double joystick_manager::get_thrusta_axis() {
+double joystick_mgr::get_thrusta_axis() {
 	if (!preferences::joystick_support_enabled()) return 0.0;
 
 	const int thrust_joystick_x = preferences::joystick_num_thrusta_axis();
@@ -210,7 +210,7 @@ double joystick_manager::get_thrusta_axis() {
 	return static_cast<double>(value) / 65536.0;
 }
 
-double joystick_manager::get_thrustb_axis() {
+double joystick_mgr::get_thrustb_axis() {
 	if (!preferences::joystick_support_enabled()) return 0.0;
 
 	const int thrustb_joystick = preferences::joystick_num_thrustb_axis();
@@ -222,7 +222,7 @@ double joystick_manager::get_thrustb_axis() {
 	return static_cast<double>(value) / 65536.0;
 }
 
-std::pair<double, double> joystick_manager::get_cursor_polar_coordinates() {
+std::pair<double, double> joystick_mgr::get_cursor_polar_coordinates() {
 	const int cursor_joystick_xaxis = preferences::joystick_num_cursor_xaxis();
 	const int cursor_xaxis = preferences::joystick_cursor_xaxis_num();
 
@@ -232,7 +232,7 @@ std::pair<double, double> joystick_manager::get_cursor_polar_coordinates() {
 	return get_polar_coordinates(cursor_joystick_xaxis, cursor_xaxis, cursor_joystick_yaxis, cursor_yaxis);
 }
 
-std::pair<double, double> joystick_manager::get_polar_coordinates(int joystick_xaxis, int xaxis, int joystick_yaxis, int yaxis) {
+std::pair<double, double> joystick_mgr::get_polar_coordinates(int joystick_xaxis, int xaxis, int joystick_yaxis, int yaxis) {
 
 	const std::pair<int, int> values = get_axis_pair(joystick_xaxis, xaxis, joystick_yaxis, yaxis);
 	const double radius = (sqrt(pow(values.first, 2.0f) + pow(values.second, 2.0f))) / 32768.0;
@@ -243,7 +243,7 @@ std::pair<double, double> joystick_manager::get_polar_coordinates(int joystick_x
 	return std::make_pair(radius, angle);
 }
 
-std::pair<int, int> joystick_manager::get_axis_pair(int joystick_xaxis, int xaxis, int joystick_yaxis, int yaxis) {
+std::pair<int, int> joystick_mgr::get_axis_pair(int joystick_xaxis, int xaxis, int joystick_yaxis, int yaxis) {
 
 	if(!SDL_WasInit(SDL_INIT_JOYSTICK))
 		return std::make_pair(0, 0);
@@ -268,7 +268,7 @@ std::pair<int, int> joystick_manager::get_axis_pair(int joystick_xaxis, int xaxi
 	return std::make_pair(x_axis, y_axis);
 }
 
-int joystick_manager::get_axis(int joystick_axis, int axis) {
+int joystick_mgr::get_axis(int joystick_axis, int axis) {
 	if(!SDL_WasInit(SDL_INIT_JOYSTICK))
 		return 0;
 
@@ -279,7 +279,7 @@ int joystick_manager::get_axis(int joystick_axis, int axis) {
 }
 
 
-bool joystick_manager::update_highlighted_hex(map_location& highlighted_hex, const map_location& selected_hex) {
+bool joystick_mgr::update_highlighted_hex(map_location& highlighted_hex, const map_location& selected_hex) {
 
 	const int cursor_joystick_xaxis = preferences::joystick_num_cursor_xaxis();
 	const int cursor_xaxis = preferences::joystick_cursor_xaxis_num();
@@ -315,7 +315,7 @@ bool joystick_manager::update_highlighted_hex(map_location& highlighted_hex, con
 }
 
 
-bool joystick_manager::update_highlighted_hex(map_location& highlighted_hex) {
+bool joystick_mgr::update_highlighted_hex(map_location& highlighted_hex) {
 
 	const int cursor_joystick_xaxis = preferences::joystick_num_cursor_xaxis();
 	const int cursor_xaxis = preferences::joystick_cursor_xaxis_num();
@@ -362,7 +362,7 @@ bool joystick_manager::update_highlighted_hex(map_location& highlighted_hex) {
 	return true;
 }
 
-const map_location joystick_manager::get_direction(const map_location& loc, joystick_manager::DIRECTION direction) {
+const map_location joystick_mgr::get_direction(const map_location& loc, joystick_mgr::DIRECTION direction) {
 
 	int x = loc.x;
 	int y = loc.y;
@@ -382,7 +382,7 @@ const map_location joystick_manager::get_direction(const map_location& loc, joys
 	}
 }
 
-double joystick_manager::get_angle() {
+double joystick_mgr::get_angle() {
 
 	const int cursor_joystick_xaxis = preferences::joystick_num_cursor_xaxis();
 	const int cursor_xaxis = preferences::joystick_cursor_xaxis_num();
@@ -403,7 +403,7 @@ double joystick_manager::get_angle() {
 }
 
 
-const map_location joystick_manager::get_next_hex(int x_axis, int y_axis, map_location loc)  {
+const map_location joystick_mgr::get_next_hex(int x_axis, int y_axis, map_location loc)  {
 
 	map_location new_loc = map_location::null_location;
 

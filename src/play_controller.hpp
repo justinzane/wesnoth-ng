@@ -43,34 +43,34 @@ namespace actions {
 }
 
 namespace game_events {
-	struct manager;
+	struct mgr;
 } // namespace game_events
 
 namespace halo {
-	struct manager;
+	struct mgr;
 } // namespace halo
 
 namespace preferences {
-	struct display_manager;
+	struct display_mgr;
 }
 
 namespace soundsource {
-	class manager;
+	class mgr;
 } // namespace soundsource
 
 namespace pathfind {
-	class manager;
+	class mgr;
 }
 
 namespace tooltips {
-	struct manager;
+	struct mgr;
 } // namespace tooltips
 
 namespace wb {
-	class manager; // whiteboard manager
+	class mgr; // whiteboard mgr
 } // namespace wb
 
-class play_controller : public controller_base, public events::observer, public savegame::savegame_config
+class play_controller : public controller_base, public evt_observer, public savegame::savegame_config
 {
 public:
 	play_controller(const config& level, game_state& state_of_game,
@@ -137,8 +137,8 @@ public:
 	const gamemap& get_map_const() const{
 		return map_;
 	}
-	const tod_manager& get_tod_manager_const() const{
-			return tod_manager_;
+	const tod_mgr& get_tod_mgr_const() const{
+			return tod_mgr_;
 		}
 
 	/**
@@ -147,7 +147,7 @@ public:
 	 */
 	void check_victory();
 
-	size_t turn() const {return tod_manager_.turn();}
+	size_t turn() const {return tod_mgr_.turn();}
 
 	/** Returns the number of the side whose turn it is. Numbering starts at one. */
 	int current_side() const { return player_number_; }
@@ -184,7 +184,7 @@ protected:
 	 */
 	bool in_context_menu(hotkey_cmd_t command) const;
 
-	void init_managers();
+	void init_mgrs();
 	void fire_prestart(bool execute);
 	void fire_start(bool execute);
 	virtual void init_gui();
@@ -205,19 +205,19 @@ protected:
 	/** Find a human team (ie one we own) starting backwards from 'team_num'. */
 	int find_human_team_before(const size_t team) const;
 
-	//managers
-	boost::scoped_ptr<preferences::display_manager> prefs_disp_manager_;
-	boost::scoped_ptr<tooltips::manager> tooltips_manager_;
-	boost::scoped_ptr<game_events::manager> events_manager_;
-	boost::scoped_ptr<halo::manager> halo_manager_;
-	font::floating_label_context labels_manager_;
-	help::help_manager help_manager_;
+	//mgrs
+	boost::scoped_ptr<preferences::display_mgr> prefs_disp_mgr_;
+	boost::scoped_ptr<tooltips::mgr> tooltips_mgr_;
+	boost::scoped_ptr<game_events::mgr> events_mgr_;
+	boost::scoped_ptr<halo::mgr> halo_mgr_;
+	font::floating_label_context labels_mgr_;
+	help::help_mgr help_mgr_;
 	events::mouse_handler mouse_handler_;
 	events::menu_handler menu_handler_;
-	boost::scoped_ptr<soundsource::manager> soundsources_manager_;
-	tod_manager tod_manager_;
-	boost::scoped_ptr<pathfind::manager> pathfind_manager_;
-	persist_manager persist_;
+	boost::scoped_ptr<soundsource::mgr> soundsources_mgr_;
+	tod_mgr tod_mgr_;
+	boost::scoped_ptr<pathfind::mgr> pathfind_mgr_;
+	persist_mgr persist_;
 
 	//other objects
 	boost::scoped_ptr<game_display> gui_;
@@ -233,8 +233,8 @@ protected:
 	/// number of files that depend on actions/undo.hpp).
 	boost::scoped_ptr<actions::undo_list> undo_stack_;
 
-	//whiteboard manager
-	boost::scoped_ptr<wb::manager> whiteboard_manager_;
+	//whiteboard mgr
+	boost::scoped_ptr<wb::mgr> whiteboard_mgr_;
 
 	const unit_type::experience_accelerator xp_mod_;
 	//if a team is specified whose turn it is, it means we're loading a game

@@ -55,7 +55,7 @@ struct tmessage_show_tooltip
 {
 	tmessage_show_tooltip(
 			  const std::string& message_
-			, const tpoint& location_)
+			, const point_t& location_)
 		: message(message_)
 		, location(location_)
 	{
@@ -65,7 +65,7 @@ struct tmessage_show_tooltip
 	const std::string message;
 
 	/** The location where to show the tooltip. */
-	const tpoint location;
+	const point_t location;
 };
 
 /** The message for MESSAGE_SHOW_HELPTIP. */
@@ -74,7 +74,7 @@ struct tmessage_show_helptip
 {
 	tmessage_show_helptip(
 			  const std::string& message_
-			, const tpoint& location_)
+			, const point_t& location_)
 		: message(message_)
 		, location(location_)
 	{
@@ -84,7 +84,7 @@ struct tmessage_show_helptip
 	const std::string message;
 
 	/** The location where to show the helptip. */
-	const tpoint location;
+	const point_t location;
 };
 
 } // namespace event

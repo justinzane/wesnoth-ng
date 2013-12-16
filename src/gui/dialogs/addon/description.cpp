@@ -196,7 +196,7 @@ namespace gui2 {
  *
  * == Add-on description ==
  *
- * Add-on description and details for the add-ons manager interface.
+ * Add-on description and details for the add-ons mgr interface.
  *
  * @begin{table}{dialog_widgets}
  *

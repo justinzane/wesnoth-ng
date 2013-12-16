@@ -21,7 +21,7 @@
  */
 
 #include "win_evt_hndlr.hpp"
-#include "sdl2_rndr_mgr.hpp"
+#include "rndr_mgr.hpp"
 #include "preferences.hpp"
 #include <stdio.h>
 
@@ -52,9 +52,10 @@ void handle(SDL_Event* evt) {
 }
 
 void handle_window_resized(SDL_WindowEvent* wevt) {
-    sdl2_rndr_mgr rm = sdl2_rndr_mgr::get_rndr_mgr();
+    rndr_mgr rm = get_rndr_mgr();
     if (wevt->data1 >= preferences::min_allowed_width() &&
         wevt->data2 >= preferences::min_allowed_height()) {
-        preferences::set_resolution(rm.get_window_size());
+        /// @todo set resolution in preferences
+        //preferences::set_resolution(rm.get_window_size());
     }
 }

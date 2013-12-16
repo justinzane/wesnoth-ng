@@ -16,12 +16,12 @@
    See the COPYING file for more details.
 */
 
-#ifndef PERSIST_MANAGER_HPP_INCLUDED
-#define PERSIST_MANAGER_HPP_INCLUDED
+#ifndef PERSIST_mgr_HPP_INCLUDED
+#define PERSIST_mgr_HPP_INCLUDED
 
 #include "persist_context.hpp"
 
-class persist_manager {
+class persist_mgr {
 	protected:
 		typedef std::map<std::string,persist_context *> context_map;
 
@@ -32,8 +32,8 @@ class persist_manager {
 		bool end_transaction();
 		bool cancel_transaction();
 
-		persist_manager() : in_transaction_(false),contexts_() {}
-		virtual ~persist_manager() {
+		persist_mgr() : in_transaction_(false),contexts_() {}
+		virtual ~persist_mgr() {
 			cancel_transaction();
 			for (context_map::iterator i = contexts_.begin(); i != contexts_.end(); ++i)
 				delete (i->second);

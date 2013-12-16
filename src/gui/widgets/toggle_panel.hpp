@@ -50,12 +50,12 @@ public:
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE;
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE;
 
 	/** See @ref tcontrol::set_active. */
@@ -83,7 +83,7 @@ public:
 	 * tpanel_definition we need to override this function and do about the same,
 	 * look at a way to 'fix' that.
 	 */
-	virtual tpoint border_space() const OVERRIDE;
+	virtual point_t border_space() const OVERRIDE;
 
 	/** Inherited from tselectable_ */
 	bool get_value() const { return state_ >= ENABLED_SELECTED; }

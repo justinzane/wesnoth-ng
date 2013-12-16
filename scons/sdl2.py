@@ -80,12 +80,20 @@ def CheckSDL(context, sdl_lib="SDL", require_version=False, use_sdl2=False):
         restore_env(context.env, backup)
         return False
 
+# #
+# @brief Check if SDL supports libpng
 def CheckPNG(context, use_sdl2=False):
     if use_sdl2:
         sdl_path = "SDL2"
+        test_program = ('''#include <%s/SDL_image.h>
+#include <stdlib.h>
+int main(int argc, char **argv) {
+    SDL_Surface* src = IMG_Load("images/buttons/button_normal/button_H22-pressed.png");
+    if (src == NULL) { exit(2); } else { exit(0); } }\n
+''' % sdl_path)
     else:
         sdl_path = "SDL"
-    test_program = ('''
+        test_program = ('''
 #include <%s/SDL_image.h>
 #include <stdlib.h>
 int main(int argc, char **argv) {
@@ -104,37 +112,8 @@ int main(int argc, char **argv) {
     else:
         context.Result("NO -- %s" % output)
         return False
-# #
-# @brief Check of SDL supports OggVorbis
-def CheckOgg(context, use_sdl2=False):
-    if use_sdl2:
-        sdl_path = "SDL2"
-    else:
-        sdl_path = "SDL"
-    test_program = ('''
-#include <%s/SDL_mixer.h>
-#include <stdlib.h>
-int main(int argc, char **argv) {
-    Mix_Music* music = Mix_LoadMUS("data/core/music/main_menu.ogg");
-    if (music == NULL) {
-        exit(1);
-    }
-    exit(0);
-}\n
-''' % (sdl_path))
-    # context.env.AppendUnique(LIBS = "SDL_mixer")
-    context.Message("Checking for Ogg Vorbis support in %s... " % sdl_path)
-    if context.env["host"]:
-        context.Result("n/a (cross-compile)")
-        return True
-    (result, output) = context.TryRun(test_program, ".c")
-    if result:
-        context.Result("YES")
-        return True
-    else:
-        context.Result("NO -- %s" % output)
-        return False
 
+# #
+# @brief List of checks defined in this file.
 config_checks = {'CheckSDL' : CheckSDL,
-                 'CheckOgg' : CheckOgg,
                  'CheckPNG' : CheckPNG }

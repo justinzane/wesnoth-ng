@@ -62,7 +62,7 @@ namespace ai {
 
 game_logic::candidate_action_ptr formula_ai::load_candidate_action_from_config(const config& cfg)
 {
-	return candidate_action_manager_.load_candidate_action_from_config(cfg,this,&function_table_);
+	return candidate_action_mgr_.load_candidate_action_from_config(cfg,this,&function_table_);
 }
 
 int formula_ai::get_recursion_count() const{
@@ -81,7 +81,7 @@ formula_ai::formula_ai(readonly_context &context, const config &cfg)
 	infinite_loop_guardian_(),
 	vars_(),
 	function_table_(*this),
-	candidate_action_manager_()
+	candidate_action_mgr_()
 {
 	add_ref();
 	init_readonly_context_proxy(context);
@@ -498,7 +498,7 @@ variant formula_ai::execute_variant(const variant& var, ai_context &ai_, bool co
 				} else
 				{
 					LOG_AI << "Explicit fallback to: " << fallback_command->key() << std::endl;
-					ai_ptr fallback( manager::create_transient_ai(fallback_command->key(), config(), &ai_));
+					ai_ptr fallback( mgr::create_transient_ai(fallback_command->key(), config(), &ai_));
 					if(fallback) {
 						fallback->play_turn();
 					}
@@ -655,11 +655,11 @@ variant formula_ai::get_value(const std::string& key) const
 
 	} else if(key == "turn")
 	{
-		return variant(resources::tod_manager->turn());
+		return variant(resources::tod_mgr->turn());
 
 	} else if(key == "time_of_day")
 	{
-		return variant(resources::tod_manager->get_time_of_day().id);
+		return variant(resources::tod_mgr->get_time_of_day().id);
 
 	} else if(key == "my_side")
 	{
@@ -986,11 +986,11 @@ bool formula_ai::execute_candidate_action(game_logic::candidate_action_ptr fai_c
 formula_ai::gamestate_change_observer::gamestate_change_observer() :
 	set_var_counter_(), set_unit_var_counter_(), continue_counter_()
 {
-	ai::manager::add_gamestate_observer(this);
+	ai::mgr::add_gamestate_observer(this);
 }
 
 formula_ai::gamestate_change_observer::~gamestate_change_observer() {
-	ai::manager::remove_gamestate_observer(this);
+	ai::mgr::remove_gamestate_observer(this);
 }
 
 void formula_ai::gamestate_change_observer::handle_generic_event(const std::string& /*event_name*/) {

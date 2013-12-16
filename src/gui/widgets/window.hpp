@@ -265,12 +265,12 @@ public:
 
 	/** See @ref twidget::find_at. */
 	virtual twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) OVERRIDE;
 
 	/** See @ref twidget::find_at. */
 	virtual const twidget* find_at(
-			  const tpoint& coordinate
+			  const point_t& coordinate
 			, const bool must_be_active) const OVERRIDE;
 
 	/** Inherited from twidget. */
@@ -690,7 +690,7 @@ private:
 	/***** ***** ***** signal handlers ***** ****** *****/
 
 	void signal_handler_sdl_video_resize(
-			const event::tevent event, bool& handled, const tpoint& new_size);
+			const event::tevent event, bool& handled, const point_t& new_size);
 
 	/**
 	 * The handler for the click dismiss mouse 'event'.

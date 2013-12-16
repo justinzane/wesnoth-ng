@@ -33,12 +33,12 @@ void push_call_stack(const char* str);
 void pop_call_stack();
 std::string get_call_stack();
 
-struct call_stack_manager {
-	explicit call_stack_manager(const char* str) {
+struct call_stack_mgr {
+	explicit call_stack_mgr(const char* str) {
 		push_call_stack(str);
 	}
 
-	~call_stack_manager() {
+	~call_stack_mgr() {
 		pop_call_stack();
 	}
 };

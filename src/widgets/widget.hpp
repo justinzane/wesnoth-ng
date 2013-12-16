@@ -20,14 +20,16 @@
 #define WIDGET_HPP_INCLUDED
 
 #include "../events.hpp"
-#include "../sdl2/sdl2_evt_hndlr.hpp"
+#include "../sdl2/evt_handler.hpp"
 #include "../sdl_utils.hpp"
 
 class CVideo;
 
 namespace gui {
 
-class widget : public sdl2_evt_hndlr {
+class widget :
+    public evt_handler
+{
     public:
         SDL_Rect const &location() const;
         virtual void set_location(SDL_Rect const &rect);

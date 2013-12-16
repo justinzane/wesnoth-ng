@@ -25,7 +25,7 @@
 #include "log/log.hpp"
 #include "preferences_display.hpp"
 #include "sound.hpp"
-#include "sld2/sdl2_rndr_mgr.hpp"
+#include "sdl2/rndr_mgr.hpp"
 #if defined _WIN32
 #include "windows_tray_notification.hpp"
 #endif
@@ -43,92 +43,6 @@
 namespace events {
 
 namespace {
-
-struct context {
-        context() :
-            handlers(), focused_handler( -1) {
-        }
-
-        void add_handler(handler* ptr);bool remove_handler(handler* ptr);
-        int cycle_focus();
-        void set_focus(const handler* ptr);
-
-        std::vector<handler*> handlers;
-        int focused_handler;
-
-        void delete_handler_index(size_t handler);
-};
-
-void context::add_handler(handler* ptr) {
-    handlers.push_back(ptr);
-}
-
-void context::delete_handler_index(size_t handler) {
-    if (focused_handler == static_cast<int>(handler)) {
-        focused_handler = -1;
-    } else if (focused_handler > static_cast<int>(handler)) {
-        --focused_handler;
-    }
-
-    handlers.erase(handlers.begin() + handler);
-}
-
-bool context::remove_handler(handler* ptr) {
-    if (handlers.empty()) {
-        return false;
-    }
-
-    static int depth = 0;
-    ++depth;
-
-    //the handler is most likely on the back of the events array,
-    //so look there first, otherwise do a complete search.
-    if (handlers.back() == ptr) {
-        delete_handler_index(handlers.size() - 1);
-    } else {
-        const std::vector<handler*>::iterator i = std::find(handlers.begin(), handlers.end(),
-                                                            ptr);
-        if (i != handlers.end()) {
-            delete_handler_index(i - handlers.begin());
-        } else {
-            return false;
-        }
-    }
-
-    --depth;
-
-    if (depth == 0) {
-        cycle_focus();
-    } else {
-        focused_handler = -1;
-    }
-
-    return true;
-}
-
-int context::cycle_focus() {
-    int index = focused_handler + 1;
-    for (size_t i = 0; i != handlers.size(); ++i) {
-        if (size_t(index) == handlers.size()) {
-            index = 0;
-        }
-
-        if (handlers[size_t(index)]->requires_event_focus()) {
-            focused_handler = index;
-            break;
-        }
-    }
-
-    return focused_handler;
-}
-
-void context::set_focus(const handler* ptr) {
-    const std::vector<handler*>::const_iterator i = std::find(handlers.begin(), handlers.end(),
-                                                              ptr);
-    if (i != handlers.end() && ( * *i).requires_event_focus()) {
-        focused_handler = int(i - handlers.begin());
-    }
-}
 
 //this object stores all the event handlers. It is a stack of event 'contexts'.
 //a new event context is created when e.g. a modal dialog is opened, and then
@@ -148,16 +62,6 @@ pump_monitor::~pump_monitor() {
     pump_monitors.erase(std::remove(pump_monitors.begin(), pump_monitors.end(), this),
                         pump_monitors.end());
 }
-
-event_context::event_context() {
-    event_contexts.push_back(context());
-}
-
-event_context::~event_context() {
-    assert(event_contexts.empty() == false);
-    event_contexts.pop_back();
-}
-
 void focus_handler(const handler* ptr) {
     if (event_contexts.empty() == false) {
         event_contexts.back().set_focus(ptr);
@@ -205,99 +109,6 @@ bool has_focus(const handler* hand, const SDL_Event* event) {
     }
     return false;
 }
-
-void handler(const SDL_Event* evt) {
-    switch (evt->type) {
-        // Application events -----------------------------------------------------------------
-        case SDL_QUIT:      // Send Quit to daemon
-            do_quit(); break;
-        // Android and iOS events IGNORED -----------------------------------------------------
-        case SDL_APP_TERMINATING: break;
-        case SDL_APP_LOWMEMORY: break;
-        case SDL_APP_WILLENTERBACKGROUND: break;
-        case SDL_APP_DIDENTERBACKGROUND: break;
-        case SDL_APP_WILLENTERFOREGROUND: break;
-        case SDL_APP_DIDENTERFOREGROUND: break;
-        // Window events ----------------------------------------------------------------------
-        case SDL_WINDOWEVENT: handle_window_event(evt); break;
-        case SDL_SYSWMEVENT: break;
-        // Keyboard events --------------------------------------------------------------------
-        case SDL_KEYDOWN: break;
-        case SDL_KEYUP: break;
-        case SDL_TEXTEDITING: break;
-        case SDL_TEXTINPUT:
-            handle_text_input(evt); break;
-        // Mouse events -----------------------------------------------------------------------
-        case SDL_MOUSEMOTION:
-            handle_mouse_motion(evt); break;
-        case SDL_MOUSEBUTTONDOWN: break;
-        case SDL_MOUSEBUTTONUP: break;
-        case SDL_MOUSEWHEEL: break;
-        // Joystick events --------------------------------------------------------------------
-        case SDL_JOYAXISMOTION: break;
-        case SDL_JOYBALLMOTION: break;
-        case SDL_JOYHATMOTION: break;
-        case SDL_JOYBUTTONDOWN: break;
-        case SDL_JOYBUTTONUP: break;
-        case SDL_JOYDEVICEADDED: break;
-        case SDL_JOYDEVICEREMOVED: break;
-        // Controller events ------------------------------------------------------------------
-        case SDL_CONTROLLERAXISMOTION: break;
-        case SDL_CONTROLLERBUTTONDOWN: break;
-        case SDL_CONTROLLERBUTTONUP: break;
-        case SDL_CONTROLLERDEVICEADDED: break;
-        case SDL_CONTROLLERDEVICEREMOVED: break;
-        case SDL_CONTROLLERDEVICEREMAPPED: break;
-        // Touch events -----------------------------------------------------------------------
-        case SDL_FINGERDOWN: break;
-        case SDL_FINGERUP: break;
-        case SDL_FINGERMOTION: break;
-        // Gesture events ---------------------------------------------------------------------
-        case SDL_DOLLARGESTURE: break;
-        case SDL_DOLLARRECORD: break;
-        case SDL_MULTIGESTURE: break;
-        // Clipboard events -------------------------------------------------------------------
-        case SDL_CLIPBOARDUPDATE: break;
-        // Drag and drop events ---------------------------------------------------------------
-        case SDL_DROPFILE: break;
-        // These are for your use, and should be allocated with SDL_RegisterEvents() ----------
-        case SDL_USEREVENT: break;
-        case SDL_LASTEVENT: break;
-    }
-}
-
-void handle_window_event(const SDL_Event* event) {
-    if (event->type == SDL_WINDOWEVENT) {
-        switch (event->window.event) {
-            case SDL_WINDOWEVENT_SHOWN: break;
-            case SDL_WINDOWEVENT_HIDDEN: break;
-            case SDL_WINDOWEVENT_EXPOSED: break;
-            case SDL_WINDOWEVENT_MOVED: break;
-            case SDL_WINDOWEVENT_RESIZED:
-                handle_window_resized(event); break;
-            case SDL_WINDOWEVENT_MINIMIZED: break;
-            case SDL_WINDOWEVENT_MAXIMIZED: break;
-            case SDL_WINDOWEVENT_RESTORED: break;
-            case SDL_WINDOWEVENT_ENTER: break;
-            case SDL_WINDOWEVENT_LEAVE: break;
-            case SDL_WINDOWEVENT_FOCUS_GAINED: break;
-            case SDL_WINDOWEVENT_FOCUS_LOST: break;
-            case SDL_WINDOWEVENT_CLOSE: break;
-            default:
-                fprintf(stdout, "Window %d got unknown event %d\n", event->window.windowID,
-                        event->window.event);
-                break;
-        }
-    }
-}
-
-void handle_window_resized(const SDL_Event* evt) {
-    SDL_WindowEvent* win_evt = (SDL_WindowEvent*)evt;
-    win_size[0] = win_evt->data1;
-    win_size[0] = win_evt->data2;
-}
-
-
 
 void pump() {
     SDL_PumpEvents();

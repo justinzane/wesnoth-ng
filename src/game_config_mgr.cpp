@@ -1,5 +1,5 @@
 /**
- * @file src/game_config_manager.cpp
+ * @file src/game_config_mgr.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -40,7 +40,7 @@ static lg::log_domain log_config("config");
 #define WRN_CONFIG LOG_STREAM(warn, log_config)
 #define LOG_CONFIG LOG_STREAM(info, log_config)
 
-game_config_manager::game_config_manager(
+game_config_mgr::game_config_mgr(
 		const commandline_options& cmdline_opts,
 		game_display& display,
 		const bool jump_to_editor) :
@@ -49,10 +49,10 @@ game_config_manager::game_config_manager(
 	jump_to_editor_(jump_to_editor),
 	game_config_(),
 	old_defines_map_(),
-	paths_manager_(),
+	paths_mgr_(),
 	cache_(game_config::config_cache::instance())
 {
-	resources::config_manager = this;
+	resources::config_mgr = this;
 
 	if(cmdline_opts_.nocache) {
 		cache_.set_use_cache(false);
@@ -62,12 +62,12 @@ game_config_manager::game_config_manager(
 	}
 }
 
-game_config_manager::~game_config_manager()
+game_config_mgr::~game_config_mgr()
 {
-	resources::config_manager = nullptr;
+	resources::config_mgr = nullptr;
 }
 
-bool game_config_manager::init_game_config(FORCE_RELOAD_CONFIG force_reload)
+bool game_config_mgr::init_game_config(FORCE_RELOAD_CONFIG force_reload)
 {
 	// Add preproc defines according to the command line arguments.
 	game_config::scoped_preproc_define multiplayer("MULTIPLAYER",
@@ -93,7 +93,7 @@ bool game_config_manager::init_game_config(FORCE_RELOAD_CONFIG force_reload)
 	return true;
 }
 
-void game_config_manager::load_game_config(FORCE_RELOAD_CONFIG force_reload,
+void game_config_mgr::load_game_config(FORCE_RELOAD_CONFIG force_reload,
 	game_classification const* classification)
 {
 	// Make sure that 'debug mode' symbol is set
@@ -109,7 +109,7 @@ void game_config_manager::load_game_config(FORCE_RELOAD_CONFIG force_reload,
 		return;
 	}
 
-	loadscreen::loadscreen_mgr loadscreen_manager(disp_.video());
+	loadscreen::loadscreen_mgr loadscreen_mgr(disp_.video());
 	cursor::setter cur(cursor::WAIT);
 
 	// The loadscreen will erase the titlescreen.
@@ -186,10 +186,10 @@ void game_config_manager::load_game_config(FORCE_RELOAD_CONFIG force_reload,
 	old_defines_map_ = cache_.get_preproc_map();
 
 	// Set new binary paths.
-	paths_manager_.set_paths(game_config());
+	paths_mgr_.set_paths(game_config());
 }
 
-void game_config_manager::load_addons_cfg()
+void game_config_mgr::load_addons_cfg()
 {
 	const std::string user_campaign_dir = get_addon_campaigns_dir();
 
@@ -286,7 +286,7 @@ void game_config_manager::load_addons_cfg()
 	}
 }
 
-void game_config_manager::set_multiplayer_hashes()
+void game_config_mgr::set_multiplayer_hashes()
 {
 	config& hashes = game_config_.add_child("multiplayer_hashes");
 	foreach_ng(const config &ch, game_config_.child_range("multiplayer")) {
@@ -294,7 +294,7 @@ void game_config_manager::set_multiplayer_hashes()
 	}
 }
 
-void game_config_manager::set_color_info()
+void game_config_mgr::set_color_info()
 {
 	config colorsys_info;
 	colorsys_info.splice_children(game_config_, "color_range");
@@ -302,7 +302,7 @@ void game_config_manager::set_color_info()
 	game_config::add_color_info(colorsys_info);
 }
 
-void game_config_manager::set_unit_data()
+void game_config_mgr::set_unit_data()
 {
 	game_config_.merge_children("units");
 	loadscreen::start_stage("load unit types");
@@ -311,7 +311,7 @@ void game_config_manager::set_unit_data()
 	}
 }
 
-void game_config_manager::reload_changed_game_config()
+void game_config_mgr::reload_changed_game_config()
 {
 	// Rebuild addon version info cache.
 	refresh_addon_version_info_cache();
@@ -323,13 +323,13 @@ void game_config_manager::reload_changed_game_config()
 	init_game_config(FORCE_RELOAD);
 }
 
-void game_config_manager::load_game_config_for_editor()
+void game_config_mgr::load_game_config_for_editor()
 {
 	game_config::scoped_preproc_define editor("EDITOR");
 	load_game_config(NO_FORCE_RELOAD);
 }
 
-void game_config_manager::load_game_config_for_game(
+void game_config_mgr::load_game_config_for_game(
 	const game_classification& classification)
 {
 	game_config::scoped_preproc_define difficulty(classification.difficulty,

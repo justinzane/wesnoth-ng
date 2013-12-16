@@ -159,13 +159,13 @@ namespace image {
 
 	void flush_cache();
 
-	///the image manager is responsible for setting up images, and destroying
+	///the image mgr is responsible for setting up images, and destroying
 	///all images when the program exits. It should probably
 	///be created once for the life of the program
-	struct manager
+	struct mgr
 	{
-		manager();
-		~manager();
+		mgr();
+		~mgr();
 	};
 
 	///will make all scaled images have these rgb values added to all

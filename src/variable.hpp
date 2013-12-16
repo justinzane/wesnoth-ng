@@ -41,6 +41,7 @@ class vconfig {
     private:
 
         template<class T1, class T2>
+        ///@todo Fix warning.
         friend class std::pair;
 
         struct safe_bool_impl {

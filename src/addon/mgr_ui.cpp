@@ -1,5 +1,5 @@
 /**
- * @file src/addon/manager_ui.cpp
+ * @file src/addon/mgr_ui.cpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
@@ -17,7 +17,7 @@
    See the COPYING file for more details.
 */
 
-#include "addon/manager_ui.hpp"
+#include "addon/mgr_ui.hpp"
 
 #include "addon/info.hpp"
 #include "addon/mgr.hpp"
@@ -432,7 +432,7 @@ public:
 
 		if(std::equal(f_.types.begin(), f_.types.end(), new_types.begin()) && f_.status == new_status &&
 		   f_.sort == new_sort && f_.direction == new_direction) {
-			// Close the manager dialog only if the filter options changed.
+			// Close the mgr dialog only if the filter options changed.
 			return gui::CONTINUE_DIALOG;
 		}
 
@@ -538,7 +538,7 @@ sorted_addon_pointer_list sort_addons_list(addons_list& addons, ADDON_SORT sort,
 	return res;
 }
 
-void show_addons_manager_dialog(display& disp, addons_client& client, addons_list& addons, std::string& last_addon_id, bool& stay_in_ui, bool& wml_changed, addons_filter_state& filter)
+void show_addons_mgr_dialog(display& disp, addons_client& client, addons_list& addons, std::string& last_addon_id, bool& stay_in_ui, bool& wml_changed, addons_filter_state& filter)
 {
 	boost::scoped_ptr<cursor::setter> cursor_setter(new cursor::setter(cursor::WAIT));
 
@@ -749,7 +749,7 @@ void show_addons_manager_dialog(display& disp, addons_client& client, addons_lis
 				: _("There are no add-ons matching the specified criteria on this server.");
 		}
 
-		gui::dialog dlg(disp, _("Add-ons Manager"), dlg_message, gui::OK_CANCEL);
+		gui::dialog dlg(disp, _("Add-ons mgr"), dlg_message, gui::OK_CANCEL);
 
 		gui::menu::basic_sorter sorter;
 		sorter.set_alpha_sort(1).set_alpha_sort(2).set_alpha_sort(3);
@@ -917,9 +917,9 @@ void show_addons_manager_dialog(display& disp, addons_client& client, addons_lis
 	}
 }
 
-bool addons_manager_ui(display& disp, const std::string& remote_address)
+bool addons_mgr_ui(display& disp, const std::string& remote_address)
 {
-	bool stay_in_manager_ui = false;
+	bool stay_in_mgr_ui = false;
 	bool need_wml_cache_refresh = false;
 	std::string last_addon_id;
 	addons_filter_state filter;
@@ -934,7 +934,7 @@ bool addons_manager_ui(display& disp, const std::string& remote_address)
 				// along with all other caches, but we don't want to do all that here.
 				// Thus, we refresh this specific cache when required, so that add-ons
 				// are properly reported as installed/upgraded before leaving the
-				// manager UI.
+				// mgr UI.
 				refresh_addon_version_info_cache();
 			}
 
@@ -969,15 +969,15 @@ bool addons_manager_ui(display& disp, const std::string& remote_address)
 			try {
 				// Don't reconnect when switching between view modes.
 				do {
-					show_addons_manager_dialog(disp, client, addons, last_addon_id, stay_in_manager_ui, need_wml_cache_refresh, filter);
+					show_addons_mgr_dialog(disp, client, addons, last_addon_id, stay_in_mgr_ui, need_wml_cache_refresh, filter);
 				} while(filter.changed);
 			} catch(const addons_client::user_exit&) {
-				// Don't do anything; just go back to the addons manager UI
+				// Don't do anything; just go back to the addons mgr UI
 				// if the user cancels a download or other network operation
 				// after fetching the add-ons list above.
-				LOG_AC << "operation canceled by user; returning to add-ons manager\n";
+				LOG_AC << "operation canceled by user; returning to add-ons mgr\n";
 			}
-		} while(stay_in_manager_ui);
+		} while(stay_in_mgr_ui);
 	} catch(const config::error& e) {
 		ERR_CFG << "config::error thrown during transaction with add-on server; \""<< e.message << "\"\n";
 		gui2::show_error_message(disp.video(), _("Network communication error."));
@@ -1147,7 +1147,7 @@ bool manage_addons(display& disp)
 
 	switch(res) {
 		case addon_download:
-			return addons_manager_ui(disp, host_name);
+			return addons_mgr_ui(disp, host_name);
 		case addon_uninstall:
 			return uninstall_local_addons(disp);
 		default:

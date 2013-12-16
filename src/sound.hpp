@@ -18,8 +18,10 @@
 #ifndef SOUND_HPP_INCLUDED
 #define SOUND_HPP_INCLUDED
 
+#include "sdl2/evt_mgr.hpp"
+#include "sdl2/evt_handler.hpp"
 #include "events.hpp"
-
+#include <SDL2/SDL_mixer.h>
 #include <string>
 
 class config;

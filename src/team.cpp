@@ -70,7 +70,7 @@ const char * const team::attributes[] = {
 	nullptr };
 
 
-const std::vector<team>& teams_manager::get_teams()
+const std::vector<team>& teams_mgr::get_teams()
 {
 	assert(teams);
 	return *teams;
@@ -149,9 +149,9 @@ void team::team_info::read(const config &cfg)
 		user_team_name = t_string::from_serialized(user_team_name);
 
 	if(cfg.has_attribute("ai_config")) {
-		ai::manager::add_ai_for_side_from_file(side, cfg["ai_config"], true);
+		ai::mgr::add_ai_for_side_from_file(side, cfg["ai_config"], true);
 	} else {
-		ai::manager::add_ai_for_side_from_config(side, cfg, true);
+		ai::mgr::add_ai_for_side_from_config(side, cfg, true);
 	}
 
 	std::vector<std::string> recruits = utils::split(cfg["recruit"]);
@@ -284,7 +284,7 @@ void team::team_info::write(config& cfg) const
 	cfg["persistent"] = persistent;
 	cfg["lost"] = lost;
 
-	cfg.add_child("ai",ai::manager::to_config(side));
+	cfg.add_child("ai",ai::mgr::to_config(side));
 }
 
 team::team() :
@@ -410,14 +410,14 @@ void team::set_recruits(const std::set<std::string>& recruits)
 {
 	info_.can_recruit = recruits;
 	info_.minimum_recruit_price = 0;
-	ai::manager::raise_recruit_list_changed();
+	ai::mgr::raise_recruit_list_changed();
 }
 
 void team::add_recruit(const std::string &recruit)
 {
 	info_.can_recruit.insert(recruit);
 	info_.minimum_recruit_price = 0;
-	ai::manager::raise_recruit_list_changed();
+	ai::mgr::raise_recruit_list_changed();
 }
 
 int team::minimum_recruit_price() const

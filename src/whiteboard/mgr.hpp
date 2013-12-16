@@ -20,8 +20,8 @@
  * @file
  */
 
-#ifndef WB_MANAGER_HPP_
-#define WB_MANAGER_HPP_
+#ifndef WB_mgr_HPP_
+#define WB_mgr_HPP_
 
 #include "side_actions.hpp"
 
@@ -42,7 +42,7 @@ class highlighter;
 /**
  * This class is the frontend of the whiteboard framework for the rest of the Wesnoth code.
  */
-class manager : private boost::noncopyable
+class mgr : private boost::noncopyable
 {
 	friend struct future_map;
 	friend struct future_map_if_active;
@@ -50,8 +50,8 @@ class manager : private boost::noncopyable
 
 public:
 
-	manager();
-	~manager();
+	mgr();
+	~mgr();
 
 	void print_help_once();
 
@@ -146,11 +146,11 @@ public:
 	void save_temp_attack(const map_location& attacker_loc, const map_location& defender_loc, int weapon_choice);
 
 	/** Creates a recruit action for the current side
-	 *  @return true if manager has saved a planned recruit */
+	 *  @return true if mgr has saved a planned recruit */
 	bool save_recruit(const std::string& name, int side_num, const map_location& recruit_hex);
 
 	/** Creates a recall action for the current side
-	 *  @return true if manager has saved a planned recall */
+	 *  @return true if mgr has saved a planned recall */
 	bool save_recall(const unit& unit, int side_num, const map_location& recall_hex);
 
 	/** Creates a suppose-dead action for the current side */
@@ -171,7 +171,7 @@ public:
 	/** Moves the action determined by the UI toward the beginning of the queue  */
 	void contextual_bump_down_action();
 
-	/** Get the highlight visitor instance in use by the manager */
+	/** Get the highlight visitor instance in use by the mgr */
 	boost::weak_ptr<highlighter> get_highlighter() { return highlighter_; }
 
 	/** Checks whether the whiteboard has any planned action on any team */
@@ -280,4 +280,4 @@ struct real_map
 
 } // end namespace wb
 
-#endif /* WB_MANAGER_HPP_ */
+#endif /* WB_mgr_HPP_ */

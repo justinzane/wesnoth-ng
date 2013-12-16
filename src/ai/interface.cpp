@@ -17,7 +17,7 @@
 */
 
 /**
- * Base class for the AI and AI-ai_manager contract.
+ * Base class for the AI and AI-ai_mgr contract.
  * @file
  */
 

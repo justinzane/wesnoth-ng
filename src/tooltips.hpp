@@ -27,10 +27,10 @@ class CVideo;
 
 namespace tooltips {
 
-struct manager
+struct mgr
 {
-	manager(CVideo& video);
-	~manager();
+	mgr(CVideo& video);
+	~mgr();
 };
 
 void clear_tooltips();

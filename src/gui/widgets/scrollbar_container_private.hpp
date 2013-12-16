@@ -51,7 +51,7 @@ struct tscrollbar_container_implementation
 	/**
 	 * Implementation for the wrappers for
 	 * [const] twidget* tscrollbar_container::find_at(
-	 * const tpoint&, const bool) [const].
+	 * const point_t&, const bool) [const].
 	 *
 	 * @tparam W                  twidget or const twidget.
 	 */
@@ -59,7 +59,7 @@ struct tscrollbar_container_implementation
 	static W* find_at(
 			typename utils::tconst_clone<tscrollbar_container, W>::reference
 				scrollbar_container,
-			const tpoint& coordinate, const bool must_be_active)
+			const point_t& coordinate, const bool must_be_active)
 	{
 
 		assert(scrollbar_container.content_

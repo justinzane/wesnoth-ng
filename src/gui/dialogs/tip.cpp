@@ -91,7 +91,7 @@ public:
 		message_ = message;
 	}
 
-	void set_mouse(const tpoint& mouse)
+	void set_mouse(const point_t& mouse)
 	{
 		mouse_ = mouse;
 	}
@@ -143,7 +143,7 @@ static ttip& tip()
 void show(CVideo& video
 		, const std::string& window_id
 		, const t_string& message
-		, const tpoint& mouse)
+		, const point_t& mouse)
 {
 	/*
 	 * For now allow invalid tip names, might turn them to invalid wml messages

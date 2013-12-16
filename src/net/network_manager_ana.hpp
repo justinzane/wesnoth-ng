@@ -27,8 +27,8 @@
 #include "net/network.hpp"
 #include "ana/api/ana.hpp"
 
-#ifndef NETWORK_MANAGER_ANA_HPP_INCLUDED
-#define NETWORK_MANAGER_ANA_HPP_INCLUDED
+#ifndef NETWORK_mgr_ANA_HPP_INCLUDED
+#define NETWORK_mgr_ANA_HPP_INCLUDED
 
 /**
  * A representative of a network component to the application.
@@ -128,11 +128,11 @@ typedef std::set<ana_component*> ana_component_set;
 /**
  * Manages connected client ids for a given server.
  */
-class clients_manager : public ana::connection_handler
+class clients_mgr : public ana::connection_handler
 {
     public:
         /** Constructor. */
-        clients_manager( ana::server* );
+        clients_mgr( ana::server* );
 
         /** Returns the amount of components connected to this server. */
         size_t client_amount() const;
@@ -199,7 +199,7 @@ class ana_send_handler : public ana::send_handler
 class ana_handshake_finisher_handler : public ana::send_handler
 {
     public:
-        ana_handshake_finisher_handler( ana::server*, clients_manager* );
+        ana_handshake_finisher_handler( ana::server*, clients_mgr* );
 
         ~ana_handshake_finisher_handler();
     private:
@@ -207,7 +207,7 @@ class ana_handshake_finisher_handler : public ana::send_handler
         virtual void handle_send(ana::error_code, ana::net_id, ana::operation_id);
 
         ana::server*       server_;
-        clients_manager*   manager_;
+        clients_mgr*   mgr_;
 };
 
 
@@ -367,12 +367,12 @@ class ana_connect_handler : public ana::connection_handler
 /**
  * Provides network functionality for Wesnoth using the ana API and library.
  */
-class ana_network_manager : public ana::listener_handler,
+class ana_network_mgr : public ana::listener_handler,
                             public ana::send_handler
 {
     public:
         /** Constructor. */
-        ana_network_manager();
+        ana_network_mgr();
 
         /**
          * Create a server component and return it's ID.
@@ -570,7 +570,7 @@ class ana_network_manager : public ana::listener_handler,
         ana::timer*                connect_timer_;
         ana_component_set          components_;
 
-        std::map< ana::server*, clients_manager* > server_manager_;
+        std::map< ana::server*, clients_mgr* > server_mgr_;
 
         /** Clients that have disconnected from servers (used for client applications.) */
         std::queue< ana_component* > disconnected_components_;

@@ -44,14 +44,14 @@ static lg::log_domain log_desktop("desktop");
 
 namespace desktop {
 
-bool open_in_file_manager(const std::string& path) {
+bool open_in_file_mgr(const std::string& path) {
 #if defined(_X11) || defined(__APPLE__)
 
 #ifndef __APPLE__
-    LOG_DE<<"open_in_file_manager(): on X11, will use xdg-open\n";
+    LOG_DE<<"open_in_file_mgr(): on X11, will use xdg-open\n";
     const char launcher[] = "xdg-open";
 #else
-    LOG_DE << "open_in_file_manager(): on OS X, will use open\n";
+    LOG_DE << "open_in_file_mgr(): on OS X, will use open\n";
     const char launcher[] = "open";
 #endif
 
@@ -59,22 +59,22 @@ bool open_in_file_manager(const std::string& path) {
     const pid_t child = fork();
 
     if(child == -1) {
-        ERR_DE << "open_in_file_manager(): fork() failed\n";
+        ERR_DE << "open_in_file_mgr(): fork() failed\n";
         return false;
     } else if(child == 0) {
-        execlp(launcher, launcher, path.c_str(), reinterpret_cast<char*>(path));
+        execlp(launcher, launcher, path.c_str(), path.c_str());
         _exit(1);  // This shouldn't happen.
     } else if(waitpid(child, &child_status, 0) == -1) {
-        ERR_DE << "open_in_file_manager(): waitpid() failed\n";
+        ERR_DE << "open_in_file_mgr(): waitpid() failed\n";
         return false;
     }
 
     if(child_status) {
         if(WIFEXITED(child_status)) {
-            ERR_DE << "open_in_file_manager(): " << launcher << " returned "
+            ERR_DE << "open_in_file_mgr(): " << launcher << " returned "
             << WEXITSTATUS(child_status) << '\n';
         } else {
-            ERR_DE << "open_in_file_manager(): " << launcher << " failed\n";
+            ERR_DE << "open_in_file_mgr(): " << launcher << " failed\n";
         }
 
         return false;
@@ -84,14 +84,14 @@ bool open_in_file_manager(const std::string& path) {
 
 #elif defined(_WIN32)
 
-    LOG_DE << "open_in_file_manager(): on Win32, will use ShellExecute()\n";
+    LOG_DE << "open_in_file_mgr(): on Win32, will use ShellExecute()\n";
 
     wide_string wpath = utils::string_to_wstring(path);
     wpath.push_back(wchar_t(0));  // Make wpath nullptr-terminated
 
     const int res = reinterpret_cast<int>(ShellExecute(nullptr, L"open", &wpath.front(), nullptr, nullptr, SW_SHOW));
     if(res <= 32) {
-        ERR_DE << "open_in_file_manager(): ShellExecute() failed (" << res << ")\n";
+        ERR_DE << "open_in_file_mgr(): ShellExecute() failed (" << res << ")\n";
         return false;
     }
 
@@ -99,7 +99,7 @@ bool open_in_file_manager(const std::string& path) {
 
 #else
 
-    ERR_DE << "open_in_file_manager(): unsupported platform\n";
+    ERR_DE << "open_in_file_mgr(): unsupported platform\n";
     return false;
 
 #endif

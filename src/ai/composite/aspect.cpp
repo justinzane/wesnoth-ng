@@ -50,18 +50,18 @@ aspect::aspect(readonly_context &context, const config &cfg, const std::string &
 aspect::~aspect()
 	{
 		if (invalidate_on_turn_start_) {
-			manager::remove_turn_started_observer(this);
+			mgr::remove_turn_started_observer(this);
 		}
 		if (invalidate_on_tod_change_) {
 			///@todo 1.9 add tod_changed_observer
-			//manager::remove_tod_changed_observer(this);
+			//mgr::remove_tod_changed_observer(this);
 		}
 		if (invalidate_on_gamestate_change_) {
-			manager::remove_gamestate_observer(this);
+			mgr::remove_gamestate_observer(this);
 		}
 		if (invalidate_on_minor_gamestate_change_) {
 			///@todo 1.9 add minor_gamestate_change_observer
-			//manager::remove_minor_gamestate_observer(this);
+			//mgr::remove_minor_gamestate_observer(this);
 		}
 	}
 
@@ -77,18 +77,18 @@ void aspect::on_create()
 bool aspect::redeploy(const config &cfg, const std::string& /*id*/)
 {
 	if (invalidate_on_turn_start_) {
-		manager::remove_turn_started_observer(this);
+		mgr::remove_turn_started_observer(this);
 	}
 	if (invalidate_on_tod_change_) {
 		///@todo 1.9 add tod_changed_observer
-		//manager::remove_tod_changed_observer(this);
+		//mgr::remove_tod_changed_observer(this);
 	}
 	if (invalidate_on_gamestate_change_) {
-		manager::remove_gamestate_observer(this);
+		mgr::remove_gamestate_observer(this);
 	}
 	if (invalidate_on_minor_gamestate_change_) {
 		///@todo 1.9 add minor_gamestate_change_observer
-		//manager::remove_minor_gamestate_observer(this);
+		//mgr::remove_minor_gamestate_observer(this);
 	}
 
 	valid_ = false;
@@ -104,18 +104,18 @@ bool aspect::redeploy(const config &cfg, const std::string& /*id*/)
 	id_ = cfg["id"].str();
 	DBG_AI_ASPECT << "redeploying aspect: engine=["<<engine_<<"], name=["<<name_<<"], id=["<<id_<<"]"<< std::endl;
 	if (invalidate_on_turn_start_) {
-		manager::add_turn_started_observer(this);
+		mgr::add_turn_started_observer(this);
 	}
 	if (invalidate_on_tod_change_) {
 		///@todo 1.9 add tod_changed_observer
-		//manager::add_tod_changed_observer(this);
+		//mgr::add_tod_changed_observer(this);
 	}
 	if (invalidate_on_gamestate_change_) {
-		manager::add_gamestate_observer(this);
+		mgr::add_gamestate_observer(this);
 	}
 	if (invalidate_on_minor_gamestate_change_) {
 		///@todo 1.9 add minor_gamestate_change_observer
-		//manager::add_minor_gamestate_observer(this);
+		//mgr::add_minor_gamestate_observer(this);
 	}
 	return true;
 }

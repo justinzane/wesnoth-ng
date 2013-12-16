@@ -61,7 +61,7 @@ map_context::map_context(const editor_map& map, const display& disp)
 	, labels_(disp, nullptr)
 	, units_()
 	, teams_()
-	, tod_manager_(new tod_manager)
+	, tod_mgr_(new tod_mgr)
 	, state_()
 	, music_tracks_()
 {
@@ -85,7 +85,7 @@ map_context::map_context(const config& game_config, const std::string& filename,
 	, labels_(disp, nullptr)
 	, units_()
 	, teams_()
-	, tod_manager_(nullptr)
+	, tod_mgr_(nullptr)
 	, state_()
 	, music_tracks_()
 {
@@ -150,9 +150,9 @@ map_context::map_context(const config& game_config, const std::string& filename,
 
 	labels_.read(level);
 
-	tod_manager_.reset(new tod_manager(level));
+	tod_mgr_.reset(new tod_mgr(level));
 	foreach_ng(const config &t, level.child_range("time_area")) {
-		tod_manager_->add_time_area(t);
+		tod_mgr_->add_time_area(t);
 	}
 
 	foreach_ng(const config& music, level.child_range("music")) {
@@ -191,7 +191,7 @@ map_context::~map_context()
 
 bool map_context::select_area(int index)
 {
-	return map_.set_selection(tod_manager_->get_area_by_index(index));
+	return map_.set_selection(tod_mgr_->get_area_by_index(index));
 }
 
 void map_context::draw_terrain(const t_translation::t_terrain & terrain,
@@ -289,7 +289,7 @@ bool map_context::save()
 {
 	std::string data = map_.write();
 
-	config wml_data = tod_manager_->to_config();
+	config wml_data = tod_mgr_->to_config();
 	labels_.write(wml_data);
 
 	foreach_ng(const music_map::value_type& track, music_tracks_) {

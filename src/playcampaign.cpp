@@ -119,7 +119,7 @@ static void store_carryover(game_state& gamestate, playsingle_controller& playco
 		int finishing_bonus_per_turn =
 				map.villages().size() * game_config::village_income +
 				game_config::base_income;
-		tod_manager tod = playcontroller.get_tod_manager_const();
+		tod_mgr tod = playcontroller.get_tod_mgr_const();
 		int turns_left = std::max<int>(0, tod.number_of_turns() - tod.turn());
 		int finishing_bonus = (end_level.gold_bonus && turns_left > -1) ?
 				finishing_bonus_per_turn * turns_left : 0;

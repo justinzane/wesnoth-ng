@@ -181,7 +181,7 @@ std::pair<unit_map::unit_iterator, bool> unit_map::insert(unit *p) {
 				   << " - " << q->id() << " - " << q->underlying_id()
 				   << " ("  << q->get_location()
 				   << "). The new unit will be assigned underlying_id="
-				   << (1 + n_unit::id_manager::instance().get_save_id())
+				   << (1 + n_unit::id_mgr::instance().get_save_id())
 				   << " to prevent duplicate id conflicts.\n";
 
 			p->clone(false);

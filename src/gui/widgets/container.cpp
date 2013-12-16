@@ -76,13 +76,13 @@ bool tcontainer_::can_wrap() const
 	return grid_.can_wrap() || twidget::can_wrap();
 }
 
-void tcontainer_::place(const tpoint& origin, const tpoint& size)
+void tcontainer_::place(const point_t& origin, const point_t& size)
 {
 	tcontrol::place(origin, size);
 
 	const SDL_Rect rect = get_client_rect();
-	const tpoint client_size(rect.w, rect.h);
-	const tpoint client_position(rect.x, rect.y);
+	const point_t client_size(rect.w, rect.h);
+	const point_t client_position(rect.x, rect.y);
 	grid_.place(client_position, client_size);
 }
 
@@ -96,7 +96,7 @@ tpoint tcontainer_::calculate_best_size() const
 	log_scope2(log_gui_layout, LOG_SCOPE_HEADER);
 
 	tpoint result(grid_.get_best_size());
-	const tpoint border_size = border_space();
+	const point_t border_size = border_space();
 
 	// If the best size has a value of 0 it's means no limit so don't
 	// add the border_size might set a very small best size.
@@ -116,13 +116,13 @@ tpoint tcontainer_::calculate_best_size() const
 	return result;
 }
 
-void tcontainer_::set_origin(const tpoint& origin)
+void tcontainer_::set_origin(const point_t& origin)
 {
 	// Inherited.
 	twidget::set_origin(origin);
 
 	const SDL_Rect rect = get_client_rect();
-	const tpoint client_position(rect.x, rect.y);
+	const point_t client_position(rect.x, rect.y);
 	grid_.set_origin(client_position);
 }
 
@@ -166,14 +166,14 @@ void tcontainer_::child_populate_dirty_list(twindow& caller,
 }
 
 twidget* tcontainer_::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active)
 {
 	return grid_.find_at(coordinate, must_be_active);
 }
 
 const twidget* tcontainer_::find_at(
-		  const tpoint& coordinate
+		  const point_t& coordinate
 		, const bool must_be_active) const
 {
 	return grid_.find_at(coordinate, must_be_active);
@@ -225,7 +225,7 @@ void tcontainer_::init_grid(
 
 tpoint tcontainer_::border_space() const
 {
-	return tpoint(0, 0);
+	return point_t(0, 0);
 }
 
 } // namespace gui2

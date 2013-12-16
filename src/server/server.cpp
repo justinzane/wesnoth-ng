@@ -327,9 +327,9 @@ namespace {
 
 server::server(int port, const std::string& config_file, size_t min_threads,
 		size_t max_threads) :
-	net_manager_(min_threads, max_threads),
+	net_mgr_(min_threads, max_threads),
 	server_(port),
-	ban_manager_(),
+	ban_mgr_(),
 	ip_log_(),
 	failed_logins_(),
 	user_handler_(nullptr),
@@ -378,7 +378,7 @@ server::server(int port, const std::string& config_file, size_t min_threads,
 {
 	setup_handlers();
 	load_config();
-	ban_manager_.read();
+	ban_mgr_.read();
 	rooms_.read_rooms();
 
 #ifndef _MSC_VER
@@ -575,7 +575,7 @@ void server::load_config() {
 			proxy_versions_[version] = proxy;
 		}
 	}
-	ban_manager_.load_config(cfg_);
+	ban_mgr_.load_config(cfg_);
 	rooms_.load_config(cfg_);
 
 	// If there is a [user_handler] tag in the config file
@@ -615,7 +615,7 @@ std::string server::is_ip_banned(const std::string& ip) const {
 	if (!tor_ip_list_.empty()) {
 		if (find(tor_ip_list_.begin(), tor_ip_list_.end(), ip) != tor_ip_list_.end()) return "TOR IP";
 	}
-	return ban_manager_.is_ip_banned(ip);
+	return ban_mgr_.is_ip_banned(ip);
 }
 
 void server::dump_stats(const time_t& now) {
@@ -683,7 +683,7 @@ void server::run() {
 					graceful_restart = true;
 				}
 				// and check if bans have expired
-				ban_manager_.check_ban_times(now);
+				ban_mgr_.check_ban_times(now);
 				// Make sure we log stats every 5 minutes
 				if (last_stats_ + 5 * 60 <= now) {
 					dump_stats(now);
@@ -1167,7 +1167,7 @@ void server::process_login(const network::connection sock,
 				i->attempts++;
 
 				if (i->attempts > failed_login_limit_) {
-					LOG_SERVER << ban_manager_.ban(login_ip.ip, now + failed_login_ban_, "Maximum login attempts exceeded", "automatic", "", username);
+					LOG_SERVER << ban_mgr_.ban(login_ip.ip, now + failed_login_ban_, "Maximum login attempts exceeded", "automatic", "", username);
 					send_error(sock, "You have made too many failed login attempts.", MP_TOO_MANY_ATTEMPTS_ERROR);
 					network::queue_disconnect(sock);
 				} else {
@@ -1670,14 +1670,14 @@ void server::bans_handler(const std::string& /*issuer_name*/, const std::string&
 	assert(out != nullptr);
 
 	if (parameters.empty()) {
-		ban_manager_.list_bans(*out);
+		ban_mgr_.list_bans(*out);
 	} else if (utils::lowercase(parameters) == "deleted") {
-		ban_manager_.list_deleted_bans(*out);
+		ban_mgr_.list_deleted_bans(*out);
 	} else if (utils::lowercase(parameters).find("deleted") == 0) {
 		std::string mask = parameters.substr(7);
-		ban_manager_.list_deleted_bans(*out, utils::strip(mask));
+		ban_mgr_.list_deleted_bans(*out, utils::strip(mask));
 	} else {
-		ban_manager_.list_bans(*out, utils::strip(parameters));
+		ban_mgr_.list_bans(*out, utils::strip(parameters));
 	}
 }
 
@@ -1688,7 +1688,7 @@ void server::ban_handler(const std::string& issuer_name, const std::string& /*qu
 	std::string::iterator first_space = std::find(parameters.begin(), parameters.end(), ' ');
 
 	if (first_space == parameters.end()) {
-		*out << ban_manager_.get_ban_help();
+		*out << ban_mgr_.get_ban_help();
 		return;
 	}
 
@@ -1697,9 +1697,9 @@ void server::ban_handler(const std::string& issuer_name, const std::string& /*qu
 
 	const std::string duration(first_space + 1, second_space);
 	time_t parsed_time = time(nullptr);
-	if (ban_manager_.parse_time(duration, &parsed_time) == false) {
+	if (ban_mgr_.parse_time(duration, &parsed_time) == false) {
 		*out << "Failed to parse the ban duration: '" << duration << "'\n"
-			<< ban_manager_.get_ban_help();
+			<< ban_mgr_.get_ban_help();
 		return;
 	}
 
@@ -1720,7 +1720,7 @@ void server::ban_handler(const std::string& issuer_name, const std::string& /*qu
 	if (std::count(target.begin(), target.end(), '.') >= 1) {
 		banned = true;
 
-		*out << ban_manager_.ban(target, parsed_time, reason, issuer_name, dummy_group);
+		*out << ban_mgr_.ban(target, parsed_time, reason, issuer_name, dummy_group);
 	} else {
 		for (wesnothd::player_map::const_iterator pl = players_.begin();
 				pl != players_.end(); ++pl)
@@ -1729,7 +1729,7 @@ void server::ban_handler(const std::string& issuer_name, const std::string& /*qu
 				if (banned) *out << "\n";
 				else banned = true;
 				const std::string ip = network::ip_address(pl->first);
-				*out << ban_manager_.ban(ip, parsed_time, reason, issuer_name, dummy_group, target);
+				*out << ban_mgr_.ban(ip, parsed_time, reason, issuer_name, dummy_group, target);
 			}
 		}
 		if (!banned) {
@@ -1742,7 +1742,7 @@ void server::ban_handler(const std::string& issuer_name, const std::string& /*qu
 					if (i->nick == target) {
 						if (banned) out << "\n";
 						else banned = true;
-						out << ban_manager_.ban(i->ip, parsed_time, reason, issuer_name, group, target);
+						out << ban_mgr_.ban(i->ip, parsed_time, reason, issuer_name, group, target);
 					}
 				}
 			}*/
@@ -1759,16 +1759,16 @@ void server::kickban_handler(const std::string& issuer_name, const std::string& 
 		bool banned = false;
 		std::string::iterator first_space = std::find(parameters.begin(), parameters.end(), ' ');
 		if (first_space == parameters.end()) {
-			*out << ban_manager_.get_ban_help();
+			*out << ban_mgr_.get_ban_help();
 			return;
 		}
 		std::string::iterator second_space = std::find(first_space + 1, parameters.end(), ' ');
 		const std::string target(parameters.begin(), first_space);
 		const std::string duration(first_space + 1, second_space);
 		time_t parsed_time = time(nullptr);
-		if (ban_manager_.parse_time(duration, &parsed_time) == false) {
+		if (ban_mgr_.parse_time(duration, &parsed_time) == false) {
 			*out << "Failed to parse the ban duration: '" << duration << "'\n"
-				<< ban_manager_.get_ban_help();
+				<< ban_mgr_.get_ban_help();
 			return;
 		}
 
@@ -1789,7 +1789,7 @@ void server::kickban_handler(const std::string& issuer_name, const std::string& 
 		if (std::count(target.begin(), target.end(), '.') >= 1) {
 			banned = true;
 
-			*out << ban_manager_.ban(target, parsed_time, reason, issuer_name, dummy_group);
+			*out << ban_mgr_.ban(target, parsed_time, reason, issuer_name, dummy_group);
 
 			for (wesnothd::player_map::const_iterator pl = players_.begin();
 					pl != players_.end(); ++pl)
@@ -1809,7 +1809,7 @@ void server::kickban_handler(const std::string& issuer_name, const std::string& 
 					if (banned) *out << "\n";
 					else banned = true;
 					const std::string ip = network::ip_address(pl->first);
-					*out << ban_manager_.ban(ip, parsed_time, reason, issuer_name, dummy_group, target);
+					*out << ban_mgr_.ban(ip, parsed_time, reason, issuer_name, dummy_group, target);
 					*out << "\nKicked " << pl->second.name() << " (" << ip << ").";
 					send_error(pl->first, "You have been banned. Reason: " + reason);
 					network::queue_disconnect(pl->first);
@@ -1825,7 +1825,7 @@ void server::kickban_handler(const std::string& issuer_name, const std::string& 
 						if (i->nick == target) {
 							if (banned) out << "\n";
 							else banned = true;
-							out << ban_manager_.ban(i->ip, parsed_time, reason, issuer_name, group, target);
+							out << ban_mgr_.ban(i->ip, parsed_time, reason, issuer_name, group, target);
 						}
 					}
 				}*/
@@ -1842,7 +1842,7 @@ void server::gban_handler(const std::string& issuer_name, const std::string& /*q
 			bool banned = false;
 			std::string::iterator first_space = std::find(parameters.begin(), parameters.end(), ' ');
 			if (first_space == parameters.end()) {
-				*out << ban_manager_.get_ban_help();
+				*out << ban_mgr_.get_ban_help();
 				return;
 			}
 			std::string::iterator second_space = std::find(first_space + 1, parameters.end(), ' ');
@@ -1854,9 +1854,9 @@ void server::gban_handler(const std::string& issuer_name, const std::string& /*q
 
 			const std::string duration(first_space + 1, second_space);
 			time_t parsed_time = time(nullptr);
-			if (ban_manager_.parse_time(duration, &parsed_time) == false) {
+			if (ban_mgr_.parse_time(duration, &parsed_time) == false) {
 				*out << "Failed to parse the ban duration: '" << duration << "'\n"
-					<< ban_manager_.get_ban_help();
+					<< ban_mgr_.get_ban_help();
 				return;
 			}
 
@@ -1875,7 +1875,7 @@ void server::gban_handler(const std::string& issuer_name, const std::string& /*q
 			if (std::count(target.begin(), target.end(), '.') >= 1) {
 				banned = true;
 
-				*out << ban_manager_.ban(target, parsed_time, reason, issuer_name, group);
+				*out << ban_mgr_.ban(target, parsed_time, reason, issuer_name, group);
 			} else {
 				for (wesnothd::player_map::const_iterator pl = players_.begin();
 						pl != players_.end(); ++pl)
@@ -1884,7 +1884,7 @@ void server::gban_handler(const std::string& issuer_name, const std::string& /*q
 						if (banned) *out << "\n";
 						else banned = true;
 						const std::string ip = network::ip_address(pl->first);
-						*out << ban_manager_.ban(ip, parsed_time, reason, issuer_name, group, target);
+						*out << ban_mgr_.ban(ip, parsed_time, reason, issuer_name, group, target);
 					}
 				}
 				if (!banned) {
@@ -1897,7 +1897,7 @@ void server::gban_handler(const std::string& issuer_name, const std::string& /*q
 							if (i->nick == target) {
 								if (banned) out << "\n";
 								else banned = true;
-								out << ban_manager_.ban(i->ip, parsed_time, reason, issuer_name, group, target);
+								out << ban_mgr_.ban(i->ip, parsed_time, reason, issuer_name, group, target);
 							}
 						}
 					}*/
@@ -1915,7 +1915,7 @@ void server::unban_handler(const std::string& /*issuer_name*/, const std::string
 		*out << "You must enter an ipmask to unban.";
 		return;
 	}
-	ban_manager_.unban(*out, parameters);
+	ban_mgr_.unban(*out, parameters);
 }
 
 void server::ungban_handler(const std::string& /*issuer_name*/, const std::string& /*query*/, std::string& parameters, std::ostringstream *out) {
@@ -1925,7 +1925,7 @@ void server::ungban_handler(const std::string& /*issuer_name*/, const std::strin
 		*out << "You must enter an ipmask to ungban.";
 		return;
 	}
-	ban_manager_.unban_group(*out, parameters);
+	ban_mgr_.unban_group(*out, parameters);
 }
 
 void server::kick_handler(const std::string& /*issuer_name*/, const std::string& /*query*/, std::string& parameters, std::ostringstream *out) {

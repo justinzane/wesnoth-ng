@@ -248,7 +248,7 @@ bool tlistbox::update_content_size()
 		return true;
 	}
 
-	if(get_size() == tpoint(0, 0)) {
+	if(get_size() == point_t(0, 0)) {
 		return false;
 	}
 
@@ -261,7 +261,7 @@ bool tlistbox::update_content_size()
 	return false;
 }
 
-void tlistbox::place(const tpoint& origin, const tpoint& size)
+void tlistbox::place(const point_t& origin, const point_t& size)
 {
 	// Inherited.
 	tscrollbar_container::place(origin, size);
@@ -498,13 +498,13 @@ void tlistbox::finalize(
 
 }
 
-void tlistbox::set_content_size(const tpoint& origin, const tpoint& size)
+void tlistbox::set_content_size(const point_t& origin, const point_t& size)
 {
 	/** @todo This function needs more testing. */
 	assert(content_grid());
 
 	const int best_height = content_grid()->get_best_size().y;
-	const tpoint s(size.x, size.y < best_height ? size.y : best_height);
+	const point_t s(size.x, size.y < best_height ? size.y : best_height);
 
 	content_grid()->place(origin, s);
 }

@@ -220,9 +220,9 @@ This module provides high level network access using an API similar
 to sockets, but primarily for the transport of @ref config objects.
 This is how the games protocols work - data is sent via config objects.
 
-A client would create a @ref manager object to initialize
+A client would create a @ref mgr object to initialize
 the network layer, connect(), and then send_data().
-A server would create a @ref server_manager object,
+A server would create a @ref server_mgr object,
 then accept_connection(), and finally receive_data().
 
 */
@@ -374,8 +374,8 @@ class display {
 };
 @endcode
 
-- Do not refer to multiple objects of the type "Manager"
-  as "Managers" or "manager". Instead, say "Manager objects".
+- Do not refer to multiple objects of the type "mgr"
+  as "mgrs" or "mgr". Instead, say "mgr objects".
   Doxygen will automatically link to class documentation
   whenever it finds class names in comments,
   but will not do so if you do not use their proper names.

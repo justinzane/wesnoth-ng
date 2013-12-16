@@ -31,10 +31,10 @@ class display;
 
 namespace preferences {
 
-	struct base_manager
+	struct base_mgr
 	{
-		base_manager();
-		~base_manager();
+		base_mgr();
+		~base_mgr();
 	};
 
 	void write_preferences();

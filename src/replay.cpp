@@ -782,14 +782,14 @@ namespace {
 
 replay* replay_src = nullptr;
 
-struct replay_source_manager
+struct replay_source_mgr
 {
-	replay_source_manager(replay* o) : old_(replay_src)
+	replay_source_mgr(replay* o) : old_(replay_src)
 	{
 		replay_src = o;
 	}
 
-	~replay_source_manager()
+	~replay_source_mgr()
 	{
 		replay_src = old_;
 	}
@@ -869,7 +869,7 @@ bool do_replay(int side_num, replay *obj)
 {
 	log_scope("do replay");
 
-	const replay_source_manager replaymanager(obj);
+	const replay_source_mgr replaymgr(obj);
 
 //	replay& replayer = (obj != nullptr) ? *obj : recorder;
 

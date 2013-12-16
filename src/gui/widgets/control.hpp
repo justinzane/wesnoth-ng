@@ -112,7 +112,7 @@ class tcontrol: public twidget {
          *
          * @returns                   The size.
          */
-        tpoint get_config_minimum_size() const;
+        point_t get_config_minimum_size() const;
 
         /**
          * Gets the default size as defined in the config.
@@ -121,7 +121,7 @@ class tcontrol: public twidget {
          *
          * @returns                   The size.
          */
-        tpoint get_config_default_size() const;
+        point_t get_config_default_size() const;
 
         /**
          * Gets the best size as defined in the config.
@@ -130,7 +130,7 @@ class tcontrol: public twidget {
          *
          * @returns                   The size.
          */
-        tpoint get_config_maximum_size() const;
+        point_t get_config_maximum_size() const;
 
         /**
          * Returns the number of characters per line.
@@ -156,11 +156,11 @@ class tcontrol: public twidget {
 
     protected:
         /** See @ref twidget::calculate_best_size. */
-        virtual tpoint calculate_best_size() const OVERRIDE;
+        virtual point_t calculate_best_size() const OVERRIDE;
     public:
 
         /** See @ref twidget::place. */
-        virtual void place(const tpoint& origin, const tpoint& size) OVERRIDE;
+        virtual void place(const point_t& origin, const point_t& size) OVERRIDE;
 
         /***** ***** ***** ***** Inherited ***** ***** ***** *****/
 
@@ -190,10 +190,10 @@ class tcontrol: public twidget {
     public:
 
         /** See @ref twidget::find_at. */
-        virtual twidget* find_at(const tpoint& coordinate, const bool must_be_active) OVERRIDE;
+        virtual twidget* find_at(const point_t& coordinate, const bool must_be_active) OVERRIDE;
 
         /** See @ref twidget::find_at. */
-        virtual const twidget* find_at(const tpoint& coordinate,
+        virtual const twidget* find_at(const point_t& coordinate,
                                        const bool must_be_active) const OVERRIDE;
 
         /** See @ref twidget::find. */
@@ -431,8 +431,8 @@ class tcontrol: public twidget {
          *
          * @returns                   The best size.
          */
-        tpoint get_best_text_size(const tpoint& minimum_size, const tpoint& maximum_size =
-            tpoint(0, 0)) const;
+        point_t get_best_text_size(const point_t& minimum_size, const point_t& maximum_size =
+            point_t(0, 0)) const;
 
         /**
          * Contains a helper cache for the rendering.
@@ -460,11 +460,11 @@ class tcontrol: public twidget {
 
         void signal_handler_show_tooltip(const event::tevent event,
         bool& handled,
-                                         const tpoint& location);
+                                         const point_t& location);
 
         void signal_handler_show_helptip(const event::tevent event,
         bool& handled,
-                                         const tpoint& location);
+                                         const point_t& location);
 
         void signal_handler_notify_remove_tooltip(const event::tevent event, bool& handled);
 };

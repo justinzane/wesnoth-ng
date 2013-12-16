@@ -25,8 +25,8 @@
 
 #include "serdes/parser.hpp"
 
-#include "net/network_manager_ana.hpp"
-#include "net/network_manager_ana.hpp"
+#include "net/network_mgr_ana.hpp"
+#include "net/network_mgr_ana.hpp"
 #include "serdes/binary_or_text.hpp"
 
 #include "gettext.hpp"
@@ -69,9 +69,9 @@ void ana_send_handler::wait_completion()
 // Begin ana_handshake_finisher_handler implementation --------------------------------------------
 
 ana_handshake_finisher_handler::ana_handshake_finisher_handler( ana::server*     server,
-                                                                clients_manager* mgr)
+                                                                clients_mgr* mgr)
     : server_( server ),
-      manager_( mgr )
+      mgr_( mgr )
 {
 }
 
@@ -86,7 +86,7 @@ void ana_handshake_finisher_handler::handle_send(ana::error_code   ec,
     if ( ec )
         server_->disconnect( client );
     else
-        manager_->connected( client );
+        mgr_->connected( client );
 
     delete this;
 }
@@ -510,9 +510,9 @@ network::connection ana_component::oldest_sender_id_still_pending()
     return id;
 }
 
-// Begin clients_manager  implementation ----------------------------------------------------------
+// Begin clients_mgr  implementation ----------------------------------------------------------
 
-clients_manager::clients_manager( ana::server* server) :
+clients_mgr::clients_mgr( ana::server* server) :
     server_( server ),
     ids_(),
     pending_ids_(),
@@ -520,12 +520,12 @@ clients_manager::clients_manager( ana::server* server) :
 {
 }
 
-size_t clients_manager::client_amount() const
+size_t clients_mgr::client_amount() const
 {
     return ids_.size();
 }
 
-void clients_manager::handle_connect(ana::error_code error, ana::net_id client)
+void clients_mgr::handle_connect(ana::error_code error, ana::net_id client)
 {
     if (! error )
     {
@@ -534,18 +534,18 @@ void clients_manager::handle_connect(ana::error_code error, ana::net_id client)
     }
 }
 
-void clients_manager::handle_disconnect(ana::error_code /*error*/, ana::net_id client)
+void clients_mgr::handle_disconnect(ana::error_code /*error*/, ana::net_id client)
 {
     ids_.erase(client);
     pending_ids_.erase( network::connection( client ) );
 }
 
-void clients_manager::connected( ana::net_id id )
+void clients_mgr::connected( ana::net_id id )
 {
     pending_ids_.insert( network::connection( id ) );
 }
 
-void clients_manager::remove( ana::net_id id )
+void clients_mgr::remove( ana::net_id id )
 {
     ids_.erase( id );
     pending_ids_.erase( network::connection( id ) );
@@ -553,63 +553,63 @@ void clients_manager::remove( ana::net_id id )
 }
 
 
-void clients_manager::handshaked( ana::net_id id )
+void clients_mgr::handshaked( ana::net_id id )
 {
     pending_handshakes_.erase( id );
 }
 
-bool clients_manager::has_connection_pending() const
+bool clients_mgr::has_connection_pending() const
 {
     return ! pending_ids_.empty();
 }
 
-bool clients_manager::is_pending_handshake( ana::net_id id ) const
+bool clients_mgr::is_pending_handshake( ana::net_id id ) const
 {
     return pending_handshakes_.find( id ) != pending_handshakes_.end();
 }
 
-bool clients_manager::is_a_client( ana::net_id id ) const
+bool clients_mgr::is_a_client( ana::net_id id ) const
 {
     return ids_.find( id ) != ids_.end();
 }
 
-network::connection clients_manager::get_pending_connection_id()
+network::connection clients_mgr::get_pending_connection_id()
 {
     const network::connection result = *pending_ids_.begin();
     pending_ids_.erase( pending_ids_.begin() );
     return result;
 }
 
-// Begin ana_network_manager implementation -------------------------------------------------------
+// Begin ana_network_mgr implementation -------------------------------------------------------
 
-ana_network_manager::ana_network_manager() :
+ana_network_mgr::ana_network_mgr() :
     connect_timer_( nullptr ),
     components_(),
-    server_manager_(),
+    server_mgr_(),
     disconnected_components_(),
     disconnected_ids_(),
     proxy_settings_()
 {
 }
 
-ana::net_id ana_network_manager::create_server( )
+ana::net_id ana_network_mgr::create_server( )
 {
     ana_component* new_component = new ana_component( );
     components_.insert( new_component );
 
     ana::server* server = new_component->server();
 
-    clients_manager* manager = new clients_manager( server );
-    server_manager_[ server ] = manager;
+    clients_mgr* mgr = new clients_mgr( server );
+    server_mgr_[ server ] = mgr;
 
-    server->set_connection_handler( manager );
+    server->set_connection_handler( mgr );
     server->set_listener_handler( this );
     server->set_raw_data_mode();
 
     return server->id();
 }
 
-network::connection ana_network_manager::create_client_and_connect(std::string host, int port)
+network::connection ana_network_mgr::create_client_and_connect(std::string host, int port)
 {
     ana::net_id new_client_id = ana::invalid_net_id;
 
@@ -691,7 +691,7 @@ network::connection ana_network_manager::create_client_and_connect(std::string h
     }
 }
 
-network::connection ana_network_manager::new_connection_id( )
+network::connection ana_network_mgr::new_connection_id( )
 {
     ana_component_set::iterator it;
 
@@ -699,7 +699,7 @@ network::connection ana_network_manager::new_connection_id( )
     {
         if ( (*it)->is_server() )
         {
-            clients_manager* clients_mgr = server_manager_[ (*it)->server() ];
+            clients_mgr* clients_mgr = server_mgr_[ (*it)->server() ];
             if ( clients_mgr->has_connection_pending() )
                 return clients_mgr->get_pending_connection_id();
         }
@@ -710,7 +710,7 @@ network::connection ana_network_manager::new_connection_id( )
 }
 
 
-const ana::stats* ana_network_manager::get_stats( network::connection connection_num,
+const ana::stats* ana_network_mgr::get_stats( network::connection connection_num,
                                                   ana::stat_type      type)
 {
     ana::net_id id( connection_num );
@@ -753,20 +753,20 @@ const ana::stats* ana_network_manager::get_stats( network::connection connection
     }
 }
 
-void ana_network_manager::close_connections_and_cleanup()
+void ana_network_mgr::close_connections_and_cleanup()
 {
     for (ana_component_set::iterator it = components_.begin(); it != components_.end(); ++it)
         delete *it;
 
-    std::map< ana::server*, clients_manager* >::iterator it;
-    for ( it = server_manager_.begin(); it != server_manager_.end(); ++it)
+    std::map< ana::server*, clients_mgr* >::iterator it;
+    for ( it = server_mgr_.begin(); it != server_mgr_.end(); ++it)
         delete it->second;
 
     components_.clear();
-    server_manager_.clear();
+    server_mgr_.clear();
 }
 
-void ana_network_manager::throw_if_pending_disconnection()
+void ana_network_mgr::throw_if_pending_disconnection()
 {
     if ( ! disconnected_components_.empty() )
     {
@@ -788,7 +788,7 @@ void ana_network_manager::throw_if_pending_disconnection()
     }
 }
 
-void ana_network_manager::run_server(ana::net_id id, int port)
+void ana_network_mgr::run_server(ana::net_id id, int port)
 {
     std::stringstream ss;
     ss << port;
@@ -808,7 +808,7 @@ void ana_network_manager::run_server(ana::net_id id, int port)
 
 }
 
-std::string ana_network_manager::ip_address( network::connection id )
+std::string ana_network_mgr::ip_address( network::connection id )
 {
     std::set<ana_component*>::iterator it;
 
@@ -824,7 +824,7 @@ std::string ana_network_manager::ip_address( network::connection id )
     return "";
 }
 
-size_t ana_network_manager::number_of_connections() const
+size_t ana_network_mgr::number_of_connections() const
 {
     // TODO:check if this is the intention
 
@@ -838,7 +838,7 @@ size_t ana_network_manager::number_of_connections() const
             ++total;
         else
         {
-            std::map< ana::server*, clients_manager* >::const_iterator mgr = server_manager_.find(
+            std::map< ana::server*, clients_mgr* >::const_iterator mgr = server_mgr_.find(
 (*it)->server() );
             total += mgr->second->client_amount();
         }
@@ -848,7 +848,7 @@ size_t ana_network_manager::number_of_connections() const
 }
 
 
-std::string ana_network_manager::compress_config( const config& cfg )
+std::string ana_network_mgr::compress_config( const config& cfg )
 {
     std::ostringstream out;
     compress_config( cfg, out );
@@ -856,7 +856,7 @@ std::string ana_network_manager::compress_config( const config& cfg )
 }
 
 
-void ana_network_manager::compress_config( const config& cfg, std::ostringstream& out)
+void ana_network_mgr::compress_config( const config& cfg, std::ostringstream& out)
 {
     boost::iostreams::filtering_stream<boost::iostreams::output> filter;
     filter.push(boost::iostreams::gzip_compressor());
@@ -866,14 +866,14 @@ void ana_network_manager::compress_config( const config& cfg, std::ostringstream
 }
 
 
-void ana_network_manager::read_config( const ana::read_buffer& buffer, config& cfg)
+void ana_network_mgr::read_config( const ana::read_buffer& buffer, config& cfg)
 {
     std::istringstream input( buffer->string() );
 
     read_gz(cfg, input);
 }
 
-size_t ana_network_manager::send_all( const config& cfg )
+size_t ana_network_mgr::send_all( const config& cfg )
 {
     const std::string output_string = compress_config(cfg);
 
@@ -883,7 +883,7 @@ size_t ana_network_manager::send_all( const config& cfg )
     {
         if ( (*it)->is_server() )
         {
-            const size_t necessary_calls = server_manager_[ (*it)->server() ]->client_amount();
+            const size_t necessary_calls = server_mgr_[ (*it)->server() ]->client_amount();
             ana_send_handler handler( necessary_calls );
 
             (*it)->server()->send_all( ana::buffer( output_string ), &handler); //, ana::ZERO_COPY);
@@ -901,7 +901,7 @@ size_t ana_network_manager::send_all( const config& cfg )
     return output_string.size();
 }
 
-size_t ana_network_manager::send( network::connection connection_num ,
+size_t ana_network_mgr::send( network::connection connection_num ,
                                   const config&       cfg )
 {
     const std::string output_string = compress_config(cfg);
@@ -910,7 +910,7 @@ size_t ana_network_manager::send( network::connection connection_num ,
     return send_raw_data( output_string.c_str(), output_string.size(), connection_num );
 }
 
-size_t ana_network_manager::send_raw_data( const char*         base_char,
+size_t ana_network_mgr::send_raw_data( const char*         base_char,
                                            size_t              size,
                                            network::connection connection_num )
 {
@@ -970,7 +970,7 @@ size_t ana_network_manager::send_raw_data( const char*         base_char,
     }
 }
 
-void ana_network_manager::send_all_except(const config& cfg, network::connection connection_num)
+void ana_network_mgr::send_all_except(const config& cfg, network::connection connection_num)
 {
     const std::string output_string = compress_config(cfg);
 
@@ -985,10 +985,10 @@ void ana_network_manager::send_all_except(const config& cfg, network::connection
         {
             if ( (*it)->get_id() != id_to_avoid )
             {
-                if ( server_manager_[ (*it)->server() ]->is_a_client( id_to_avoid ) )
+                if ( server_mgr_[ (*it)->server() ]->is_a_client( id_to_avoid ) )
                 {
                     const size_t clients_receiving_number
-                                = server_manager_[ (*it)->server() ]->client_amount() - 1;
+                                = server_mgr_[ (*it)->server() ]->client_amount() - 1;
 
                     ana_send_handler handler( clients_receiving_number );
                     (*it)->server()->send_all_except( id_to_avoid,
@@ -1010,7 +1010,7 @@ void ana_network_manager::send_all_except(const config& cfg, network::connection
     }
 }
 
-network::connection ana_network_manager::read_from_ready_buffer(
+network::connection ana_network_mgr::read_from_ready_buffer(
                                          const ana_component_set::iterator& it, config& cfg)
 {
     read_config( (*it)->wait_for_element(), cfg);
@@ -1018,7 +1018,7 @@ network::connection ana_network_manager::read_from_ready_buffer(
     return (*it)->get_wesnoth_id();
 }
 
-network::connection ana_network_manager::read_from( const ana_component_set::iterator& it,
+network::connection ana_network_mgr::read_from( const ana_component_set::iterator& it,
                                                     config&             cfg,
                                                     size_t              timeout_ms)
 {
@@ -1054,7 +1054,7 @@ network::connection ana_network_manager::read_from( const ana_component_set::ite
     }
 }
 
-network::connection ana_network_manager::read_from( network::connection connection_num,
+network::connection ana_network_mgr::read_from( network::connection connection_num,
                                                     config&             cfg,
                                                     size_t              timeout_ms)
 {
@@ -1123,7 +1123,7 @@ network::connection ana_network_manager::read_from( network::connection connecti
     }
 }
 
-network::connection ana_network_manager::read_from_all( std::vector<char>& vec)
+network::connection ana_network_mgr::read_from_all( std::vector<char>& vec)
 {
     ana_component_set::iterator it;
 
@@ -1151,7 +1151,7 @@ network::connection ana_network_manager::read_from_all( std::vector<char>& vec)
     return 0;
 }
 
-network::statistics ana_network_manager::get_send_stats(network::connection handle)
+network::statistics ana_network_mgr::get_send_stats(network::connection handle)
 {
     if ( handle != 0 )
     {
@@ -1175,7 +1175,7 @@ network::statistics ana_network_manager::get_send_stats(network::connection hand
         return network::statistics();
 }
 
-network::statistics ana_network_manager::get_receive_stats(network::connection handle)
+network::statistics ana_network_mgr::get_receive_stats(network::connection handle)
 {
     if ( handle != 0 )
     {
@@ -1199,7 +1199,7 @@ network::statistics ana_network_manager::get_receive_stats(network::connection h
         return network::statistics();
 }
 
-bool ana_network_manager::disconnect( network::connection handle)
+bool ana_network_mgr::disconnect( network::connection handle)
 {
     if ( handle == 0 )
         close_connections_and_cleanup();
@@ -1228,34 +1228,34 @@ bool ana_network_manager::disconnect( network::connection handle)
 }
 
 // --- Proxy methods
-void ana_network_manager::enable_connection_through_proxy()
+void ana_network_mgr::enable_connection_through_proxy()
 {
     proxy_settings_.enabled = true;
 }
 
-void ana_network_manager::set_proxy_address ( const std::string& address  )
+void ana_network_mgr::set_proxy_address ( const std::string& address  )
 {
     proxy_settings_.address = address;
 }
 
-void ana_network_manager::set_proxy_port    ( const std::string& port     )
+void ana_network_mgr::set_proxy_port    ( const std::string& port     )
 {
     proxy_settings_.port = port;
 }
 
-void ana_network_manager::set_proxy_user    ( const std::string& user     )
+void ana_network_mgr::set_proxy_user    ( const std::string& user     )
 {
     proxy_settings_.user = user;
 }
 
-void ana_network_manager::set_proxy_password( const std::string& password )
+void ana_network_mgr::set_proxy_password( const std::string& password )
 {
     proxy_settings_.password = password;
 }
 // --- End Proxy methods
 
 
-void ana_network_manager::handle_send(ana::error_code error_code,
+void ana_network_mgr::handle_send(ana::error_code error_code,
                                       ana::net_id client,
                                       ana::operation_id /*op_id*/)
 {
@@ -1263,7 +1263,7 @@ void ana_network_manager::handle_send(ana::error_code error_code,
         network::disconnect( client );
 }
 
-void ana_network_manager::handle_receive( ana::error_code          error,
+void ana_network_mgr::handle_receive( ana::error_code          error,
                                           ana::net_id              client,
                                           ana::read_buffer buffer)
 {
@@ -1283,9 +1283,9 @@ void ana_network_manager::handle_receive( ana::error_code          error,
             if (components_.empty() )
                 throw std::runtime_error("Received a message while no component was running.\n");
 
-            std::map< ana::server*, clients_manager* >::iterator mgrs;
+            std::map< ana::server*, clients_mgr* >::iterator mgrs;
 
-            for ( mgrs = server_manager_.begin(); mgrs != server_manager_.end(); ++mgrs)
+            for ( mgrs = server_mgr_.begin(); mgrs != server_mgr_.end(); ++mgrs)
             {
                 if (mgrs->second->is_a_client( client ) ) // Is this your client?
                 {
@@ -1322,7 +1322,7 @@ void ana_network_manager::handle_receive( ana::error_code          error,
                             mgrs->first->set_header_first_mode( client );
                         }
                     }
-                    else // just add the buffer to the associated clients_manager
+                    else // just add the buffer to the associated clients_mgr
                     {
                         ana::net_id server_id = mgrs->first->id();
 
@@ -1348,7 +1348,7 @@ bool ana_component::new_buffer_ready() // non const due to mutex block
 }
 
 
-void ana_network_manager::handle_disconnect(ana::error_code /*error_code*/, ana::net_id client)
+void ana_network_mgr::handle_disconnect(ana::error_code /*error_code*/, ana::net_id client)
 {
     std::set< ana_component* >::iterator it;
 
@@ -1364,9 +1364,9 @@ void ana_network_manager::handle_disconnect(ana::error_code /*error_code*/, ana:
     {
         for (it = components_.begin(); it != components_.end(); ++it )
             if ( (*it)->is_server() )
-                if ( server_manager_[ (*it)->server() ]->is_a_client( client ) )
+                if ( server_mgr_[ (*it)->server() ]->is_a_client( client ) )
                 {
-                    server_manager_[ (*it)->server() ]->remove( client );
+                    server_mgr_[ (*it)->server() ]->remove( client );
                     disconnected_ids_.push( client );
                 }
     }

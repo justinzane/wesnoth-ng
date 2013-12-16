@@ -28,9 +28,9 @@ class t_string;
 namespace font {
 
 //object which initializes and destroys structures needed for fonts
-struct manager {
-	manager();
-	~manager();
+struct mgr {
+	mgr();
+	~mgr();
 
 	/**
 	 * Updates the font path, when initialized it sets the fontpath to

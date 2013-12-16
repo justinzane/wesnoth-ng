@@ -56,7 +56,7 @@ configure::configure(game_display& disp, const config &cfg, chat& c, config& gam
 	ui(disp, _("Configure Game"), cfg, c, gamelist),
 
 	local_players_only_(local_players_only),
-	tooltip_manager_(disp.video()),
+	tooltip_mgr_(disp.video()),
 	mp_countdown_init_time_(270),
 	mp_countdown_reservoir_time_(330),
 
@@ -100,7 +100,7 @@ configure::configure(game_display& disp, const config &cfg, chat& c, config& gam
 	show_entry_points_(false),
 	force_use_map_settings_check_(true),
 	parameters_(params),
-	options_manager_(cfg, disp.video(), preferences::options())
+	options_mgr_(cfg, disp.video(), preferences::options())
 {
 	// Build the list of scenarios to play
 
@@ -210,9 +210,9 @@ configure::configure(game_display& disp, const config &cfg, chat& c, config& gam
 		show_entry_points_ = true;
 	}
 
-	options_manager_.set_era(parameters_.mp_era);
-	options_manager_.set_scenario(parameters_.mp_scenario);
-	options_manager_.set_modifications(parameters_.active_mods);
+	options_mgr_.set_era(parameters_.mp_era);
+	options_mgr_.set_scenario(parameters_.mp_scenario);
+	options_mgr_.set_modifications(parameters_.active_mods);
 
 	utils::string_map i18n_symbols;
 	i18n_symbols["login"] = preferences::login();
@@ -295,7 +295,7 @@ const mp_game_settings& configure::get_parameters()
 	parameters_.share_view = vision_combo_.selected() == 0;
 	parameters_.share_maps = vision_combo_.selected() == 1;
 
-	parameters_.options = options_manager_.get_values();
+	parameters_.options = options_mgr_.get_values();
 
 	return parameters_;
 }
@@ -328,7 +328,7 @@ void configure::process_event()
 	}
 
 	if(options_.pressed()) {
-		options_manager_.show_dialog();
+		options_mgr_.show_dialog();
 	}
 
 	if (entry_points_combo_.changed()) {

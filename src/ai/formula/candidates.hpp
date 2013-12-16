@@ -88,9 +88,9 @@ struct candidate_action_compare {
 typedef std::set<game_logic::candidate_action_ptr, game_logic::candidate_action_compare> candidate_action_set;
 
 //this class is responsible for managing candidate actions
-class candidate_action_manager {
+class candidate_action_mgr {
 public:
-	candidate_action_manager()
+	candidate_action_mgr()
 		: evaluated_candidate_actions_()
 		, candidate_actions_()
 	{}

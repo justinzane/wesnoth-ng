@@ -1,5 +1,5 @@
 /**
- * @file src/generic_sdl2/sdl2_evt_mgr.hpp
+ * @file src/sdl2/evt_mgr.hpp
  * @project The Battle for Wesnoth NG - https://github.com/justinzane/wesnoth-ng
  * @brief 
  * @authors 
